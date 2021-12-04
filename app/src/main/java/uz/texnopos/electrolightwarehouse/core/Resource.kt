@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.core
+package uz.texnopos.electrolightwarehouse.core
 
 open class Resource<out T> constructor(
     val status: ResourceState,

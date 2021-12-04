@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse
+package uz.texnopos.electrolightwarehouse
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
@@ -6,10 +6,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import uz.texnopos.chandelierwarehouse.di.adapterModule
-import uz.texnopos.chandelierwarehouse.di.helperModule
-import uz.texnopos.chandelierwarehouse.di.networkModule
-import uz.texnopos.chandelierwarehouse.di.viewModelModule
+import uz.texnopos.electrolightwarehouse.di.adapterModule
+import uz.texnopos.electrolightwarehouse.di.helperModule
+import uz.texnopos.electrolightwarehouse.di.networkModule
+import uz.texnopos.electrolightwarehouse.di.viewModelModule
 
 class App : Application() {
     override fun onCreate() {

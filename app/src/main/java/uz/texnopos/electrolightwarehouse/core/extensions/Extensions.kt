@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.core.extensions
+package uz.texnopos.electrolightwarehouse.core.extensions
 
 import android.app.Activity
 import android.content.Context

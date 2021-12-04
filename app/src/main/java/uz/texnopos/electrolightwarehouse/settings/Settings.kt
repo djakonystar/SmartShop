@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.settings
+package uz.texnopos.electrolightwarehouse.settings
 
 import android.content.Context
 import android.content.SharedPreferences

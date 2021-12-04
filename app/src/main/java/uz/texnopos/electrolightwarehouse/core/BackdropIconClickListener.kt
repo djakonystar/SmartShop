@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.core
+package uz.texnopos.electrolightwarehouse.core
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator

@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse
+package uz.texnopos.electrolightwarehouse
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

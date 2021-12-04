@@ -9,7 +9,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "uz.texnopos.chandelierwarehouse"
+        applicationId "uz.texnopos.electrolightwarehouse"
         minSdk 21
         targetSdk 31
         versionCode 1

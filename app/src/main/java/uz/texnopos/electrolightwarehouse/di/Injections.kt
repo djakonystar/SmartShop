@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.di
+package uz.texnopos.electrolightwarehouse.di
 
 import com.google.gson.GsonBuilder
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -8,8 +8,8 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import uz.texnopos.chandelierwarehouse.data.retrofit.ApiInterface
-import uz.texnopos.chandelierwarehouse.settings.Settings
+import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
+import uz.texnopos.electrolightwarehouse.settings.Settings
 import java.util.concurrent.TimeUnit
 
 private const val baseUrl = "https://"

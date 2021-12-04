@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse
+package uz.texnopos.electrolightwarehouse
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

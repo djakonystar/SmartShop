@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.core
+package uz.texnopos.electrolightwarehouse.core
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView

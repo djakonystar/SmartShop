@@ -1,4 +1,4 @@
-package uz.texnopos.chandelierwarehouse.core
+package uz.texnopos.electrolightwarehouse.core
 
 import java.text.SimpleDateFormat
 import java.util.*
