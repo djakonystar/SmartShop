@@ -1,10 +1,11 @@
 package uz.texnopos.electrolightwarehouse.ui.signin
 
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.content.Context
+import android.os.*
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
 import androidx.core.os.postDelayed
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -35,9 +36,27 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
         } else {
-            Snackbar.make(binding.etPassword, "Error!", Snackbar.LENGTH_SHORT).show()
+            val snackbar = Snackbar.make(binding.etPassword, "Error!", Snackbar.LENGTH_SHORT)
+            val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
+            params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+            params.width = FrameLayout.LayoutParams.MATCH_PARENT
+            snackbar.view.layoutParams = params
+            snackbar.show()
+
             val shake = AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
             binding.etPassword.startAnimation(shake)
+
+            val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        200, VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            } else {
+                vibrator.vibrate(200)
+            }
+
             Handler(Looper.getMainLooper()).postDelayed(100) {
                 kotlin.run {
                     binding.etPassword.setText("")
