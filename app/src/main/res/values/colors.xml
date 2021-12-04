@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="color_clients">#1de9b6</color>
+    <color name="color_new_client">#b2ff59</color>
+    <color name="color_new_sale">#ffd600</color>
+    <color name="color_sales">#ff3d00</color>
+    <color name="color_add_payment">#ff6d00</color>
+    <color name="color_warehouse">#26a69a</color>
 </resources>

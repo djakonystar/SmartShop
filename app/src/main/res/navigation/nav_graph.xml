@@ -9,5 +9,14 @@
         android:id="@+id/signInFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.signin.SignInFragment"
         android:label="SignInFragment"
-        tools:layout="@layout/fragment_sign_in" />
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="uz.texnopos.electrolightwarehouse.ui.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main"/>
 </navigation>
