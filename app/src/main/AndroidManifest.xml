@@ -15,9 +15,9 @@
         android:theme="@style/Theme.Warehouse">
         <activity
             android:name="uz.texnopos.electrolightwarehouse.MainActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            android:exported="true">
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

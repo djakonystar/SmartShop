@@ -9,5 +9,19 @@
     <dimen name="radius_card_view">8dp</dimen>
     <dimen name="padding_image">24dp</dimen>
     <dimen name="text_size_main">18dp</dimen>
+    <dimen name="text_size_standard">14dp</dimen>
+    <dimen name="text_size_larger">16dp</dimen>
+    <dimen name="text_size_smaller">12dp</dimen>
     <dimen name="card_elevation">6dp</dimen>
+    <dimen name="action_bar_icon_size">48dp</dimen>
+    <dimen name="margin_middle">8dp</dimen>
+    <dimen name="padding_middle">8dp</dimen>
+    <dimen name="elevation_standard">8dp</dimen>
+    <dimen name="action_bar_title_size">20dp</dimen>
+    <dimen name="til_corner_radius">8dp</dimen>
+    <dimen name="button_padding_horizontal">48dp</dimen>
+    <dimen name="checkbox_text_size">22dp</dimen>
+    <dimen name="button_height">64dp</dimen>
+    <dimen name="login_lock_icon_size">96dp</dimen>
+    <dimen name="checkbox_height">48dp</dimen>
 </resources>
