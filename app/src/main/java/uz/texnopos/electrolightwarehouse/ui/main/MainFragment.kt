@@ -20,9 +20,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
-            newClient.onClick {
-                navController.navigate(R.id.action_mainFragment_to_newClientFragment)
-            }
+
         }
     }
 }
