@@ -4,4 +4,10 @@
     <dimen name="pin_code_edit_height">80dp</dimen>
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_standard">16dp</dimen>
+    <dimen name="margin_half">8dp</dimen>
+    <dimen name="radius_card_view">8dp</dimen>
+    <dimen name="padding_image">24dp</dimen>
+    <dimen name="text_size_main">18dp</dimen>
+    <dimen name="card_elevation">6dp</dimen>
 </resources>

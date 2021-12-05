@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import androidx.core.os.postDelayed
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.databinding.FragmentSignInBinding
@@ -35,6 +36,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             Snackbar.make(binding.etPassword, "Success!", Snackbar.LENGTH_SHORT).show()
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
+            findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
         } else {
             val snackbar = Snackbar.make(binding.etPassword, "Error!", Snackbar.LENGTH_SHORT)
             val params = snackbar.view.layoutParams as FrameLayout.LayoutParams

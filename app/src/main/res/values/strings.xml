@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Warehouse</string>
+    <string name="warehouse">Omborxona</string>
+    <string name="clients">Mijozlar</string>
+    <string name="new_client">Yangi mijoz</string>
+    <string name="sales">Sotuvlar</string>
+    <string name="new_sale">Yangi sotuv</string>
+    <string name="new_payment">Yangi to\'lov</string>
 </resources>
