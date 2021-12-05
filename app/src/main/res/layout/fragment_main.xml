@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ui.main.MainFragment">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sales"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:src="@drawable/elektro"
+        android:layout_marginVertical="@dimen/margin_half"
+        />
 
     <ImageView
         android:id="@+id/icon_settings"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:clickable="true"
         android:focusable="true"
-        android:padding="4dp"
-        android:src="@drawable/app_settings"
-        app:layout_constraintBottom_toTopOf="@id/new_client"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginEnd="@dimen/margin_standard"
+        app:layout_constraintBottom_toTopOf="@id/new_sale"
+        android:src="@drawable/app_settings"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal_line"
@@ -31,6 +40,7 @@
         android:id="@+id/clients"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_half"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_half"
         android:layout_marginBottom="@dimen/margin_half"
@@ -39,11 +49,11 @@
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/radius_card_view"
         app:cardElevation="@dimen/card_elevation"
-        app:layout_constraintBottom_toTopOf="@id/sales"
-        app:layout_constraintEnd_toStartOf="@id/new_client"
+        app:layout_constraintBottom_toTopOf="@id/warehouse"
+        app:layout_constraintEnd_toStartOf="@id/new_payment"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/horizontal_line"
+        app:layout_constraintTop_toBottomOf="@id/sales"
         app:layout_constraintVertical_chainStyle="packed">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,22 +89,23 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/new_client"
+        android:id="@+id/new_product"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_half"
         android:layout_marginStart="@dimen/margin_half"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_half"
+        android:layout_marginBottom="@dimen/margin_standard"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/radius_card_view"
         app:cardElevation="@dimen/card_elevation"
-        app:layout_constraintBottom_toTopOf="@id/new_sale"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/clients"
-        app:layout_constraintTop_toTopOf="@id/horizontal_line"
+        app:layout_constraintStart_toEndOf="@id/warehouse"
+        app:layout_constraintTop_toBottomOf="@id/new_payment"
         app:layout_constraintVertical_chainStyle="packed">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,22 +113,22 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/icon_new_client"
+                android:id="@+id/icon_new_product"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_new_client"
+                android:background="@color/color_new_product"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/add_user"
-                app:layout_constraintBottom_toTopOf="@id/title_new_client"
+                android:src="@drawable/add_product"
+                app:layout_constraintBottom_toTopOf="@id/title_new_product"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/title_new_client"
+                android:id="@+id/title_new_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
-                android:text="@string/new_client"
+                android:text="@string/new_product"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -134,7 +145,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_half"
         android:layout_marginEnd="@dimen/margin_half"
         android:layout_marginBottom="@dimen/margin_half"
         android:clickable="true"
@@ -142,11 +152,11 @@
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/radius_card_view"
         app:cardElevation="@dimen/card_elevation"
-        app:layout_constraintBottom_toTopOf="@id/warehouse"
+        app:layout_constraintTop_toTopOf="@id/horizontal_line"
         app:layout_constraintEnd_toStartOf="@id/new_sale"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clients"
+        app:layout_constraintBottom_toTopOf="@id/clients"
         app:layout_constraintVertical_chainStyle="packed">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -186,7 +196,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin_half"
-        android:layout_marginTop="@dimen/margin_half"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_half"
         android:clickable="true"
@@ -198,7 +207,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/sales"
-        app:layout_constraintTop_toBottomOf="@id/new_client"
+        app:layout_constraintTop_toTopOf="@id/horizontal_line"
         app:layout_constraintVertical_chainStyle="packed">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -247,10 +256,10 @@
         app:cardCornerRadius="@dimen/radius_card_view"
         app:cardElevation="@dimen/card_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/new_payment"
+        app:layout_constraintEnd_toStartOf="@id/new_product"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sales"
+        app:layout_constraintTop_toBottomOf="@id/clients"
         app:layout_constraintVertical_chainStyle="packed">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -292,16 +301,16 @@
         android:layout_marginStart="@dimen/margin_half"
         android:layout_marginTop="@dimen/margin_half"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_half"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/radius_card_view"
         app:cardElevation="@dimen/card_elevation"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/new_product"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/warehouse"
+        app:layout_constraintStart_toEndOf="@id/clients"
         app:layout_constraintTop_toBottomOf="@id/new_sale"
         app:layout_constraintVertical_chainStyle="packed">
 
