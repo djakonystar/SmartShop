@@ -47,6 +47,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
             val shake = AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
             binding.etPassword.startAnimation(shake)
+            binding.tvDescription.startAnimation(shake)
 
             val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

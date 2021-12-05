@@ -6,4 +6,14 @@
     <string name="sales">Sotuvlar</string>
     <string name="new_sale">Yangi sotuv</string>
     <string name="new_payment">Yangi to\'lov</string>
+    <string name="home_button">Home Button</string>
+    <string name="full_name">F. I. Sh.</string>
+    <string name="phone_number">Telefon raqam</string>
+    <string name="legal_person">Yuridik shaxs</string>
+    <string name="tax_identification_number">STIR (ИНН)</string>
+    <string name="address">Manzil</string>
+    <string name="comment">Izoh</string>
+    <string name="add">Qo\'shish</string>
+    <string name="enter_special_code">Maxsus kodingizni kiriting</string>
+    <string name="required_field">To\'ldirilishi shart</string>
 </resources>

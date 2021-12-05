@@ -13,4 +13,5 @@
     <color name="color_sales">#ff3d00</color>
     <color name="color_add_payment">#ff6d00</color>
     <color name="color_warehouse">#26a69a</color>
+    <color name="app_main_color">#26a69a</color>
 </resources>

@@ -34,5 +34,8 @@ class MaskWatcher(private val mask: String) : TextWatcher {
         fun phoneNumberBySpaces(): MaskWatcher {
             return MaskWatcher("(##) ### ## ##")
         }
+        fun taxIdentificationNumber(): MaskWatcher {
+            return MaskWatcher("### ### ###")
+        }
     }
 }
