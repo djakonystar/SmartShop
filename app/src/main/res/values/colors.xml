@@ -14,4 +14,5 @@
     <color name="color_add_payment">#ff6d00</color>
     <color name="color_warehouse">#26a69a</color>
     <color name="app_main_color">#26a69a</color>
+    <color name="payment_icon_color">#FF6D00</color>
 </resources>

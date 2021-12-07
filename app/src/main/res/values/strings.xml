@@ -17,4 +17,9 @@
     <string name="enter_special_code">Maxsus kodingizni kiriting</string>
     <string name="required_field">To\'ldirilishi shart</string>
     <string name="new_product">Yangi tovar</string>
+    <string name="call">Call</string>
+    <string name="add_payment">Add payment</string>
+    <string name="uzs">UZS</string>
+    <string name="close">Yopish</string>
+    <string name="search">Izlash</string>
 </resources>

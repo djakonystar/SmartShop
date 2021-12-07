@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_middle"
+    android:layout_marginVertical="4dp"
+    android:background="@color/white"
+    android:foreground="?attr/selectableItemBackground"
+    android:elevation="@dimen/elevation_standard"
+    app:cardCornerRadius="@dimen/radius_card_view">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/userTypeBackground"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:background="@drawable/shape_rounded_field"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        
+        <TextView
+            android:id="@+id/tvUserType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/rubik_mono_one"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/checkbox_text_size"
+            app:layout_constraintStart_toStartOf="@id/userTypeBackground"
+            app:layout_constraintEnd_toEndOf="@id/userTypeBackground"
+            app:layout_constraintTop_toTopOf="@id/userTypeBackground"
+            app:layout_constraintBottom_toBottomOf="@id/userTypeBackground"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/card_view_item_text_size"
+            app:layout_constraintEnd_toStartOf="@id/ivPayment"
+            app:layout_constraintStart_toEndOf="@id/userTypeBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/tvBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/card_view_item_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/userTypeBackground"
+            app:layout_constraintTop_toBottomOf="@id/tvName"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/tvSum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:text="@string/uzs"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/card_view_item_text_size"
+            app:layout_constraintBottom_toBottomOf="@id/tvBalance"
+            app:layout_constraintStart_toEndOf="@id/tvBalance"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivPhone"
+            android:layout_width="@dimen/image_height"
+            android:layout_height="@dimen/image_height"
+            android:layout_marginVertical="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/call"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#00e676" />
+
+        <ImageView
+            android:id="@+id/ivPayment"
+            android:layout_width="@dimen/image_height"
+            android:layout_height="@dimen/image_height"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_payment"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_payment"
+            app:layout_constraintBottom_toBottomOf="@id/ivPhone"
+            app:layout_constraintEnd_toStartOf="@id/ivPhone"
+            app:layout_constraintTop_toTopOf="@id/ivPhone"
+            app:tint="@color/payment_icon_color" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
