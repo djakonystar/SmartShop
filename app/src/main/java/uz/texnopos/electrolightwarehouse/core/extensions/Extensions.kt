@@ -109,6 +109,16 @@ val String.ifContainsLatin: Boolean
         return false
     }
 
+val String.toSumFormat: String
+    get() {
+        var text = this.reversed()
+        text = text.subSequence(0, text.length)
+            .chunked(3) // group every 3 chars
+            .joinToString(" ")
+        return text.reversed()
+    }
+
+
 val Int.toSumFormat: String
     get() {
         var text = this.toString().reversed()

@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        android:elevation="@dimen/elevation_standard"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
