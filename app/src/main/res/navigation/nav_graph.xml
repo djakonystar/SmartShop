@@ -20,20 +20,20 @@
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragment_to_newClientFragment"
-            app:destination="@id/newClientFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_clientsFragment"
             app:destination="@id/clientsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_warehouseFragment"
+            app:destination="@id/warehouseFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/newClientFragment"
-        android:name="uz.texnopos.electrolightwarehouse.ui.newclient.NewClientFragment"
-        android:label="fragment_client_new"
-        tools:layout="@layout/fragment_client_new" />
     <fragment
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.client.ClientsFragment"
         android:label="fragment_clients"
         tools:layout="@layout/fragment_clients" />
+    <fragment
+        android:id="@+id/warehouseFragment"
+        android:name="uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseFragment"
+        android:label="fragment_warehouse"
+        tools:layout="@layout/fragment_warehouse" />
 </navigation>

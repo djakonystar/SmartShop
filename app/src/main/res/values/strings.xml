@@ -22,4 +22,13 @@
     <string name="uzs">UZS</string>
     <string name="close">Yopish</string>
     <string name="search">Izlash</string>
+    <string name="count_text">%s dona</string>
+    <string name="sum_text">%s UZS</string>
+    <string name="sort_button">Sort Button</string>
+    <string name="by_product_name">Tovar nomi bo\'yicha</string>
+    <string name="by_category">Kategoriya bo\'yicha</string>
+    <string name="by_remain">Qoldiq bo\'yicha</string>
+    <string name="by_ascend">O\'sish tartibida</string>
+    <string name="by_descend">Kamayish tartibida</string>
+    <string name="by_few_remain">Kam qolganlar bo\'yicha</string>
 </resources>
