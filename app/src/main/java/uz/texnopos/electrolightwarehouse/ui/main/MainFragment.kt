@@ -20,6 +20,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
+            newPayment.onClick {
+                navController.navigate(R.id.action_mainFragment_to_newPayment)
+            }
+            newProduct.onClick {
+                navController.navigate(R.id.action_mainFragment_to_newProductFragment)
+            }
             sales.onClick {
                 navController.navigate(R.id.action_mainFragment_to_salesFragment)
             }

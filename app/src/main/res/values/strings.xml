@@ -29,6 +29,14 @@
     <string name="mix">Aralash</string>
     <string name="cancel_uzb">Bekor qilish</string>
     <string name="done_uzb">Saylash</string>
+    <string name="choose_category">Kategoryani saylayng</string>
+    <string name="product_name">Tovarning nomi</string>
+    <string name="branch_name">Firmaning nomi</string>
+    <string name="cost_price">Tan narhini kirting</string>
+    <string name="wholesale_price">Ulgurji narhi</string>
+    <string name="min_price">Minimum narhi</string>
+    <string name="max_price">Maximum narhi</string>
+    <string name="add_new_product">Yangi tovarni kiritish</string>
     <string name="call">Call</string>
     <string name="add_payment">Add payment</string>
     <string name="uzs">UZS</string>

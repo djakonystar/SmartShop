@@ -30,6 +30,7 @@ class NewPaymentFragment: Fragment(R.layout.fragment_payment_new) {
     private var _binding: FragmentPaymentNewBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+    private lateinit var abBinding: ActionBarBinding
     private val calendarHelper = CalendarHelper()
     private lateinit var selectedDate: String
     private var method: String = ""
@@ -40,7 +41,6 @@ class NewPaymentFragment: Fragment(R.layout.fragment_payment_new) {
     private var lastTextEdit: Long = 0
     private var comment: String = ""
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var abBinding: ActionBarBinding
     private val viewModel: NewPaymentViewModel by viewModel()
 
 
@@ -59,10 +59,10 @@ class NewPaymentFragment: Fragment(R.layout.fragment_payment_new) {
         abBinding = ActionBarBinding.bind(view)
         selectedDate = calendarHelper.currentDate
         abBinding.apply {
-            tvTitle.text = context?.getString(R.string.new_payment)
-            btnHome.onClick {
-                navController.popBackStack()
-            }
+                tvTitle.text = context?.getString(R.string.new_payment)
+                btnHome.onClick {
+                    navController.popBackStack()
+                }
         }
         binding.apply {
             etPaymentCard.addTextChangedListener(MaskWatcherPayment(etPaymentCard))
