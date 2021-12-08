@@ -32,4 +32,5 @@
     <dimen name="text_size_item_large">24dp</dimen>
     <dimen name="item_percent_bg_size">48dp</dimen>
     <dimen name="margin_small">4dp</dimen>
+    <dimen name="item_indicator_size">15dp</dimen>
 </resources>

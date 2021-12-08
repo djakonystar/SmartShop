@@ -53,8 +53,8 @@
     </fragment>
     <fragment
         android:id="@+id/detailSalesFragment"
-        tools:layout="@layout/fragment_detail_sales"
-        android:name="uz.texnopos.electrolightwarehouse.ui.sales.detail.DetailSalesFragment"
+        tools:layout="@layout/fragment_sales_detail"
+        android:name="uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailFragment"
         android:label="DetailSalesFragment" />
     <fragment
         android:id="@+id/warehouseFragment"

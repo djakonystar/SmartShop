@@ -1,106 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:elevation="8dp"
-    app:cardCornerRadius="8dp"
-    android:layout_margin="8dp"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_middle"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:elevation="@dimen/elevation_standard"
+    app:cardCornerRadius="@dimen/radius_card_view">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="@dimen/margin_half"
-            android:layout_marginStart="@dimen/margin_half"
             android:id="@+id/dot"
+            android:layout_width="@dimen/item_indicator_size"
+            android:layout_height="@dimen/item_indicator_size"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:contentDescription="@string/status_indicator"
+            android:src="@drawable/red_eclipse"
+            app:layout_constraintBottom_toBottomOf="@id/tvClientName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/red_eclipse"/>
+            app:layout_constraintTop_toTopOf="@id/tvClientName" />
 
         <TextView
-            android:layout_width="0dp"
-            app:layout_constraintEnd_toStartOf="@id/tvPaymentInfo"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_32"
             android:id="@+id/tvClientName"
-            app:layout_constraintStart_toEndOf="@id/dot"
-            android:text="Jaqsibay Hakimov"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toTopOf="@id/dot"
-            android:layout_marginStart="@dimen/margin_half"
-            android:textSize="18dp"/>
-
-        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_half"
-            app:layout_constraintEnd_toEndOf="@id/tvClientName"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_32"
+            android:textColor="@color/black"
+            android:textSize="@dimen/card_view_item_text_size"
+            app:layout_constraintEnd_toStartOf="@id/tvPaymentInfo"
+            app:layout_constraintStart_toEndOf="@id/dot"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
+
+        <TextView
             android:id="@+id/tvTotalPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginTop="@dimen/margin_half"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/card_view_item_text_size"
+            app:layout_constraintEnd_toEndOf="@id/tvClientName"
             app:layout_constraintStart_toEndOf="@id/dot"
             app:layout_constraintTop_toBottomOf="@id/tvClientName"
-            android:text="1200000"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/margin_half"
-            android:textSize="18dp"/>
-
+            tools:ignore="SpUsage" />
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#DCDCDC"
             android:layout_margin="8dp"
-            android:id="@+id/view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="@dimen/margin_32"
+            android:background="#DCDCDC"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
 
         <TextView
+            android:id="@+id/tvPaymentInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/tvPaymentInfo"
-            android:text="Karta"
-            android:textSize="18dp"
             android:layout_marginEnd="@dimen/margin_32"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintBottom_toBottomOf="@id/tvTotalPrice"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTotalPrice"
-            app:layout_constraintBottom_toBottomOf="@id/tvTotalPrice"/>
+            tools:ignore="SpUsage" />
 
         <TextView
+            android:id="@+id/tvSailorName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_half"
             android:layout_marginTop="@dimen/margin_half"
             android:layout_marginEnd="@dimen/margin_half"
+            android:layout_marginBottom="@dimen/margin_half"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvData"
-            android:id="@+id/tvSailorName"
             app:layout_constraintStart_toEndOf="@id/dot"
             app:layout_constraintTop_toBottomOf="@id/view"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="@dimen/margin_half"
-            android:text="Bisenov Saliq"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/margin_half"
-            android:textSize="18dp"/>
+            tools:ignore="SpUsage" />
 
 
         <TextView
+            android:id="@+id/tvData"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:id="@+id/tvData"
-            app:layout_constraintTop_toTopOf="@id/tvSailorName"
-            app:layout_constraintBottom_toBottomOf="@id/tvSailorName"
-            android:text="21.12.2021"
             android:textColor="@color/black"
-            android:textSize="18dp"/>
-
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintBottom_toBottomOf="@id/tvSailorName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvSailorName"
+            tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.cardview.widget.CardView>
