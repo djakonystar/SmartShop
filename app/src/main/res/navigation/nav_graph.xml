@@ -23,6 +23,12 @@
             android:id="@+id/action_mainFragment_to_newClientFragment"
             app:destination="@id/newClientFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_newPayment"
+            app:destination="@id/newPayment" />
+        <action
+            android:id="@+id/action_mainFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_clientsFragment"
             app:destination="@id/clientsFragment" />
         <action
@@ -37,6 +43,16 @@
         android:name="uz.texnopos.electrolightwarehouse.ui.newclient.NewClientFragment"
         android:label="fragment_client_new"
         tools:layout="@layout/fragment_client_new" />
+    <fragment
+        android:id="@+id/newPayment"
+        android:name="uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentFragment"
+        android:label="NewPayment"
+        tools:layout="@layout/fragment_payment_new"/>
+    <fragment
+        android:id="@+id/newProductFragment"
+        android:name="uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductFragment"
+        android:label="NewProductFragment"
+        tools:layout="@layout/fragment_product_new"/>
     <fragment
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.client.ClientsFragment"

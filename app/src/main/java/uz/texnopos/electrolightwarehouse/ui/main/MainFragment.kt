@@ -20,15 +20,24 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
+            newPayment.onClick {
+                navController.navigate(R.id.action_mainFragment_to_newPayment)
+            }
+            newProduct.onClick {
+                navController.navigate(R.id.action_mainFragment_to_newProductFragment)
+            }
+            sales.onClick {
+                navController.navigate(R.id.action_mainFragment_to_salesFragment)
+            }
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
             warehouse.onClick {
                 navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
             }
-        }
-        binding.sales.onClick {
-                navController.navigate(MainFragmentDirections.actionMainFragmentToSalesFragment())
+            newPayment.onClick {
+                navController.navigate(R.id.action_mainFragment_to_newPayment)
+            }
         }
     }
 }
