@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sortProduct"
+        android:title="@string/by_product_name" />
+    <item
+        android:id="@+id/sortCategory"
+        android:title="@string/by_category" />
+    <item
+        android:id="@+id/sortRemain"
+        android:title="@string/by_remain">
+        <menu>
+            <item
+                android:id="@+id/sortAscend"
+                android:title="@string/by_ascend" />
+            <item
+                android:id="@+id/sortDescend"
+                android:title="@string/by_descend" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/sortFewRemain"
+        android:title="@string/by_few_remain" />
+</menu>

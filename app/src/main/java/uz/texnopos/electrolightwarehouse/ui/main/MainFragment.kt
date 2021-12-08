@@ -23,6 +23,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
+            warehouse.onClick {
+                navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
+            }
         }
     }
 }

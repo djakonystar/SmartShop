@@ -28,4 +28,8 @@
     <dimen name="card_view_item_text_size">22dp</dimen>
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_standard">16dp</dimen>
+    <dimen name="text_size_item_small">18dp</dimen>
+    <dimen name="text_size_item_large">24dp</dimen>
+    <dimen name="item_percent_bg_size">48dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
 </resources>
