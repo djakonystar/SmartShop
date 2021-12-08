@@ -5,12 +5,16 @@ import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
+import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
+import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
+import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
 import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseAdapter
 import java.util.concurrent.TimeUnit
 
@@ -53,10 +57,12 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
-
+    viewModel { SalesViewModel()}
 }
 
 val adapterModule = module {
     single { ClientsAdapter() }
+    single { SalesAdapter() }
+    single { SalesDetailAdapter() }
     single { WarehouseAdapter() }
 }

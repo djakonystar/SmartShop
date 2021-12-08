@@ -31,4 +31,7 @@
     <string name="by_ascend">O\'sish tartibida</string>
     <string name="by_descend">Kamayish tartibida</string>
     <string name="by_few_remain">Kam qolganlar bo\'yicha</string>
+    <string name="status_indicator">Status Indicator</string>
+    <string name="payment_cash">Naqd</string>
+    <string name="payment_card">Karta</string>
 </resources>

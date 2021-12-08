@@ -20,17 +20,42 @@
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <action
+            android:id="@+id/action_mainFragment_to_newClientFragment"
+            app:destination="@id/newClientFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_clientsFragment"
             app:destination="@id/clientsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_salesFragment"
+            app:destination="@id/salesFragment" />
         <action
             android:id="@+id/action_mainFragment_to_warehouseFragment"
             app:destination="@id/warehouseFragment" />
     </fragment>
     <fragment
+        android:id="@+id/newClientFragment"
+        android:name="uz.texnopos.electrolightwarehouse.ui.newclient.NewClientFragment"
+        android:label="fragment_client_new"
+        tools:layout="@layout/fragment_client_new" />
+    <fragment
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.client.ClientsFragment"
         android:label="fragment_clients"
         tools:layout="@layout/fragment_clients" />
+    <fragment
+        android:id="@+id/salesFragment"
+        tools:layout="@layout/fragment_sales"
+        android:name="uz.texnopos.electrolightwarehouse.ui.sales.SalesFragment"
+        android:label="SalesFragment" >
+        <action
+            android:id="@+id/action_salesFragment_to_detailSalesFragment"
+            app:destination="@id/detailSalesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailSalesFragment"
+        tools:layout="@layout/fragment_sales_detail"
+        android:name="uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailFragment"
+        android:label="DetailSalesFragment" />
     <fragment
         android:id="@+id/warehouseFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseFragment"
