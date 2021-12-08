@@ -11,6 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
+import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
@@ -57,6 +58,7 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
+    viewModel { NewPaymentViewModel(get()) }
     viewModel { SalesViewModel()}
 }
 
