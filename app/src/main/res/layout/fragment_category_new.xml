@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context=".ui.newcategory.NewCategoryFragment">
 
     <include
         android:id="@+id/actionBar"
@@ -12,13 +13,13 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCategoryName"
@@ -26,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_standard_middle"
-                android:hint="Categoryaning nomi"
+                android:hint="@string/category_name"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -41,8 +42,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilWholesalePrice"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/tilWholesalePercent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
@@ -51,104 +51,123 @@
                 app:layout_constraintTop_toBottomOf="@id/tilCategoryName">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etWholesalePrice"
+                    android:id="@+id/etWholesalePercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789 "
+                    android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
-                    android:inputType="numberDecimal"
-                    android:digits="0123456789 ,"
-                    android:padding="@dimen/margin_standard"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMinPrice"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/tilMinPercent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/min_percent"
                 app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilWholesalePrice">
+                app:layout_constraintTop_toBottomOf="@id/tilWholesalePercent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMinPrice"
+                    android:id="@+id/etMinPercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789 "
+                    android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
-                    android:inputType="numberDecimal"
-                    android:digits="0123456789 ,"
-                    android:padding="@dimen/margin_standard"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMaxPrice"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/tilMaxPercent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/max_percent"
                 app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilMinPrice">
+                app:layout_constraintTop_toBottomOf="@id/tilMinPercent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMaxPrice"
+                    android:id="@+id/etMaxPercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789 "
+                    android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
-                    android:inputType="numberDecimal"
-                    android:digits="0123456789 ,"
-                    android:padding="@dimen/margin_standard"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilMinQuantity"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="Minimum miqdori"
+                android:hint="@string/min_quantity"
+                app:helperTextEnabled="true"
+                app:helperText="@string/min_quantity_hint"
                 app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilMaxPrice">
+                app:layout_constraintTop_toBottomOf="@id/tilMaxPercent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMinQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789 "
+                    android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
-                    android:inputType="numberDecimal"
-                    android:digits="0123456789 ,"
-                    android:padding="@dimen/margin_standard"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
+
             </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.button.MaterialButton
+
+            <Button
                 android:id="@+id/btnAddCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginVertical="@dimen/margin_standard"
+                android:layout_marginHorizontal="@dimen/margin_standard"
                 android:backgroundTint="@color/app_main_color"
-                android:paddingVertical="@dimen/padding_standard_middle"
+                android:paddingHorizontal="@dimen/button_padding_horizontal"
                 android:text="@string/add_new_category"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_standard"
-                app:cornerRadius="@dimen/margin_standard"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_larger"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilMinQuantity"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
