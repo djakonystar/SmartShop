@@ -54,4 +54,9 @@
     <string name="status_indicator">Status Indicator</string>
     <string name="payment_cash">Naqd</string>
     <string name="payment_card">Karta</string>
+    <string name="new_category">Yangi categorya</string>
+    <string name="add_new_category">Yangi categoryani yaratish</string>
+    <string name="wholesale_percent">Ulgurji foizi</string>
+    <string name="max_percent">Maximum foizi</string>
+    <string name="min_percent">minimum foizi</string>
 </resources>
