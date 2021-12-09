@@ -12,6 +12,8 @@ class Settings(context: Context) {
         const val PRODUCT = "product"
     }
 
+    var userToken = "Bearer 4|jWOXCzVKhdLVljBD4Jp0QZCyULSsRhqHJNez5TxV"
+
     private val preferences: SharedPreferences =
         context.getSharedPreferences("WarehousePreferences", Context.MODE_PRIVATE)
 

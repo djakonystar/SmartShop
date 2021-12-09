@@ -67,7 +67,7 @@ val viewModelModule = module {
     viewModel { CategoriesViewModel(get()) }
 
     viewModel { NewPaymentViewModel(get()) }
-    viewModel { SalesViewModel()}
+    viewModel { SalesViewModel(get(),get())}
     viewModel { ClientsViewModel(get(), get()) }
 }
 

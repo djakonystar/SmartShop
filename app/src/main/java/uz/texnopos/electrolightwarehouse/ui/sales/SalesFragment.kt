@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
@@ -24,11 +25,10 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.getOrders()
         binding = FragmentSalesBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
-
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.sales)
             btnHome.onClick {
@@ -38,33 +38,40 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
 
         binding.apply {
             recyclerView.adapter = adapter
+            swipeRefresh.setOnRefreshListener {
+                viewModel.getOrders()
+            }
         }
 
         adapter.onClickItem {
-            navController.navigate(SalesFragmentDirections.actionSalesFragmentToDetailSalesFragment())
+            val gsonPretty= GsonBuilder().setPrettyPrinting().create()
+            val gsonString=gsonPretty.toJson(it)
+            navController.navigate(SalesFragmentDirections.actionSalesFragmentToDetailSalesFragment(gsonString))
         }
 
         setUpObservers()
     }
 
-    private fun setLoading(loading: Boolean) {
-        binding.apply {
-            progressBar.isVisible = loading
-            swipeRefresh.isEnabled = !loading
-        }
-    }
+//    private fun setLoading(loading: Boolean) {
+//        binding.apply {
+//            progressBar.isVisible = loading
+//            swipeRefresh.isEnabled = !loading
+//        }
+//    }
 
     private fun setUpObservers() {
         viewModel.orders.observe(viewLifecycleOwner, {
             when (it.status) {
                 ResourceState.LOADING -> {
-
+                    binding.swipeRefresh.isRefreshing = true
                 }
                 ResourceState.SUCCESS -> {
-
+                    adapter.models = it.data!!
+                    binding.swipeRefresh.isRefreshing = false
                 }
                 ResourceState.ERROR -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    binding.swipeRefresh.isRefreshing = false
                 }
             }
         })
