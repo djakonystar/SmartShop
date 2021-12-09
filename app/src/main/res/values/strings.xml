@@ -66,4 +66,6 @@
     <string name="add_payment">To\'lovni qo\'shish</string>
     <string name="choose_payment_method">To\'lov turini tanlang</string>
     <string name="new_pin_code">Yangi kod olish</string>
+    <string name="basket">Savat</string>
+    <string name="fill_the_fields">Qatorlarni toldiring!</string>
 </resources>

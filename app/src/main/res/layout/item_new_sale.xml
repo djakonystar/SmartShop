@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/item_background_color"
+    android:layout_margin="4dp"
+    android:elevation="3dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:id="@+id/ivProduct"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="12dp"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:id="@+id/tvTitle"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/ivProduct"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_small"
+        app:layout_constraintBottom_toTopOf="@id/tvDescription"
+        app:layout_constraintEnd_toStartOf="@id/btnAddToBasket"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        android:id="@+id/tvDescription"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintBottom_toTopOf="@id/tvPrice"
+        app:layout_constraintEnd_toEndOf="@id/tvTitle"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        android:id="@+id/tvPrice"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/margin_standard"
+        app:layout_constraintEnd_toEndOf="@id/tvTitle"/>
+
+<ImageView
+    android:layout_width="40dp"
+    android:layout_marginEnd="@dimen/margin_standard"
+    android:padding="2dp"
+    android:layout_height="40dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/btnAddToBasket"
+    android:background="?selectableItemBackgroundBorderless"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:src="@drawable/add"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

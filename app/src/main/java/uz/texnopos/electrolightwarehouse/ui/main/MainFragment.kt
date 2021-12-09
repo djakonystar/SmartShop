@@ -43,7 +43,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 optionsMenu(it)
             }
             newSale.onClick {
-                findNavController().navigate(R.id.action_mainFragment_to_newSaleFragment)
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
             }
         }
     }

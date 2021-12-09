@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/white_grey"
+    android:elevation="8dp"
     tools:ignore="UseCompoundDrawables">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,24 +29,14 @@
                     android:id="@+id/etSearch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
                     android:autofillHints="true"
                     android:hint="@string/search"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:layout_toStartOf="@id/filter"
-                    android:layoutDirection="rtl"
-                    />
+                    android:layoutDirection="rtl" />
 
-                <ImageView
-                    android:id="@+id/filter"
-                    android:layout_width="@dimen/img_standard_height"
-                    android:layout_height="@dimen/img_standard_height"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:padding="@dimen/margin_half"
-                    android:src="@drawable/ic_baseline_filter_alt_24" />
             </RelativeLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>

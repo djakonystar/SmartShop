@@ -16,4 +16,6 @@
     <color name="app_main_color">#26a69a</color>
     <color name="white_grey">#f7f8fa</color>
     <color name="payment_icon_color">#FF6D00</color>
+    <color name="item_background_color">#F1F4FB</color>
+    <color name="lightGrey">#9E9F9F</color>
 </resources>
