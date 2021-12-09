@@ -68,4 +68,5 @@
     <string name="new_pin_code">Yangi kod olish</string>
     <string name="basket">Savat</string>
     <string name="fill_the_fields">Qatorlarni toldiring!</string>
+    <string name="wrong_pincode">Mavjud bo\'lmagan maxfiy kod!</string>
 </resources>
