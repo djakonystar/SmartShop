@@ -2,6 +2,7 @@ package uz.texnopos.electrolightwarehouse.ui.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -20,24 +21,43 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
-            newPayment.onClick {
-                navController.navigate(R.id.action_mainFragment_to_newPayment)
-            }
-            newProduct.onClick {
-                navController.navigate(R.id.action_mainFragment_to_newProductFragment)
-            }
             sales.onClick {
                 navController.navigate(R.id.action_mainFragment_to_salesFragment)
             }
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
-            warehouse.onClick {
-                navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
-            }
             newPayment.onClick {
                 navController.navigate(R.id.action_mainFragment_to_newPayment)
             }
+            warehouse.onClick {
+                navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
+            }
+            newProduct.onClick {
+                navController.navigate(R.id.action_mainFragment_to_newProductFragment)
+            }
+
+            ivOther.onClick {
+                optionsMenu(it)
+            }
         }
+    }
+
+    private fun optionsMenu(view: View) {
+        val optionsMenu = PopupMenu(requireContext(), view)
+        val menuInflater = optionsMenu.menuInflater
+        menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
+        optionsMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menuNewCategory -> {
+                    navController.navigate(R.id.action_mainFragment_to_newCategoryFragment)
+                }
+                R.id.menuNewPinCode -> {
+                    // todo go to setting
+                }
+            }
+            return@setOnMenuItemClickListener true
+        }
+        optionsMenu.show()
     }
 }

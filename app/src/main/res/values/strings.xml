@@ -65,4 +65,5 @@
     <string name="search_client_hint">Mijozni ism sharifi yoki telefon raqami bo\'yicha qidirishingiz mumkin</string>
     <string name="add_payment">To\'lovni qo\'shish</string>
     <string name="choose_payment_method">To\'lov turini tanlang</string>
+    <string name="new_pin_code">Yangi kod olish</string>
 </resources>
