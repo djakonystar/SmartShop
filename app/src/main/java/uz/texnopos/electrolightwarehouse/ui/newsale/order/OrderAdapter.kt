@@ -20,9 +20,9 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun populateModel(model: Product) {
-            binding.tvProductName.text = model.product_name
+            binding.tvProductName.text = model.productName
             binding.tvProductsCount.text = "(${model.count})"
-            binding.tvPrice.text = (model.price_max * model.count).toString() + " uzs"
+            binding.tvPrice.text = (model.priceMax * model.count).toString() + " uzs"
         }
     }
 

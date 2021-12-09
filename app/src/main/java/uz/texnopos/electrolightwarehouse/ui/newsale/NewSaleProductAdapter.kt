@@ -24,9 +24,9 @@ class NewSaleProductAdapter: RecyclerView.Adapter<NewSaleProductAdapter.NewSaleV
     inner class NewSaleViewHolder(private val binding:ItemNewSaleBinding) : RecyclerView.ViewHolder(binding.root){
         fun populateModel(product: Product){
             binding.apply {
-                tvTitle.text = product.product_name
-                tvDescription.text = product.product_brand
-                tvPrice.text = product.product_cost_price
+                tvTitle.text = product.productName
+                tvDescription.text = product.productBrand
+                tvPrice.text = product.productCostPrice.toString()
             }
             binding.btnAddToBasket.onClick {
                 onItemClick.invoke(product)

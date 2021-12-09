@@ -118,7 +118,7 @@
         tools:layout="@layout/fragment_order"
         android:name="uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderFragment"
         android:label="OrderFragment" >
-        <argument android:name="product"
+        <argument android:name="products"
             app:argType="string" />
     </fragment>
 </navigation>

@@ -8,8 +8,8 @@ class Basket {
 
     fun addProduct(product: Product, onComplete: (product: Product) -> Unit) {
         mutableProducts.forEachIndexed { index, p ->
-            if (p.category_id == product.category_id) {
-                mutableProducts[index].count++
+            if (p.productId == product.productId) {
+                mutableProducts[index].count
                 onComplete.invoke(mutableProducts[index])
                 return
             }
@@ -18,29 +18,13 @@ class Basket {
         mutableProducts.add(product)
         onComplete.invoke(product)
     }
-
-    fun removeProduct(product: Product, onComplete: (product: Product) -> Unit, onRemoved: (product: Product)-> Unit) {
-        mutableProducts.forEachIndexed { index, p ->
-            if (p.category_id == product.category_id) {
-                if (p.count == 1) {
-                    mutableProducts.remove(p)
-                    onRemoved.invoke(product)
-                } else {
-                    mutableProducts[index].count--
-                    onComplete.invoke(mutableProducts[index])
-                }
-                return
-            }
-        }
-    }
-
-    fun setProduct(product: Product, count: Int, totalPrice:String) {
+    fun setProduct(product: Product, count: Int, totalPrice:Int) {
         product.count = count
-        product.product_cost_price = totalPrice
-        mutableProducts.forEachIndexed { index, p ->
-            if (p.category_id == product.category_id) {
+        product.salePrice = totalPrice
+        mutableProducts.forEachIndexed { _, p ->
+            if (p.productId == product.productId) {
                 p.count = count
-                p.product_cost_price = totalPrice
+                p.salePrice = totalPrice
                 return
             }
         }

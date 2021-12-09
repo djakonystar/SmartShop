@@ -16,7 +16,6 @@ import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
 import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.databinding.FragmentNewSaleBinding
-import uz.texnopos.electrolightwarehouse.di.adapterModule
 import uz.texnopos.electrolightwarehouse.ui.newsale.dialog.AddToBasketDialog
 
 class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
@@ -44,9 +43,9 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
             productNewSaleAdapter.onItemClickListener {
                 val dialog = AddToBasketDialog(it)
                 dialog.show(requireActivity().supportFragmentManager,"")
-                basket.addProduct(it){
+                basket.addProduct(it){ p->
                     dialog.onItemClickListener { quantity, totalPrice ->
-                        basket.setProduct(it,quantity, totalPrice)
+                        basket.setProduct(p,quantity, totalPrice.toInt())
                     }
                 }
             }
@@ -69,18 +68,18 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
         )
 
         productNewSaleAdapter.models = listOf(
-            Product("1","asd","2000","2000","",0,
-                2000,3000,40000),
-            Product("2","asd","2000","2000","",0,
-            2000,3000,40000),
-        Product("3","asd","2000","2000","",0,
-            2000,3000,40000),
-        Product("4","asd","2000","2000","",0,
-            2000,3000,40000),
-        Product("5","asd","2000","2000","",0,
-            2000,3000,40000),
-        Product("6","asd","2000","2000","",0,
-            2000,3000,40000)
+            Product(1,1,"asd","BMW","",2000,
+                2000,2000,3000,0,1200),
+            Product(1,1,"asd","BMW","",2000,
+                2000,2000,3000,0,1200),
+            Product(1,1,"asd","BMW","",2000,
+                2000,2000,3000,0,1200),
+            Product(1,1,"asd","BMW","",2000,
+                2000,2000,3000,0,1200),
+            Product(1,1,"asd","BMW","",2000,
+                2000,2000,3000,0,1200),
+            Product(1,1,"asd","BMW","",2000,
+                2000,2000,3000,0,1200)
         )
     }
 
