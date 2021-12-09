@@ -82,7 +82,7 @@
             android:id="@+id/bgWholesalePercent"
             android:layout_width="@dimen/item_percent_bg_size"
             android:layout_height="@dimen/item_percent_bg_size"
-            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_middle"
             android:background="@drawable/shape_rounded_field"
             app:layout_constraintBottom_toBottomOf="@id/tvCategory"
             app:layout_constraintEnd_toStartOf="@id/bgMinimumPercent"

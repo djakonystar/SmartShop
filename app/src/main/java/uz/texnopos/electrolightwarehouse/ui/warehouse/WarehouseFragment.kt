@@ -1,7 +1,6 @@
 package uz.texnopos.electrolightwarehouse.ui.warehouse
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
@@ -9,8 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
+import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
+import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
+import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarSortBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentWarehouseBinding
 
@@ -18,7 +21,9 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var binding: FragmentWarehouseBinding
     private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
+    private val viewModel: WarehouseViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
+    private var productsList = listOf<WarehouseProduct>()
     private var sortType = "byFewRemain"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,8 +47,41 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
+                viewModel.getProductsFromWarehouse()
             }
             recyclerView.adapter = adapter
+        }
+
+        viewModel.getProductsFromWarehouse()
+        setUpObservers()
+    }
+
+    private fun setUpObservers() {
+        viewModel.warehouseProducts.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    if (it.data!!.successful) {
+                        val products = it.data.payload
+                        productsList = when (sortType) {
+                            "byFewRemain" -> products.sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+                            "byProduct" -> products.sortedBy { t -> t.name }
+                            "byCategory" -> products.sortedBy { t -> t.category.name }
+                            "byRemainAscend" -> products.sortedBy { t -> t.remained }
+                            "byRemainDescend" -> products.sortedByDescending { t -> t.remained }
+                            else -> products
+                        }
+                        adapter.models = productsList
+                    } else {
+                        showMessage(it.data.message)
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
         }
     }
 
@@ -61,7 +99,6 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         menuInflater.inflate(R.menu.menu_warehouse_sort, optionsMenu.menu)
         optionsMenu.setOnMenuItemClickListener {
             when (it.itemId) {
-                // TODO: Do get requests
                 R.id.sortProduct -> {
                     sortType = "byProduct"
                 }
@@ -78,6 +115,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     sortType = "byFewRemain"
                 }
             }
+            viewModel.getProductsFromWarehouse()
             return@setOnMenuItemClickListener true
         }
         optionsMenu.show()
