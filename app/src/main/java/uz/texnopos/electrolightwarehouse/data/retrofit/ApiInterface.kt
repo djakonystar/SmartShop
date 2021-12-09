@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
 import uz.texnopos.electrolightwarehouse.data.model.Client
 import uz.texnopos.electrolightwarehouse.data.model.Sales
+import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
 import uz.texnopos.electrolightwarehouse.data.newClient.ClientId
 import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
 import uz.texnopos.electrolightwarehouse.data.newPayment.NewPayment
@@ -35,6 +36,11 @@ interface ApiInterface {
     fun getOrders(
         @Header("Authorization") token: String
     ): Observable<GenericResponse<List<Sales>>>
+
+    @GET("api/warehouse")
+    fun getProductsFromWarehouse(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<List<WarehouseProduct>>>
 
 //    @GET("api/categories")
 //    fun getCategories(

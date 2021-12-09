@@ -16,8 +16,8 @@ class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
         fun populateModel(model: Client) {
             binding.apply {
                 tvName.text = model.name
-                tvBalance.text = if (model.balance < 0) {
-                    "-${(-1 * model.balance).toString().toSumFormat}"
+                tvBalance.text = if (model.balance?:0 < 0) {
+                    "-${(-1 * model.balance!!).toString().toSumFormat}"
                 } else {
                     model.balance.toString().toSumFormat
                 }
