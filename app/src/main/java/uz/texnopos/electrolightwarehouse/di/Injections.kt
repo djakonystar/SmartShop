@@ -13,13 +13,14 @@ import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
+import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
 import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseAdapter
 import java.util.concurrent.TimeUnit
 
-private const val baseUrl = "https://"
+private const val baseUrl = "http://electro-life.texnopos.site"
 private const val timeOut = 50L
 
 val networkModule = module {
@@ -60,6 +61,7 @@ val helperModule = module {
 val viewModelModule = module {
     viewModel { NewPaymentViewModel(get()) }
     viewModel { SalesViewModel()}
+    viewModel { ClientsViewModel(get(), get()) }
 }
 
 val adapterModule = module {

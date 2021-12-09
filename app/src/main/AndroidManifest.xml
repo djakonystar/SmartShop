@@ -12,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Warehouse">
+        android:theme="@style/Theme.Warehouse"
+        android:usesCleartextTraffic="true">
         <activity
             android:name="uz.texnopos.electrolightwarehouse.MainActivity"
             android:exported="true"

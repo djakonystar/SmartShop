@@ -8,12 +8,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
-import uz.texnopos.electrolightwarehouse.core.extensions.toPhoneNumber
+import uz.texnopos.electrolightwarehouse.core.extensions.toPhoneNumberFromFull
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.ClientResponse
+import uz.texnopos.electrolightwarehouse.data.model.Client
 import uz.texnopos.electrolightwarehouse.databinding.DialogClientDetailBinding
 
-class ClientDetailDialogFragment(private val client: ClientResponse) : DialogFragment() {
+class ClientDetailDialogFragment(private val client: Client) : DialogFragment() {
     private lateinit var binding: DialogClientDetailBinding
 
     override fun onCreateView(
@@ -37,10 +37,10 @@ class ClientDetailDialogFragment(private val client: ClientResponse) : DialogFra
             } else {
                 "${client.balance.toString().toSumFormat} UZS"
             }
-            tvPhone.text = client.phone.toPhoneNumber
+            tvPhone.text = client.phone.toPhoneNumberFromFull
             tvComment.text = client.comment
             if (client.type == 1) {
-                tvTIN.text = client.tin.toSumFormat
+                tvTIN.text = client.tin!!.toSumFormat
             } else {
                 tvTINTitle.isVisible = false
                 tvTIN.isVisible = false
