@@ -1,8 +1,18 @@
 package uz.texnopos.electrolightwarehouse.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ProductInfo(
-    val order_id:Int,
-    val product_id:Int,
-    val product_name:String,
+    @SerializedName("order_id")
+    val orderId:Int,
+    @SerializedName("product_id")
+    val productId:Int,
+    @SerializedName("product_brand")
+    val productBrand:String,
+    @SerializedName("product_name")
+    val productName:String,
+    @SerializedName("price")
+    val price:Int,
+    @SerializedName("count")
     val count:Int
 )

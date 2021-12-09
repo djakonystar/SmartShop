@@ -20,7 +20,7 @@
         app:endIconMode="clear_text"
         app:layout_constraintTop_toBottomOf="@id/actionBar">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

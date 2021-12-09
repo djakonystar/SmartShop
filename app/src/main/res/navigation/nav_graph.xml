@@ -101,7 +101,11 @@
         android:id="@+id/detailSalesFragment"
         tools:layout="@layout/fragment_sales_detail"
         android:name="uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailFragment"
-        android:label="DetailSalesFragment" />
+        android:label="DetailSalesFragment" >
+        <argument
+            android:name="detail"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/warehouseFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseFragment"
