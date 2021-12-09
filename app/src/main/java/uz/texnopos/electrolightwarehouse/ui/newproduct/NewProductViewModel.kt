@@ -25,7 +25,7 @@ class NewProductViewModel(private val api: ApiInterface,private val settings: Se
 
     fun getCategories(){
         mutableCategories.value = Resource.loading()
-        compositeDisposable.add(api.getCategories("Bearer 5|Cmn3wbVIPlspPYUFvXG9JhCKWCKfMdffyijCvAC3")
+        compositeDisposable.add(api.getCategories("Bearer ${settings.token}")
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -46,7 +46,7 @@ class NewProductViewModel(private val api: ApiInterface,private val settings: Se
 
     fun createProduct(product: Product){
         mutableProduct.value = Resource.loading()
-        compositeDisposable.add(api.createdProduct("Bearer 5|Cmn3wbVIPlspPYUFvXG9JhCKWCKfMdffyijCvAC3", product)
+        compositeDisposable.add(api.createdProduct("Bearer ${settings.token}", product)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

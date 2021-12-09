@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.*
 import uz.texnopos.electrolightwarehouse.data.ClientInfo
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
+import uz.texnopos.electrolightwarehouse.data.model.Client
 import uz.texnopos.electrolightwarehouse.data.model.Sales
 import uz.texnopos.electrolightwarehouse.data.model.signin.SignInPayload
 import uz.texnopos.electrolightwarehouse.data.model.signin.SignInPost
@@ -29,11 +30,16 @@ interface ApiInterface {
         @Header("Authorization") token: String,@Query("search") search: String
     ): Observable<GenericResponse<List<ClientInfo>>>
 
+    @GET("api/clients")
+    fun getClients(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<List<Client>>>
+
     @POST("api/client/payment")
     fun payment(
         @Header("Authorization") token: String,
         @Body newPayment: NewPayment
-    ): Observable<GenericResponse<String>>
+    ): Observable<GenericResponse<List<String>>>
 
     @GET("api/orders")
     fun getOrders(

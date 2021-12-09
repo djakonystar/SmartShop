@@ -24,7 +24,7 @@ class NewPaymentViewModel(private val api: ApiInterface,private val settings: Se
 
     fun newPayment(newPayment: NewPayment){
         mutableNewPayment.value = Resource.loading()
-        compositeDisposable.add(api.payment("Bearer 5|Cmn3wbVIPlspPYUFvXG9JhCKWCKfMdffyijCvAC3",newPayment)
+        compositeDisposable.add(api.payment("Bearer ${settings.token}",newPayment)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -48,7 +48,7 @@ class NewPaymentViewModel(private val api: ApiInterface,private val settings: Se
 
     fun searchClient(search: String){
         mutableSearchClient.value = Resource.loading()
-        compositeDisposable.add(api.getClients("Bearer 5|Cmn3wbVIPlspPYUFvXG9JhCKWCKfMdffyijCvAC3",search)
+        compositeDisposable.add(api.getClients("Bearer ${settings.token}", search)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
