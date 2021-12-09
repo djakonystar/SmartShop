@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import java.lang.Exception
 import java.util.*
 
 class MaskWatcherPercent(private val editText: EditText) : TextWatcher {
@@ -32,7 +31,7 @@ class MaskWatcherPercent(private val editText: EditText) : TextWatcher {
                     for (i in str) if (i.isDigit()) d+=i
                     editText.setText("${d.toDecimalFormat()}%")
                 }
-                editText.setSelection(editText.text.toString().length - 4)
+                editText.setSelection(editText.text.toString().length - 1)
             }
             editText.addTextChangedListener(this)
             return

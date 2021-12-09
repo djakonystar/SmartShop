@@ -80,7 +80,14 @@
         android:id="@+id/newProductFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductFragment"
         android:label="NewProductFragment"
-        tools:layout="@layout/fragment_product_new"/>
+        tools:layout="@layout/fragment_product_new">
+        <action
+            android:id="@+id/action_newProductFragment_to_newCategoryFragment"
+            app:destination="@id/newCategoryFragment" />
+        <action
+            android:id="@+id/action_newProductFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.client.ClientsFragment"
@@ -117,8 +124,11 @@
         android:id="@+id/newCategoryFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newcategory.NewCategoryFragment"
         android:label="fragment_category_new"
-        tools:layout="@layout/fragment_category_new" />
-
+        tools:layout="@layout/fragment_category_new" >
+        <action
+            android:id="@+id/action_newCategoryFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderFragment"
         tools:layout="@layout/fragment_order"
