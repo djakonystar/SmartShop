@@ -2,9 +2,9 @@ package uz.texnopos.electrolightwarehouse.data.model
 
 data class Payment(
     val id:Int,
-    val card:Double,
-    val cash:Double,
-    val debt:Double,
+    val card: Long,
+    val cash: Long,
+    val debt: Long,
     val price:Double,
     val term: String,
     val description:String,

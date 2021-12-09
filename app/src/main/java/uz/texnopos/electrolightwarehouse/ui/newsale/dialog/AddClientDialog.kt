@@ -18,7 +18,6 @@ class AddClientDialog:DialogFragment() {
     private var _binding:DialogAddClientBinding? = null
     private val binding get() = _binding!!
     private var type= MutableLiveData<String>()
-    private var typeOf = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,11 +51,16 @@ class AddClientDialog:DialogFragment() {
 
         binding.apply {
             binding.btnAdd.onClick {
-                if (etName.text.isNotEmpty() && etInn.text.isNotEmpty() && etPhone.text.isNotEmpty()){
+                if (etName.text.isNotEmpty() && etPhone.text.isNotEmpty()){
                     val name = etName.text.toString()
                     val inn = etInn.text.toString()
                     val phone = etPhone.text.toString()
-                    sendDate.invoke(name, inn, phone, type.value.toString())
+                    val typeOf: Int = if (type.value.toString() == "Jismoniy"){
+                        0
+                    }else{
+                        1
+                    }
+                    sendDate.invoke(name, inn, phone, typeOf)
                     dismiss()
                 }else{
                     Toast.makeText(context, requireActivity().getString(R.string.fill_the_fields), Toast.LENGTH_SHORT).show()
@@ -84,8 +88,8 @@ class AddClientDialog:DialogFragment() {
     }
 
 
-    private var sendDate: (name:String, inn:String, phone:String, type:String) -> Unit = { _:String,_:String,_:String, _: String -> }
-    fun setDate(sendDate: (name:String, inn:String, phone:String, type:String) -> Unit) {
+    private var sendDate: (name:String, inn:String, phone:String, type:Int) -> Unit = { _:String,_:String,_:String, _: Int -> }
+    fun setDate(sendDate: (name:String, inn:String, phone:String, type:Int) -> Unit) {
         this.sendDate = sendDate
     }
 }

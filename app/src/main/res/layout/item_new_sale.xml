@@ -8,25 +8,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:id="@+id/ivProduct"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="12dp"/>
-
     <TextView
         android:layout_width="0dp"
         android:id="@+id/tvTitle"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/ivProduct"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="@dimen/margin_standard"
+        android:textColor="@color/black"
+        android:textSize="18dp"
         android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_32"
         app:layout_constraintBottom_toTopOf="@id/tvDescription"
         app:layout_constraintEnd_toStartOf="@id/btnAddToBasket"/>
 
@@ -35,11 +27,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/tvTitle"
         android:id="@+id/tvDescription"
+        android:textColor="@color/black"
+        android:textSize="18dp"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintBottom_toTopOf="@id/tvPrice"
         app:layout_constraintEnd_toEndOf="@id/tvTitle"/>
     <TextView
         android:layout_width="0dp"
+        android:textColor="@color/black"
+        android:textSize="18dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/tvTitle"
         android:id="@+id/tvPrice"

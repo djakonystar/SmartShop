@@ -1,6 +1,8 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -13,8 +15,6 @@ import uz.texnopos.electrolightwarehouse.core.MarginItemDecoration
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.dp
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
-import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
-import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.databinding.FragmentNewSaleBinding
 import uz.texnopos.electrolightwarehouse.ui.newsale.dialog.AddToBasketDialog
 
@@ -49,11 +49,40 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
                 }
             }
 
-            btnFab.onClick {
-                val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-                val gsonString = gsonPretty.toJson(Basket.products)
-                findNavController().navigate(NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(gsonString))
+            actionBar.btnBack.onClick {
+                findNavController().popBackStack()
+                Basket.mutableProducts.clear()
             }
+
+            actionBar.etSearch.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    p0?.let {
+                        if (it.isEmpty()) {
+                            productNewSaleAdapter.models = productNewSaleAdapter.allModel
+                        } else {
+                            categoryViewModel.getProductByName(it.toString())
+                        }
+                    }
+                }
+
+            })
+
+            btnFab.onClick {
+                if (!Basket.products.isEmpty()){
+                    val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+                    val gsonString = gsonPretty.toJson(Basket.products)
+                    findNavController().navigate(NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(gsonString))
+
+                    }else{
+                    Toast.makeText(requireContext(), "Producta qoshing!", Toast.LENGTH_SHORT).show()
+                }
+                }
             categoryNewSaleAdapter.onItemClickListener {
                 categoryViewModel.getCategoryById(it)
             }
@@ -83,7 +112,7 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
                 }
                 ResourceState.SUCCESS->{
                     binding.swipeRefreshLayout.isRefreshing = false
-                    productNewSaleAdapter.models = it.data!!.products
+                    productNewSaleAdapter.allModel = it.data!!.products
                 }
                 ResourceState.ERROR->{
                     binding.swipeRefreshLayout.isRefreshing = false

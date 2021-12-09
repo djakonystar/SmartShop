@@ -11,14 +11,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
-import uz.texnopos.electrolightwarehouse.ui.newsale.Basket
-import uz.texnopos.electrolightwarehouse.ui.newsale.CategoryNewSaleAdapter
-import uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleProductAdapter
-import uz.texnopos.electrolightwarehouse.ui.newsale.CategoriesViewModel
-import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderAdapter
-import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel
+import uz.texnopos.electrolightwarehouse.ui.newclient.NewClientViewModel
+import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
+import uz.texnopos.electrolightwarehouse.ui.newsale.CategoriesViewModel
+import uz.texnopos.electrolightwarehouse.ui.newsale.CategoryNewSaleAdapter
+import uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleProductAdapter
+import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderAdapter
+import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
@@ -69,6 +70,9 @@ val viewModelModule = module {
     viewModel { NewPaymentViewModel(get()) }
     viewModel { SalesViewModel()}
     viewModel { ClientsViewModel(get(), get()) }
+    viewModel { NewClientViewModel(get()) }
+    viewModel { OrderViewModel(get()) }
+
 }
 
 val adapterModule = module {

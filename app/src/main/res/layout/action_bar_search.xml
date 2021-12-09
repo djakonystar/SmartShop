@@ -9,7 +9,9 @@
     tools:ignore="UseCompoundDrawables">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/white_grey">
@@ -25,17 +27,37 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.SearchView
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etSearch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="@dimen/margin_half"
                     android:autofillHints="true"
-                    android:hint="@string/search"
-                    android:layout_marginEnd="@dimen/margin_standard"
+                    android:background="@drawable/background_edit_text_search"
+                    android:drawableStart="@drawable/ic_search_24"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:layoutDirection="rtl" />
+                    android:padding="12dp" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:id="@+id/btnBack"
+                    android:focusable="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="-9dp"
+                    android:layout_marginTop="-2dp"
+                    android:layout_marginBottom="2dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_back" />
 
             </RelativeLayout>
 

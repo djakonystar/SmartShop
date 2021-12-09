@@ -8,7 +8,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.electrolightwarehouse.core.Resource
 import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
-import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.data.model.Products
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 
@@ -24,7 +23,7 @@ class CategoriesViewModel(private val api:ApiInterface): ViewModel() {
     fun getCategories() {
         _categories.value = Resource.loading()
         compositeDisposable.add(
-            api.getCategories("Bearer 4|jWOXCzVKhdLVljBD4Jp0QZCyULSsRhqHJNez5TxV").subscribeOn(Schedulers.newThread())
+            api.getCategories("Bearer 2|0UiQUlD83kpr4zqBtUvhgTWJUEepFwo4UW94Uooe").subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -43,7 +42,7 @@ class CategoriesViewModel(private val api:ApiInterface): ViewModel() {
     fun getCategoryById(id: Int){
         _products.value = Resource.loading()
         compositeDisposable.add(
-            api.getCategoriesById("Bearer 4|jWOXCzVKhdLVljBD4Jp0QZCyULSsRhqHJNez5TxV",id)
+            api.getCategoriesById("Bearer 2|0UiQUlD83kpr4zqBtUvhgTWJUEepFwo4UW94Uooe",id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

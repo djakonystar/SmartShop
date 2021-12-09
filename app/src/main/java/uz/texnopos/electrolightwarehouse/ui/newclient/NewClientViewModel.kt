@@ -18,9 +18,9 @@ class NewClientViewModel(private val api:ApiInterface): ViewModel() {
     private var mutableRegister: MutableLiveData<Resource<GenericResponse<ClientId>>> = MutableLiveData()
     val registerNewClient: LiveData<Resource<GenericResponse<ClientId>>> get() = mutableRegister
 
-    fun registerNewClient(token: String,registerClient: RegisterClient){
+    fun registerNewClient(registerClient: RegisterClient){
         mutableRegister.value = Resource.loading()
-        compositeDisposable.add(api.registerNewClient(token,registerClient)
+        compositeDisposable.add(api.registerNewClient("Bearer 4|jWOXCzVKhdLVljBD4Jp0QZCyULSsRhqHJNez5TxV",registerClient)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
