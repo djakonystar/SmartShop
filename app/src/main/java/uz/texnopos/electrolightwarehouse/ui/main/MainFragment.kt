@@ -28,7 +28,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
             newPayment.onClick {
-                navController.navigate(R.id.action_mainFragment_to_newPayment)
+                navController.navigate(
+                    MainFragmentDirections.actionMainFragmentToNewPayment(client = "null")
+                )
             }
             warehouse.onClick {
                 navController.navigate(R.id.action_mainFragment_to_warehouseFragment)

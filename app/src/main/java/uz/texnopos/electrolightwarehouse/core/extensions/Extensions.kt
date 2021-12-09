@@ -99,6 +99,12 @@ fun String.dialPhone(activity: Activity) {
     activity.startActivity(intent)
 }
 
+fun String.dialPhoneFull(activity: Activity) {
+    val phone = this
+    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(phone)))
+    activity.startActivity(intent)
+}
+
 val String.ifContainsLatin: Boolean
     get() {
         this.forEach {
@@ -140,6 +146,22 @@ val Double.toSumFormat: String
 val String.toPhoneNumber: String
     get() {
         val arr = this.toCharArray()
+        var phone = "+998 ("
+        arr.forEachIndexed { index, c ->
+            phone += c
+            if (index == 1) {
+                phone += ") "
+            }
+            if (index == 4 || index == 6) {
+                phone += " "
+            }
+        }
+        return phone
+    }
+
+val String.toPhoneNumberFromFull: String
+    get() {
+        val arr = this.substring(4..this.lastIndex).toCharArray()
         var phone = "+998 ("
         arr.forEachIndexed { index, c ->
             phone += c

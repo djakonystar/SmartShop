@@ -11,11 +11,14 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import org.koin.android.ext.android.inject
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.databinding.FragmentSignInBinding
+import uz.texnopos.electrolightwarehouse.settings.Settings
 
 class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private lateinit var binding: FragmentSignInBinding
+    private val settings: Settings by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +39,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             Snackbar.make(binding.etPassword, "Success!", Snackbar.LENGTH_SHORT).show()
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
+            settings.token = "2|dgEFGswFxmEWJChz0ydIXRizVjanLKypmGnZCv5x" // todo clear this line
             findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
         } else {
             val snackbar = Snackbar.make(binding.etPassword, "Error!", Snackbar.LENGTH_SHORT)

@@ -24,7 +24,14 @@
             app:destination="@id/newClientFragment" />
         <action
             android:id="@+id/action_mainFragment_to_newPayment"
-            app:destination="@id/newPayment" />
+            app:destination="@id/newPayment" >
+            <argument
+                android:name="clientId"
+                android:defaultValue="0" />
+            <argument
+                android:name="client"
+                android:defaultValue="null" />
+        </action>
         <action
             android:id="@+id/action_mainFragment_to_newProductFragment"
             app:destination="@id/newProductFragment" />
@@ -50,7 +57,11 @@
         android:id="@+id/newPayment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentFragment"
         android:label="NewPayment"
-        tools:layout="@layout/fragment_payment_new"/>
+        tools:layout="@layout/fragment_payment_new">
+        <argument
+            android:name="client"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/newProductFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductFragment"
@@ -60,7 +71,11 @@
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.client.ClientsFragment"
         android:label="fragment_clients"
-        tools:layout="@layout/fragment_clients" />
+        tools:layout="@layout/fragment_clients" >
+        <action
+            android:id="@+id/action_clientsFragment_to_newPayment"
+            app:destination="@id/newPayment" />
+    </fragment>
     <fragment
         android:id="@+id/salesFragment"
         tools:layout="@layout/fragment_sales"

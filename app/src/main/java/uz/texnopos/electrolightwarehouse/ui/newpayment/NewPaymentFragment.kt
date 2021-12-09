@@ -11,6 +11,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.gson.Gson
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.CalendarHelper
@@ -19,6 +21,7 @@ import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.core.extensions.visibility
+import uz.texnopos.electrolightwarehouse.data.model.Client
 import uz.texnopos.electrolightwarehouse.data.newPayment.NewPayment
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentPaymentNewBinding
@@ -28,6 +31,7 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val viewModel: NewPaymentViewModel by viewModel()
+    private val args: NewPaymentFragmentArgs by navArgs()
     private val calendarHelper = CalendarHelper()
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var selectedDate: String
@@ -47,6 +51,8 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
         navController = findNavController()
         selectedDate = calendarHelper.currentDate
 
+        val fromClientFragment = args.client != "null"
+
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_payment)
             btnHome.onClick {
@@ -55,6 +61,13 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
         }
 
         binding.apply {
+            if (fromClientFragment) {
+                val client = Gson().fromJson(args.client, Client::class.java)
+                tilClient.isEnabled = false
+                etSearchClient.setText(client.name)
+                clientId = client.id
+            }
+
             etPaymentCard.addTextChangedListener(MaskWatcherPayment(etPaymentCard))
             etPaymentCash.addTextChangedListener(MaskWatcherPayment(etPaymentCash))
 

@@ -7,13 +7,13 @@ import uz.texnopos.electrolightwarehouse.core.BaseAdapter
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.ClientResponse
+import uz.texnopos.electrolightwarehouse.data.model.Client
 import uz.texnopos.electrolightwarehouse.databinding.ItemClientBinding
 
-class ClientsAdapter : BaseAdapter<ClientResponse, ClientsAdapter.ClientsViewHolder>() {
+class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
     inner class ClientsViewHolder(private val binding: ItemClientBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun populateModel(model: ClientResponse) {
+        fun populateModel(model: Client) {
             binding.apply {
                 tvName.text = model.name
                 tvBalance.text = if (model.balance < 0) {
@@ -45,8 +45,8 @@ class ClientsAdapter : BaseAdapter<ClientResponse, ClientsAdapter.ClientsViewHol
         holder.populateModel(models[position])
     }
 
-    private var onItemClick: (model: ClientResponse) -> Unit = {}
-    fun setOnItemClickListener(onItemClick: (model: ClientResponse) -> Unit) {
+    private var onItemClick: (model: Client) -> Unit = {}
+    fun setOnItemClickListener(onItemClick: (model: Client) -> Unit) {
         this.onItemClick = onItemClick
     }
 
@@ -55,8 +55,8 @@ class ClientsAdapter : BaseAdapter<ClientResponse, ClientsAdapter.ClientsViewHol
         this.onPhoneClick = onPhoneClick
     }
 
-    private var onPaymentClick: (model: ClientResponse) -> Unit = {}
-    fun setOnPaymentClickListener(onPaymentClick: (model: ClientResponse) -> Unit) {
+    private var onPaymentClick: (model: Client) -> Unit = {}
+    fun setOnPaymentClickListener(onPaymentClick: (model: Client) -> Unit) {
         this.onPaymentClick = onPaymentClick
     }
 }
