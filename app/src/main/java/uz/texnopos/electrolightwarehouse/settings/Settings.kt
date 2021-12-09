@@ -9,6 +9,7 @@ class Settings(context: Context) {
         const val SIGNED_IN = "signedIn"
         const val TOKEN = "accessToken"
         const val USERNAME = "username"
+        const val PRODUCT = "product"
     }
 
     private val preferences: SharedPreferences =

@@ -37,4 +37,5 @@
     <dimen name="item_percent_bg_size">48dp</dimen>
     <dimen name="margin_small">4dp</dimen>
     <dimen name="item_indicator_size">15dp</dimen>
+    <dimen name="margin_64">64dp</dimen>
 </resources>

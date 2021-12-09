@@ -61,6 +61,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rvHorizontalCategories"
                 android:layout_height="0dp"
                 tools:listitem="@layout/item_new_sale"
+                android:layout_marginBottom="@dimen/margin_64"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,7 +89,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
-        android:layout_margin="@dimen/margin_standard"
+        android:layout_margin="@dimen/margin_half"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_shopping_cart_"
         app:tint="@color/white"

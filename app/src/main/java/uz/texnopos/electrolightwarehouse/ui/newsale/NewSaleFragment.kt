@@ -1,7 +1,6 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -25,7 +24,6 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
     private val productNewSaleAdapter:NewSaleProductAdapter by inject()
     private val categoryNewSaleAdapter:CategoryNewSaleAdapter by inject()
     private val categoryViewModel:CategoriesViewModel by viewModel()
-    private val basket = Basket()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,17 +42,16 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
             productNewSaleAdapter.onItemClickListener {
                 val dialog = AddToBasketDialog(it)
                 dialog.show(requireActivity().supportFragmentManager,"")
-                basket.addProduct(it){ p->
+                Basket.addProduct(it){ p->
                     dialog.onItemClickListener { quantity, totalPrice ->
-                        basket.setProduct(p,quantity, totalPrice.toInt())
+                        Basket.setProduct(p,quantity, totalPrice.toInt())
                     }
                 }
             }
 
             btnFab.onClick {
                 val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-                val gsonString = gsonPretty.toJson(basket.products)
-                Log.d("abc", basket.products.size.toString())
+                val gsonString = gsonPretty.toJson(Basket.products)
                 findNavController().navigate(NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(gsonString))
             }
             categoryNewSaleAdapter.onItemClickListener {
@@ -99,7 +96,6 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
                     binding.swipeRefreshLayout.isRefreshing = false
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
-
             }
         })
         categoryViewModel.products.observe(viewLifecycleOwner,{
