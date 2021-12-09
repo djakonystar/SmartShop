@@ -19,8 +19,8 @@ class SalesViewModel(private val api:ApiInterface, private val settings: Setting
     fun getOrders() {
         _orders.value = Resource.loading()
         compositeDisposable.add(
-            api.getOrders(settings.userToken).subscribeOn(
-                Schedulers.newThread())
+            api.getOrders("Bearer ${settings.token}")
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {

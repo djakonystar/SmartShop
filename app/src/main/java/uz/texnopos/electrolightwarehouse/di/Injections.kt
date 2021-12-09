@@ -22,6 +22,7 @@ import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
+import uz.texnopos.electrolightwarehouse.ui.signin.SignInViewModel
 import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseAdapter
 import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseViewModel
 import java.util.concurrent.TimeUnit
@@ -70,6 +71,7 @@ val viewModelModule = module {
     viewModel { SalesViewModel(get(), get()) }
     viewModel { ClientsViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
+    viewModel { SignInViewModel(get(), get()) }
 }
 
 val adapterModule = module {

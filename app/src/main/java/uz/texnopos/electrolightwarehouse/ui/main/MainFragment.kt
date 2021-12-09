@@ -15,7 +15,6 @@ import uz.texnopos.electrolightwarehouse.settings.Settings
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private lateinit var navController: NavController
-    private val settings: Settings by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -23,11 +22,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding = FragmentMainBinding.bind(view)
         navController = findNavController()
 
-        settings.token = "4|XfKRxk0N38WckhMvHdHl8523j1Dzi9tqq4BZYrtq"
-
         binding.apply {
             sales.onClick {
                 navController.navigate(R.id.action_mainFragment_to_salesFragment)
+            }
+            newSale.onClick {
+                navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
             }
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
@@ -45,10 +45,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             ivOther.onClick {
-                optionsMenu(it)
-            }
-            newSale.onClick {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
+                navController.navigate(R.id.action_mainFragment_to_newCategoryFragment)
+//                optionsMenu(it)
             }
         }
     }
