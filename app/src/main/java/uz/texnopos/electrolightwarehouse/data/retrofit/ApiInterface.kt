@@ -6,6 +6,7 @@ import uz.texnopos.electrolightwarehouse.data.ClientInfo
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
 import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
 import uz.texnopos.electrolightwarehouse.data.model.Client
+import uz.texnopos.electrolightwarehouse.data.model.Order
 import uz.texnopos.electrolightwarehouse.data.model.Products
 import uz.texnopos.electrolightwarehouse.data.model.Sales
 import uz.texnopos.electrolightwarehouse.data.model.signin.SignInPayload
@@ -37,6 +38,12 @@ interface ApiInterface {
     fun getClients(
         @Header("Authorization") token: String
     ): Observable<GenericResponse<List<Client>>>
+
+    @GET("api/clients")
+    fun getClientsByName(
+        @Header("Authorization") token: String,@Query("search") search: String
+    ): Observable<GenericResponse<List<ClientInfo>>>
+
 
     @POST("api/client/payment")
     fun payment(
@@ -90,4 +97,9 @@ interface ApiInterface {
     fun getCategories(
         @Header("Authorization") token: String
     ): Observable<GenericResponse<List<Categories>>>
+    @POST("api/order")
+    fun order(
+        @Header("Authorization") token: String,
+        @Body order:Order
+    ):Observable<GenericResponse<Any>>
 }

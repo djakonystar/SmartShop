@@ -16,6 +16,14 @@ class NewSaleProductAdapter: RecyclerView.Adapter<NewSaleProductAdapter.NewSaleV
         notifyDataSetChanged()
     }
 
+    var allModel: List<Product> = listOf()
+        set(value) {
+            field = value
+            models = value
+            notifyDataSetChanged()
+        }
+
+
     var onItemClick: (product:Product) -> Unit = {}
     fun onItemClickListener(onItemClick: (product:Product) -> Unit) {
         this.onItemClick = onItemClick
@@ -45,4 +53,10 @@ class NewSaleProductAdapter: RecyclerView.Adapter<NewSaleProductAdapter.NewSaleV
     }
 
     override fun getItemCount(): Int = models.size
+
+    fun filterList(filteredListName: MutableList<Product>) {
+        models = filteredListName
+        notifyDataSetChanged()
+    }
+
 }
