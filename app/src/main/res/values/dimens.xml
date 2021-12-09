@@ -24,6 +24,8 @@
     <dimen name="button_height">64dp</dimen>
     <dimen name="login_lock_icon_size">96dp</dimen>
     <dimen name="checkbox_height">48dp</dimen>
+    <dimen name="title_text_size">18dp</dimen>
+    <dimen name="img_standard_height">40dp</dimen>
     <dimen name="margin_standard_middle">12dp</dimen>
     <dimen name="padding_standard_middle">12dp</dimen>
     <dimen name="image_height">48dp</dimen>
