@@ -42,6 +42,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             ivOther.onClick {
                 optionsMenu(it)
             }
+            newSale.onClick {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
+            }
         }
     }
 

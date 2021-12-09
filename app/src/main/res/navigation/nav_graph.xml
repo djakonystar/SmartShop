@@ -23,6 +23,9 @@
             android:id="@+id/action_mainFragment_to_newClientFragment"
             app:destination="@id/newClientFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_newSaleFragment"
+            app:destination="@id/newSaleFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_newPayment"
             app:destination="@id/newPayment" >
             <argument
@@ -53,6 +56,15 @@
         android:name="uz.texnopos.electrolightwarehouse.ui.newclient.NewClientFragment"
         android:label="fragment_client_new"
         tools:layout="@layout/fragment_client_new" />
+    <fragment
+        android:id="@+id/newSaleFragment"
+        android:name="uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleFragment"
+        android:label="NewSaleFragment"
+        tools:layout="@layout/fragment_new_sale">
+        <action
+            android:id="@+id/action_newSaleFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newPayment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentFragment"
@@ -100,4 +112,13 @@
         android:name="uz.texnopos.electrolightwarehouse.ui.newcategory.NewCategoryFragment"
         android:label="fragment_category_new"
         tools:layout="@layout/fragment_category_new" />
+
+    <fragment
+        android:id="@+id/orderFragment"
+        tools:layout="@layout/fragment_order"
+        android:name="uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderFragment"
+        android:label="OrderFragment" >
+        <argument android:name="products"
+            app:argType="string" />
+    </fragment>
 </navigation>

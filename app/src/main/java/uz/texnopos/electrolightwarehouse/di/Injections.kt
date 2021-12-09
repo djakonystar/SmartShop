@@ -11,6 +11,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
+import uz.texnopos.electrolightwarehouse.ui.newsale.Basket
+import uz.texnopos.electrolightwarehouse.ui.newsale.CategoryNewSaleAdapter
+import uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleProductAdapter
+import uz.texnopos.electrolightwarehouse.ui.newsale.CategoriesViewModel
+import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderAdapter
 import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel
@@ -20,7 +25,7 @@ import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
 import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseAdapter
 import java.util.concurrent.TimeUnit
 
-private const val baseUrl = "http://electro-life.texnopos.site"
+private const val baseUrl = "http://electro-life.texnopos.site/"
 private const val timeOut = 50L
 
 val networkModule = module {
@@ -59,6 +64,8 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
+    viewModel { CategoriesViewModel(get()) }
+
     viewModel { NewPaymentViewModel(get()) }
     viewModel { SalesViewModel()}
     viewModel { ClientsViewModel(get(), get()) }
@@ -69,4 +76,7 @@ val adapterModule = module {
     single { SalesAdapter() }
     single { SalesDetailAdapter() }
     single { WarehouseAdapter() }
+    single { NewSaleProductAdapter() }
+    single { CategoryNewSaleAdapter() }
+    single { OrderAdapter() }
 }

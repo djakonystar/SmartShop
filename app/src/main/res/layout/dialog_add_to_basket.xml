@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minWidth="320dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:padding="@dimen/margin_small"
+        android:text="Buyurtma"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="@dimen/margin_standard"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/etQuantity"
+        android:maxLength="5"
+        android:inputType="numberDecimal"
+        android:hint="Soni"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMax"
+        app:layout_constraintBottom_toTopOf="@id/etSumma"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
+        android:maxLength="18"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/etSumma"
+        android:inputType="number"
+        android:hint="Summa"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etQuantity"
+        app:layout_constraintBottom_toTopOf="@id/btnAdd"
+        android:layout_marginBottom="@dimen/margin_32"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/etSumma"
+        android:id="@+id/tvWholesale"
+        android:layout_marginTop="@dimen/margin_standard"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:text="ulgurji : "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/etSumma"
+        android:id="@+id/tvMin"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintTop_toBottomOf="@id/tvWholesale"
+        android:text="Min : "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/etSumma"
+        android:id="@+id/tvMax"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintTop_toBottomOf="@id/tvMin"
+        android:text="Max : "/>
+
+
+    <TextView
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:text="Korzinaga qosish"
+        android:textSize="15dp"
+        android:textColor="@color/black"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="@dimen/margin_small"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/btnAdd"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:textSize="15dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="bekor qilish"
+        android:padding="@dimen/margin_small"
+        app:layout_constraintEnd_toStartOf="@id/btnAdd"
+        android:focusable="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,4 +35,13 @@ interface ApiInterface {
 //        @Header("Authorization") token: String
 //    ): Observable<GenericResponse<List<Sales>>>
 
+//    @GET("api/categories")
+//    fun getCategories(
+//        @Header("Authorization") token: String
+//    ): Observable<GenericResponse<List<CatalogCategory>>>
+//
+//    @GET("api/products")
+//    fun getCategoriesById(
+//        @Header("Authorization") token: String,
+//        @Query("category") id: Int):Observable<GenericResponse<List<Product>>>
 }
