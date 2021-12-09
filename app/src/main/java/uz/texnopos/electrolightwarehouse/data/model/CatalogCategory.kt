@@ -1,10 +1,17 @@
 package uz.texnopos.electrolightwarehouse.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class CatalogCategory(
-    val category_id: Int,
+    @SerializedName("category_id")
+    val categoryId: Int,
+    @SerializedName("name")
     val name: String,
-    val percent_wholesale:Int,
-    val percent_min:Int,
+    @SerializedName("percent_wholesale")
+    val percentWholesale:Int,
+    @SerializedName("percent_min")
+    val percentMin:Int,
+    @SerializedName("percent_max")
     val percent_max:Int,
     var selectedMood: Boolean = false
 )

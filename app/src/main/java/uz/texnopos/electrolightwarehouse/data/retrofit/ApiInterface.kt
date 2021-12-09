@@ -1,12 +1,11 @@
 package uz.texnopos.electrolightwarehouse.data.retrofit
 
 import io.reactivex.rxjava3.core.Observable
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
+import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
 import uz.texnopos.electrolightwarehouse.data.model.Client
+import uz.texnopos.electrolightwarehouse.data.model.Products
 import uz.texnopos.electrolightwarehouse.data.newClient.ClientId
 import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
 import uz.texnopos.electrolightwarehouse.data.newPayment.NewPayment
@@ -35,13 +34,19 @@ interface ApiInterface {
 //        @Header("Authorization") token: String
 //    ): Observable<GenericResponse<List<Sales>>>
 
-//    @GET("api/categories")
-//    fun getCategories(
-//        @Header("Authorization") token: String
-//    ): Observable<GenericResponse<List<CatalogCategory>>>
-//
-//    @GET("api/products")
-//    fun getCategoriesById(
-//        @Header("Authorization") token: String,
-//        @Query("category") id: Int):Observable<GenericResponse<List<Product>>>
+    @GET("api/categories")
+    fun getCategories(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<List<CatalogCategory>>>
+
+    @GET("api/products")
+    fun getCategoriesById(
+        @Header("Authorization") token: String,
+        @Query("category") id: Int):Observable<GenericResponse<Products>>
+
+    @GET("api/products")
+    fun getProduct(
+        @Header("Authorization") token: String,
+        @Query("search") name:String): Observable<GenericResponse<Products>>
+
 }
