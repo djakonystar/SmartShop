@@ -2,14 +2,17 @@ package uz.texnopos.electrolightwarehouse.data.newProduct
 
 import com.google.gson.annotations.SerializedName
 
-data class Categories(
+data class Product(
     @SerializedName("category_id")
     val categoryId: Int,
+    val brand: String,
     val name: String,
-    @SerializedName("percent_wholesale")
+    @SerializedName("cost_price")
+    val costPrice: Int,
+    @SerializedName("price_wholesale")
     val percentWholesale: Int,
-    @SerializedName("percent_min")
-    val percentMin: Int ,
-    @SerializedName("percent_max")
+    @SerializedName("price_min")
+    val percentMin: Int,
+    @SerializedName("price_max")
     val percentMax: Int
 )

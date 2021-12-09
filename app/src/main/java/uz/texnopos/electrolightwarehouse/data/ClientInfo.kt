@@ -8,12 +8,12 @@ data class ClientInfo(
     @SerializedName("full_name")
     val name: String,
     val phone: String,
-    @SerializedName("iin")
+    @SerializedName("inn")
     val inn: String?,
     val balance: Int?,
     val about: String,
     @SerializedName("user_type")
-    val userType: Boolean,
+    val userType: Int,
     @SerializedName("created_at")
     val createdAt: String
 

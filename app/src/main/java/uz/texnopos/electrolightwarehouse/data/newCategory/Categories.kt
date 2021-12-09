@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data.newProduct
+package uz.texnopos.electrolightwarehouse.data.newCategory
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,10 +6,12 @@ data class Categories(
     @SerializedName("category_id")
     val categoryId: Int,
     val name: String,
+    @SerializedName("min_count")
+    val minQuantity: Int,
     @SerializedName("percent_wholesale")
-    val percentWholesale: Int,
+    val wholesale: Int,
     @SerializedName("percent_min")
-    val percentMin: Int ,
+    val min: Int,
     @SerializedName("percent_max")
-    val percentMax: Int
+    val max: Int,
 )
