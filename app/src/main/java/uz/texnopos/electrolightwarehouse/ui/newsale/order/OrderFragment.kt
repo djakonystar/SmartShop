@@ -14,36 +14,49 @@ import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.databinding.FragmentOrderBinding
 import uz.texnopos.electrolightwarehouse.ui.newsale.dialog.AddClientDialog
+import com.google.gson.reflect.TypeToken
+
+
+
 
 class OrderFragment:Fragment(R.layout.fragment_order) {
 
     private lateinit var binding: FragmentOrderBinding
     private val adapter: OrderAdapter by inject()
     private val gson = Gson()
-    private lateinit var safe: Product
     private val safeArgs: OrderFragmentArgs by navArgs()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOrderBinding.bind(view)
         binding.apply {
-//            safe = gson.fromJson(safeArgs.products,Product::class.java)
+            val myType = object : TypeToken<List<Product>>() {}.type
+            val list = gson.fromJson<List<Product>>(safeArgs.products, myType)
             rvOrder.adapter = adapter
             rvOrder.addItemDecoration(MarginItemDecoration(8.dp))
+            adapter.models = list
+            var totalPrice = 0
+            var eachPrice = 0
+            for (i in list.indices){
+                eachPrice+=list[i].salePrice*list[i].count
+            }
+            totalPrice+=eachPrice
+            tvTotalPrice.text = "Total price : $totalPrice uzs"
             btnBack.onClick {
                 findNavController().popBackStack()
             }
-
             btnAddClient.onClick {
                 val dialog = AddClientDialog()
                 dialog.show(requireActivity().supportFragmentManager,"")
+                dialog.setDate { name, inn, phone, type ->
 
+                }
             }
 
             btnOrder.onClick {
 
             }
-
         }
     }
 }

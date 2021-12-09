@@ -22,7 +22,7 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         fun populateModel(model: Product) {
             binding.tvProductName.text = model.productName
             binding.tvProductsCount.text = "(${model.count})"
-            binding.tvPrice.text = (model.priceMax * model.count).toString() + " uzs"
+            binding.tvPrice.text = (model.salePrice * model.count).toString() + " uzs"
         }
     }
 

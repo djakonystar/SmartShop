@@ -1,6 +1,7 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -53,6 +54,7 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
             btnFab.onClick {
                 val gsonPretty = GsonBuilder().setPrettyPrinting().create()
                 val gsonString = gsonPretty.toJson(basket.products)
+                Log.d("abc", basket.products.size.toString())
                 findNavController().navigate(NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(gsonString))
             }
             categoryNewSaleAdapter.onItemClickListener {
@@ -70,15 +72,15 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
         productNewSaleAdapter.models = listOf(
             Product(1,1,"asd","BMW","",2000,
                 2000,2000,3000,0,1200),
-            Product(1,1,"asd","BMW","",2000,
+            Product(2,1,"asd","BMW","",2000,
                 2000,2000,3000,0,1200),
-            Product(1,1,"asd","BMW","",2000,
+            Product(3,1,"asd","BMW","",2000,
                 2000,2000,3000,0,1200),
-            Product(1,1,"asd","BMW","",2000,
+            Product(4,1,"asd","BMW","",2000,
                 2000,2000,3000,0,1200),
-            Product(1,1,"asd","BMW","",2000,
+            Product(5,1,"asd","BMW","",2000,
                 2000,2000,3000,0,1200),
-            Product(1,1,"asd","BMW","",2000,
+            Product(6,1,"asd","BMW","",2000,
                 2000,2000,3000,0,1200)
         )
     }

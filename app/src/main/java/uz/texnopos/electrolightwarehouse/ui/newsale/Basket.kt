@@ -1,5 +1,6 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale
 
+
 import uz.texnopos.electrolightwarehouse.data.model.Product
 
 class Basket {
