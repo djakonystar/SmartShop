@@ -73,16 +73,17 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
+    viewModel { CategoriesViewModel(get(), get()) }
+    viewModel { NewPaymentViewModel(get()) }
     viewModel { NewPaymentViewModel(get(),get()) }
     viewModel { SalesViewModel(get(), get())}
     viewModel { NewCategoryViewModel(get(), get()) }
     viewModel { NewProductViewModel(get(),get()) }
-    viewModel { CategoriesViewModel(get(), get()) }
     viewModel { ClientsViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
     viewModel { SignInViewModel(get(), get()) }
-    viewModel { NewClientViewModel(get()) }
-    viewModel { OrderViewModel(get()) }
+    viewModel { NewClientViewModel(get(), get()) }
+    viewModel { OrderViewModel(get(), get()) }
 
 }
 

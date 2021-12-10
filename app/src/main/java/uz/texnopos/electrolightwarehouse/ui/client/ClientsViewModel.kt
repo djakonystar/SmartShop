@@ -44,7 +44,7 @@ class ClientsViewModel(private val api: ApiInterface, private val settings: Sett
 
     fun searchClient(search: String){
         mutableSearchClient.value = Resource.loading()
-        compositeDisposable.add(api.getClientsByName("Bearer 5|Cmn3wbVIPlspPYUFvXG9JhCKWCKfMdffyijCvAC3",search)
+        compositeDisposable.add(api.getClientsByName("Bearer ${settings.token}",search)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
