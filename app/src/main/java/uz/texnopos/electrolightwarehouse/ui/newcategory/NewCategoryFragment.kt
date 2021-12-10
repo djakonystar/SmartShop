@@ -33,7 +33,6 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
         binding = FragmentCategoryNewBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
-        setupObserver()
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_category)
@@ -76,6 +75,7 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                     viewModel.createdNewCategory( NewCategory(category,minQuantity.toInt(),
                         Percent(wholesalePercent.toInt(),minPercent.toInt(),maxPercent.toInt())
                     ))
+                    setupObserver()
                 } else {
                     if (category.isEmpty()) {
                         tilCategoryName.error = context?.getString(R.string.required_field)
@@ -121,7 +121,9 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                             etMinQuantity.text!!.clear()
                             etWholesalePercent.text!!.clear()
                         }
-                        navController.navigate(R.id.action_newCategoryFragment_to_newProductFragment)
+                        alertDialog.setOnDismissListener {
+                            navController.navigate(R.id.action_newCategoryFragment_to_newProductFragment)
+                        }
                     } else {
                         showMessage(it.data.message)
                     }
