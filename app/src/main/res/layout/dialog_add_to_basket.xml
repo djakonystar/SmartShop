@@ -64,7 +64,7 @@
         android:id="@+id/tvWholesale"
         android:layout_marginTop="@dimen/margin_standard"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        android:text="ulgurji : "/>
+        android:text="Ulgurji: "/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
         android:id="@+id/tvMin"
         android:layout_marginTop="@dimen/margin_small"
         app:layout_constraintTop_toBottomOf="@id/tvWholesale"
-        android:text="Min : "/>
+        android:text="Min: "/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
         android:id="@+id/tvMax"
         android:layout_marginTop="@dimen/margin_small"
         app:layout_constraintTop_toBottomOf="@id/tvMin"
-        android:text="Max : "/>
+        android:text="Max: "/>
 
 
     <TextView
@@ -90,7 +90,7 @@
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
-        android:text="Korzinaga qosish"
+        android:text="Savatga qo'shish"
         android:textSize="15dp"
         android:textColor="@color/black"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -112,7 +112,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:textStyle="bold"
-        android:text="bekor qilish"
+        android:text="Bekor qilish"
         android:padding="@dimen/margin_small"
         app:layout_constraintEnd_toStartOf="@id/btnAdd"
         android:focusable="true" />

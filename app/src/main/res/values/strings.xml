@@ -67,6 +67,11 @@
     <string name="choose_payment_method">To\'lov turini tanlang</string>
     <string name="new_pin_code">Yangi kod olish</string>
     <string name="basket">Savat</string>
-    <string name="fill_the_fields">Qatorlarni toldiring!</string>
+    <string name="fill_the_fields">Qatorlarni to\'ldiring!</string>
     <string name="wrong_pincode">Mavjud bo\'lmagan maxfiy kod!</string>
+    <string name="input_sum">Summani kiriting!</string>
+    <string name="input_sum_and_date">Summa va sanani kiriting</string>
+    <string name="success">Muvaffaqiyatli!</string>
+    <string name="order_successfully_done">Buyurtma muvvaffaqiyatli amalga oshirildi!</string>
+    <string name="client_successfully_added">Mijoz muvaffaqiyatli qo\'shildi!</string>
 </resources>
