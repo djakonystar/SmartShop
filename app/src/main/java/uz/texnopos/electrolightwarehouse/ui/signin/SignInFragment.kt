@@ -1,12 +1,14 @@
 package uz.texnopos.electrolightwarehouse.ui.signin
 
 import android.content.Context
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
-import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -81,14 +83,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         if (login) {
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
-            if (settings.username != username) {
-                settings.username = username
-                settings.pincode = pincode
-                settings.token = token
-            } else if (settings.pincode != pincode) {
-                settings.pincode = pincode
-                settings.token = token
-            }
+            settings.token = token
             navController.navigate(R.id.action_signInFragment_to_mainFragment)
         } else {
             val snackbar = Snackbar.make(binding.etPassword, error, Snackbar.LENGTH_SHORT)

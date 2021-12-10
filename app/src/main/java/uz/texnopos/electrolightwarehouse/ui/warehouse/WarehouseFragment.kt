@@ -66,8 +66,8 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         val products = it.data.payload
                         productsList = when (sortType) {
                             "byFewRemain" -> products.sortedBy { t -> t.remained / t.category.minCount.toDouble() }
-                            "byProduct" -> products.sortedBy { t -> t.name }
-                            "byCategory" -> products.sortedBy { t -> t.category.name }
+                            "byProduct" -> products.sortedBy { t -> t.name.lowercase() }
+                            "byCategory" -> products.sortedBy { t -> t.category.name.lowercase() }
                             "byRemainAscend" -> products.sortedBy { t -> t.remained }
                             "byRemainDescend" -> products.sortedByDescending { t -> t.remained }
                             else -> products
