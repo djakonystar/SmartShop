@@ -56,7 +56,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
             btnHome.onClick {
-                navController.navigate(R.id.action_newProductFragment_to_mainFragment)
+                navController.popBackStack()
             }
         }
         viewModel.getCategories()

@@ -141,10 +141,12 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                     cash = etPaymentCash.text.toString()
                     cash = cash.replace("\\s".toRegex(), "")
                     cash = cash.substring(0, cash.length - 3)
+                    viewModel.newPayment(NewPayment(clientId, cash.toInt(), 0, comment))
                 } else if (rb2.isChecked && etPaymentCard.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
                     card = etPaymentCard.text.toString()
                     card = card.replace("\\s".toRegex(), "")
                     card = card.substring(0, card.length - 3)
+                    viewModel.newPayment(NewPayment(clientId, 0, card.toInt(), comment))
                 } else if (rb3.isChecked && etPaymentCash.text!!.isNotEmpty() && etPaymentCard.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
                     cash = etPaymentCash.text.toString()
                     cash = cash.replace("\\s".toRegex(), "")

@@ -38,7 +38,7 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_category)
             btnHome.onClick {
-                navController.navigate(R.id.action_newCategoryFragment_to_newProductFragment)
+                navController.popBackStack()
             }
         }
 
