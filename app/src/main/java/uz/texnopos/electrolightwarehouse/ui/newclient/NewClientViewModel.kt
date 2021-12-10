@@ -11,16 +11,17 @@ import uz.texnopos.electrolightwarehouse.data.GenericResponse
 import uz.texnopos.electrolightwarehouse.data.newClient.ClientId
 import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
+import uz.texnopos.electrolightwarehouse.settings.Settings
 
-class NewClientViewModel(private val api:ApiInterface): ViewModel() {
+class NewClientViewModel(private val api:ApiInterface, private val settings: Settings): ViewModel() {
     private var compositeDisposable =  CompositeDisposable()
 
     private var mutableRegister: MutableLiveData<Resource<GenericResponse<ClientId>>> = MutableLiveData()
     val registerNewClient: LiveData<Resource<GenericResponse<ClientId>>> get() = mutableRegister
 
-    fun registerNewClient(token: String,registerClient: RegisterClient){
+    fun registerNewClient(registerClient: RegisterClient){
         mutableRegister.value = Resource.loading()
-        compositeDisposable.add(api.registerNewClient(token,registerClient)
+        compositeDisposable.add(api.registerNewClient("Bearer ${settings.token}",registerClient)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

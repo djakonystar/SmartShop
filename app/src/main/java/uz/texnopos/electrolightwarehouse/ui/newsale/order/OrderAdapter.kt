@@ -19,6 +19,7 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     fun removeItem(position: Int){
         models.removeAt(position)
+        models.clear()
         notifyItemRemoved(position)
         notifyDataSetChanged()
     }
@@ -34,13 +35,26 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         fun populateModel(model: Product, position: Int) {
             binding.tvProductName.text = model.productName
             binding.tvProductsCount.text = "(${model.count})"
-            binding.tvPrice.text = (model.salePrice).toString() + " uzs"
+            binding.tvPrice.text = (model.salePrice).changeFormat()
             binding.btnDelete.onClick {
-                removeItem(position)
-                onItemClick.invoke(model)
+                if (models.size>0){
+                    removeItem(position)
+                    onItemClick.invoke(model)
+                }
             }
         }
 
+    }
+
+    private fun Int.changeFormat(): String {
+        val num = this.toLong().toString()
+        var s = ""
+        val sz = num.length
+        for (i in 0 until sz) {
+            if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
+            s += num[i]
+        }
+        return "$s uzs"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {

@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_standard"
         android:padding="@dimen/margin_small"
-        android:text="Mijozni qoshish"
+        android:text="To'lash"
         android:textColor="@color/black"
         android:gravity="center"
         android:textSize="@dimen/margin_standard"
@@ -30,30 +30,79 @@
         android:layout_marginTop="@dimen/margin_standard"
         android:background="@drawable/background_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etName"
-        android:inputType="text"
-        android:hint="F.I.O."
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner"
-        app:layout_constraintBottom_toTopOf="@id/etInn"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etInn"
-        android:maxLength="9"
+        android:id="@+id/etCash"
+        android:hint="naqd"
+        android:maxLength="18"
         android:visibility="gone"
-        android:inputType="numberDecimal"
-        android:hint="STIR"
+        android:inputType="number"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etName"/>
+        app:layout_constraintTop_toBottomOf="@id/spinner"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/etCard"
+        android:visibility="gone"
+        android:hint="karta"
+        android:maxLength="18"
+        android:inputType="numberDecimal"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etCash"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:maxLength="18"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_64"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/etDebt"
+        android:inputType="numberDecimal"
+        android:hint="qarz"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etCard"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_64"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/etData"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:enabled="false"
+        android:hint="sana"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etDebt"/>
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="@dimen/margin_half"
+        android:visibility="gone"
+        android:id="@+id/btnCalender"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/etData"
+        app:layout_constraintBottom_toBottomOf="@id/etData"
+        android:src="@drawable/ic_calendar"
+        android:layout_marginEnd="@dimen/margin_standard"
+        />
 
 
     <EditText
@@ -62,17 +111,17 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_small"
-        android:maxLength="13"
         android:background="@drawable/background_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etPhone"
-        android:inputType="phone"
-        android:hint="+998 "
+        android:id="@+id/etDescription"
+        android:inputType="text"
+        android:hint="Komment"
         android:padding="12dp"
+        android:maxLines="5"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="@dimen/margin_32"
         app:layout_constraintBottom_toTopOf="@id/btnAdd"
-        app:layout_constraintTop_toBottomOf="@id/etInn"/>
+        app:layout_constraintTop_toBottomOf="@id/etData"/>
 
     <RelativeLayout
         android:id="@+id/spinner"

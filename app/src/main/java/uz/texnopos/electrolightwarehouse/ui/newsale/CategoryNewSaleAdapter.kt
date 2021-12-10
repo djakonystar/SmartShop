@@ -2,7 +2,6 @@ package uz.texnopos.electrolightwarehouse.ui.newsale
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +29,7 @@ class CategoryNewSaleAdapter : RecyclerView.Adapter<CategoryNewSaleAdapter.Order
             selectedItem = 0
             notifyDataSetChanged()
             if (models.isNotEmpty())
-            onItemClick.invoke(models[0].category_id)
+            onItemClick.invoke(models[0].categoryId)
         }
 
     inner class OrderHorizontalViewHolder(private val binding: ItemHorizontalOrdersCategoriesBinding) :
@@ -40,19 +39,20 @@ class CategoryNewSaleAdapter : RecyclerView.Adapter<CategoryNewSaleAdapter.Order
             binding.apply {
                 tvCategories.text = model.name
                 if (model.selectedMood) {
-                    tvCategories.setTextColor(Color.BLACK)
-                    tvCategories.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+                    tvCategories.setTextColor(Color.WHITE)
                     tvCategories.textSize = 18F
+                    itemView.setBackgroundResource(R.drawable.shape_square_for_horizontal_item_categories)
                     tvCategories.setTypeface(tvCategories.typeface, Typeface.BOLD)
                 } else {
-                    tvCategories.setTextColor(Color.GRAY)
+                    tvCategories.setTextColor(Color.BLACK)
+                    tvCategories.setTypeface(tvCategories.typeface, Typeface.BOLD)
                     tvCategories.paintFlags = 0
-                    tvCategories.setTypeface(tvCategories.typeface, Typeface.DEFAULT.style)
+                    itemView.setBackgroundResource(R.drawable.shape_line_for_horizontal_item_categories)
                     tvCategories.textSize = 16F
                 }
             }
             binding.root.onClick {
-                onItemClick.invoke(model.category_id)
+                onItemClick.invoke(model.categoryId)
                 selectedItem = position
             }
         }

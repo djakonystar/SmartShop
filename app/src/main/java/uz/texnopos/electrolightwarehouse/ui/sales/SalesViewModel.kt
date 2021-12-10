@@ -35,4 +35,23 @@ class SalesViewModel(private val api:ApiInterface, private val settings: Setting
                 )
         )
     }
+    fun getOrdersByDate(from:String, to:String){
+        _orders.value = Resource.loading()
+        compositeDisposable.add(
+            api.getOrdersByDate("Bearer ${settings.token}",from,to)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        if (it.successful) {
+                            _orders.value = Resource.success(it.payload)
+                        } else {
+                            _orders.value = Resource.error(it.message)
+                        }
+                    }, {
+                        _orders.value = Resource.error(it.localizedMessage)
+                    }
+                )
+        )
+    }
 }

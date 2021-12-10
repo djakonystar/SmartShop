@@ -14,12 +14,14 @@ import uz.texnopos.electrolightwarehouse.settings.Settings
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel
 import uz.texnopos.electrolightwarehouse.ui.newcategory.NewCategoryViewModel
+import uz.texnopos.electrolightwarehouse.ui.newclient.NewClientViewModel
 import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductViewModel
 import uz.texnopos.electrolightwarehouse.ui.newsale.CategoriesViewModel
 import uz.texnopos.electrolightwarehouse.ui.newsale.CategoryNewSaleAdapter
 import uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleProductAdapter
 import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderAdapter
+import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
@@ -67,14 +69,17 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { NewPaymentViewModel(get(),get()) }
+    viewModel { CategoriesViewModel(get(), get()) }
+    viewModel { NewPaymentViewModel(get(), get()) }
     viewModel { SalesViewModel(get(), get())}
     viewModel { NewCategoryViewModel(get(), get()) }
     viewModel { NewProductViewModel(get(),get()) }
-    viewModel { CategoriesViewModel(get(), get()) }
     viewModel { ClientsViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
     viewModel { SignInViewModel(get(), get()) }
+    viewModel { NewClientViewModel(get(), get()) }
+    viewModel { OrderViewModel(get(), get()) }
+
 }
 
 val adapterModule = module {

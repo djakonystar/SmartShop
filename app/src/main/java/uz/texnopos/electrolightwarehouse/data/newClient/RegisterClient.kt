@@ -10,5 +10,5 @@ data class RegisterClient(
     val inn: String?,
     val about: String,
     @SerializedName("user_type")
-    val clientType: Boolean
+    val clientType: Int
 )
