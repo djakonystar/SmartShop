@@ -58,28 +58,6 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
                 categoryViewModel.getCategoryById(it)
             }
         }
-
-        categoryNewSaleAdapter.models = listOf(
-            CatalogCategory(1,"asd",2000,3000,4000,false),
-            CatalogCategory(2,"asd",2000,3000,4000,false),
-            CatalogCategory(3,"asd",2000,3000,4000,false),
-            CatalogCategory(4,"asd",2000,3000,4000,false)
-        )
-
-        productNewSaleAdapter.models = listOf(
-            Product(1,1,"asd","BMW","",2000,
-                2000,2000,3000,0,1200),
-            Product(2,1,"asd","BMW","",2000,
-                2000,2000,3000,0,1200),
-            Product(3,1,"asd","BMW","",2000,
-                2000,2000,3000,0,1200),
-            Product(4,1,"asd","BMW","",2000,
-                2000,2000,3000,0,1200),
-            Product(5,1,"asd","BMW","",2000,
-                2000,2000,3000,0,1200),
-            Product(6,1,"asd","BMW","",2000,
-                2000,2000,3000,0,1200)
-        )
     }
 
     private fun setObservers(){
@@ -105,7 +83,7 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
                 }
                 ResourceState.SUCCESS->{
                     binding.swipeRefreshLayout.isRefreshing = false
-                    productNewSaleAdapter.models = it.data!!
+                    productNewSaleAdapter.models = it.data!!.products
                 }
                 ResourceState.ERROR->{
                     binding.swipeRefreshLayout.isRefreshing = false
