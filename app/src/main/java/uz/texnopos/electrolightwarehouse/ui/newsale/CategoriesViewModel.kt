@@ -10,8 +10,9 @@ import uz.texnopos.electrolightwarehouse.core.Resource
 import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
 import uz.texnopos.electrolightwarehouse.data.model.Products
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
+import uz.texnopos.electrolightwarehouse.settings.Settings
 
-class CategoriesViewModel(private val api:ApiInterface): ViewModel() {
+class CategoriesViewModel(private val api:ApiInterface, private val settings:Settings): ViewModel() {
 
     private var _categories: MutableLiveData<Resource<List<CatalogCategory>>> = MutableLiveData()
     val categories: LiveData<Resource<List<CatalogCategory>>> get() = _categories
@@ -23,7 +24,8 @@ class CategoriesViewModel(private val api:ApiInterface): ViewModel() {
     fun getCategories() {
         _categories.value = Resource.loading()
         compositeDisposable.add(
-            api.getCategories("Bearer 2|0UiQUlD83kpr4zqBtUvhgTWJUEepFwo4UW94Uooe").subscribeOn(Schedulers.newThread())
+            api.getCatalogCategories("Bearer ${settings.token}")
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -42,7 +44,7 @@ class CategoriesViewModel(private val api:ApiInterface): ViewModel() {
     fun getCategoryById(id: Int){
         _products.value = Resource.loading()
         compositeDisposable.add(
-            api.getCategoriesById("Bearer 2|0UiQUlD83kpr4zqBtUvhgTWJUEepFwo4UW94Uooe",id)
+            api.getCategoriesById("Bearer ${settings.token}",id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -62,7 +64,7 @@ class CategoriesViewModel(private val api:ApiInterface): ViewModel() {
     fun getProductByName(name:String){
         _products.value = Resource.loading()
         compositeDisposable.add(
-            api.getProduct("Bearer 4|jWOXCzVKhdLVljBD4Jp0QZCyULSsRhqHJNez5TxV", name)
+            api.getProduct("Bearer ${settings.token}", name)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

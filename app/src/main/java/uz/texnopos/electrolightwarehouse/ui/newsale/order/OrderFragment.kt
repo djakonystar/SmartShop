@@ -48,7 +48,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
     private lateinit var adapterArray: ArrayAdapter<String>
-    private val delay: Long = 1000
+    private val delay: Long = 100
     private var lastTextEdit: Long = 0
     private var searchValue: String = ""
     private val handler = Handler(Looper.getMainLooper())
@@ -66,13 +66,14 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
             rvOrder.adapter = adapter
             rvOrder.addItemDecoration(MarginItemDecoration(8.dp))
             adapter.models = Basket.mutableProducts
+            tvTotalPrice
             var totalPrice = 0
             for (i in list.indices){
                 totalPrice+=list[i].salePrice
             }
             price.postValue(totalPrice.toLong())
             price.observe(viewLifecycleOwner,{
-                tvTotalPrice.text = "Summa : $it uzs"
+                tvTotalPrice.text = "Summa : "+(it.changeFormat())
             })
 
             val orderItems : MutableList<OrderItem> = mutableListOf()
@@ -158,6 +159,17 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
 
     }
 
+    private fun Long.changeFormat(): String {
+        val num = this.toLong().toString()
+        var s = ""
+        val sz = num.length
+        for (i in 0 until sz) {
+            if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
+            s += num[i]
+        }
+        return "$s uzs"
+    }
+
     private fun setupObservers(){
         viewModelNewClient.registerNewClient.observe(viewLifecycleOwner,{
             when(it.status){
@@ -183,6 +195,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
                         etSearchClient.text.clear()
                         tvTotalPrice.text = ""
                         adapter.models.clear()
+                        adapter.notifyDataSetChanged()
                     }
                     //TODO: AlertDialog
                     Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()

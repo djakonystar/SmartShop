@@ -13,8 +13,10 @@ import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsAdapter
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel
+import uz.texnopos.electrolightwarehouse.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.electrolightwarehouse.ui.newclient.NewClientViewModel
 import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
+import uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductViewModel
 import uz.texnopos.electrolightwarehouse.ui.newsale.CategoriesViewModel
 import uz.texnopos.electrolightwarehouse.ui.newsale.CategoryNewSaleAdapter
 import uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleProductAdapter
@@ -23,7 +25,9 @@ import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesAdapter
 import uz.texnopos.electrolightwarehouse.ui.sales.SalesViewModel
 import uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailAdapter
+import uz.texnopos.electrolightwarehouse.ui.signin.SignInViewModel
 import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseAdapter
+import uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseViewModel
 import java.util.concurrent.TimeUnit
 
 private const val baseUrl = "http://electro-life.texnopos.site/"
@@ -65,13 +69,16 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { CategoriesViewModel(get()) }
-
-    viewModel { NewPaymentViewModel(get()) }
-    viewModel { SalesViewModel()}
+    viewModel { CategoriesViewModel(get(), get()) }
+    viewModel { NewPaymentViewModel(get(), get()) }
+    viewModel { SalesViewModel(get(), get())}
+    viewModel { NewCategoryViewModel(get(), get()) }
+    viewModel { NewProductViewModel(get(),get()) }
     viewModel { ClientsViewModel(get(), get()) }
-    viewModel { NewClientViewModel(get()) }
-    viewModel { OrderViewModel(get()) }
+    viewModel { WarehouseViewModel(get(), get()) }
+    viewModel { SignInViewModel(get(), get()) }
+    viewModel { NewClientViewModel(get(), get()) }
+    viewModel { OrderViewModel(get(), get()) }
 
 }
 

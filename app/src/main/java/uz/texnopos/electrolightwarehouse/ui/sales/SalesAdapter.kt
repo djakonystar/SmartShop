@@ -14,15 +14,16 @@ class SalesAdapter : BaseAdapter<Sales, SalesAdapter.SalesViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun populateModel(sales: Sales) {
             binding.apply {
-                tvClientName.text = sales.client_name
-                tvTotalPrice.text = sales.basket[0].price.toString()
-                if (sales.basket[0].debt > 0) {
+                tvClientName.text = sales.clientName
+                tvTotalPrice.text = sales.basket.price.toString()
+                if (sales.basket.debt > 0) {
                     dot.setBackgroundResource(R.drawable.red_eclipse)
                 } else {
                     dot.setBackgroundResource(R.drawable.green_eclipse)
                 }
-                tvData.text = sales.basket[0].created_at
-                if (sales.basket[0].cash > 0) {
+                tvSailorName.text = sales.vendorName
+                tvData.text = sales.basket.createdAt
+                if (sales.basket.cash > 0) {
                     tvPaymentInfo.text = itemView.context?.getString(R.string.payment_cash)
                 } else {
                     tvPaymentInfo.text = itemView.context?.getString(R.string.payment_card)

@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.databinding.FragmentMainBinding
+import uz.texnopos.electrolightwarehouse.ui.newsale.Basket
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
@@ -16,7 +17,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Basket.mutableProducts.clear()
         binding = FragmentMainBinding.bind(view)
         navController = findNavController()
 

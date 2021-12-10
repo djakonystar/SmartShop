@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_sign_in" >
         <action
             android:id="@+id/action_signInFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -78,7 +80,14 @@
         android:id="@+id/newProductFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductFragment"
         android:label="NewProductFragment"
-        tools:layout="@layout/fragment_product_new"/>
+        tools:layout="@layout/fragment_product_new">
+        <action
+            android:id="@+id/action_newProductFragment_to_newCategoryFragment"
+            app:destination="@id/newCategoryFragment" />
+        <action
+            android:id="@+id/action_newProductFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.client.ClientsFragment"
@@ -101,7 +110,11 @@
         android:id="@+id/detailSalesFragment"
         tools:layout="@layout/fragment_sales_detail"
         android:name="uz.texnopos.electrolightwarehouse.ui.sales.detail.SalesDetailFragment"
-        android:label="DetailSalesFragment" />
+        android:label="DetailSalesFragment" >
+        <argument
+            android:name="detail"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/warehouseFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.warehouse.WarehouseFragment"
@@ -111,8 +124,11 @@
         android:id="@+id/newCategoryFragment"
         android:name="uz.texnopos.electrolightwarehouse.ui.newcategory.NewCategoryFragment"
         android:label="fragment_category_new"
-        tools:layout="@layout/fragment_category_new" />
-
+        tools:layout="@layout/fragment_category_new" >
+        <action
+            android:id="@+id/action_newCategoryFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderFragment"
         tools:layout="@layout/fragment_order"

@@ -31,7 +31,8 @@
         android:background="@drawable/background_edit_text"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/etCash"
-        android:hint="cash"
+        android:hint="naqd"
+        android:maxLength="18"
         android:visibility="gone"
         android:inputType="number"
         android:padding="12dp"
@@ -48,7 +49,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/etCard"
         android:visibility="gone"
-        android:hint="card"
+        android:hint="karta"
+        android:maxLength="18"
         android:inputType="numberDecimal"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +58,7 @@
 
     <EditText
         android:layout_width="0dp"
+        android:maxLength="18"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_64"
@@ -64,10 +67,29 @@
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/etDebt"
         android:inputType="numberDecimal"
-        android:hint="debt"
+        android:hint="qarz"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etCard"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_64"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/etData"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:enabled="false"
+        android:hint="sana"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etDebt"/>
+
 
     <ImageView
         android:layout_width="40dp"
@@ -76,8 +98,8 @@
         android:visibility="gone"
         android:id="@+id/btnCalender"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/etDebt"
-        app:layout_constraintBottom_toBottomOf="@id/etDebt"
+        app:layout_constraintTop_toTopOf="@id/etData"
+        app:layout_constraintBottom_toBottomOf="@id/etData"
         android:src="@drawable/ic_calendar"
         android:layout_marginEnd="@dimen/margin_standard"
         />
@@ -93,12 +115,13 @@
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/etDescription"
         android:inputType="text"
-        android:hint="Description"
+        android:hint="Komment"
         android:padding="12dp"
+        android:maxLines="5"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="@dimen/margin_32"
         app:layout_constraintBottom_toTopOf="@id/btnAdd"
-        app:layout_constraintTop_toBottomOf="@id/etDebt"/>
+        app:layout_constraintTop_toBottomOf="@id/etData"/>
 
     <RelativeLayout
         android:id="@+id/spinner"

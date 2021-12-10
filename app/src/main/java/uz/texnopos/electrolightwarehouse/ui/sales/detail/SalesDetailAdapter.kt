@@ -1,21 +1,32 @@
 package uz.texnopos.electrolightwarehouse.ui.sales.detail
 
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.BaseAdapter
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
-import uz.texnopos.electrolightwarehouse.data.model.Sales
+import uz.texnopos.electrolightwarehouse.data.model.ProductInfo
 import uz.texnopos.electrolightwarehouse.databinding.ItemSalesDetailBinding
 
-class SalesDetailAdapter : BaseAdapter<Sales, SalesDetailAdapter.DetailViewHolder>() {
+class SalesDetailAdapter : BaseAdapter<ProductInfo, SalesDetailAdapter.DetailViewHolder>() {
+
+    var allModel: List<ProductInfo> = listOf()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            models = value
+            notifyDataSetChanged()
+        }
+
     inner class DetailViewHolder(private val binding: ItemSalesDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun populateModel(sales: Sales) {
+        fun populateModel(productInfo: ProductInfo) {
             binding.apply {
-                tvProductName.text = sales.orders[0].product_name
-                tvCount.text = sales.orders[0].count.toString()
-                tvCost.text = sales.basket[0].cash.toString()
+                tvProductName.text = productInfo.productName
+                tvBrand.text = productInfo.productBrand
+                tvCount.text = productInfo.count.toString()
+                tvCost.text = "${productInfo.price} uzs"
             }
         }
     }
@@ -28,5 +39,11 @@ class SalesDetailAdapter : BaseAdapter<Sales, SalesDetailAdapter.DetailViewHolde
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         holder.populateModel(models[position])
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun filterList(filteredListName: MutableList<ProductInfo>) {
+        models = filteredListName
+        notifyDataSetChanged()
     }
 }

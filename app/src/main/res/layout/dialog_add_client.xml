@@ -47,6 +47,7 @@
         android:background="@drawable/background_edit_text"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/etInn"
+        android:maxLength="9"
         android:visibility="gone"
         android:inputType="numberDecimal"
         android:hint="STIR"

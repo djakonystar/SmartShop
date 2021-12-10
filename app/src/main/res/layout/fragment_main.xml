@@ -23,7 +23,7 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="4dp"
-        android:src="@drawable/ic_other"
+        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toTopOf="@id/new_sale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

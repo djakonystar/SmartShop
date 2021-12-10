@@ -94,8 +94,8 @@ class AddToBasketDialog(private val product: Product):DialogFragment() {
         liveQuantity.observe(requireActivity(),{
             val quantity = it
             binding.apply {
-                tvMin.text =  "Ulgurji :" +(product.priceWholesale * quantity).changeFormat()
-                tvWholesale.text = "Min :" + (product.priceMin * quantity).changeFormat()
+                tvMin.text =  "Min :" +(product.priceWholesale * quantity).changeFormat()
+                tvWholesale.text = "Ulgurji :" + (product.priceMin * quantity).changeFormat()
                 tvMax.text =  "Max :" +(product.priceMax * quantity).changeFormat()
 
             }

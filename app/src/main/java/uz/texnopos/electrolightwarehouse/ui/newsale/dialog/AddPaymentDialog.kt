@@ -79,6 +79,7 @@ class AddPaymentDialog:DialogFragment() {
                 setListener = DatePickerDialog.OnDateSetListener { _, year1, month1, dayOfMonth1 ->
                     month = month1+1
                     data = "$dayOfMonth1.$month.$year1"
+                    etData.text = data
                 }
                 val datePickerDialog = DatePickerDialog(
                     requireContext(),
@@ -110,11 +111,13 @@ class AddPaymentDialog:DialogFragment() {
                         etCard.visibility(true)
                         etCash.visibility(false)
                         etDebt.visibility(false)
+                        etData.visibility(false)
                         btnCalender.visibility(false)
                     }
                     "Naqd"->{
                         etDebt.visibility(false)
                         etCard.visibility(false)
+                        etData.visibility(false)
                         etCash.visibility(true)
                         btnCalender.visibility(false)
                     }
@@ -127,6 +130,7 @@ class AddPaymentDialog:DialogFragment() {
                     else->{
                         etDebt.visibility(true)
                         etCard.visibility(false)
+                        etData.visibility(true)
                         etCash.visibility(false)
                         btnCalender.visibility(true)
                     }
@@ -143,6 +147,7 @@ class AddPaymentDialog:DialogFragment() {
                         etCard.visibility(true)
                         etCash.visibility(false)
                         etDebt.visibility(false)
+                        etData.visibility(false)
                         if (etCard.text.isNotEmpty() && etDescription.text.isNotEmpty()){
                             val card = etCard.text.toString().getOnlyDigits().toLong()
                             val description = etDescription.text.toString()
@@ -156,6 +161,7 @@ class AddPaymentDialog:DialogFragment() {
                         etDebt.visibility(false)
                         etCard.visibility(false)
                         etCash.visibility(true)
+                        etData.visibility(false)
                         if (etCash.text.isNotEmpty() && etDescription.text.isNotEmpty()){
                             val cash = etCash.text.toString().getOnlyDigits().toLong()
                             val description = etDescription.text.toString()
@@ -169,6 +175,7 @@ class AddPaymentDialog:DialogFragment() {
                     "Aralash"->{
                         etDebt.visibility(false)
                         etCard.visibility(true)
+                        etData.visibility(false)
                         etCash.visibility(true)
                         if (etCash.text.isNotEmpty() && etCard.text.isNotEmpty() && etDescription.text.isNotEmpty()){
                             val cash = etCash.text.toString().getOnlyDigits().toLong()
@@ -185,6 +192,7 @@ class AddPaymentDialog:DialogFragment() {
                         etDebt.visibility(true)
                         etCard.visibility(false)
                         etCash.visibility(false)
+                        etData.visibility(true)
                         btnCalender.visibility(true)
                         if (etDebt.text.isNotEmpty() && etDescription.text.isNotEmpty() && data.isNotEmpty()){
                             val debt = etDebt.text.toString().getOnlyDigits().toLong()

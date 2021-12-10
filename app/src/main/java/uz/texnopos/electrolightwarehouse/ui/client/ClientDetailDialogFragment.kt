@@ -32,8 +32,8 @@ class ClientDetailDialogFragment(private val client: Client) : DialogFragment() 
 
         binding.apply {
             tvName.text = client.name
-            tvBalance.text = if (client.balance < 0) {
-                "-${(-1 * client.balance).toString().toSumFormat} UZS"
+            tvBalance.text = if (client.balance?:0 < 0) {
+                "-${(-1 * client.balance!!).toString().toSumFormat} UZS"
             } else {
                 "${client.balance.toString().toSumFormat} UZS"
             }

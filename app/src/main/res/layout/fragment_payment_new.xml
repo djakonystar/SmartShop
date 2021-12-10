@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:startIconDrawable="@drawable/ic_baseline_person_search">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/etSearchClient"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,16 +55,17 @@
 
             <RadioGroup
                 android:id="@+id/rg"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_standard_middle"
                 android:padding="@dimen/margin_standard_middle"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvMethodStr">
 
                 <RadioButton
                     android:id="@+id/rb1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"
@@ -72,7 +73,7 @@
 
                 <RadioButton
                     android:id="@+id/rb2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"
@@ -80,7 +81,7 @@
 
                 <RadioButton
                     android:id="@+id/rb3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_standard"

@@ -74,13 +74,13 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
             })
 
             btnFab.onClick {
-                if (!Basket.products.isEmpty()){
+                if (Basket.products.isNotEmpty()){
                     val gsonPretty = GsonBuilder().setPrettyPrinting().create()
                     val gsonString = gsonPretty.toJson(Basket.products)
                     findNavController().navigate(NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(gsonString))
 
                     }else{
-                    Toast.makeText(requireContext(), "Producta qoshing!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Tovarni qoshing!", Toast.LENGTH_SHORT).show()
                 }
                 }
             categoryNewSaleAdapter.onItemClickListener {

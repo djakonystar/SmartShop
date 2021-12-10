@@ -1,9 +1,18 @@
 package uz.texnopos.electrolightwarehouse.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Sales(
-    var client_id:Int,
-    var client_name:String,
-    var phone:String,
-    var basket:List<Payment>,
-    var orders:List<ProductInfo>
+    @SerializedName("client_id")
+    val clientId:Int,
+    @SerializedName("client_name")
+    val clientName:String,
+    @SerializedName("phone")
+    val phone:String,
+    @SerializedName("basket")
+    val basket:Basket,
+    @SerializedName("orders")
+    val orders:List<ProductInfo>,
+    @SerializedName("vendor_name")
+    val vendorName:String
 )

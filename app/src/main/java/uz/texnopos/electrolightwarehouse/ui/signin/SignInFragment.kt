@@ -7,42 +7,91 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import androidx.core.os.postDelayed
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
+import uz.texnopos.electrolightwarehouse.core.ResourceState
+import uz.texnopos.electrolightwarehouse.data.model.signin.SignInPost
 import uz.texnopos.electrolightwarehouse.databinding.FragmentSignInBinding
 import uz.texnopos.electrolightwarehouse.settings.Settings
 
 class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private lateinit var binding: FragmentSignInBinding
+    private lateinit var navController: NavController
+    private val viewModel: SignInViewModel by viewModel()
     private val settings: Settings by inject()
+    private var pincode: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSignInBinding.bind(view)
+        navController = findNavController()
 
         binding.apply {
             etPassword.addTextChangedListener {
                 if (it.toString().length == 4) {
-                    login(it.toString())
+                    val signIn = SignInPost(
+                        pincode = it.toString()
+                    )
+                    pincode = it.toString()
+                    viewModel.signIn(signIn = signIn)
+                }
+            }
+        }
+
+        setUpObservers()
+    }
+
+    private fun setLoading(loading: Boolean) {
+        binding.apply {
+            progressBar.isVisible = loading
+            etPassword.isEnabled = !loading
+        }
+    }
+
+    private fun setUpObservers() {
+        viewModel.signIn.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    if (it.data!!.successful) {
+                        val user = it.data.payload
+                        login(true, user.name, user.token, "")
+                    } else {
+                        login(false, "", "", requireContext().getString(R.string.wrong_pincode))
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    login(false, "", "", it.message!!)
                 }
             }
         }
     }
 
-    private fun login(login: String) {
-        if (login == "4565") {
-            Snackbar.make(binding.etPassword, "Success!", Snackbar.LENGTH_SHORT).show()
+    private fun login(login: Boolean, username: String, token: String, error: String) {
+        if (login) {
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
-            settings.token = "2|dgEFGswFxmEWJChz0ydIXRizVjanLKypmGnZCv5x" // todo clear this line
-            findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
+            if (settings.username != username) {
+                settings.username = username
+                settings.pincode = pincode
+                settings.token = token
+            } else if (settings.pincode != pincode) {
+                settings.pincode = pincode
+                settings.token = token
+            }
+            navController.navigate(R.id.action_signInFragment_to_mainFragment)
         } else {
-            val snackbar = Snackbar.make(binding.etPassword, "Error!", Snackbar.LENGTH_SHORT)
+            val snackbar = Snackbar.make(binding.etPassword, error, Snackbar.LENGTH_SHORT)
             val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
             params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
             params.width = FrameLayout.LayoutParams.MATCH_PARENT
@@ -52,6 +101,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             val shake = AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
             binding.etPassword.startAnimation(shake)
             binding.tvDescription.startAnimation(shake)
+            binding.etPassword.setText("")
+            binding.etPassword.clearFocus()
 
             val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -62,13 +113,6 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 )
             } else {
                 vibrator.vibrate(200)
-            }
-
-            Handler(Looper.getMainLooper()).postDelayed(100) {
-                kotlin.run {
-                    binding.etPassword.setText("")
-                    binding.etPassword.clearFocus()
-                }
             }
         }
     }

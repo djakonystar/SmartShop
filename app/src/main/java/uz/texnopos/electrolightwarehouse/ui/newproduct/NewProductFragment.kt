@@ -1,5 +1,6 @@
 package uz.texnopos.electrolightwarehouse.ui.newproduct
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -12,25 +13,37 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPayment
+import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.data.newProduct.Amount
 import uz.texnopos.electrolightwarehouse.data.newProduct.Categories
+import uz.texnopos.electrolightwarehouse.data.newProduct.Product
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentProductNewBinding
 
-class NewProductFragment() : Fragment(R.layout.fragment_product_new) {
+class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private lateinit var groupAdapter: ArrayAdapter<String>
+    private val viewModel: NewProductViewModel by viewModel()
     var mutableList: MutableList<Categories> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
     private var categoryId = 0
     private val amount = MediatorLiveData<Amount>().apply { value = Amount() }
     private var liveCostPrice = MutableLiveData<Long>()
+    private var wholesalePercent: Int = 0
+    private var minPercent: Int = 0
+    private var maxPercent: Int = 0
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        merge()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -39,13 +52,15 @@ class NewProductFragment() : Fragment(R.layout.fragment_product_new) {
         navController = findNavController()
 
         observeCostChange()
-        merge()
+        setupObserver()
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
             btnHome.onClick {
                 navController.popBackStack()
             }
         }
+        viewModel.getCategories()
+
         binding.apply {
             etWholesalePrice.addTextChangedListener(MaskWatcherPayment(etWholesalePrice))
             etMinPrice.addTextChangedListener(MaskWatcherPayment(etMinPrice))
@@ -93,15 +108,19 @@ class NewProductFragment() : Fragment(R.layout.fragment_product_new) {
 
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
-                val costPrice = etCostPrice.text.toString()
-                val wholesalePrice = etWholesalePrice.text.toString()
-                val minPrice = etMinPrice.text.toString()
-                val maxPrice = etMaxPrice.text.toString()
+                val costPrice = etCostPrice.text.toString().filter { c->c.isDigit() }
+                val branch = etBranchName.text.toString()
+                val wholesalePrice = etWholesalePrice.text.toString().filter { w->w.isDigit() }
+                val minPrice = etMinPrice.text.toString().filter { min->min.isDigit() }
+                val maxPrice = etMaxPrice.text.toString().filter { max->max.isDigit() }
 
                 if (categoryId != 0 && productName.isNotEmpty() && costPrice.isNotEmpty()
                     && wholesalePrice.isNotEmpty() && minPrice.isNotEmpty() && maxPrice.isNotEmpty()
                 ) {
                     // todo post request for add new product
+                    viewModel.createProduct(Product(categoryId,branch,productName, costPrice.toInt(),
+                        wholesalePrice.toInt(),minPrice.toInt(),maxPrice.toInt()))
+                    setupObserverCreatedProduct()
                 } else {
                     if (categoryId == 0) {
                         tilSpinner.error = context?.getString(R.string.required_field)
@@ -120,6 +139,10 @@ class NewProductFragment() : Fragment(R.layout.fragment_product_new) {
                     }
                 }
             }
+            ivAddCategory.onClick {
+                navController.navigate(R.id.action_newProductFragment_to_newCategoryFragment)
+            }
+
         }
 
     }
@@ -156,15 +179,15 @@ class NewProductFragment() : Fragment(R.layout.fragment_product_new) {
             binding.apply {
                 // TODO: change to extension
                 etWholesalePrice.setText(
-                    (10 * price.toString().toLong() / 100L + price.toString()
+                    (wholesalePercent * price.toString().toLong() / 100L + price.toString()
                         .toLong()).changeFormat()
                 )
                 etMaxPrice.setText(
-                    (20 * price.toString().toLong() / 100L + price.toString()
+                    (maxPercent * price.toString().toLong() / 100L + price.toString()
                         .toLong()).changeFormat()
                 )
                 etMinPrice.setText(
-                    (15 * price.toString().toLong() / 100L + price.toString()
+                    (minPercent * price.toString().toLong() / 100L + price.toString()
                         .toLong()).changeFormat()
                 )
             }
@@ -176,5 +199,57 @@ class NewProductFragment() : Fragment(R.layout.fragment_product_new) {
             progressBar.isVisible = loading
             scrollView.isEnabled = !loading
         }
+    }
+    private fun setupObserver(){
+        viewModel.categories.observe(viewLifecycleOwner,{
+            when(it.status){
+                ResourceState.LOADING->{setLoading(true)}
+                ResourceState.SUCCESS->{setLoading(false)
+                    if (it.data!!.successful){
+                        mutableList = it.data.payload.toMutableList()
+                        mutableList.forEach { data->
+                            wholesalePercent = data.percentWholesale
+                            minPercent = data.percentMin
+                            maxPercent = data.percentMax
+                            if (!categoryName.contains(data.name))categoryName.add(data.name)
+                        }
+                    }else{
+                        Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                ResourceState.ERROR->{setLoading(false)
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()}
+            }
+        })
+
+    }
+    private fun setupObserverCreatedProduct(){
+        viewModel.createProduct.observe(viewLifecycleOwner,{
+            when(it.status){
+                ResourceState.LOADING->{setLoading(true)}
+                ResourceState.SUCCESS->{setLoading(false)
+                    if (it.data!!.successful){
+                        val alertDialog = AlertDialog.Builder(requireContext())
+                        alertDialog.setTitle("Muvaffaqiyatli!")
+                        alertDialog.setMessage("Tovar muvaffaqiyatli qoshildi!")
+                        alertDialog.show()
+                        binding.apply {
+                            actSpinner.text.clear()
+                            etProductName.text!!.clear()
+                            etMinPrice.text!!.clear()
+                            etMaxPrice.text!!.clear()
+                            etCostPrice.text!!.clear()
+                            etWholesalePrice.text!!.clear()
+                            etBranchName.text!!.clear()
+                            categoryId = 0
+                        }
+                    }else{
+                        Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                ResourceState.ERROR->{setLoading(false)
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()}
+            }
+        })
     }
 }

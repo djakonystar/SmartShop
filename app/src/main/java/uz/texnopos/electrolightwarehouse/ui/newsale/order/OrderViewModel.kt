@@ -8,15 +8,16 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.electrolightwarehouse.core.Resource
 import uz.texnopos.electrolightwarehouse.data.model.Order
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
+import uz.texnopos.electrolightwarehouse.settings.Settings
 
-class OrderViewModel(private val api:ApiInterface): ViewModel() {
+class OrderViewModel(private val api:ApiInterface, private val settings: Settings): ViewModel() {
 
     private var _orderState:MutableLiveData<Resource<Any>> = MutableLiveData()
     val orderState:LiveData<Resource<Any>> get() = _orderState
 
     fun setOrder(order: Order){
         _orderState.value = Resource.loading()
-        api.order("Bearer 2|0UiQUlD83kpr4zqBtUvhgTWJUEepFwo4UW94Uooe",order)
+        api.order("Bearer ${settings.token}",order)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

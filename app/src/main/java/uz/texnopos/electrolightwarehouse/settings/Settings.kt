@@ -10,6 +10,7 @@ class Settings(context: Context) {
         const val TOKEN = "accessToken"
         const val USERNAME = "username"
         const val PRODUCT = "product"
+        const val PIN = "pin"
     }
 
     private val preferences: SharedPreferences =
@@ -26,4 +27,16 @@ class Settings(context: Context) {
             preferences.edit().putString(TOKEN, value).apply()
         }
         get() = preferences.getString(TOKEN, "") ?: ""
+
+    var username: String
+        set(value) {
+            preferences.edit().putString(USERNAME, value).apply()
+        }
+        get() = preferences.getString(USERNAME, "") ?: ""
+
+    var pincode: String
+        set(value) {
+            preferences.edit().putString(PIN, value).apply()
+        }
+        get() = preferences.getString(PIN, "") ?: ""
 }

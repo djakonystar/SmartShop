@@ -7,6 +7,9 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -15,7 +18,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
-import uz.texnopos.electrolightwarehouse.core.CalendarHelper
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPayment
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
@@ -32,16 +34,20 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private lateinit var navController: NavController
     private val viewModel: NewPaymentViewModel by viewModel()
     private val args: NewPaymentFragmentArgs by navArgs()
-    private val calendarHelper = CalendarHelper()
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var selectedDate: String
     private var method: String = ""
     private var cash = ""
     private var card = ""
     private var clientId: Int = 0
-    private val delay: Long = 1000
+    private val delay: Long = 700
     private var lastTextEdit: Long = 0
     private var comment: String = ""
+    private var searchValue: String = ""
+    private var clientName = ""
+    private var list: MutableSet<String> = mutableSetOf()
+    private var listIds: MutableMap<String, Int> = mutableMapOf()
+    private lateinit var adapter: ArrayAdapter<String>
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,7 +55,7 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
         binding = FragmentPaymentNewBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
-        selectedDate = calendarHelper.currentDate
+        setUpObservers()
 
         val fromClientFragment = args.client != "null"
 
@@ -100,8 +106,12 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
 
             val inputFinishChecker = Runnable {
                 if (System.currentTimeMillis() > (lastTextEdit + delay - 500)) {
-                    //TODO: do what you need here
+                    viewModel.searchClient(searchValue)
                 }
+            }
+            etSearchClient.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                clientName = parent.getItemAtPosition(position).toString()
+                clientId = listIds.getValue(clientName)
             }
             etSearchClient.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -113,6 +123,8 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
 
                 override fun afterTextChanged(p0: Editable?) {
                     if (p0?.length!! > 0) {
+                        list.clear()
+                        searchValue = p0.toString()
                         lastTextEdit = System.currentTimeMillis()
                         handler.postDelayed(inputFinishChecker, delay)
                     }
@@ -129,22 +141,21 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                     cash = etPaymentCash.text.toString()
                     cash = cash.replace("\\s".toRegex(), "")
                     cash = cash.substring(0, cash.length - 3)
+                    viewModel.newPayment(NewPayment(clientId, cash.toInt(), 0, comment))
                 } else if (rb2.isChecked && etPaymentCard.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
                     card = etPaymentCard.text.toString()
                     card = card.replace("\\s".toRegex(), "")
                     card = card.substring(0, card.length - 3)
+                    viewModel.newPayment(NewPayment(clientId, 0, card.toInt(), comment))
                 } else if (rb3.isChecked && etPaymentCash.text!!.isNotEmpty() && etPaymentCard.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
                     cash = etPaymentCash.text.toString()
                     cash = cash.replace("\\s".toRegex(), "")
                     cash = cash.substring(0, cash.length - 3)
                     card = etPaymentCard.text.toString()
                     card = card.replace("\\s".toRegex(), "")
-                    card = card.substring(0, cash.length - 3)
+                    card = card.substring(0, card.length - 3)
                     comment = etComment.text.toString()
-                    viewModel.newPayment(
-                        "",
-                        NewPayment(clientId, cash, card, selectedDate, comment)
-                    )
+                    viewModel.newPayment(NewPayment(clientId, cash.toInt(), card.toInt(), comment))
                 } else {
                     showMessage("Iltimos mijozni tanlang va to'lovni to'liq kiriting")
                 }
@@ -170,6 +181,12 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                         alertDialog.setTitle("Muvaffaqiyatli!")
                         alertDialog.setMessage("To'lov muvaffaqiyatli amalga oshirildi!")
                         alertDialog.show()
+                        binding.apply {
+                            etSearchClient.text.clear()
+                            etPaymentCard.text!!.clear()
+                            etPaymentCash.text!!.clear()
+                            etComment.text!!.clear()
+                        }
                     } else {
                         showMessage(it.data.message)
                     }
@@ -180,5 +197,26 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 }
             }
         }
+
+        viewModel.searchClient.observe(viewLifecycleOwner,{
+            when(it.status){
+                ResourceState.LOADING->setLoading(true)
+                ResourceState.SUCCESS->{setLoading(false)
+                if (it.data!!.successful)
+                {
+                    it.data.payload.forEach {data->
+                        list.add("${data.name}, ${data.phone}")
+                        if (!listIds.contains("${data.name}, ${data.phone}")) listIds["${data.name}, ${data.phone}"]=data.clientId
+                        adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,list.toMutableList())
+                        binding.etSearchClient.setAdapter(adapter)
+                 }
+                }else{
+                    Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT).show()}
+                }
+                ResourceState.ERROR->{
+                    setLoading(false)
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()}
+                }
+        })
     }
 }
