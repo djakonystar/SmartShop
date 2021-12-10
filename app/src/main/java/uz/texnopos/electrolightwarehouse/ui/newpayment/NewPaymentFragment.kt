@@ -39,7 +39,7 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private var cash = ""
     private var card = ""
     private var clientId: Int = 0
-    private val delay: Long = 1000
+    private val delay: Long = 700
     private var lastTextEdit: Long = 0
     private var comment: String = ""
     private var searchValue: String = ""

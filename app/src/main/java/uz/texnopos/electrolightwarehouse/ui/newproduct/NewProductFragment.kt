@@ -120,6 +120,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     // todo post request for add new product
                     viewModel.createProduct(Product(categoryId,branch,productName, costPrice.toInt(),
                         wholesalePrice.toInt(),minPrice.toInt(),maxPrice.toInt()))
+                    setupObserverCreatedProduct()
                 } else {
                     if (categoryId == 0) {
                         tilSpinner.error = context?.getString(R.string.required_field)
@@ -220,6 +221,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()}
             }
         })
+
+    }
+    private fun setupObserverCreatedProduct(){
         viewModel.createProduct.observe(viewLifecycleOwner,{
             when(it.status){
                 ResourceState.LOADING->{setLoading(true)}
