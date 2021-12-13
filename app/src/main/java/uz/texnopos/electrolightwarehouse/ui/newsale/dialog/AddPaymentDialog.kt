@@ -9,17 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPrice
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
+import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.core.extensions.visibility
 import uz.texnopos.electrolightwarehouse.databinding.DialogAddPaymentBinding
 import java.util.*
 
-class AddPaymentDialog:DialogFragment() {
+class AddPaymentDialog(private val totalPrice: Long):DialogFragment() {
     private var _binding:DialogAddPaymentBinding? = null
     private val binding get() = _binding!!
     private var type= MutableLiveData<String>()
@@ -39,7 +39,7 @@ class AddPaymentDialog:DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observe()
-        val list = arrayListOf("Naqd","Karta","Qarz","Aralash")
+        val list = arrayListOf("Naqd pul","Karta","Qarz","Aralash")
         binding.apply {
             etDebt.addTextChangedListener(MaskWatcherPrice(etDebt))
             etCash.addTextChangedListener(MaskWatcherPrice(etCash))
@@ -114,7 +114,7 @@ class AddPaymentDialog:DialogFragment() {
                         etData.visibility(false)
                         btnCalender.visibility(false)
                     }
-                    "Naqd"->{
+                    "Naqd pul"->{
                         etDebt.visibility(false)
                         etCard.visibility(false)
                         etData.visibility(false)
@@ -148,28 +148,29 @@ class AddPaymentDialog:DialogFragment() {
                         etCash.visibility(false)
                         etDebt.visibility(false)
                         etData.visibility(false)
-                        if (etCard.text.isNotEmpty() && etDescription.text.isNotEmpty()){
+                        if (etCard.text.isNotEmpty()){
                             val card = etCard.text.toString().getOnlyDigits().toLong()
+                            val debt = totalPrice - card
                             val description = etDescription.text.toString()
-                            sendDate.invoke(card,0,0,description,data)
+                            sendDate.invoke(card,0,debt,description,data)
                             dismiss()
                         }else{
-                            Toast.makeText(context, requireActivity().getString(R.string.fill_the_fields), Toast.LENGTH_SHORT).show()
+                            showMessage(context?.getString(R.string.input_sum))
                         }
                     }
-                    "Naqd"->{
+                    "Naqd pul"->{
                         etDebt.visibility(false)
                         etCard.visibility(false)
                         etCash.visibility(true)
                         etData.visibility(false)
-                        if (etCash.text.isNotEmpty() && etDescription.text.isNotEmpty()){
+                        if (etCash.text.isNotEmpty()){
                             val cash = etCash.text.toString().getOnlyDigits().toLong()
+                            val debt = totalPrice - cash
                             val description = etDescription.text.toString()
-                            sendDate.invoke(0,cash,0,description,data)
+                            sendDate.invoke(0,cash,debt,description,data)
                             dismiss()
                         }else{
-                            Toast.makeText(context, requireActivity().getString(R.string.fill_the_fields), Toast.LENGTH_SHORT).show()
-
+                            showMessage(context?.getString(R.string.input_sum))
                         }
                     }
                     "Aralash"->{
@@ -177,15 +178,15 @@ class AddPaymentDialog:DialogFragment() {
                         etCard.visibility(true)
                         etData.visibility(false)
                         etCash.visibility(true)
-                        if (etCash.text.isNotEmpty() && etCard.text.isNotEmpty() && etDescription.text.isNotEmpty()){
+                        if (etCash.text.isNotEmpty() && etCard.text.isNotEmpty()){
                             val cash = etCash.text.toString().getOnlyDigits().toLong()
                             val card = etCard.text.toString().getOnlyDigits().toLong()
+                            val debt = totalPrice - cash - card
                             val description = etDescription.text.toString()
-                            sendDate.invoke(card,cash,0,description,data)
+                            sendDate.invoke(card,cash,debt,description,data)
                             dismiss()
                         }else{
-                            Toast.makeText(context, requireActivity().getString(R.string.fill_the_fields), Toast.LENGTH_SHORT).show()
-
+                            showMessage(context?.getString(R.string.input_sum))
                         }
                     }
                     else->{
@@ -194,13 +195,13 @@ class AddPaymentDialog:DialogFragment() {
                         etCash.visibility(false)
                         etData.visibility(true)
                         btnCalender.visibility(true)
-                        if (etDebt.text.isNotEmpty() && etDescription.text.isNotEmpty() && data.isNotEmpty()){
+                        if (etDebt.text.isNotEmpty() && data.isNotEmpty()){
                             val debt = etDebt.text.toString().getOnlyDigits().toLong()
                             val description = etDescription.text.toString()
                             sendDate.invoke(0,0,debt,description,data)
                             dismiss()
                         }else{
-                            Toast.makeText(context, requireActivity().getString(R.string.fill_the_fields), Toast.LENGTH_SHORT).show()
+                            showMessage(context?.getString(R.string.input_sum_and_date))
                         }
                     }
                 }

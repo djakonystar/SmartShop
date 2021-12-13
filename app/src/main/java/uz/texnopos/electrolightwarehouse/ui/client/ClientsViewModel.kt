@@ -25,10 +25,10 @@ class ClientsViewModel(private val api: ApiInterface, private val settings: Sett
     val searchClient: LiveData<Resource<GenericResponse<List<ClientInfo>>>> get() = mutableSearchClient
 
 
-    fun getClients() {
+    fun getClients(limit: Int,page: Int,search: String) {
         mutableClients.value = Resource.loading()
         compositeDisposable.add(
-            api.getClients("Bearer ${settings.token}")
+            api.getClients("Bearer ${settings.token}",limit,page,search)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

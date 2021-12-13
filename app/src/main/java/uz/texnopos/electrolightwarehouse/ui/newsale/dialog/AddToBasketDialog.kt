@@ -94,10 +94,9 @@ class AddToBasketDialog(private val product: Product):DialogFragment() {
         liveQuantity.observe(requireActivity(),{
             val quantity = it
             binding.apply {
-                tvMin.text =  "Min :" +(product.priceWholesale * quantity).changeFormat()
-                tvWholesale.text = "Ulgurji :" + (product.priceMin * quantity).changeFormat()
-                tvMax.text =  "Max :" +(product.priceMax * quantity).changeFormat()
-
+                tvWholesale.text = "Ulgurji: " + (product.priceMin * quantity).changeFormat()
+                tvMin.text =  "Min: " +(product.priceWholesale * quantity).changeFormat()
+                tvMax.text =  "Max: " +(product.priceMax * quantity).changeFormat()
             }
         })
     }
@@ -110,7 +109,7 @@ class AddToBasketDialog(private val product: Product):DialogFragment() {
             if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
             s += num[i]
         }
-        return "$s uzs"
+        return "$s UZS"
     }
 
     private var onItemClick: (quantity:Int, summa:String) -> Unit = { _, _->}

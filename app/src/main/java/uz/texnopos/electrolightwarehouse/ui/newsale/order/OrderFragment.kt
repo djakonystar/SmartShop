@@ -1,6 +1,7 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale.order
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,6 +23,7 @@ import uz.texnopos.electrolightwarehouse.core.MarginItemDecoration
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.dp
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
+import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.data.model.Order
 import uz.texnopos.electrolightwarehouse.data.model.OrderItem
 import uz.texnopos.electrolightwarehouse.data.model.Product
@@ -56,7 +58,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
 
 
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOrderBinding.bind(view)
@@ -105,7 +107,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
 
             btnOrder.onClick {
                 if (etSearchClient.text.isNotEmpty()){
-                    val dialog = AddPaymentDialog()
+                    val dialog = AddPaymentDialog(totalPrice.toLong())
                     dialog.show(requireActivity().supportFragmentManager,"")
                     dialog.setDate { card, cash, debt, description, data ->
                         viewModelOrder.setOrder(
@@ -122,7 +124,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
                         )
                     }
                 }else{
-                    Toast.makeText(requireContext(), "Klientni qoshing!", Toast.LENGTH_SHORT).show()
+                    showMessage(context?.getString(R.string.choose_client))
                 }
 
             }
@@ -167,7 +169,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
             if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
             s += num[i]
         }
-        return "$s uzs"
+        return "$s UZS"
     }
 
     private fun setupObservers(){
@@ -177,8 +179,7 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
 
                 }
                 ResourceState.SUCCESS->{
-
-                    Toast.makeText(requireContext(), "Klient qo'shildi", Toast.LENGTH_SHORT).show()
+                    showMessage(context?.getString(R.string.client_successfully_added))
                 }
                 ResourceState.ERROR->{
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
@@ -197,8 +198,11 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
                         adapter.models.clear()
                         adapter.notifyDataSetChanged()
                     }
-                    //TODO: AlertDialog
-                    Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+
+                    val alertDialog = AlertDialog.Builder(requireContext())
+                    alertDialog.setTitle(context?.getString(R.string.success))
+                    alertDialog.setMessage(context?.getString(R.string.order_successfully_done))
+                    alertDialog.show()
                 }
                 ResourceState.ERROR->{
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
