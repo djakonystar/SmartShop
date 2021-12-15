@@ -21,10 +21,10 @@ class WarehouseViewModel(private val api: ApiInterface, private val settings: Se
     val warehouseProducts: LiveData<Resource<GenericResponse<List<WarehouseProduct>>>> =
         mutableWarehouseProducts
 
-    fun getProductsFromWarehouse(search: String,page: Int) {
+    fun getProductsFromWarehouse() {
         mutableWarehouseProducts.value = Resource.loading()
         compositeDisposable.add(
-            api.getProductsFromWarehouse("Bearer ${settings.token}",search, page)
+            api.getProductsFromWarehouse("Bearer ${settings.token}")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

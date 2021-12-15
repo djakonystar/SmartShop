@@ -109,17 +109,18 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
                 val costPrice = etCostPrice.text.toString().filter { c->c.isDigit() }
+                val productQuantity = etProductQuantity.text.toString().filter { q->q.isDigit() }
                 val branch = etBranchName.text.toString()
                 val wholesalePrice = etWholesalePrice.text.toString().filter { w->w.isDigit() }
                 val minPrice = etMinPrice.text.toString().filter { min->min.isDigit() }
                 val maxPrice = etMaxPrice.text.toString().filter { max->max.isDigit() }
 
                 if (categoryId != 0 && productName.isNotEmpty() && costPrice.isNotEmpty()
-                    && wholesalePrice.isNotEmpty() && minPrice.isNotEmpty() && maxPrice.isNotEmpty()
+                    && wholesalePrice.isNotEmpty() && minPrice.isNotEmpty() && maxPrice.isNotEmpty() && productQuantity.isNotEmpty()
                 ) {
                     // todo post request for add new product
                     viewModel.createProduct(Product(categoryId,branch,productName, costPrice.toInt(),
-                        wholesalePrice.toInt(),minPrice.toInt(),maxPrice.toInt()))
+                        wholesalePrice.toInt(),minPrice.toInt(),maxPrice.toInt(),productQuantity.toInt()))
                     setupObserverCreatedProduct()
                 } else {
                     if (categoryId == 0) {
@@ -136,6 +137,12 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     }
                     if (maxPrice.isEmpty()) {
                         tilMaxPrice.error = context?.getString(R.string.required_field)
+                    }
+                    if (productQuantity.isEmpty()){
+                        tilProductQuantity.error = context?.getString(R.string.required_field)
+                    }
+                    if (costPrice.isEmpty()){
+                        tilCostPrice.error = context?.getString(R.string.required_field)
                     }
                 }
             }

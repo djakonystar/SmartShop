@@ -61,8 +61,7 @@ interface ApiInterface {
 
     @GET("api/warehouse")
     fun getProductsFromWarehouse(
-        @Header("Authorization") token: String,@Query("search") search: String,@Query("page") page: Int
-    ): Observable<GenericResponse<List<WarehouseProduct>>>
+        @Header("Authorization") token: String): Observable<GenericResponse<List<WarehouseProduct>>>
 
     @POST("api/login")
     fun signIn(
