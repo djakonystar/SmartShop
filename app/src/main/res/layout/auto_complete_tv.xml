@@ -9,7 +9,9 @@
     <TextView
         android:id="@+id/tvNameContact"
         android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:padding="6dp"
-        android:textColor="@android:color/black"/>
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_middle"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/item_text_size_standard_tablet"
+        tools:ignore="SpUsage" />
 </LinearLayout>

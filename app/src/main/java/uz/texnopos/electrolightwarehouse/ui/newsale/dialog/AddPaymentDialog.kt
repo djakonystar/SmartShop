@@ -1,94 +1,101 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale.dialog
 
-import android.app.DatePickerDialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPrice
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
-import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
-import uz.texnopos.electrolightwarehouse.core.extensions.visibility
 import uz.texnopos.electrolightwarehouse.databinding.DialogAddPaymentBinding
+import java.text.SimpleDateFormat
 import java.util.*
 
-class AddPaymentDialog(private val totalPrice: Long):DialogFragment() {
-    private var _binding:DialogAddPaymentBinding? = null
-    private val binding get() = _binding!!
-    private var type= MutableLiveData<String>()
-    private var data=""
-    private lateinit var setListener: DatePickerDialog.OnDateSetListener
-    private val plusDay = 86399999
+class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
+    private lateinit var binding: DialogAddPaymentBinding
+    private var type = MutableLiveData<String>()
+    private var date = ""
+    private var dateInLong = System.currentTimeMillis()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-            _binding = DialogAddPaymentBinding.inflate(layoutInflater,container,false)
-            return binding.root
+    ): View? {
+        dialog!!.window?.setBackgroundDrawableResource(R.drawable.shape_dialog)
+        return inflater.inflate(R.layout.dialog_add_payment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = DialogAddPaymentBinding.bind(view)
+
         observe()
-        val list = arrayListOf("Naqd pul","Karta","Qarz","Aralash")
+        val list = arrayListOf(
+            context?.getString(R.string.payment_cash),
+            context?.getString(R.string.payment_card),
+            context?.getString(R.string.payment_debt),
+            context?.getString(R.string.payment_mix)
+        )
+
         binding.apply {
-            etDebt.addTextChangedListener(MaskWatcherPrice(etDebt))
+            actSpinner.setAdapter(ArrayAdapter(requireContext(), R.layout.item_spinner, list))
+            actSpinner.setOnFocusChangeListener { _, b ->
+                if (b) {
+                    actSpinner.showDropDown()
+                }
+                tilSpinner.isErrorEnabled = false
+            }
+            actSpinner.setOnItemClickListener { _, _, i, _ ->
+                type.postValue(list[i])
+            }
+
             etCash.addTextChangedListener(MaskWatcherPrice(etCash))
             etCard.addTextChangedListener(MaskWatcherPrice(etCard))
-        }
 
-
-        binding.spinner2.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
-        binding.spinner2.setPopupBackgroundResource(R.drawable.background_textview)
-        binding.spinner2.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    p0: AdapterView<*>?,
-                    p1: View?,
-                    p2: Int,
-                    p3: Long
-                ) {
-                    type.postValue(list[p2])
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                }
+            etCash.addTextChangedListener {
+                tilCash.isErrorEnabled = false
+            }
+            etCard.addTextChangedListener {
+                tilCard.isErrorEnabled = false
+            }
+            etDate.addTextChangedListener {
+                tilDate.isErrorEnabled = false
             }
 
-        binding.apply {
-            binding.btnAdd.onClick {
-                check()
+
+            etDate.onClick {
+                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Sanani tanlang")
+                    .setSelection(dateInLong)
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setStart(System.currentTimeMillis())
+                            .setValidator(DateValidatorPointForward.now())
+                            .build()
+                    )
+                    .build()
+
+                datePickerDialog.addOnPositiveButtonClickListener {
+                    dateInLong = it
+                    date = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateInLong)
+                    etDate.setText(date)
+                }
+
+                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
             }
 
-            btnCalender.onClick {
-                val calendar = Calendar.getInstance()
-                val year = calendar.get((Calendar.YEAR))
-                var month = calendar.get((Calendar.MONTH))
-                val day = calendar.get((Calendar.DAY_OF_MONTH))
-
-                setListener = DatePickerDialog.OnDateSetListener { _, year1, month1, dayOfMonth1 ->
-                    month = month1+1
-                    data = "$dayOfMonth1.$month.$year1"
-                    etData.text = data
-                }
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    setListener
-                    ,year, month, day)
-
-                datePickerDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                datePickerDialog.show()
+            btnAdd.onClick {
+                checkAndSend()
             }
 
             btnCancel.onClick {
@@ -98,110 +105,142 @@ class AddPaymentDialog(private val totalPrice: Long):DialogFragment() {
     }
 
     private fun String.getOnlyDigits(): String {
-        var s = ""
-        this.forEach { if (it.isDigit()) s += it }
+        val s = this.filter { it.isDigit() }
         return if (s.isEmpty()) "0" else s
     }
 
-    private fun observe(){
+    private fun observe() {
         type.observe(requireActivity(), {
             binding.apply {
-                when(it){
-                    "Karta"->{
-                        etCard.visibility(true)
-                        etCash.visibility(false)
-                        etDebt.visibility(false)
-                        etData.visibility(false)
-                        btnCalender.visibility(false)
+                when (it) {
+                    context?.getString(R.string.payment_cash) -> {
+                        tilCash.isVisible = true
+                        tilCard.isVisible = false
+                        tilDate.isVisible = true
+                        tilComment.isVisible = true
                     }
-                    "Naqd pul"->{
-                        etDebt.visibility(false)
-                        etCard.visibility(false)
-                        etData.visibility(false)
-                        etCash.visibility(true)
-                        btnCalender.visibility(false)
+                    context?.getString(R.string.payment_card) -> {
+                        tilCash.isVisible = false
+                        tilCard.isVisible = true
+                        tilDate.isVisible = true
+                        tilComment.isVisible = true
                     }
-                    "Aralash"->{
-                        etDebt.visibility(false)
-                        etCard.visibility(true)
-                        etCash.visibility(true)
-                        btnCalender.visibility(false)
+                    context?.getString(R.string.payment_debt) -> {
+                        tilCash.isVisible = false
+                        tilCard.isVisible = false
+                        tilDate.isVisible = true
+                        tilComment.isVisible = true
                     }
-                    else->{
-                        etDebt.visibility(true)
-                        etCard.visibility(false)
-                        etData.visibility(true)
-                        etCash.visibility(false)
-                        btnCalender.visibility(true)
+                    context?.getString(R.string.payment_mix) -> {
+                        tilCash.isVisible = true
+                        tilCard.isVisible = true
+                        tilDate.isVisible = true
+                        tilComment.isVisible = true
                     }
                 }
             }
         })
     }
 
-    private fun check(){
+    private fun checkAndSend() {
         type.observe(requireActivity(), {
+            var cash = 0L
+            var card = 0L
+            var debt: Long
+            var dateRequired = false
+            var comment: String
             binding.apply {
-                when(it){
-                    "Karta"->{
-                        etCard.visibility(true)
-                        etCash.visibility(false)
-                        etDebt.visibility(false)
-                        etData.visibility(false)
-                        if (etCard.text.isNotEmpty()){
-                            val card = etCard.text.toString().getOnlyDigits().toLong()
-                            val debt = totalPrice - card
-                            val description = etDescription.text.toString()
-                            sendDate.invoke(card,0,debt,description,data)
+                when (it) {
+                    context?.getString(R.string.payment_cash) -> {
+                        if (etCash.text.toString().isNotEmpty()) {
+                            cash = etCash.text.toString().getOnlyDigits().toLong()
+                        } else {
+                            tilCash.error = context?.getString(R.string.required_field)
+                        }
+                        debt = totalPrice - cash
+                        if (debt > 0) {
+                            dateRequired = true
+                        }
+                        comment = etComment.text.toString()
+                        if (dateRequired) {
+                            if (date.isEmpty()) {
+                                tilDate.error = context?.getString(R.string.required_field)
+                            } else {
+                                sendDate.invoke(cash, card, debt, date, comment)
+                                dismiss()
+                            }
+                        } else {
+                            sendDate.invoke(cash, card, debt, date, comment)
                             dismiss()
-                        }else{
-                            showMessage(context?.getString(R.string.input_sum))
                         }
                     }
-                    "Naqd pul"->{
-                        etDebt.visibility(false)
-                        etCard.visibility(false)
-                        etCash.visibility(true)
-                        etData.visibility(false)
-                        if (etCash.text.isNotEmpty()){
-                            val cash = etCash.text.toString().getOnlyDigits().toLong()
-                            val debt = totalPrice - cash
-                            val description = etDescription.text.toString()
-                            sendDate.invoke(0,cash,debt,description,data)
+                    context?.getString(R.string.payment_card) -> {
+                        if (etCard.text.toString().isNotEmpty()) {
+                            card = etCard.text.toString().getOnlyDigits().toLong()
+                        } else {
+                            tilCard.error = context?.getString(R.string.required_field)
+                        }
+                        debt = totalPrice - card
+                        if (debt > 0) {
+                            dateRequired = true
+                        }
+                        comment = etComment.text.toString()
+                        if (dateRequired) {
+                            if (date.isEmpty()) {
+                                tilDate.error = context?.getString(R.string.required_field)
+                            } else {
+                                sendDate.invoke(cash, card, debt, date, comment)
+                                dismiss()
+                            }
+                        } else {
+                            sendDate.invoke(cash, card, debt, date, comment)
                             dismiss()
-                        }else{
-                            showMessage(context?.getString(R.string.input_sum))
                         }
                     }
-                    "Aralash"->{
-                        etDebt.visibility(false)
-                        etCard.visibility(true)
-                        etData.visibility(false)
-                        etCash.visibility(true)
-                        if (etCash.text.isNotEmpty() && etCard.text.isNotEmpty()){
-                            val cash = etCash.text.toString().getOnlyDigits().toLong()
-                            val card = etCard.text.toString().getOnlyDigits().toLong()
-                            val debt = totalPrice - cash - card
-                            val description = etDescription.text.toString()
-                            sendDate.invoke(card,cash,debt,description,data)
+                    context?.getString(R.string.payment_debt) -> {
+                        debt = totalPrice
+                        if (debt > 0) {
+                            dateRequired = true
+                        }
+                        comment = etComment.text.toString()
+                        if (dateRequired) {
+                            if (date.isEmpty()) {
+                                tilDate.error = context?.getString(R.string.required_field)
+                            } else {
+                                sendDate.invoke(cash, card, debt, date, comment)
+                                dismiss()
+                            }
+                        } else {
+                            sendDate.invoke(cash, card, debt, date, comment)
                             dismiss()
-                        }else{
-                            showMessage(context?.getString(R.string.input_sum))
                         }
                     }
-                    else->{
-                        etDebt.visibility(true)
-                        etCard.visibility(false)
-                        etCash.visibility(false)
-                        etData.visibility(true)
-                        btnCalender.visibility(true)
-                        if (etDebt.text.isNotEmpty() && data.isNotEmpty()){
-                            val debt = etDebt.text.toString().getOnlyDigits().toLong()
-                            val description = etDescription.text.toString()
-                            sendDate.invoke(0,0,debt,description,data)
+                    context?.getString(R.string.payment_mix) -> {
+                        if (etCash.text.toString().isNotEmpty()) {
+                            cash = etCash.text.toString().getOnlyDigits().toLong()
+                        } else {
+                            tilCash.error = context?.getString(R.string.required_field)
+                        }
+                        if (etCard.text.toString().isNotEmpty()) {
+                            card = etCard.text.toString().getOnlyDigits().toLong()
+                        } else {
+                            tilCard.error = context?.getString(R.string.required_field)
+                        }
+                        debt = totalPrice - (card + cash)
+                        if (debt > 0) {
+                            dateRequired = true
+                        }
+                        comment = etComment.text.toString()
+                        if (dateRequired) {
+                            if (date.isEmpty()) {
+                                tilDate.error = context?.getString(R.string.required_field)
+                            } else {
+                                sendDate.invoke(cash, card, debt, date, comment)
+                                dismiss()
+                            }
+                        } else {
+                            sendDate.invoke(cash, card, debt, date, comment)
                             dismiss()
-                        }else{
-                            showMessage(context?.getString(R.string.input_sum_and_date))
                         }
                     }
                 }
@@ -209,8 +248,10 @@ class AddPaymentDialog(private val totalPrice: Long):DialogFragment() {
         })
     }
 
-    private var sendDate: (card:Long, cash:Long, debt:Long, description:String,data:String) -> Unit = { _:Long,_:Long,_:Long,_:String, _: String -> }
-    fun setDate(sendDate: (card:Long, cash:Long, debt:Long, description:String,data:String) -> Unit) {
+    private var sendDate: (cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit =
+        { cash: Long, card: Long, debt: Long, date: String, comment: String -> }
+
+    fun setDate(sendDate: (cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit) {
         this.sendDate = sendDate
     }
 }

@@ -64,11 +64,11 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
             rvOrder.addItemDecoration(MarginItemDecoration(8.dp))
             adapter.models = Basket.mutableProducts
             tvTotalPrice
-            var totalPrice = 0
+            var totalPrice = 0L
             for (i in list.indices){
                 totalPrice+=list[i].salePrice
             }
-            price.postValue(totalPrice.toLong())
+            price.postValue(totalPrice)
             price.observe(viewLifecycleOwner,{
                 tvTotalPrice.text = "Summa : "+(it.changeFormat())
             })
@@ -102,18 +102,18 @@ class OrderFragment:Fragment(R.layout.fragment_order) {
 
             btnOrder.onClick {
                 if (etSearchClient.text.isNotEmpty()){
-                    val dialog = AddPaymentDialog(totalPrice.toLong())
+                    val dialog = AddPaymentDialog(totalPrice)
                     dialog.show(requireActivity().supportFragmentManager,"")
-                    dialog.setDate { card, cash, debt, description, data ->
+                    dialog.setDate { cash, card, debt, date, comment ->
                         viewModelOrder.setOrder(
                             Order(
                                 id = clientId,
                                 card = card,
                                 cash = cash,
                                 debt = debt,
-                                price= totalPrice.toDouble(),
-                                term =data,
-                                description = description,
+                                price= totalPrice,
+                                term = date,
+                                description = comment,
                                 orders = orderItems
                             )
                         )

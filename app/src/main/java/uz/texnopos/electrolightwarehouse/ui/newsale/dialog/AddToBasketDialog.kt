@@ -5,114 +5,122 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import uz.texnopos.electrolightwarehouse.R
+import uz.texnopos.electrolightwarehouse.core.MaskWatcherNothing
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPrice
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
-import uz.texnopos.electrolightwarehouse.data.model.Amount
+import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
 import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.databinding.DialogAddToBasketBinding
 
-class AddToBasketDialog(private val product: Product):DialogFragment() {
-    private var _binding:DialogAddToBasketBinding? = null
-    private val binding get() = _binding!!
-    private val amount = MediatorLiveData<Amount>().apply { value = Amount() }
-    private var livePrice = MutableLiveData<Long>()
+class AddToBasketDialog(private val product: Product) : DialogFragment() {
+    private lateinit var binding: DialogAddToBasketBinding
     private var liveQuantity = MutableLiveData<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = DialogAddToBasketBinding.inflate(layoutInflater, container,false)
-        return binding.root
+    ): View? {
+        dialog!!.window?.setBackgroundDrawableResource(R.drawable.shape_dialog)
+        return inflater.inflate(R.layout.dialog_add_to_basket, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = DialogAddToBasketBinding.bind(view)
+
         observe()
-//        merge()
+
         binding.apply {
+            val remained = 100
+
+            tvWholesale.text =
+                context?.getString(R.string.wholesale_price_text, "0")
+            tvMin.text = context?.getString(R.string.min_price_text, "0")
+            tvMax.text = context?.getString(R.string.max_price_text, "0")
+            tvQuantityCounter.text =
+                context?.getString(R.string.counter_text, "0", remained.toSumFormat)
+
+            etQuantity.addTextChangedListener(MaskWatcherNothing(etQuantity))
             etSumma.addTextChangedListener(MaskWatcherPrice(etSumma))
-        }
-        binding.apply {
-//            etSumma.doOnTextChanged { it, _, _, _ ->
-//                if (it.isNullOrEmpty()){
-//                    livePrice.postValue(0)
-//                }else{
-//                    livePrice.postValue(it.toString().getOnlyDigits().toLong())
-//                }
-//            }
+
+            etQuantity.addTextChangedListener {
+                val count = it.toString().getOnlyDigits()
+                tilQuantity.isErrorEnabled = false
+                tvQuantityCounter.text =
+                    context?.getString(
+                        R.string.counter_text,
+                        count.toSumFormat,
+                        remained.toSumFormat
+                    )
+                if (count.toInt() > remained) {
+                    tilQuantity.error = context?.getString(R.string.not_enough_error)
+                }
+            }
+            etSumma.addTextChangedListener {
+                tilSumma.isErrorEnabled = false
+            }
+
             etQuantity.doOnTextChanged { it, _, _, _ ->
-                if (it.isNullOrEmpty()){
+                if (it.isNullOrEmpty()) {
                     liveQuantity.postValue(0)
-                }else{
+                } else {
                     liveQuantity.postValue(it.toString().getOnlyDigits().toLong())
                 }
             }
 
-            binding.btnAdd.onClick {
-                if (etQuantity.text.isNotEmpty() && etSumma.text.isNotEmpty()){
-                    val quantity = etQuantity.text.toString().getOnlyDigits()
-                    val summa = etSumma.text.toString().getOnlyDigits()
-                    onItemClick.invoke(quantity.toInt(), summa)
+            btnAdd.onClick {
+                val quantity = etQuantity.text.toString()
+                var sum = etSumma.text.toString()
+                if (quantity.isNotEmpty() && !tilQuantity.isErrorEnabled && sum.isNotEmpty()) {
+                    val quantityInt = quantity.getOnlyDigits().toInt()
+                    sum = sum.getOnlyDigits()
+                    onItemClick.invoke(quantityInt, sum)
                     dismiss()
-                }else{
-                    Toast.makeText(context, getString(R.string.fill_the_fields), Toast.LENGTH_SHORT).show()
+                } else {
+                    if (quantity.isEmpty()) {
+                        tilQuantity.error = context?.getString(R.string.required_field)
+                    }
+                    if (sum.isEmpty()) {
+                        tilSumma.error = context?.getString(R.string.required_field)
+                    }
                 }
             }
 
-            binding.btnCancel.onClick {
+            btnCancel.onClick {
                 dismiss()
             }
         }
     }
 
     private fun String.getOnlyDigits(): String {
-        var s = ""
-        this.forEach { if (it.isDigit()) s += it }
+        val s = this.filter { it.isDigit() }
         return if (s.isEmpty()) "0" else s
-    }
-    private fun merge() {
-        amount.addSource(livePrice) {
-            val previous = amount.value
-            amount.value = previous?.copy( sum = it)
-        }
-        amount.addSource(liveQuantity) {
-            val previous = amount.value
-            amount.value = previous?.copy(quantity = it)
-        }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun observe(){
-        liveQuantity.observe(requireActivity(),{
-            val quantity = it
+    private fun observe() {
+        liveQuantity.observe(requireActivity(), { quantity ->
+            val newWholesale = product.priceWholesale * quantity
+            val newMin = product.priceMin * quantity
+            val newMax = product.priceMax * quantity
+
             binding.apply {
-                tvWholesale.text = "Ulgurji: " + (product.priceMin * quantity).changeFormat()
-                tvMin.text =  "Min: " +(product.priceWholesale * quantity).changeFormat()
-                tvMax.text =  "Max: " +(product.priceMax * quantity).changeFormat()
+                tvWholesale.text =
+                    context?.getString(R.string.wholesale_price_text, newWholesale.toSumFormat)
+                tvMin.text = context?.getString(R.string.min_price_text, newMin.toSumFormat)
+                tvMax.text = context?.getString(R.string.max_price_text, newMax.toSumFormat)
             }
         })
     }
 
-    private fun Long.changeFormat(): String {
-        val num = this.toLong().toString()
-        var s = ""
-        val sz = num.length
-        for (i in 0 until sz) {
-            if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
-            s += num[i]
-        }
-        return "$s UZS"
-    }
-
-    private var onItemClick: (quantity:Int, summa:String) -> Unit = { _, _->}
+    private var onItemClick: (quantity: Int, summa: String) -> Unit = { _, _ -> }
     fun onItemClickListener(onItemClick: (quantity: Int, summa: String) -> Unit) {
         this.onItemClick = onItemClick
     }

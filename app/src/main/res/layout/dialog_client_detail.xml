@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="400dp">
+    android:minWidth="@dimen/dialog_min_width">
 
     <TextView
         android:id="@+id/tvName"
@@ -72,7 +72,7 @@
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:text="+998 (91) 394 11 13"
         android:textColor="@color/black"
-        android:textSize="@dimen/checkbox_text_size"
+        android:textSize="@dimen/item_text_size_standard_tablet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPhoneTitle"
@@ -109,7 +109,7 @@
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:text="253 565 145"
         android:textColor="@color/black"
-        android:textSize="@dimen/checkbox_text_size"
+        android:textSize="@dimen/item_text_size_standard_tablet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTINTitle"
@@ -148,7 +148,7 @@
         android:maxLines="5"
         android:text="Bu \nfoydalanuvchining \numuman \nqarzi \nyo'q ekan"
         android:textColor="@color/black"
-        android:textSize="@dimen/checkbox_text_size"
+        android:textSize="@dimen/item_text_size_standard_tablet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCommentTitle"

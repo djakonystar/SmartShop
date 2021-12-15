@@ -42,9 +42,9 @@ class NewSaleFragment: Fragment(R.layout.fragment_new_sale) {
             productNewSaleAdapter.onItemClickListener {
                 val dialog = AddToBasketDialog(it)
                 dialog.show(requireActivity().supportFragmentManager,"")
-                Basket.addProduct(it){ p->
+                Basket.addProduct(it){ p ->
                     dialog.onItemClickListener { quantity, totalPrice ->
-                        Basket.setProduct(p,quantity, totalPrice.toInt())
+                        Basket.setProduct(p, quantity, totalPrice.toInt())
                     }
                 }
             }

@@ -1,197 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minWidth="320dp"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/dialog_sale_min_width">
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:padding="@dimen/margin_small"
-        android:text="To'lovni amalga oshirish"
-        android:textColor="@color/black"
         android:gravity="center"
-        android:textSize="@dimen/margin_standard"
+        android:letterSpacing="0.1"
+        android:padding="@dimen/padding_small"
+        android:text="@string/payment"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_text_size_standard_tablet"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpUsage" />
 
-
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSpinner"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etCash"
-        android:hint="@string/cash_uzb"
-        android:maxLength="18"
-        android:visibility="gone"
-        android:inputType="number"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etCard"
-        android:visibility="gone"
-        android:hint="@string/payment_card"
-        android:maxLength="18"
-        android:inputType="numberDecimal"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCash"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:maxLength="18"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_64"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etDebt"
-        android:inputType="numberDecimal"
-        android:hint="Qarz"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCard"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_64"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etData"
-        android:visibility="gone"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:enabled="false"
-        android:hint="Sana"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etDebt"/>
-
-
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="@dimen/margin_half"
-        android:visibility="gone"
-        android:id="@+id/btnCalender"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/etData"
-        app:layout_constraintBottom_toBottomOf="@id/etData"
-        android:src="@drawable/ic_calendar"
-        android:layout_marginEnd="@dimen/margin_standard"
-        />
-
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etDescription"
-        android:inputType="text"
-        android:hint="@string/comment"
-        android:padding="12dp"
-        android:maxLines="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="@dimen/margin_32"
-        app:layout_constraintBottom_toTopOf="@id/btnAdd"
-        app:layout_constraintTop_toBottomOf="@id/etData"/>
-
-    <RelativeLayout
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="@drawable/spinner_border"
-        android:orientation="horizontal"
+        android:hint="@string/choose_payment_method"
+        app:endIconMode="dropdown_menu"
+        app:endIconTint="@color/app_main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/margin_32"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
-        <Spinner
-            android:id="@+id/spinner2"
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/actSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown"
-            android:textColor="@color/black" />
+            android:focusable="false"
+            android:inputType="none"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_drop_down" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
-
-
-
-
-    <TextView
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilCash"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:text="To'lash"
-        android:textSize="15dp"
-        android:textColor="@color/black"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:padding="@dimen/margin_small"
-        android:textStyle="bold"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/cash_cost"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:helperText="@string/cash_pay_helper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilSpinner">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789 "
+            android:inputType="number"
+            android:maxLength="19"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/card_cost"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:helperText="@string/card_pay_helper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilCash">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789 "
+            android:inputType="number"
+            android:maxLength="19"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/date_uzb"
+        android:visibility="gone"
+        app:helperText="@string/debt_pay_date_helper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilCard">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:drawableTint="@color/app_main_color"
+            android:focusable="false"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/comment"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilDate">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:lines="5"
+            android:minLines="5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_32"
+        android:paddingHorizontal="32dp"
+        android:text="@string/pay"
+        android:textSize="@dimen/text_size_larger"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:focusable="true" />
+        app:layout_constraintStart_toEndOf="@id/btnCancel"
+        app:layout_constraintTop_toBottomOf="@id/tilComment"
+        tools:ignore="SpUsage" />
 
-    <TextView
+    <Button
         android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/btnAdd"
-        app:layout_constraintTop_toTopOf="@id/btnAdd"
-        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_32"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:textSize="15dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:textStyle="bold"
-        android:text="Bekor qilish"
-        android:padding="@dimen/margin_small"
+        android:paddingHorizontal="32dp"
+        android:text="@string/cancel_uzb"
+        android:textSize="@dimen/text_size_larger"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnAdd"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilComment"
+        tools:ignore="SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

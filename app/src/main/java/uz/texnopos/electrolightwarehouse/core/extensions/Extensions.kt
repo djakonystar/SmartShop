@@ -134,6 +134,15 @@ val Int.toSumFormat: String
         return text.reversed()
     }
 
+val Number.toSumFormat: String
+    get() {
+        var text = this.toString().reversed()
+        text = text.subSequence(0, text.length)
+            .chunked(3) // group every 3 chars
+            .joinToString(" ")
+        return text.reversed()
+    }
+
 val Double.toSumFormat: String
     get() {
         var num = this.toInt().toSumFormat

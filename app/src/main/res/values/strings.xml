@@ -21,13 +21,13 @@
     <string name="sum_uzb">Summa</string>
     <string name="date_uzb">Sana</string>
     <string name="selected_sum">Kiritish</string>
-    <string name="cash_cost">Naqd pulni kiriting</string>
-    <string name="card_cost">Plastik kartani kiriting</string>
+    <string name="cash_cost">Naqd</string>
+    <string name="card_cost">Plastik</string>
     <string name="method_uzb">To\'lov turi</string>
     <string name="cash_uzb">Naqd pul</string>
     <string name="uzcard">Plastik karta</string>
     <string name="mix">Aralash</string>
-    <string name="cancel_uzb">Bekor qilish</string>
+    <string name="cancel_uzb">Bekorlash</string>
     <string name="done_uzb">Saylash</string>
     <string name="call">Call</string>
     <string name="uzs">UZS</string>
@@ -75,4 +75,20 @@
     <string name="order_successfully_done">Buyurtma muvvaffaqiyatli amalga oshirildi!</string>
     <string name="client_successfully_added">Mijoz muvaffaqiyatli qo\'shildi!</string>
     <string name="product_quantity">Mahsulot soni</string>
+    <string name="type_of_client">Shaxs turi</string>
+    <string name="payment">To\'lov</string>
+    <string name="cash_pay_helper">Naqd pul orqali to\'langan qiymatni kiriting</string>
+    <string name="card_pay_helper">Plastik karta orqali to\'langan qiymatni kiriting</string>
+    <string name="payment_debt">Qarz</string>
+    <string name="debt_pay_helper">Qarz bo\'lgan pul qiymatni kiriting</string>
+    <string name="debt_pay_date_helper">Qarz to\'lanadigan oxirgi muddat (agar qarz qolgan bo\'lsa)</string>
+    <string name="payment_mix">Aralash</string>
+    <string name="add_to_basket">Savatga qo\'shish</string>
+    <string name="wholesale_price_text">Ulgurji: %s UZS</string>
+    <string name="min_price_text">Minimum: %s UZS</string>
+    <string name="max_price_text">Maksimum: %s UZS</string>
+    <string name="quantity">Soni</string>
+    <string name="pay">To\'lash</string>
+    <string name="counter_text">%s/%s</string>
+    <string name="not_enough_error">Tovar yetarli emas!</string>
 </resources>

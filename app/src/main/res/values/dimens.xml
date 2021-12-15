@@ -20,7 +20,7 @@
     <dimen name="action_bar_title_size">20dp</dimen>
     <dimen name="til_corner_radius">8dp</dimen>
     <dimen name="button_padding_horizontal">48dp</dimen>
-    <dimen name="checkbox_text_size">22dp</dimen>
+    <dimen name="item_text_size_standard_tablet">22dp</dimen>
     <dimen name="button_height">64dp</dimen>
     <dimen name="login_lock_icon_size">96dp</dimen>
     <dimen name="checkbox_height">48dp</dimen>
@@ -38,4 +38,6 @@
     <dimen name="margin_small">4dp</dimen>
     <dimen name="item_indicator_size">15dp</dimen>
     <dimen name="margin_64">64dp</dimen>
+    <dimen name="dialog_min_width">400dp</dimen>
+    <dimen name="dialog_sale_min_width">450dp</dimen>
 </resources>
