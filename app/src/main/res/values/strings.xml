@@ -46,7 +46,7 @@
     <string name="payment_cash">Naqd</string>
     <string name="payment_card">Karta</string>
     <string name="choose_category">Kategoriyani tanlang</string>
-    <string name="product_name">Tovar nomi</string>
+    <string name="product_name">Mahsulot nomi</string>
     <string name="brand_name">Firma nomi</string>
     <string name="cost_price">Tan narxi</string>
     <string name="wholesale_price">Ulgurji narxi</string>
@@ -74,4 +74,5 @@
     <string name="success">Muvaffaqiyatli!</string>
     <string name="order_successfully_done">Buyurtma muvvaffaqiyatli amalga oshirildi!</string>
     <string name="client_successfully_added">Mijoz muvaffaqiyatli qo\'shildi!</string>
+    <string name="product_quantity">Mahsulot soni</string>
 </resources>

@@ -14,5 +14,7 @@ data class Product(
     @SerializedName("price_min")
     val percentMin: Int,
     @SerializedName("price_max")
-    val percentMax: Int
+    val percentMax: Int,
+    @SerializedName("new_count")
+    val quantity: Int
 )

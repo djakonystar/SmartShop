@@ -2,8 +2,6 @@ package uz.texnopos.electrolightwarehouse.ui.newpayment
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -34,13 +32,10 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private lateinit var navController: NavController
     private val viewModel: NewPaymentViewModel by viewModel()
     private val args: NewPaymentFragmentArgs by navArgs()
-    private val handler = Handler(Looper.getMainLooper())
     private var method: String = ""
     private var cash = ""
     private var card = ""
     private var clientId: Int = 0
-    private val delay: Long = 700
-    private var lastTextEdit: Long = 0
     private var comment: String = ""
     private var searchValue: String = ""
     private var clientName = ""
@@ -103,12 +98,6 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 tilPaymentCash.visibility(true)
                 tilPaymentCard.visibility(true)
             }
-
-            val inputFinishChecker = Runnable {
-                if (System.currentTimeMillis() > (lastTextEdit + delay - 500)) {
-                    viewModel.searchClient(searchValue)
-                }
-            }
             etSearchClient.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
                 clientName = parent.getItemAtPosition(position).toString()
                 clientId = listIds.getValue(clientName)
@@ -118,15 +107,13 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    handler.removeCallbacks(inputFinishChecker)
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
                     if (p0?.length!! > 0) {
                         list.clear()
                         searchValue = p0.toString()
-                        lastTextEdit = System.currentTimeMillis()
-                        handler.postDelayed(inputFinishChecker, delay)
+                        viewModel.searchClient(searchValue)
                     }
                 }
 

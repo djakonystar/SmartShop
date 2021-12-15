@@ -1,6 +1,8 @@
 package uz.texnopos.electrolightwarehouse.ui.warehouse
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
@@ -16,6 +18,8 @@ import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarSortBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentWarehouseBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var binding: FragmentWarehouseBinding
@@ -52,8 +56,37 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             recyclerView.adapter = adapter
         }
 
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                p0?.let {
+                    if (it.isEmpty()) {
+                        adapter.models = productsList
+                    } else {
+                        filter(it.toString())
+                    }
+                }
+            }
+
+        })
+
         viewModel.getProductsFromWarehouse()
         setUpObservers()
+    }
+
+    private fun filter(text: String) {
+        val filteredListName: ArrayList<WarehouseProduct> = ArrayList()
+        for (eachName in productsList) {
+            if (eachName.name.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))) {
+                filteredListName.add(eachName)
+            }
+        }
+        adapter.filterList(filteredListName)
     }
 
     private fun setUpObservers() {
@@ -88,7 +121,6 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
-            tilSearch.isEnabled = !loading
             swipeRefresh.isEnabled = !loading
         }
     }
