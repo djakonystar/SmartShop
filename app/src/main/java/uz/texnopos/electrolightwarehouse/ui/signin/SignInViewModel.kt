@@ -28,7 +28,12 @@ class SignInViewModel(private val api: ApiInterface, private val settings: Setti
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableSignIn.value = Resource.success(response)
+                        if (response.successful){
+                            mutableSignIn.value = Resource.success(response)
+                            settings.role = response.payload.role
+                        }else{
+                            mutableSignIn.value = Resource.error(response.message)
+                        }
                     },
                     { error ->
                         mutableSignIn.value = Resource.error(error.localizedMessage)
