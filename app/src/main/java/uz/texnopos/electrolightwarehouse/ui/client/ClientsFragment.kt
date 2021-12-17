@@ -15,19 +15,22 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.ResourceState
-import uz.texnopos.electrolightwarehouse.core.extensions.dialPhoneFull
+import uz.texnopos.electrolightwarehouse.core.extensions.dialPhone
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.data.model.Client
-import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
+import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
 import uz.texnopos.electrolightwarehouse.databinding.FragmentClientsBinding
-
+import uz.texnopos.electrolightwarehouse.databinding.ActionBarClientBinding
+import uz.texnopos.electrolightwarehouse.ui.newclient.NewClientViewModel
+import uz.texnopos.electrolightwarehouse.ui.newsale.dialog.AddClientDialog
 
 class ClientsFragment : Fragment(R.layout.fragment_clients) {
     private lateinit var binding: FragmentClientsBinding
-    private lateinit var abBinding: ActionBarBinding
+    private lateinit var abBinding: ActionBarClientBinding
     private lateinit var navController: NavController
     private val viewModel: ClientsViewModel by viewModel()
+    private val newClientViewModel: NewClientViewModel by viewModel()
     private val adapter: ClientsAdapter by inject()
     private var isLoading = false
     private var page = 1
@@ -38,7 +41,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentClientsBinding.bind(view)
-        abBinding = ActionBarBinding.bind(view)
+        abBinding = ActionBarClientBinding.bind(view)
         navController = findNavController()
 
         abBinding.apply {
@@ -46,13 +49,30 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
             btnHome.onClick {
                 navController.popBackStack()
             }
+            btnAddClient.onClick {
+                val dialog = AddClientDialog()
+                dialog.show(requireActivity().supportFragmentManager, "")
+                dialog.setData { name, inn, phone, type, comment ->
+                    newClientViewModel.registerNewClient(
+                        RegisterClient(
+                            name = name,
+                            phone = phone,
+                            inn = inn,
+                            about = comment,
+                            clientType = type
+                        )
+                    )
+                }
+            }
         }
 
         binding.apply {
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
-                viewModel.getClients(limit,1,"")
+                mutableClient = mutableListOf()
+                page = 1
+                viewModel.getClients(limit, page, etSearch.text.toString())
             }
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
@@ -64,7 +84,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                         if (!isLoading) {
                             if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
                                 page++
-                                viewModel.getClients(limit,page,etSearch.text.toString())
+                                viewModel.getClients(limit, page, etSearch.text.toString())
                             }
                         }
                     }
@@ -81,12 +101,13 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                 override fun afterTextChanged(p0: Editable?) {
                     p0?.let {
                         if (it.isEmpty()) {
+                            mutableClient = mutableListOf()
                             page = 1
-                            viewModel.getClients(limit,page,"")
+                            viewModel.getClients(limit, page, "")
                         } else {
                             mutableClient = mutableListOf()
                             page = 1
-                            viewModel.getClients(limit,page,it.toString())
+                            viewModel.getClients(limit, page, it.toString())
                         }
                     }
                 }
@@ -102,7 +123,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
             }
 
             adapter.setOnPhoneClickListener { phone ->
-                phone.dialPhoneFull(requireActivity())
+                phone.dialPhone(requireActivity())
             }
 
             adapter.setOnPaymentClickListener { client ->
@@ -126,7 +147,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
             }
         }
 
-        viewModel.getClients(limit,1,"")
+        viewModel.getClients(limit, 1, "")
         setUpObservers()
     }
 
@@ -156,6 +177,23 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                             showMessage(it.data!!.message)
                         }
                     }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        }
+
+        newClientViewModel.registerNewClient.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    showMessage(context?.getString(R.string.client_successfully_added))
+                    mutableClient = mutableListOf()
+                    page = 1
+                    viewModel.getClients(limit, page, binding.etSearch.text.toString())
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

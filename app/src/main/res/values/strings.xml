@@ -100,4 +100,5 @@
     <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
     <string name="add_to_basket_en">Add to basket</string>
     <string name="choose_date_uz">Sanani tanlang</string>
+    <string name="add_client_en">Add Client</string>
 </resources>
