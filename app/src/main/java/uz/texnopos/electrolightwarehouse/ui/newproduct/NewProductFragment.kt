@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
+import uz.texnopos.electrolightwarehouse.core.MaskWatcherNothing
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPayment
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
@@ -65,6 +66,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etWholesalePrice.addTextChangedListener(MaskWatcherPayment(etWholesalePrice))
             etMinPrice.addTextChangedListener(MaskWatcherPayment(etMinPrice))
             etMaxPrice.addTextChangedListener(MaskWatcherPayment(etMaxPrice))
+            etProductQuantity.addTextChangedListener(MaskWatcherNothing(etProductQuantity))
 
             etProductName.addTextChangedListener {
                 tilProductName.isErrorEnabled = false
@@ -248,6 +250,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             etCostPrice.text!!.clear()
                             etWholesalePrice.text!!.clear()
                             etBranchName.text!!.clear()
+                            etProductQuantity.text!!.clear()
                             categoryId = 0
                         }
                     }else{

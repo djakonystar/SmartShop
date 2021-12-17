@@ -18,4 +18,5 @@
     <color name="payment_icon_color">#FF6D00</color>
     <color name="item_background_color">#F1F4FB</color>
     <color name="lightGrey">#9E9F9F</color>
+    <color name="is_enabled_color">#4D000000</color>
 </resources>

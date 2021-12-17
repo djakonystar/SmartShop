@@ -9,6 +9,7 @@ class Settings(context: Context) {
         const val SIGNED_IN = "signedIn"
         const val TOKEN = "accessToken"
         const val USERNAME = "username"
+        const val USER_ROLE = "notROLE"
         const val PRODUCT = "product"
         const val PIN = "pin"
     }
@@ -39,4 +40,8 @@ class Settings(context: Context) {
             preferences.edit().putString(PIN, value).apply()
         }
         get() = preferences.getString(PIN, "") ?: ""
+
+    var role: String
+        set(value) = preferences.edit().putString(USER_ROLE,value).apply()
+        get() = preferences.getString(USER_ROLE,"")?: ""
 }
