@@ -21,6 +21,7 @@ data class Product(
     val priceMin: Long,
     @SerializedName("price_max")
     val priceMax: Long,
+    val remained: Int,
     var count: Int,
-    var salePrice: Int
+    var salePrice: Long
 )

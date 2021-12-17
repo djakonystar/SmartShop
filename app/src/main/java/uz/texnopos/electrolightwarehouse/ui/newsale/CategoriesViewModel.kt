@@ -12,15 +12,14 @@ import uz.texnopos.electrolightwarehouse.data.model.Products
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 
-class CategoriesViewModel(private val api:ApiInterface, private val settings:Settings): ViewModel() {
+class CategoriesViewModel(private val api: ApiInterface, private val settings: Settings) :
+    ViewModel() {
 
     private var _categories: MutableLiveData<Resource<List<CatalogCategory>>> = MutableLiveData()
     val categories: LiveData<Resource<List<CatalogCategory>>> get() = _categories
 
-    private var _products:MutableLiveData<Resource<Products>> = MutableLiveData()
-    val products:LiveData<Resource<Products>> get() = _products
-
     private val compositeDisposable = CompositeDisposable()
+
     fun getCategories() {
         _categories.value = Resource.loading()
         compositeDisposable.add(
@@ -41,40 +40,43 @@ class CategoriesViewModel(private val api:ApiInterface, private val settings:Set
         )
     }
 
-    fun getCategoryById(id: Int){
+    private var _products: MutableLiveData<Resource<Products>> = MutableLiveData()
+    val products: LiveData<Resource<Products>> get() = _products
+
+    fun getProductsByCategoryId(categoryId: Int) {
         _products.value = Resource.loading()
         compositeDisposable.add(
-            api.getCategoriesById("Bearer ${settings.token}",id)
+            api.getProductsByCategoryId("Bearer ${settings.token}", categoryId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        if (it.successful){
+                        if (it.successful) {
                             _products.value = Resource.success(it.payload)
-                        }else{
+                        } else {
                             _products.value = Resource.error(it.message)
                         }
-                    },{
+                    }, {
                         _products.value = Resource.error(it.localizedMessage)
                     }
                 )
         )
     }
 
-    fun getProductByName(name:String){
+    fun getProductByName(name: String) {
         _products.value = Resource.loading()
         compositeDisposable.add(
-            api.getProduct("Bearer ${settings.token}", name)
+            api.getProduct("Bearer ${settings.token}", name, limit = 100)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        if (it.successful){
+                        if (it.successful) {
                             _products.value = Resource.success(it.payload)
-                        }else{
+                        } else {
                             _products.value = Resource.error(it.message)
                         }
-                    },{
+                    }, {
                         _products.value = Resource.error(it.localizedMessage)
                     }
                 )

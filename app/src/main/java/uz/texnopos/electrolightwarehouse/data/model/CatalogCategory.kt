@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CatalogCategory(
     @SerializedName("category_id")
-    val categoryId: Int,
+    val id: Int,
     @SerializedName("name")
     val name: String,
     @SerializedName("percent_wholesale")
@@ -12,6 +12,6 @@ data class CatalogCategory(
     @SerializedName("percent_min")
     val percentMin:Int,
     @SerializedName("percent_max")
-    val percent_max:Int,
+    val percentMax:Int,
     var selectedMood: Boolean = false
 )

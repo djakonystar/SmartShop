@@ -1,81 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_grey"
     tools:context=".ui.newsale.NewSaleFragment">
 
     <include
         android:id="@+id/actionBar"
         layout="@layout/action_bar_search" />
 
-    <ScrollView
-        android:id="@+id/chipGroupScroller"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_half"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/actionBar">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_half"
-            app:chipSpacing="@dimen/margin_half"
-            app:singleSelection="true" />
-    </ScrollView>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_middle"
+        android:layout_marginTop="@dimen/margin_middle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chipGroupScroller">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toBottomOf="@id/actionBar">
+
+        <ScrollView
+            android:id="@+id/chipGroupScroller"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvHorizontalCategories"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_horizontal_orders_categories" />
+                android:layout_marginBottom="@dimen/margin_small"
+                app:singleLine="true"
+                app:singleSelection="true" />
 
+        </ScrollView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvNewSale"
-                android:layout_width="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvHorizontalCategories"
-                android:layout_height="0dp"
-                tools:listitem="@layout/item_new_sale"
-                android:layout_marginBottom="@dimen/margin_64"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chipGroupScroller"
+            tools:listitem="@layout/item_new_sale" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lavStudent"
+        android:id="@+id/lottieAnimation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/not_found"
-        app:lottie_loop="true" />
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/not_found" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -87,15 +68,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_margin="@dimen/margin_half"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_shopping_cart_"
-        app:tint="@color/white"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_standard"
+        android:contentDescription="@string/basket_en"
+        app:icon="@drawable/ic_shopping_cart_"
+        android:text="@string/basket"
+        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:iconTint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

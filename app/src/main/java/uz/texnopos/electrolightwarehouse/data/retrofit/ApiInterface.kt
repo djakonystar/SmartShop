@@ -27,17 +27,22 @@ interface ApiInterface {
 
     @GET("api/clients")
     fun getClients(
-        @Header("Authorization") token: String,@Query("search") search: String
+        @Header("Authorization") token: String,
+        @Query("search") search: String
     ): Observable<GenericResponse<List<ClientInfo>>>
 
     @GET("api/clients")
     fun getClients(
-        @Header("Authorization") token: String,@Query("limit") limit: Int,@Query("page") page: Int,@Query("search")search: String
+        @Header("Authorization") token: String,
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
+        @Query("search") search: String
     ): Observable<GenericResponse<List<Client>>>
 
     @GET("api/clients")
     fun getClientsByName(
-        @Header("Authorization") token: String,@Query("search") search: String
+        @Header("Authorization") token: String,
+        @Query("search") search: String
     ): Observable<GenericResponse<List<ClientInfo>>>
 
 
@@ -55,13 +60,14 @@ interface ApiInterface {
     @GET("api/orders")
     fun getOrdersByDate(
         @Header("Authorization") token: String,
-        @Query("to") from:String,
-        @Query("do") to:String
+        @Query("to") from: String,
+        @Query("do") to: String
     ): Observable<GenericResponse<List<Sales>>>
 
     @GET("api/warehouse")
     fun getProductsFromWarehouse(
-        @Header("Authorization") token: String): Observable<GenericResponse<List<WarehouseProduct>>>
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<List<WarehouseProduct>>>
 
     @POST("api/login")
     fun signIn(
@@ -80,14 +86,17 @@ interface ApiInterface {
     ): Observable<GenericResponse<List<CatalogCategory>>>
 
     @GET("api/products")
-    fun getCategoriesById(
+    fun getProductsByCategoryId(
         @Header("Authorization") token: String,
-        @Query("category") id: Int):Observable<GenericResponse<Products>>
+        @Query("category") categoryId: Int
+    ): Observable<GenericResponse<Products>>
 
     @GET("api/products")
     fun getProduct(
         @Header("Authorization") token: String,
-        @Query("search") name:String): Observable<GenericResponse<Products>>
+        @Query("search") name: String,
+        @Query("limit") limit: Int
+    ): Observable<GenericResponse<Products>>
 
     @POST("api/products")
     fun createdProduct(
@@ -99,9 +108,10 @@ interface ApiInterface {
     fun getCategories(
         @Header("Authorization") token: String
     ): Observable<GenericResponse<List<Categories>>>
+
     @POST("api/order")
     fun order(
         @Header("Authorization") token: String,
-        @Body order:Order
-    ):Observable<GenericResponse<Any>>
+        @Body order: Order
+    ): Observable<GenericResponse<Any>>
 }

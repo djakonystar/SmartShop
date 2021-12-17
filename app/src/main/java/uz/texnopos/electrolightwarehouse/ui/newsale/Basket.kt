@@ -17,12 +17,13 @@ class Basket {
                     return
                 }
             }
-            product.count = 1
-            mutableProducts.add(product)
+            if (product.count != 0) {
+                mutableProducts.add(product)
+            }
             onComplete.invoke(product)
         }
 
-        fun setProduct(product: Product, count: Int, totalPrice: Int) {
+        fun setProduct(product: Product, count: Int, totalPrice: Long) {
             product.count = count
             product.salePrice = totalPrice
             mutableProducts.forEachIndexed { _, p ->

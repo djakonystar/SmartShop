@@ -1,61 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/item_background_color"
-    android:layout_margin="4dp"
-    android:elevation="3dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginHorizontal="@dimen/margin_middle"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:elevation="@dimen/elevation_standard"
+    app:cardCornerRadius="@dimen/radius_card_view">
 
-
-    <TextView
-        android:layout_width="0dp"
-        android:id="@+id/tvTitle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_32"
-        app:layout_constraintBottom_toTopOf="@id/tvDescription"
-        app:layout_constraintEnd_toStartOf="@id/btnAddToBasket"/>
+        android:background="@color/white_grey">
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/tvTitle"
-        android:id="@+id/tvDescription"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintBottom_toTopOf="@id/tvPrice"
-        app:layout_constraintEnd_toEndOf="@id/tvTitle"/>
-    <TextView
-        android:layout_width="0dp"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/tvTitle"
-        android:id="@+id/tvPrice"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/margin_standard"
-        app:layout_constraintEnd_toEndOf="@id/tvTitle"/>
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintEnd_toStartOf="@id/tvRemained"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<ImageView
-    android:layout_width="40dp"
-    android:layout_marginEnd="@dimen/margin_standard"
-    android:padding="2dp"
-    android:layout_height="40dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:id="@+id/btnAddToBasket"
-    android:background="?selectableItemBackgroundBorderless"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:src="@drawable/add"/>
+        <TextView
+            android:id="@+id/tvBrand"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textSize="@dimen/title_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvCost"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvName"
+            tools:ignore="SpUsage" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvRemained"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintBottom_toTopOf="@id/tvCost"
+            app:layout_constraintEnd_toStartOf="@id/btnAddToBasket"
+            app:layout_constraintTop_toTopOf="@id/tvName"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/tvCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:visibility="gone"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_item_large"
+            app:layout_constraintBottom_toBottomOf="@id/tvBrand"
+            app:layout_constraintEnd_toStartOf="@id/btnAddToBasket"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/btnAddToBasket"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_add_to_basket"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/add_to_basket_en"
+            app:tint="@color/app_main_color" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

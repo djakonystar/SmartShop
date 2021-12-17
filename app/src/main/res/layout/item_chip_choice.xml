@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.MaterialComponents.Chip.Choice"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_middle"
+    android:text="Lyustra"
+    android:textColor="@color/chip_text_color"
+    android:textSize="@dimen/item_text_size_standard_tablet"
+    app:chipBackgroundColor="@color/chip_background_color"
+    app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
+    app:chipStrokeColor="@color/app_main_color"
+    app:chipStrokeWidth="1dp"
+    tools:ignore="SpUsage" />

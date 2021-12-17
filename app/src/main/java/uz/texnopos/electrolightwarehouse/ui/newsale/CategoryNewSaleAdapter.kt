@@ -29,7 +29,7 @@ class CategoryNewSaleAdapter : RecyclerView.Adapter<CategoryNewSaleAdapter.Order
             selectedItem = 0
             notifyDataSetChanged()
             if (models.isNotEmpty())
-            onItemClick.invoke(models[0].categoryId)
+            onItemClick.invoke(models[0].id)
         }
 
     inner class OrderHorizontalViewHolder(private val binding: ItemHorizontalOrdersCategoriesBinding) :
@@ -52,7 +52,7 @@ class CategoryNewSaleAdapter : RecyclerView.Adapter<CategoryNewSaleAdapter.Order
                 }
             }
             binding.root.onClick {
-                onItemClick.invoke(model.categoryId)
+                onItemClick.invoke(model.id)
                 selectedItem = position
             }
         }

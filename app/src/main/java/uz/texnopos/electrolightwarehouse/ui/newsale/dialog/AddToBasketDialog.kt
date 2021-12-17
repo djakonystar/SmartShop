@@ -1,6 +1,7 @@
 package uz.texnopos.electrolightwarehouse.ui.newsale.dialog
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,10 +39,9 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         observe()
 
         binding.apply {
-            val remained = 100
+            val remained = product.remained
 
-            tvWholesale.text =
-                context?.getString(R.string.wholesale_price_text, "0")
+            tvWholesale.text = context?.getString(R.string.wholesale_price_text, "0")
             tvMin.text = context?.getString(R.string.min_price_text, "0")
             tvMax.text = context?.getString(R.string.max_price_text, "0")
             tvQuantityCounter.text =
@@ -99,6 +99,11 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         }
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss.invoke()
+    }
+
     private fun String.getOnlyDigits(): String {
         val s = this.filter { it.isDigit() }
         return if (s.isEmpty()) "0" else s
@@ -123,5 +128,10 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private var onItemClick: (quantity: Int, summa: String) -> Unit = { _, _ -> }
     fun onItemClickListener(onItemClick: (quantity: Int, summa: String) -> Unit) {
         this.onItemClick = onItemClick
+    }
+
+    private var onDismiss: () -> Unit = {}
+    fun onDismissListener(onDismiss: () -> Unit) {
+        this.onDismiss = onDismiss
     }
 }

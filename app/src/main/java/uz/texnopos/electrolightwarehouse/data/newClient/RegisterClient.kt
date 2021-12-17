@@ -6,7 +6,6 @@ data class RegisterClient(
     @SerializedName("full_name")
     val name: String,
     val phone: String,
-    @SerializedName("iin")
     val inn: String?,
     val about: String,
     @SerializedName("user_type")

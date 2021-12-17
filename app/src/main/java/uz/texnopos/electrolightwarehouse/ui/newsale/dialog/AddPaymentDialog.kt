@@ -23,6 +23,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
     private var type = MutableLiveData<String>()
     private var date = ""
+    private var dateForBackend = ""
     private var dateInLong = System.currentTimeMillis()
 
     override fun onCreateView(
@@ -72,10 +73,9 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 tilDate.isErrorEnabled = false
             }
 
-
             etDate.onClick {
                 val datePickerDialog = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Sanani tanlang")
+                    .setTitleText(context?.getString(R.string.choose_date_uz))
                     .setSelection(dateInLong)
                     .setCalendarConstraints(
                         CalendarConstraints.Builder()
@@ -88,6 +88,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 datePickerDialog.addOnPositiveButtonClickListener {
                     dateInLong = it
                     date = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateInLong)
+                    dateForBackend = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateInLong)
                     etDate.setText(date)
                 }
 
@@ -166,11 +167,11 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                             if (date.isEmpty()) {
                                 tilDate.error = context?.getString(R.string.required_field)
                             } else {
-                                sendDate.invoke(cash, card, debt, date, comment)
+                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
                                 dismiss()
                             }
                         } else {
-                            sendDate.invoke(cash, card, debt, date, comment)
+                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
                             dismiss()
                         }
                     }
@@ -189,11 +190,11 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                             if (date.isEmpty()) {
                                 tilDate.error = context?.getString(R.string.required_field)
                             } else {
-                                sendDate.invoke(cash, card, debt, date, comment)
+                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
                                 dismiss()
                             }
                         } else {
-                            sendDate.invoke(cash, card, debt, date, comment)
+                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
                             dismiss()
                         }
                     }
@@ -207,11 +208,11 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                             if (date.isEmpty()) {
                                 tilDate.error = context?.getString(R.string.required_field)
                             } else {
-                                sendDate.invoke(cash, card, debt, date, comment)
+                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
                                 dismiss()
                             }
                         } else {
-                            sendDate.invoke(cash, card, debt, date, comment)
+                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
                             dismiss()
                         }
                     }
@@ -235,11 +236,11 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                             if (date.isEmpty()) {
                                 tilDate.error = context?.getString(R.string.required_field)
                             } else {
-                                sendDate.invoke(cash, card, debt, date, comment)
+                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
                                 dismiss()
                             }
                         } else {
-                            sendDate.invoke(cash, card, debt, date, comment)
+                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
                             dismiss()
                         }
                     }
@@ -249,7 +250,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     }
 
     private var sendDate: (cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit =
-        { cash: Long, card: Long, debt: Long, date: String, comment: String -> }
+        { _: Long, _: Long, _: Long, _: String, _: String -> }
 
     fun setDate(sendDate: (cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit) {
         this.sendDate = sendDate

@@ -10,6 +10,7 @@
     <string name="full_name">F. I. Sh.</string>
     <string name="phone_number">Telefon raqam</string>
     <string name="legal_person">Yuridik shaxs</string>
+    <string name="natural_person">Jismoniy shaxs</string>
     <string name="tax_identification_number">STIR (ИНН)</string>
     <string name="address">Manzil</string>
     <string name="comment">Izoh</string>
@@ -62,7 +63,7 @@
     <string name="min_quantity">Minimum miqdori</string>
     <string name="min_quantity_hint">Omborxonadagi ushbu kategoriyadagi tegishli tovarlar shu miqdordan oz bo\'lsa kam qolgan hisoblanadi</string>
     <string name="add_new_category_desc">Add New Category</string>
-    <string name="search_client_hint">Mijozni ism sharifi yoki telefon raqami bo\'yicha qidirishingiz mumkin</string>
+    <string name="search_client_hint">Mijozni ism sharifi bo\'yicha izlashingiz mumkin</string>
     <string name="add_payment">To\'lovni qo\'shish</string>
     <string name="choose_payment_method">To\'lov turini tanlang</string>
     <string name="new_pin_code">Yangi kod olish</string>
@@ -91,4 +92,12 @@
     <string name="pay">To\'lash</string>
     <string name="counter_text">%s/%s</string>
     <string name="not_enough_error">Tovar yetarli emas!</string>
+    <string name="basket_en">Basket</string>
+    <string name="confirm_order">Buyurtmani amalga oshirish</string>
+    <string name="delete_product">Delete product</string>
+    <string name="total_sum_text">Summa: %s UZS</string>
+    <string name="input_correct_info">Aniq ma\'lumot kiriting</string>
+    <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
+    <string name="add_to_basket_en">Add to basket</string>
+    <string name="choose_date_uz">Sanani tanlang</string>
 </resources>

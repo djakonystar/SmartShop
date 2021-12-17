@@ -5,39 +5,41 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
+import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
 import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.databinding.ItemNewSaleBinding
 
-class NewSaleProductAdapter: RecyclerView.Adapter<NewSaleProductAdapter.NewSaleViewHolder>() {
+class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSaleViewHolder>() {
 
-    var models:List<Product> = listOf()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
-
-    var allModel: List<Product> = listOf()
+    var models: List<Product> = listOf()
         set(value) {
             field = value
-            models = value
             notifyDataSetChanged()
         }
 
-
-    var onItemClick: (product:Product) -> Unit = {}
-    fun onItemClickListener(onItemClick: (product:Product) -> Unit) {
+    var onItemClick: (product: Product) -> Unit = {}
+    fun onItemClickListener(onItemClick: (product: Product) -> Unit) {
         this.onItemClick = onItemClick
     }
 
-    inner class NewSaleViewHolder(private val binding:ItemNewSaleBinding) : RecyclerView.ViewHolder(binding.root){
-        fun populateModel(product: Product){
+    inner class NewSaleViewHolder(private val binding: ItemNewSaleBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun populateModel(product: Product) {
             binding.apply {
-                tvTitle.text = product.productName
-                tvDescription.text = product.productBrand
-                tvPrice.text = product.productCostPrice.toString()
-            }
-            binding.btnAddToBasket.onClick {
-                onItemClick.invoke(product)
+                tvName.text = product.productName
+                tvBrand.text = product.productBrand
+                tvCost.text = itemView.context?.getString(
+                    R.string.sum_text,
+                    product.productCostPrice.toSumFormat
+                )
+                tvRemained.text = itemView.context?.getString(
+                    R.string.count_text,
+                    product.remained.toSumFormat
+                )
+
+                btnAddToBasket.onClick {
+                    onItemClick.invoke(product)
+                }
             }
         }
     }

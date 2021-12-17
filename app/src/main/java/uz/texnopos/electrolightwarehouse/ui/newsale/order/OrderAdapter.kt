@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
+import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
 import uz.texnopos.electrolightwarehouse.data.model.Product
 import uz.texnopos.electrolightwarehouse.databinding.ItemOrderDialogBinding
 
@@ -17,15 +18,13 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
             notifyDataSetChanged()
         }
 
-    fun removeItem(position: Int){
-        models.removeAt(position)
-        models.clear()
+    fun removeItem(model: Product, position: Int) {
+        models.remove(model)
         notifyItemRemoved(position)
-        notifyDataSetChanged()
     }
 
-    var onItemClick: (product:Product) -> Unit = {_->}
-    fun onItemClickListener(onItemClick: (product:Product) -> Unit) {
+    var onItemClick: (product: Product, position: Int) -> Unit = { _, _ -> }
+    fun onItemClickListener(onItemClick: (product: Product, position: Int) -> Unit) {
         this.onItemClick = onItemClick
     }
 
@@ -33,28 +32,20 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun populateModel(model: Product, position: Int) {
-            binding.tvProductName.text = model.productName
-            binding.tvProductsCount.text = "(${model.count})"
-            binding.tvPrice.text = (model.salePrice).changeFormat()
-            binding.btnDelete.onClick {
-                if (models.size>0){
-                    removeItem(position)
-                    onItemClick.invoke(model)
+            binding.apply {
+                tvName.text = model.productName
+                tvQuantity.text =
+                    itemView.context?.getString(R.string.count_text, model.count.toSumFormat)
+                tvCost.text =
+                    itemView.context?.getString(R.string.sum_text, model.salePrice.toSumFormat)
+
+                btnDelete.onClick {
+                    if (models.size > 0) {
+                        onItemClick.invoke(model, position)
+                    }
                 }
             }
         }
-
-    }
-
-    private fun Int.changeFormat(): String {
-        val num = this.toLong().toString()
-        var s = ""
-        val sz = num.length
-        for (i in 0 until sz) {
-            if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
-            s += num[i]
-        }
-        return "$s uzs"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
