@@ -66,7 +66,7 @@ class CategoriesViewModel(private val api: ApiInterface, private val settings: S
     fun getProductByName(name: String) {
         _products.value = Resource.loading()
         compositeDisposable.add(
-            api.getProduct("Bearer ${settings.token}", name, limit = 100)
+            api.getProduct("Bearer ${settings.token}", name, limit = 1000)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

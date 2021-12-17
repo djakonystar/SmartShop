@@ -52,7 +52,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         abBinding.apply {
             btnHome.onClick {
                 navController.popBackStack()
-                hideSoftKeyboard()
+                hideSoftKeyboard(btnHome)
             }
 
             etSearch.addTextChangedListener {
@@ -82,7 +82,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
 
                 dialog.onDismissListener {
-                    hideSoftKeyboard()
+                    hideSoftKeyboard(btnFab)
                 }
             }
 
@@ -153,6 +153,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                             product.categoryId == selectedCategoryId
                         } as MutableList<Product>
                     }
+                    //    Log.d("razmer", productsList.size.toString())
                     productNewSaleAdapter.models = productsList
                     showLottieAnimation(productsList.isEmpty())
                 }
@@ -196,12 +197,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
     }
 
-    private fun hideSoftKeyboard() {
-        val view = requireActivity().currentFocus
-        if (view != null) {
-            val imm =
-                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+    private fun hideSoftKeyboard(view: View) {
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

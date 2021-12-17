@@ -114,6 +114,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         override fun onClick(p0: DialogInterface?, p1: Int) {
                             adapter.removeItem(product, position)
                             Basket.mutableProducts.remove(product)
+                            val newPrice = Basket.mutableProducts.sumOf { it.salePrice }
+                            price.postValue(newPrice)
                         }
                     })
                 dialog.show()

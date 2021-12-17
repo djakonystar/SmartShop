@@ -23,12 +23,6 @@ class WarehouseAdapter : BaseAdapter<Product, WarehouseAdapter.WarehouseViewHold
         }
     }
 
-    fun filterList(filteredListName: MutableList<Product>) {
-        models = filteredListName
-        notifyDataSetChanged()
-    }
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WarehouseViewHolder {
         val itemView = parent.inflate(R.layout.item_warehouse)
         val binding = ItemWarehouseBinding.bind(itemView)

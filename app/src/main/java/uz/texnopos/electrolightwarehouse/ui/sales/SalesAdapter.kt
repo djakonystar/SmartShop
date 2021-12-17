@@ -23,23 +23,13 @@ class SalesAdapter : BaseAdapter<Sales, SalesAdapter.SalesViewHolder>() {
                     basket.price.toLong().toSumFormat
                 )
                 if (basket.debt > 0) {
-                    dot.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
-                            itemView.context,
-                            R.drawable.red_eclipse
-                        )
-                    )
+                    dot.setImageResource(R.drawable.red_eclipse)
                     tvDebtPrice.text = itemView.context?.getString(
                         R.string.sum_text,
                         (-basket.debt.toLong()).toSumFormat
                     )
                 } else {
-                    dot.setBackgroundDrawable(
-                        ContextCompat.getDrawable(
-                            itemView.context,
-                            R.drawable.green_eclipse
-                        )
-                    )
+                    dot.setImageResource(R.drawable.green_eclipse)
                     tvDebtPrice.text = ""
                 }
                 tvSellerName.text = sales.vendorName

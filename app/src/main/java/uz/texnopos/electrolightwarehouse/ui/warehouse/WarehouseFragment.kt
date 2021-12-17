@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -48,47 +49,24 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         }
 
         binding.apply {
+            recyclerView.adapter = adapter
+
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
                 viewModel.getProductsFromWarehouse()
             }
-            recyclerView.adapter = adapter
-        }
 
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                p0?.let {
-                    if (it.isEmpty()) {
-                        adapter.models = productsList
-                    } else {
-                        filter(it.toString())
-                    }
+            etSearch.addTextChangedListener {
+                val products = adapter.models
+                adapter.models = products.filter { product ->
+                    product.name.contains(it.toString(), true)
                 }
             }
-
-        })
+        }
 
         viewModel.getProductsFromWarehouse()
         setUpObservers()
-    }
-
-    private fun filter(text: String) {
-        val filteredListName: ArrayList<Product> = ArrayList()
-        for (eachName in productsList) {
-            if (eachName.name.lowercase(Locale.getDefault())
-                    .contains(text.lowercase(Locale.getDefault()))
-            ) {
-                filteredListName.add(eachName)
-            }
-        }
-        adapter.filterList(filteredListName)
     }
 
     private fun setUpObservers() {
