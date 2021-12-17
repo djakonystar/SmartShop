@@ -82,7 +82,9 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private fun filter(text: String) {
         val filteredListName: ArrayList<WarehouseProduct> = ArrayList()
         for (eachName in productsList) {
-            if (eachName.name.lowercase(Locale.getDefault()).contains(text.lowercase(Locale.getDefault()))) {
+            if (eachName.name.lowercase(Locale.getDefault())
+                    .contains(text.lowercase(Locale.getDefault()))
+            ) {
                 filteredListName.add(eachName)
             }
         }
@@ -98,11 +100,17 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     if (it.data!!.successful) {
                         val products = it.data.payload
                         productsList = when (sortType) {
-                            "byFewRemain" -> products.sortedBy { t -> t.remained / t.category.minCount.toDouble() }
-                            "byProduct" -> products.sortedBy { t -> t.name.lowercase() }
-                            "byCategory" -> products.sortedBy { t -> t.category.name.lowercase() }
-                            "byRemainAscend" -> products.sortedBy { t -> t.remained }
-                            "byRemainDescend" -> products.sortedByDescending { t -> t.remained }
+                            "byFewRemain" -> products
+                                .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+                            "byProduct" -> products
+                                .sortedBy { t -> t.name.lowercase() }
+                            "byCategory" -> products
+                                .sortedBy { t -> t.name.lowercase() }
+                                .sortedBy { t -> t.category.name.lowercase() }
+                            "byRemainAscend" -> products
+                                .sortedBy { t -> t.remained }
+                            "byRemainDescend" -> products
+                                .sortedByDescending { t -> t.remained }
                             else -> products
                         }
                         adapter.models = productsList

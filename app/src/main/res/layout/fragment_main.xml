@@ -16,13 +16,14 @@
 
     <ImageView
         android:id="@+id/ivOther"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/action_bar_icon_size"
+        android:layout_height="@dimen/action_bar_icon_size"
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
+        android:contentDescription="@string/add_category_en"
         android:focusable="true"
-        android:padding="4dp"
+        android:padding="@dimen/padding_small"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toTopOf="@id/new_sale"
         app:layout_constraintEnd_toEndOf="parent"

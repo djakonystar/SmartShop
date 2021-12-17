@@ -130,30 +130,30 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                             inn = inn,
                             about = comment,
                             clientType = type
-                        ))
+                        )
+                    )
                 }
             }
 
             btnOrder.onClick {
-                if (etSearchClient.text.isNotEmpty()) {
-                    val dialog = AddPaymentDialog(totalPrice)
-                    dialog.show(requireActivity().supportFragmentManager, "")
-                    dialog.setDate { cash, card, debt, date, comment ->
-                        viewModelOrder.setOrder(
-                            Order(
-                                id = clientId,
-                                card = card,
-                                cash = cash,
-                                debt = debt,
-                                price = totalPrice,
-                                term = date,
-                                description = comment,
-                                orders = orderItems
-                            )
+                if (etSearchClient.text.isEmpty()) {
+                    clientId = 0
+                }
+                val dialog = AddPaymentDialog(totalPrice)
+                dialog.show(requireActivity().supportFragmentManager, "")
+                dialog.setDate { cash, card, debt, date, comment ->
+                    viewModelOrder.setOrder(
+                        Order(
+                            id = clientId,
+                            card = card,
+                            cash = cash,
+                            debt = debt,
+                            price = totalPrice,
+                            term = date,
+                            description = comment,
+                            orders = orderItems
                         )
-                    }
-                } else {
-                    showMessage(context?.getString(R.string.choose_client))
+                    )
                 }
             }
         }

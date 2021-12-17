@@ -43,10 +43,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
 
             ivOther.onClick {
-                optionsMenu(it)
+//                optionsMenu(it)
+                navController.navigate(MainFragmentDirections.actionMainFragmentToNewCategoryFragment())
             }
             newSale.onClick {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
+                navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
             }
             newProduct.onClick {
                 navController.navigate(R.id.action_mainFragment_to_newProductFragment)
@@ -61,7 +62,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 "admin" -> {
                     newProduct.isEnabled = true
                 }
-                else -> showMessage("Administratsyaga murojat qiling")
+                else -> showMessage("Administratsiyaga murojaat qiling")
             }
         }
     }
@@ -71,10 +72,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val menuInflater = optionsMenu.menuInflater
         menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
         optionsMenu.setOnMenuItemClickListener {
-            when(setting.role)
-            {
-                "seller"->{
-                    when(it.itemId){
+            when (setting.role) {
+                "seller" -> {
+                    when (it.itemId) {
                         R.id.menuNewPinCode -> {
                             // todo go to setting
                         }
@@ -83,7 +83,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         }
                     }
                 }
-                "admin"->{
+                "admin" -> {
                     R.id.menuNewCategory
                     when (it.itemId) {
                         R.id.menuNewCategory -> {
@@ -92,8 +92,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         R.id.menuNewPinCode -> {
                             // todo go to setting
                         }
+                    }
                 }
-            }
 
 
             }

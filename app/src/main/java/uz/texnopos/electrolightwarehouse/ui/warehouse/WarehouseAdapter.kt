@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.BaseAdapter
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
-import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
 import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
 import uz.texnopos.electrolightwarehouse.databinding.ItemWarehouseBinding
 
@@ -19,10 +18,6 @@ class WarehouseAdapter : BaseAdapter<WarehouseProduct, WarehouseAdapter.Warehous
                 tvName.text = model.name
                 tvFirm.text = model.brand
                 tvCategory.text = model.category.name
-                tvCost.text = itemView.context?.getString(R.string.sum_text, model.costPrice.toSumFormat)
-                tvWholesalePercent.text = "${model.category.percentWholesale}%"
-                tvMinimumPercent.text = "${model.category.percentMin}%"
-                tvMaximumPercent.text = "${model.category.percentMax}%"
                 tvCount.text = itemView.context?.getString(R.string.count_text, model.remained.toString())
             }
         }

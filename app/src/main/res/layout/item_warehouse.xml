@@ -24,9 +24,8 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
-            android:textColor="@color/black"
-            android:textSize="@dimen/item_text_size_standard_tablet"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintEnd_toStartOf="@id/tvCount"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />
@@ -40,16 +39,15 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_item_small"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintEnd_toStartOf="@id/tvCategory"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvName"
             tools:ignore="SpUsage" />
 
         <TextView
             android:id="@+id/tvCategory"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
@@ -57,94 +55,10 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_item_small"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvFirm"
-            tools:ignore="SpUsage" />
-
-        <TextView
-            android:id="@+id/tvCost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:text="@string/sum_text"
-            android:textColor="@color/app_main_color"
-            android:textSize="@dimen/text_size_item_large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpUsage" />
-
-        <View
-            android:id="@+id/bgWholesalePercent"
-            android:layout_width="@dimen/item_percent_bg_size"
-            android:layout_height="@dimen/item_percent_bg_size"
-            android:layout_marginEnd="@dimen/margin_middle"
-            android:background="@drawable/shape_rounded_field"
-            app:layout_constraintBottom_toBottomOf="@id/tvCategory"
-            app:layout_constraintEnd_toStartOf="@id/bgMinimumPercent"
-            app:layout_constraintTop_toBottomOf="@id/tvCost" />
-
-        <TextView
-            android:id="@+id/tvWholesalePercent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_small"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_item_small"
-            app:layout_constraintBottom_toBottomOf="@id/bgWholesalePercent"
-            app:layout_constraintEnd_toEndOf="@id/bgWholesalePercent"
-            app:layout_constraintStart_toStartOf="@id/bgWholesalePercent"
-            app:layout_constraintTop_toTopOf="@id/bgWholesalePercent"
-            tools:ignore="SpUsage" />
-
-        <View
-            android:id="@+id/bgMinimumPercent"
-            android:layout_width="@dimen/item_percent_bg_size"
-            android:layout_height="@dimen/item_percent_bg_size"
-            android:layout_marginEnd="@dimen/margin_middle"
-            android:background="@drawable/shape_rounded_field"
-            app:layout_constraintBottom_toBottomOf="@id/tvCategory"
-            app:layout_constraintEnd_toStartOf="@id/bgMaximumPercent"
-            app:layout_constraintTop_toBottomOf="@id/tvCost" />
-
-        <TextView
-            android:id="@+id/tvMinimumPercent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_small"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_item_small"
-            app:layout_constraintBottom_toBottomOf="@id/bgMinimumPercent"
-            app:layout_constraintEnd_toEndOf="@id/bgMinimumPercent"
-            app:layout_constraintStart_toStartOf="@id/bgMinimumPercent"
-            app:layout_constraintTop_toTopOf="@id/bgMinimumPercent"
-            tools:ignore="SpUsage" />
-
-        <View
-            android:id="@+id/bgMaximumPercent"
-            android:layout_width="@dimen/item_percent_bg_size"
-            android:layout_height="@dimen/item_percent_bg_size"
-            android:layout_marginEnd="@dimen/margin_middle"
-            android:background="@drawable/shape_rounded_field"
-            app:layout_constraintBottom_toBottomOf="@id/tvCategory"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCost" />
-
-        <TextView
-            android:id="@+id/tvMaximumPercent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_small"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_item_small"
-            app:layout_constraintBottom_toBottomOf="@id/bgMaximumPercent"
-            app:layout_constraintEnd_toEndOf="@id/bgMaximumPercent"
-            app:layout_constraintStart_toStartOf="@id/bgMaximumPercent"
-            app:layout_constraintTop_toTopOf="@id/bgMaximumPercent"
+            app:layout_constraintTop_toBottomOf="@id/tvCount"
             tools:ignore="SpUsage" />
 
         <TextView
@@ -152,11 +66,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:text="@string/count_text"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_item_small"
-            app:layout_constraintBottom_toBottomOf="@id/tvCategory"
-            app:layout_constraintEnd_toStartOf="@id/bgWholesalePercent"
+            android:textColor="@color/app_main_color"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvName"
             tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
