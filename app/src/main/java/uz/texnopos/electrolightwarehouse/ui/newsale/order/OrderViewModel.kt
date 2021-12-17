@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.electrolightwarehouse.core.Resource
-import uz.texnopos.electrolightwarehouse.data.model.Order
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Order
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 

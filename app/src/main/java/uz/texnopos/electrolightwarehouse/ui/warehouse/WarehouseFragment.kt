@@ -15,7 +15,7 @@ import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
-import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
+import uz.texnopos.electrolightwarehouse.data.model.warehouse.Product
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarSortBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentWarehouseBinding
 import java.util.*
@@ -27,7 +27,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var navController: NavController
     private val viewModel: WarehouseViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
-    private var productsList = listOf<WarehouseProduct>()
+    private var productsList = listOf<Product>()
     private var sortType = "byFewRemain"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +80,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     }
 
     private fun filter(text: String) {
-        val filteredListName: ArrayList<WarehouseProduct> = ArrayList()
+        val filteredListName: ArrayList<Product> = ArrayList()
         for (eachName in productsList) {
             if (eachName.name.lowercase(Locale.getDefault())
                     .contains(text.lowercase(Locale.getDefault()))

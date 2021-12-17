@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.BaseAdapter
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
-import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
+import uz.texnopos.electrolightwarehouse.data.model.warehouse.Product
 import uz.texnopos.electrolightwarehouse.databinding.ItemWarehouseBinding
 
-class WarehouseAdapter : BaseAdapter<WarehouseProduct, WarehouseAdapter.WarehouseViewHolder>() {
+class WarehouseAdapter : BaseAdapter<Product, WarehouseAdapter.WarehouseViewHolder>() {
     inner class WarehouseViewHolder(private val binding: ItemWarehouseBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun populateModel(model: WarehouseProduct) {
+        fun populateModel(model: Product) {
             binding.apply {
                 tvName.text = model.name
                 tvFirm.text = model.brand
@@ -23,7 +23,7 @@ class WarehouseAdapter : BaseAdapter<WarehouseProduct, WarehouseAdapter.Warehous
         }
     }
 
-    fun filterList(filteredListName: MutableList<WarehouseProduct>) {
+    fun filterList(filteredListName: MutableList<Product>) {
         models = filteredListName
         notifyDataSetChanged()
     }

@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data.newProduct
+package uz.texnopos.electrolightwarehouse.data.model.newproduct
 
 data class Amount(
     var wholesalePrice: Long = 0L,

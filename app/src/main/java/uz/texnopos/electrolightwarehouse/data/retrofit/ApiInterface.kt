@@ -2,20 +2,23 @@ package uz.texnopos.electrolightwarehouse.data.retrofit
 
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.*
-import uz.texnopos.electrolightwarehouse.data.ClientInfo
+import uz.texnopos.electrolightwarehouse.data.model.clients.ClientInfo
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
-import uz.texnopos.electrolightwarehouse.data.model.*
+import uz.texnopos.electrolightwarehouse.data.model.clients.Client
+import uz.texnopos.electrolightwarehouse.data.model.sales.Sales
 import uz.texnopos.electrolightwarehouse.data.model.signin.SignInPayload
 import uz.texnopos.electrolightwarehouse.data.model.signin.SignInPost
-import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
-import uz.texnopos.electrolightwarehouse.data.newCategory.CategoryId
-import uz.texnopos.electrolightwarehouse.data.newCategory.NewCategory
-import uz.texnopos.electrolightwarehouse.data.newClient.ClientId
-import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
-import uz.texnopos.electrolightwarehouse.data.newPayment.NewPayment
-import uz.texnopos.electrolightwarehouse.data.newProduct.Categories
-import uz.texnopos.electrolightwarehouse.data.newProduct.Product
-import uz.texnopos.electrolightwarehouse.data.newProduct.ProductId
+import uz.texnopos.electrolightwarehouse.data.model.newcategory.CategoryId
+import uz.texnopos.electrolightwarehouse.data.model.newcategory.NewCategory
+import uz.texnopos.electrolightwarehouse.data.model.newclient.ClientId
+import uz.texnopos.electrolightwarehouse.data.model.newclient.RegisterClient
+import uz.texnopos.electrolightwarehouse.data.model.newpayment.NewPayment
+import uz.texnopos.electrolightwarehouse.data.model.newproduct.Categories
+import uz.texnopos.electrolightwarehouse.data.model.newproduct.Product
+import uz.texnopos.electrolightwarehouse.data.model.newproduct.ProductId
+import uz.texnopos.electrolightwarehouse.data.model.newsale.CatalogCategory
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Order
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Products
 
 interface ApiInterface {
 
@@ -67,7 +70,7 @@ interface ApiInterface {
     @GET("api/warehouse")
     fun getProductsFromWarehouse(
         @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<WarehouseProduct>>>
+    ): Observable<GenericResponse<List<uz.texnopos.electrolightwarehouse.data.model.warehouse.Product>>>
 
     @POST("api/login")
     fun signIn(

@@ -1,32 +1,24 @@
 package uz.texnopos.electrolightwarehouse.ui.sales.detail
 
-import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.BaseAdapter
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
-import uz.texnopos.electrolightwarehouse.data.model.ProductInfo
+import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
+import uz.texnopos.electrolightwarehouse.data.model.sales.Product
 import uz.texnopos.electrolightwarehouse.databinding.ItemSalesDetailBinding
 
-class SalesDetailAdapter : BaseAdapter<ProductInfo, SalesDetailAdapter.DetailViewHolder>() {
-
-    var allModel: List<ProductInfo> = listOf()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            field = value
-            models = value
-            notifyDataSetChanged()
-        }
+class SalesDetailAdapter : BaseAdapter<Product, SalesDetailAdapter.DetailViewHolder>() {
 
     inner class DetailViewHolder(private val binding: ItemSalesDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun populateModel(productInfo: ProductInfo) {
+        fun populateModel(product: Product) {
             binding.apply {
-                tvProductName.text = productInfo.productName
-                tvBrand.text = productInfo.productBrand
-                tvCount.text = productInfo.count.toString()
-                tvCost.text = "${productInfo.price} uzs"
+                tvProductName.text = product.productName
+                tvBrand.text = product.productBrand
+                tvCount.text = itemView.context?.getString(R.string.count_text, product.count.toSumFormat)
+                tvCost.text = itemView.context?.getString(R.string.sum_text, product.price.toSumFormat)
             }
         }
     }
@@ -39,11 +31,5 @@ class SalesDetailAdapter : BaseAdapter<ProductInfo, SalesDetailAdapter.DetailVie
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         holder.populateModel(models[position])
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun filterList(filteredListName: MutableList<ProductInfo>) {
-        models = filteredListName
-        notifyDataSetChanged()
     }
 }

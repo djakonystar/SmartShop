@@ -23,10 +23,10 @@ import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.Order
-import uz.texnopos.electrolightwarehouse.data.model.OrderItem
-import uz.texnopos.electrolightwarehouse.data.model.Product
-import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Order
+import uz.texnopos.electrolightwarehouse.data.model.newsale.OrderItem
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Product
+import uz.texnopos.electrolightwarehouse.data.model.newclient.RegisterClient
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentOrderBinding
 import uz.texnopos.electrolightwarehouse.ui.client.ClientsViewModel

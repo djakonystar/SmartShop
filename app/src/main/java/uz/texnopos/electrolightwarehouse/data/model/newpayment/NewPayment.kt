@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data.newPayment
+package uz.texnopos.electrolightwarehouse.data.model.newpayment
 
 import com.google.gson.annotations.SerializedName
 

@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.electrolightwarehouse.core.Resource
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
-import uz.texnopos.electrolightwarehouse.data.model.warehouse.WarehouseProduct
+import uz.texnopos.electrolightwarehouse.data.model.warehouse.Product
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 
@@ -16,9 +16,9 @@ class WarehouseViewModel(private val api: ApiInterface, private val settings: Se
     ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableWarehouseProducts: MutableLiveData<Resource<GenericResponse<List<WarehouseProduct>>>> =
+    private var mutableWarehouseProducts: MutableLiveData<Resource<GenericResponse<List<Product>>>> =
         MutableLiveData()
-    val warehouseProducts: LiveData<Resource<GenericResponse<List<WarehouseProduct>>>> =
+    val warehouseProducts: LiveData<Resource<GenericResponse<List<Product>>>> =
         mutableWarehouseProducts
 
     fun getProductsFromWarehouse() {

@@ -26,11 +26,11 @@ class MaskWatcherPayment(private val editText: EditText) : TextWatcher {
                 }
 
                 val str: String = editText.text.toString().replace(" ", "")
-                if (str == "сум") editText.setText("")
+                if (str == "UZS") editText.setText("")
                 else{
                     var d=""
                     for (i in str) if (i.isDigit()) d+=i
-                    editText.setText("${d.toDecimalFormat()} сум")
+                    editText.setText("${d.toDecimalFormat()} UZS")
                 }
                 editText.setSelection(editText.text.toString().length - 4)
             }

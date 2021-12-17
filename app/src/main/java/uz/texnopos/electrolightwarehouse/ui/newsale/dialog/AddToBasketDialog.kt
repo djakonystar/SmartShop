@@ -15,7 +15,7 @@ import uz.texnopos.electrolightwarehouse.core.MaskWatcherNothing
 import uz.texnopos.electrolightwarehouse.core.MaskWatcherPrice
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.Product
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Product
 import uz.texnopos.electrolightwarehouse.databinding.DialogAddToBasketBinding
 
 class AddToBasketDialog(private val product: Product) : DialogFragment() {

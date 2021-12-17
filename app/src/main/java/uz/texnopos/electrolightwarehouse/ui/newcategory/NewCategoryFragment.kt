@@ -15,8 +15,8 @@ import uz.texnopos.electrolightwarehouse.core.MaskWatcherPercent
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
-import uz.texnopos.electrolightwarehouse.data.newCategory.NewCategory
-import uz.texnopos.electrolightwarehouse.data.newCategory.Percent
+import uz.texnopos.electrolightwarehouse.data.model.newcategory.NewCategory
+import uz.texnopos.electrolightwarehouse.data.model.newcategory.Percent
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentCategoryNewBinding
 

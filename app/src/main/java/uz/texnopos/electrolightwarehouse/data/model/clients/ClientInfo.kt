@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data
+package uz.texnopos.electrolightwarehouse.data.model.clients
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,7 +8,6 @@ data class ClientInfo(
     @SerializedName("full_name")
     val name: String,
     val phone: String,
-    @SerializedName("inn")
     val inn: String?,
     val balance: Int?,
     val about: String,

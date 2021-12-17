@@ -7,7 +7,7 @@ import uz.texnopos.electrolightwarehouse.core.BaseAdapter
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.Client
+import uz.texnopos.electrolightwarehouse.data.model.clients.Client
 import uz.texnopos.electrolightwarehouse.databinding.ItemClientBinding
 
 class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {

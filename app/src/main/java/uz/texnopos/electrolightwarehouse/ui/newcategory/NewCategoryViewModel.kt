@@ -8,8 +8,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.electrolightwarehouse.core.Resource
 import uz.texnopos.electrolightwarehouse.data.GenericResponse
-import uz.texnopos.electrolightwarehouse.data.newCategory.CategoryId
-import uz.texnopos.electrolightwarehouse.data.newCategory.NewCategory
+import uz.texnopos.electrolightwarehouse.data.model.newcategory.CategoryId
+import uz.texnopos.electrolightwarehouse.data.model.newcategory.NewCategory
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 

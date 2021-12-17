@@ -18,8 +18,8 @@ import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.dialPhone
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
-import uz.texnopos.electrolightwarehouse.data.model.Client
-import uz.texnopos.electrolightwarehouse.data.newClient.RegisterClient
+import uz.texnopos.electrolightwarehouse.data.model.clients.Client
+import uz.texnopos.electrolightwarehouse.data.model.newclient.RegisterClient
 import uz.texnopos.electrolightwarehouse.databinding.FragmentClientsBinding
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarClientBinding
 import uz.texnopos.electrolightwarehouse.ui.newclient.NewClientViewModel

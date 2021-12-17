@@ -7,7 +7,7 @@ import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.extensions.inflate
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.Product
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Product
 import uz.texnopos.electrolightwarehouse.databinding.ItemOrderDialogBinding
 
 class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {

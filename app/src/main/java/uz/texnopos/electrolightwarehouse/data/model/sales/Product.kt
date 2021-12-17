@@ -1,8 +1,8 @@
-package uz.texnopos.electrolightwarehouse.data.model
+package uz.texnopos.electrolightwarehouse.data.model.sales
 
 import com.google.gson.annotations.SerializedName
 
-data class ProductInfo(
+data class Product(
     @SerializedName("order_id")
     val orderId:Int,
     @SerializedName("product_id")

@@ -2,7 +2,7 @@ package uz.texnopos.electrolightwarehouse.data.model.warehouse
 
 import com.google.gson.annotations.SerializedName
 
-data class WarehouseProduct(
+data class Product(
     @SerializedName("product_id")
     val id: Int,
     @SerializedName("product_name")

@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data.newCategory
+package uz.texnopos.electrolightwarehouse.data.model.newcategory
 
 import com.google.gson.annotations.SerializedName
 

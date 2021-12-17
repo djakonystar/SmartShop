@@ -18,7 +18,6 @@ import uz.texnopos.electrolightwarehouse.ui.newclient.NewClientViewModel
 import uz.texnopos.electrolightwarehouse.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.electrolightwarehouse.ui.newproduct.NewProductViewModel
 import uz.texnopos.electrolightwarehouse.ui.newsale.CategoriesViewModel
-import uz.texnopos.electrolightwarehouse.ui.newsale.CategoryNewSaleAdapter
 import uz.texnopos.electrolightwarehouse.ui.newsale.NewSaleProductAdapter
 import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderAdapter
 import uz.texnopos.electrolightwarehouse.ui.newsale.order.OrderViewModel
@@ -88,6 +87,5 @@ val adapterModule = module {
     single { SalesDetailAdapter() }
     single { WarehouseAdapter() }
     single { NewSaleProductAdapter() }
-    single { CategoryNewSaleAdapter() }
     single { OrderAdapter() }
 }

@@ -7,17 +7,25 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
+import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
+import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentSalesBinding
+import java.text.SimpleDateFormat
 import java.util.*
 
 class SalesFragment : Fragment(R.layout.fragment_sales) {
@@ -26,70 +34,21 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private lateinit var navController: NavController
     private val adapter: SalesAdapter by inject()
     private val viewModel: SalesViewModel by viewModel()
-    private lateinit var setListener: DatePickerDialog.OnDateSetListener
-    private val plusDay = 86399999
-    private var from = ""
-    private var to = ""
+    private var dateFromInLong = System.currentTimeMillis()
+    private var dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
+    private var dateFromForBackend =
+        SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateFromInLong)
+    private var dateToInLong = System.currentTimeMillis()
+    private var dateTo = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateToInLong)
+    private var dateToForBackend =
+        SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateToInLong)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getOrders()
+
         binding = FragmentSalesBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
-
-        binding.apply {
-            etFrom.onClick {
-                val calendar = Calendar.getInstance()
-                val year = calendar.get((Calendar.YEAR))
-                var month = calendar.get((Calendar.MONTH))
-                val day = calendar.get((Calendar.DAY_OF_MONTH))
-
-                setListener = DatePickerDialog.OnDateSetListener { _, year1, month1, dayOfMonth1 ->
-                    month = month1+1
-                    from = "$year1-$month-$dayOfMonth1"
-                    etFrom.setText(from)
-                }
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    setListener
-                    ,year, month, day)
-
-                datePickerDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                datePickerDialog.show()
-            }
-
-            etTo.onClick {
-                val calendar = Calendar.getInstance()
-                val year = calendar.get((Calendar.YEAR))
-                var month = calendar.get((Calendar.MONTH))
-                val day = calendar.get((Calendar.DAY_OF_MONTH))
-
-                setListener = DatePickerDialog.OnDateSetListener { _, year1, month1, dayOfMonth1 ->
-                    month = month1+1
-                    to = "$year1-$month-$dayOfMonth1"
-                    etTo.setText(to)
-                }
-                val datePickerDialog = DatePickerDialog(
-                    requireContext(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    setListener
-                    ,year, month, day)
-
-                datePickerDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                datePickerDialog.show()
-
-                datePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK") { dialog, _ ->
-                    datePickerDialog.onClick(dialog, DialogInterface.BUTTON_POSITIVE)
-                    if (from.isNotEmpty()&& to.isNotEmpty()){
-                        viewModel.getOrdersByDate(from, to)
-                    }else{
-                        Toast.makeText(requireContext(), "sana kiriting", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.sales)
@@ -100,50 +59,111 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
 
         binding.apply {
             recyclerView.adapter = adapter
+            adapter.onClickItem {
+                val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+                val gsonString = gsonPretty.toJson(it)
+                navController.navigate(
+                    SalesFragmentDirections.actionSalesFragmentToDetailSalesFragment(
+                        gsonString
+                    )
+                )
+            }
+
             swipeRefresh.setOnRefreshListener {
-                viewModel.getOrders()
+                setLoading(false)
+                swipeRefresh.isRefreshing = false
+                viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
+            }
+
+            etDateFrom.setText(dateFrom)
+            etDateTo.setText(dateTo)
+
+            etDateFrom.onClick {
+                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(context?.getString(R.string.start_date))
+                    .setSelection(dateFromInLong)
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setEnd(System.currentTimeMillis())
+                            .setValidator(DateValidatorPointBackward.now())
+                            .build()
+                    )
+                    .build()
+
+                datePickerDialog.addOnPositiveButtonClickListener {
+                    dateFromInLong = it
+                    dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
+                    dateFromForBackend =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateFromInLong)
+                    etDateFrom.setText(dateFrom)
+                }
+
+                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
+            }
+
+            etDateTo.onClick {
+                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(context?.getString(R.string.end_date))
+                    .setSelection(dateToInLong)
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setEnd(System.currentTimeMillis())
+                            .setValidator(DateValidatorPointBackward.now())
+                            .build()
+                    )
+                    .build()
+
+                datePickerDialog.addOnPositiveButtonClickListener {
+                    dateToInLong = it
+                    dateTo = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateToInLong)
+                    dateToForBackend =
+                        SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateToInLong)
+                    etDateTo.setText(dateTo)
+                }
+
+                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
+            }
+
+            btnCalculate.onClick {
+                viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
             }
         }
 
-        adapter.onClickItem {
-            val gsonPretty= GsonBuilder().setPrettyPrinting().create()
-            val gsonString=gsonPretty.toJson(it)
-            navController.navigate(SalesFragmentDirections.actionSalesFragmentToDetailSalesFragment(gsonString))
-        }
 
+        viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
         setUpObservers()
+    }
+
+    private fun setLoading(loading: Boolean) {
+        binding.apply {
+            progressBar.isVisible = loading
+            tilDateFrom.isEnabled = !loading
+            tilDateTo.isEnabled = !loading
+            btnCalculate.isEnabled = !loading
+            swipeRefresh.isEnabled = !loading
+        }
     }
 
     private fun setUpObservers() {
         viewModel.orders.observe(viewLifecycleOwner, {
             when (it.status) {
-                ResourceState.LOADING -> {
-                    binding.swipeRefresh.isRefreshing = true
-                }
+                ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
-                    adapter.models = it.data!!
-                    var price = 0.0
-                    for (element in adapter.models){
-                        price +=  element.basket.price
+                    setLoading(false)
+                    if (it.data!!.successful) {
+                        adapter.models = it.data.payload
+                        val total = it.data.payload.sumOf { sale -> sale.basket.price }.toLong()
+                        binding.tvTotalPrice.text =
+                            context?.getString(R.string.total_sum_text, total.toSumFormat)
+                    } else {
+                        showMessage(it.data.message)
                     }
-                    binding.tvTotalPrice.text = "Summa : "+(price.changeFormat())
-                    binding.swipeRefresh.isRefreshing = false
                 }
                 ResourceState.ERROR -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                    binding.swipeRefresh.isRefreshing = false
+                    setLoading(false)
+                    showMessage(it.message)
                 }
             }
         })
-    }
-    private fun Double.changeFormat(): String {
-        val num = this.toLong().toString()
-        var s = ""
-        val sz = num.length
-        for (i in 0 until sz) {
-            if (i != 0 && (i - sz % 3) % 3 == 0) s += ' '
-            s += num[i]
-        }
-        return "$s uzs"
     }
 }

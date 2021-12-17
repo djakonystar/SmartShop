@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data.model
+package uz.texnopos.electrolightwarehouse.data.model.newsale
 
 import com.google.gson.annotations.SerializedName
 

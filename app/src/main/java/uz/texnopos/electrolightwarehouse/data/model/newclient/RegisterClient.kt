@@ -1,4 +1,4 @@
-package uz.texnopos.electrolightwarehouse.data.newClient
+package uz.texnopos.electrolightwarehouse.data.model.newclient
 
 import com.google.gson.annotations.SerializedName
 

@@ -7,8 +7,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.electrolightwarehouse.core.Resource
-import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
-import uz.texnopos.electrolightwarehouse.data.model.Products
+import uz.texnopos.electrolightwarehouse.data.model.newsale.CatalogCategory
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Products
 import uz.texnopos.electrolightwarehouse.data.retrofit.ApiInterface
 import uz.texnopos.electrolightwarehouse.settings.Settings
 

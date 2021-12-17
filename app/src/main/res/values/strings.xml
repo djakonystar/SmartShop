@@ -17,7 +17,7 @@
     <string name="add">Qo\'shish</string>
     <string name="enter_special_code">Maxsus kodingizni kiriting</string>
     <string name="required_field">To\'ldirilishi shart</string>
-    <string name="new_product">Yangi tovar</string>
+    <string name="new_product">Yangi mahsulot</string>
     <string name="choose_client">Mijozni tanlang</string>
     <string name="sum_uzb">Summa</string>
     <string name="date_uzb">Sana</string>
@@ -37,7 +37,7 @@
     <string name="count_text">%s dona</string>
     <string name="sum_text">%s UZS</string>
     <string name="sort_button">Sort Button</string>
-    <string name="by_product_name">Tovar nomi bo\'yicha</string>
+    <string name="by_product_name">Mahsulot nomi bo\'yicha</string>
     <string name="by_category">Kategoriya bo\'yicha</string>
     <string name="by_remain">Qoldiq bo\'yicha</string>
     <string name="by_ascend">O\'sish tartibida</string>
@@ -53,7 +53,7 @@
     <string name="wholesale_price">Ulgurji narxi</string>
     <string name="min_price">Minimum narxi</string>
     <string name="max_price">Maximum narxi</string>
-    <string name="add_new_product">Tovar qo\'shish</string>
+    <string name="add_new_product">Mahsulot qo\'shish</string>
     <string name="new_category">Yangi kategoriya</string>
     <string name="add_new_category">Kategoriya qo\'shish</string>
     <string name="wholesale_percent">Ulgurji foizi</string>
@@ -61,7 +61,7 @@
     <string name="min_percent">Minimum foizi</string>
     <string name="category_name">Kategoriya nomi</string>
     <string name="min_quantity">Minimum miqdori</string>
-    <string name="min_quantity_hint">Omborxonadagi ushbu kategoriyadagi tegishli tovarlar shu miqdordan oz bo\'lsa kam qolgan hisoblanadi</string>
+    <string name="min_quantity_hint">Omborxonadagi ushbu kategoriyaga tegishli mahsulotlar shu miqdordan oz bo\'lsa kam qolgan hisoblanadi</string>
     <string name="add_new_category_desc">Add New Category</string>
     <string name="search_client_hint">Mijozni ism sharifi bo\'yicha izlashingiz mumkin</string>
     <string name="add_payment">To\'lovni qo\'shish</string>
@@ -91,7 +91,7 @@
     <string name="quantity">Soni</string>
     <string name="pay">To\'lash</string>
     <string name="counter_text">%s/%s</string>
-    <string name="not_enough_error">Tovar yetarli emas!</string>
+    <string name="not_enough_error">Mahsulot yetarli emas!</string>
     <string name="basket_en">Basket</string>
     <string name="confirm_order">Buyurtmani amalga oshirish</string>
     <string name="delete_product">Delete product</string>
@@ -102,4 +102,13 @@
     <string name="choose_date_uz">Sanani tanlang</string>
     <string name="add_client_en">Add Client</string>
     <string name="add_category_en">Add Category</string>
+    <string name="product_added_successfully">Mahsulot muvaffaqiyatli qo\'shildi!</string>
+    <string name="product_quantity_helper">Omborxonaga shu mahsulotdan qancha miqdorda qo\'shilishi</string>
+    <string name="set_duration">Muddatni ko\'rsating</string>
+    <string name="today">Bugun</string>
+    <string name="type_of_payment_three">%s/%s/%s</string>
+    <string name="type_of_payment_two">%s/%s</string>
+    <string name="start_date">...dan</string>
+    <string name="end_date">...gacha</string>
+    <string name="calculate">Hisoblash</string>
 </resources>

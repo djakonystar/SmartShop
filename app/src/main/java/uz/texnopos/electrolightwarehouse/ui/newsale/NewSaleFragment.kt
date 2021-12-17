@@ -20,8 +20,8 @@ import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
-import uz.texnopos.electrolightwarehouse.data.model.CatalogCategory
-import uz.texnopos.electrolightwarehouse.data.model.Product
+import uz.texnopos.electrolightwarehouse.data.model.newsale.CatalogCategory
+import uz.texnopos.electrolightwarehouse.data.model.newsale.Product
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarSearchBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentNewSaleBinding
 import uz.texnopos.electrolightwarehouse.ui.newsale.dialog.AddToBasketDialog

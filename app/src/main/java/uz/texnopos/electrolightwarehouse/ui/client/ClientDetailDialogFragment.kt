@@ -10,7 +10,7 @@ import uz.texnopos.electrolightwarehouse.R
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.toPhoneNumber
 import uz.texnopos.electrolightwarehouse.core.extensions.toSumFormat
-import uz.texnopos.electrolightwarehouse.data.model.Client
+import uz.texnopos.electrolightwarehouse.data.model.clients.Client
 import uz.texnopos.electrolightwarehouse.databinding.DialogClientDetailBinding
 
 class ClientDetailDialogFragment(private val client: Client) : DialogFragment() {

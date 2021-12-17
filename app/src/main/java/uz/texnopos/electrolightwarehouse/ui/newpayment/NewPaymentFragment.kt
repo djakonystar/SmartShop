@@ -21,8 +21,8 @@ import uz.texnopos.electrolightwarehouse.core.ResourceState
 import uz.texnopos.electrolightwarehouse.core.extensions.onClick
 import uz.texnopos.electrolightwarehouse.core.extensions.showMessage
 import uz.texnopos.electrolightwarehouse.core.extensions.visibility
-import uz.texnopos.electrolightwarehouse.data.model.Client
-import uz.texnopos.electrolightwarehouse.data.newPayment.NewPayment
+import uz.texnopos.electrolightwarehouse.data.model.clients.Client
+import uz.texnopos.electrolightwarehouse.data.model.newpayment.NewPayment
 import uz.texnopos.electrolightwarehouse.databinding.ActionBarBinding
 import uz.texnopos.electrolightwarehouse.databinding.FragmentPaymentNewBinding
 
