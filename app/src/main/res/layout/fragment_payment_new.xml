@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
+                    android:textSize="@dimen/item_text_size_standard_tablet"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -68,25 +68,25 @@
                     android:id="@+id/rb1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
-                    tools:ignore="SpUsage" />
+                    android:paddingStart="@dimen/padding_standard"
+                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                    tools:ignore="RtlSymmetry,SpUsage" />
 
                 <RadioButton
                     android:id="@+id/rb2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
-                    tools:ignore="SpUsage" />
+                    android:paddingStart="@dimen/padding_standard"
+                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                    tools:ignore="RtlSymmetry,SpUsage" />
 
                 <RadioButton
                     android:id="@+id/rb3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
-                    tools:ignore="SpUsage" />
+                    android:paddingStart="@dimen/padding_standard"
+                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                    tools:ignore="RtlSymmetry,SpUsage" />
 
             </RadioGroup>
 
@@ -116,8 +116,6 @@
                         android:maxLength="19"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_standard"
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -142,8 +140,6 @@
                         android:maxLength="19"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_standard"
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -167,8 +163,6 @@
                     android:gravity="top"
                     android:lines="5"
                     android:minLines="5"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>

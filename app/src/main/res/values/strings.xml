@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Warehouse</string>
+    <string name="app_name">ElektroLife</string>
     <string name="warehouse">Omborxona</string>
     <string name="clients">Mijozlar</string>
     <string name="new_client">Yangi mijoz</string>
@@ -111,4 +111,6 @@
     <string name="start_date">...dan</string>
     <string name="end_date">...gacha</string>
     <string name="calculate">Hisoblash</string>
+    <string name="remove_uz">O\'chirish</string>
+    <string name="confirm_remove_uz">Siz rostdan ham ushbu mahsulotni savatdan o\'chirmoqchimisiz?</string>
 </resources>
