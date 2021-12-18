@@ -4,63 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/white_grey"
-    android:elevation="8dp"
-    tools:ignore="UseCompoundDrawables">
+    android:background="@color/white">
 
-    <com.google.android.material.appbar.AppBarLayout
+        <ImageView
+            android:id="@+id/btnHome"
+            android:layout_width="@dimen/action_bar_icon_size"
+            android:layout_height="@dimen/action_bar_icon_size"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/home_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSearch"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        app:startIconDrawable="@drawable/ic_search_24"
+        app:startIconTint="@color/app_main_color"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/white_grey">
+        app:layout_constraintStart_toEndOf="@id/btnHome"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/action_bar"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:title="Yangi sotuv">
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="30"
+            android:paddingVertical="@dimen/padding_standard_middle"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+    </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/etSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="@dimen/margin_32"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginEnd="@dimen/margin_half"
-                    android:autofillHints="true"
-                    android:background="@drawable/background_edit_text_search"
-                    android:drawableStart="@drawable/ic_search_24"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:padding="12dp" />
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:id="@+id/btnBack"
-                    android:focusable="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="-9dp"
-                    android:layout_marginTop="-2dp"
-                    android:layout_marginBottom="2dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_back" />
-
-            </RelativeLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

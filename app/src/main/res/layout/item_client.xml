@@ -32,7 +32,7 @@
             android:fontFamily="@font/rubik_mono_one"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/checkbox_text_size"
+            android:textSize="@dimen/item_text_size_standard_tablet"
             app:layout_constraintStart_toStartOf="@id/userTypeBackground"
             app:layout_constraintEnd_toEndOf="@id/userTypeBackground"
             app:layout_constraintTop_toTopOf="@id/userTypeBackground"

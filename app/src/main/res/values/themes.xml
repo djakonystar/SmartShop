@@ -18,18 +18,33 @@
         <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
-    <style name="Widget.ElektroLife.TextInputLayout.OutlinedBox"
-        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="Widget.ElektroLife.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundColor">@color/white</item>
         <item name="boxCornerRadiusBottomStart">@dimen/til_corner_radius</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/til_corner_radius</item>
         <item name="boxCornerRadiusTopStart">@dimen/til_corner_radius</item>
         <item name="boxCornerRadiusTopEnd">@dimen/til_corner_radius</item>
         <item name="boxStrokeColor">@color/app_main_color</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.ElektroLife.TextInputLayout</item>
+        <item name="prefixTextColor">@color/black</item>
         <item name="android:textCursorDrawable">@color/app_main_color</item>
     </style>
 
     <style name="Widget.ElektroLife.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:buttonTint">@color/app_main_color</item>
+    </style>
+
+    <style name="TextAppearance.ElektroLife.TwentyTwo" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/item_text_size_standard_tablet</item>
+    </style>
+
+    <style name="ThemeOverlay.ElektroLife.TextInputLayout" parent="">
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.ElektroLife.TwentyTwo</item>
+    </style>
+
+    <style name="ThemeOverlay.ElektroLife.TextInputEditText" parent="">
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.ElektroLife.TwentyTwo</item>
     </style>
 </resources>

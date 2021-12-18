@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilName"
                 android:layout_width="match_parent"
@@ -71,7 +70,7 @@
                 android:layout_marginTop="@dimen/margin_middle"
                 android:text="@string/legal_person"
                 android:textColor="@color/black"
-                android:textSize="@dimen/checkbox_text_size"
+                android:textSize="@dimen/item_text_size_standard_tablet"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilPhone"
                 tools:ignore="SpUsage" />

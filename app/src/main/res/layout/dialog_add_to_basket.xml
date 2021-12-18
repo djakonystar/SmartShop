@@ -1,120 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minWidth="320dp"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:minWidth="@dimen/dialog_sale_min_width">
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:padding="@dimen/margin_small"
-        android:text="Buyurtma"
-        android:textColor="@color/black"
         android:gravity="center"
-        android:textSize="@dimen/margin_standard"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etQuantity"
-        android:maxLength="5"
-        android:inputType="numberDecimal"
-        android:hint="Soni"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMax"
-        app:layout_constraintBottom_toTopOf="@id/etSumma"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:maxLength="18"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etSumma"
-        android:inputType="number"
-        android:hint="Summa"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etQuantity"
-        app:layout_constraintBottom_toTopOf="@id/btnAdd"
-        android:layout_marginBottom="@dimen/margin_32"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/etSumma"
-        android:id="@+id/tvWholesale"
-        android:layout_marginTop="@dimen/margin_standard"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        android:text="Ulgurji: "/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/etSumma"
-        android:id="@+id/tvMin"
-        android:layout_marginTop="@dimen/margin_small"
-        app:layout_constraintTop_toBottomOf="@id/tvWholesale"
-        android:text="Min: "/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/etSumma"
-        android:id="@+id/tvMax"
-        android:layout_marginTop="@dimen/margin_small"
-        app:layout_constraintTop_toBottomOf="@id/tvMin"
-        android:text="Max: "/>
-
-
-    <TextView
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:text="Savatga qo'shish"
-        android:textSize="15dp"
+        android:letterSpacing="0.1"
+        android:padding="@dimen/padding_small"
+        android:text="@string/add_to_basket"
+        android:textAllCaps="true"
         android:textColor="@color/black"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:padding="@dimen/margin_small"
+        android:textSize="@dimen/item_text_size_standard_tablet"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpUsage" />
+
+    <TextView
+        android:id="@+id/tvWholesale"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:text="@string/wholesale_price_text"
+        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <TextView
+        android:id="@+id/tvMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/min_price_text"
+        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWholesale" />
+
+    <TextView
+        android:id="@+id/tvMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/max_price_text"
+        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMin" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilQuantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/quantity"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMax">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789 "
+            android:inputType="number"
+            android:maxLength="12"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvQuantityCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_middle"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/counter_text"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_larger"
+        app:layout_constraintEnd_toEndOf="@id/tilQuantity"
+        app:layout_constraintTop_toBottomOf="@id/tilQuantity"
+        tools:ignore="SpUsage" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSumma"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/sum_uzb"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvQuantityCounter">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSumma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789 "
+            android:inputType="number"
+            android:maxLength="19"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_32"
+        android:paddingHorizontal="32dp"
+        android:text="@string/add"
+        android:textSize="@dimen/text_size_larger"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:focusable="true" />
+        app:layout_constraintStart_toEndOf="@id/btnCancel"
+        app:layout_constraintTop_toBottomOf="@id/tilSumma"
+        tools:ignore="SpUsage" />
 
-    <TextView
+    <Button
         android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/btnAdd"
-        app:layout_constraintTop_toTopOf="@id/btnAdd"
-        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_32"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:textSize="15dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:textStyle="bold"
-        android:text="Bekor qilish"
-        android:padding="@dimen/margin_small"
+        android:paddingHorizontal="32dp"
+        android:text="@string/cancel_uzb"
+        android:textSize="@dimen/text_size_larger"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnAdd"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilSumma"
+        tools:ignore="SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

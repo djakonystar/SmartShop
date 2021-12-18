@@ -45,7 +45,8 @@
                 android:id="@+id/tilWholesalePercent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
+                android:layout_marginHorizontal="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_middle"
                 android:hint="@string/wholesale_percent"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilCategoryName">
@@ -59,8 +60,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -83,8 +82,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -107,8 +104,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -133,8 +128,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -148,7 +141,6 @@
                 android:backgroundTint="@color/app_main_color"
                 android:paddingHorizontal="@dimen/button_padding_horizontal"
                 android:text="@string/add_new_category"
-                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_larger"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

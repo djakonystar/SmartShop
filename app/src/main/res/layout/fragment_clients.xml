@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/actionBar"
-        layout="@layout/action_bar" />
+        layout="@layout/action_bar_client" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilSearch"

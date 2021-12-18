@@ -1,148 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minWidth="320dp"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/dialog_sale_min_width">
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:padding="@dimen/margin_small"
-        android:text="Yangi mijoz qo'shish"
-        android:textColor="@color/black"
         android:gravity="center"
-        android:textSize="@dimen/margin_standard"
+        android:letterSpacing="0.1"
+        android:padding="@dimen/padding_small"
+        android:text="@string/new_client"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_text_size_standard_tablet"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpUsage" />
 
-
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSpinner"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etName"
-        android:inputType="text"
-        android:hint="@string/full_name"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner"
-        app:layout_constraintBottom_toTopOf="@id/etInn"/>
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etInn"
-        android:maxLength="9"
-        android:visibility="gone"
-        android:inputType="numberDecimal"
-        android:hint="@string/tax_identification_number"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etName"/>
-
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:maxLength="13"
-        android:background="@drawable/background_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/etPhone"
-        android:inputType="phone"
-        android:hint="+998 "
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="@dimen/margin_32"
-        app:layout_constraintBottom_toTopOf="@id/btnAdd"
-        app:layout_constraintTop_toBottomOf="@id/etInn"/>
-
-    <RelativeLayout
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="@drawable/spinner_border"
-        android:orientation="horizontal"
+        android:hint="@string/type_of_client"
+        app:endIconMode="dropdown_menu"
+        app:endIconTint="@color/app_main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/margin_32"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
-        <Spinner
-            android:id="@+id/spinner2"
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/actSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown"
-            android:textColor="@color/black" />
+            android:focusable="false"
+            android:inputType="none"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_drop_down" />
-
-    </RelativeLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-
-
-    <TextView
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:text="Mijoz qo'shish"
-        android:textSize="15dp"
+        android:hint="@string/full_name"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilSpinner">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="80"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/phone_number"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilName"
+        app:prefixText="+998 ">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789 ()"
+            android:inputType="number"
+            android:maxLength="14"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilInn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/tax_identification_number"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilPhone">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etInn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789 "
+            android:inputType="number"
+            android:maxLength="11"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            android:singleLine="true"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/comment"
+        android:visibility="gone"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilInn">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:lines="5"
+            android:minLines="5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginEnd="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:backgroundTint="@color/app_main_color"
+        android:paddingHorizontal="32dp"
+        android:text="@string/add"
         android:textColor="@color/black"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:padding="@dimen/margin_small"
-        android:textStyle="bold"
+        android:textSize="@dimen/text_size_larger"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:focusable="true" />
+        app:layout_constraintStart_toEndOf="@id/btnCancel"
+        app:layout_constraintTop_toBottomOf="@id/tilComment"
+        tools:ignore="SpUsage" />
 
-    <TextView
+    <Button
         android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/btnAdd"
-        app:layout_constraintTop_toTopOf="@id/btnAdd"
-        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginStart="@dimen/margin_32"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:textSize="15dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:textStyle="bold"
-        android:text="Bekor qilish"
-        android:padding="@dimen/margin_small"
+        android:paddingHorizontal="32dp"
+        android:text="@string/cancel_uzb"
+        android:textSize="@dimen/text_size_larger"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnAdd"
-        android:focusable="true" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilComment"
+        tools:ignore="SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

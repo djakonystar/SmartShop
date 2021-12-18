@@ -1,97 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context=".ui.newsale.order.OrderFragment">
+
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilClient"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:hint="@string/choose_client"
+        app:endIconTint="@color/app_main_color"
+        app:layout_constraintEnd_toStartOf="@id/btnAddClient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionBar"
+        app:startIconDrawable="@drawable/ic_baseline_person_search"
+        app:startIconTint="@color/app_main_color">
+
+        <AutoCompleteTextView
+            android:id="@+id/etSearchClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
-        android:layout_width="40dp"
-        android:id="@+id/btnBack"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_baseline_arrow_back_24"
-        android:padding="8dp"
+        android:id="@+id/btnAddClient"
+        android:layout_width="@dimen/action_bar_icon_size"
+        android:layout_height="@dimen/action_bar_icon_size"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"
+        android:contentDescription="@string/add"
         android:focusable="true"
-        android:layout_margin="@dimen/margin_standard"
-        android:layout_height="40dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="@dimen/padding_middle"
+        android:src="@drawable/ic_baseline_person_add_alt_1_24"
+        app:layout_constraintBottom_toBottomOf="@id/tilClient"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Savat"
-        android:id="@+id/tvTitle"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:textColor="@color/black"
-        android:textSize="18dp"/>
+        app:layout_constraintTop_toBottomOf="@id/actionBar"
+        app:tint="@color/app_main_color" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
-        android:layout_marginTop="8dp"
-        tools:listitem="@layout/item_order_dialog"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginBottom="120dp"
         android:orientation="vertical"
-        android:id="@+id/rvOrder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="@dimen/margin_32"
-        app:layout_constraintTop_toBottomOf="@id/etSearchClient"
-        app:layout_constraintBottom_toTopOf="@id/tvTotalPrice"
-        />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilClient"
+        tools:listitem="@layout/item_order_dialog" />
 
-    <AutoCompleteTextView
-        android:layout_width="0dp"
-        android:id="@+id/etSearchClient"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_baseline_search_24"
-        android:padding="12dp"
-        android:background="@drawable/background_edit_text"
-        android:elevation="12dp"
-        android:maxLines="5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnAddClient"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        android:layout_margin="@dimen/margin_standard"/>
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:src="@drawable/ic_baseline_person_add_alt_1_24"
-        android:id="@+id/btnAddClient"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/etSearchClient"
-        app:layout_constraintBottom_toBottomOf="@id/etSearchClient"/>
+        android:background="@drawable/bottom_sheet_bg"
+        android:elevation="@dimen/elevation_standard"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginVertical="@dimen/margin_standard"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintBottom_toTopOf="@id/btnOrder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/btnOrder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:paddingHorizontal="32dp"
+            android:text="@string/confirm_order"
+            android:textSize="@dimen/text_size_larger"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="SpUsage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="21dp"
-        android:text="Total price : 0"
-        app:layout_constraintBottom_toTopOf="@id/btnOrder"
-        app:layout_constraintStart_toStartOf="@id/etSearchClient"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:id="@+id/tvTotalPrice"/>
-
-    <Button
-        android:layout_width="0dp"
-        android:id="@+id/btnOrder"
-        android:layout_height="50dp"
-        android:text="Zakaz qilish"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_small"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

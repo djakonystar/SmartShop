@@ -5,7 +5,7 @@
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_32">32dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
-    <dimen name="margin_half">8dp</dimen>
+    <dimen name="margin_middle">8dp</dimen>
     <dimen name="radius_card_view">8dp</dimen>
     <dimen name="padding_image">24dp</dimen>
     <dimen name="text_size_main">18dp</dimen>
@@ -14,13 +14,12 @@
     <dimen name="text_size_smaller">12dp</dimen>
     <dimen name="card_elevation">6dp</dimen>
     <dimen name="action_bar_icon_size">48dp</dimen>
-    <dimen name="margin_middle">8dp</dimen>
     <dimen name="padding_middle">8dp</dimen>
     <dimen name="elevation_standard">8dp</dimen>
     <dimen name="action_bar_title_size">20dp</dimen>
     <dimen name="til_corner_radius">8dp</dimen>
     <dimen name="button_padding_horizontal">48dp</dimen>
-    <dimen name="checkbox_text_size">22dp</dimen>
+    <dimen name="item_text_size_standard_tablet">22dp</dimen>
     <dimen name="button_height">64dp</dimen>
     <dimen name="login_lock_icon_size">96dp</dimen>
     <dimen name="checkbox_height">48dp</dimen>
@@ -38,4 +37,9 @@
     <dimen name="margin_small">4dp</dimen>
     <dimen name="item_indicator_size">15dp</dimen>
     <dimen name="margin_64">64dp</dimen>
+    <dimen name="dialog_min_width">400dp</dimen>
+    <dimen name="dialog_sale_min_width">450dp</dimen>
+    <dimen name="chip_min_touch_target_size">4dp</dimen>
+    <dimen name="margin_large_standard">24dp</dimen>
+    <dimen name="margin_48">48dp</dimen>
 </resources>

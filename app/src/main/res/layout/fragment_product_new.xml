@@ -19,14 +19,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilSpinner"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/choose_category"
                 app:endIconTint="@color/app_main_color"
                 app:layout_constraintEnd_toStartOf="@id/ivAddCategory"
@@ -40,16 +40,16 @@
                     android:focusable="false"
                     android:inputType="none"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/item_text_size_standard_tablet"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/ivAddCategory"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="@dimen/margin_standard_middle"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
+                android:layout_marginEnd="@dimen/margin_standard"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/add_new_category_desc"
                 android:foregroundGravity="center_vertical"
@@ -65,7 +65,7 @@
                 android:id="@+id/tilProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/product_name"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilSpinner">
@@ -75,8 +75,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -85,8 +83,9 @@
                 android:id="@+id/tilProductQuantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/product_quantity"
+                app:helperText="@string/product_quantity_helper"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilProductName">
 
@@ -96,8 +95,8 @@
                     android:layout_height="wrap_content"
                     android:digits="0123456789 "
                     android:inputType="number"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
+                    android:maxLength="9"
+                    android:singleLine="true"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -107,7 +106,7 @@
                 android:id="@+id/tilBranchName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/brand_name"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilProductQuantity">
@@ -117,8 +116,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -127,7 +124,7 @@
                 android:id="@+id/tilCostPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/cost_price"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilBranchName">
@@ -141,8 +138,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -151,7 +146,7 @@
                 android:id="@+id/tilWholesalePrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/wholesale_price"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilCostPrice">
@@ -165,8 +160,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -175,7 +168,7 @@
                 android:id="@+id/tilMinPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/min_price"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilWholesalePrice">
@@ -189,8 +182,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -199,7 +190,7 @@
                 android:id="@+id/tilMaxPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard_middle"
+                android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/max_price"
                 app:endIconMode="clear_text"
                 app:layout_constraintTop_toBottomOf="@id/tilMinPrice">
@@ -213,8 +204,6 @@
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_standard"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -228,7 +217,6 @@
                 android:backgroundTint="@color/app_main_color"
                 android:paddingHorizontal="@dimen/button_padding_horizontal"
                 android:text="@string/add_new_product"
-                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_larger"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
