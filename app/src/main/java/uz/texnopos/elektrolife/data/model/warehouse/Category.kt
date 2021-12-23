@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Category(
     val id: Int,
-    val name: String,
+    val name: String? = "",
     @SerializedName("min_count")
     val minCount: Int
 )

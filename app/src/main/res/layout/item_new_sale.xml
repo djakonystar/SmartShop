@@ -6,13 +6,14 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_middle"
     android:layout_marginVertical="@dimen/margin_small"
+    android:background="@color/white_grey"
+    android:foreground="?attr/selectableItemBackground"
     android:elevation="@dimen/elevation_standard"
     app:cardCornerRadius="@dimen/radius_card_view">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white_grey">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvName"
@@ -21,10 +22,7 @@
             android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginTop="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:clickable="true"
             android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintEnd_toStartOf="@id/tvRemained"
@@ -37,10 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
-            android:clickable="true"
             android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textSize="@dimen/title_text_size"
@@ -84,6 +79,7 @@
             android:focusable="true"
             android:padding="2dp"
             android:src="@drawable/ic_add_to_basket"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

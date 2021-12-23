@@ -2,6 +2,7 @@ package uz.texnopos.elektrolife.ui.newproduct
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
@@ -186,9 +187,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         liveCostPrice.observe(requireActivity(), {
             val price = it
             binding.apply {
-                val wholesalePrice = wholesalePercent * price
-                val minPrice = minPercent * price
-                val maxPrice = maxPercent * price
+                val wholesalePrice = (wholesalePercent / 100.0 * price).toLong() + price
+                val minPrice = (minPercent / 100.0 * price).toLong() + price
+                val maxPrice = (maxPercent / 100.0 * price).toLong() + price
 
                 etWholesalePrice.setText(rounding(wholesalePrice).toSumFormat)
                 etMinPrice.setText(rounding(minPrice).toSumFormat)
@@ -220,6 +221,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             maxPercent = data.percentMax
                             if (!categoryName.contains(data.name)) categoryName.add(data.name)
                         }
+                        groupAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
+                        binding.actSpinner.setAdapter(groupAdapter)
                     } else {
                         showMessage(it.data.message)
                     }

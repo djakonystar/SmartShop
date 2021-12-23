@@ -48,7 +48,7 @@
     <string name="payment_card">Karta</string>
     <string name="choose_category">Kategoriyani tanlang</string>
     <string name="product_name">Mahsulot nomi</string>
-    <string name="brand_name">Firma nomi</string>
+    <string name="brand_name">Ishlab chiqaruvchi</string>
     <string name="cost_price">Tan narxi</string>
     <string name="wholesale_price">Ulgurji narxi</string>
     <string name="min_price">Minimum narxi</string>
@@ -87,7 +87,7 @@
     <string name="add_to_basket">Savatga qo\'shish</string>
     <string name="wholesale_price_text">Ulgurji: %s UZS</string>
     <string name="min_price_text">Minimum: %s UZS</string>
-    <string name="max_price_text">Maksimum: %s UZS</string>
+    <string name="max_price_text">Narxi: %s UZS</string>
     <string name="quantity">Soni</string>
     <string name="pay">To\'lash</string>
     <string name="counter_text">%s/%s</string>
@@ -113,4 +113,5 @@
     <string name="calculate">Hisoblash</string>
     <string name="remove_uz">O\'chirish</string>
     <string name="confirm_remove_uz">Siz rostdan ham ushbu mahsulotni savatdan o\'chirmoqchimisiz?</string>
+    <string name="price_visibility_en">Price visibility</string>
 </resources>
