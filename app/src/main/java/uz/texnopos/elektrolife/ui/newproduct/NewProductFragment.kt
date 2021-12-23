@@ -1,5 +1,6 @@
 package uz.texnopos.elektrolife.ui.newproduct
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -13,35 +14,35 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.MaskWatcherNothing
-import uz.texnopos.elektrolife.core.MaskWatcherPayment
-import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.*
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newproduct.Amount
 import uz.texnopos.elektrolife.data.model.newproduct.Categories
 import uz.texnopos.elektrolife.data.model.newproduct.Product
-import uz.texnopos.elektrolife.databinding.ActionBarBinding
+import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
+import uz.texnopos.elektrolife.settings.Settings
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
-    private lateinit var abBinding: ActionBarBinding
+    private lateinit var abBinding: ActionBarProductNewBinding
     private lateinit var navController: NavController
     private lateinit var groupAdapter: ArrayAdapter<String>
     private val viewModel: NewProductViewModel by viewModel()
+    private val settings: Settings by inject()
     private var mutableList: MutableList<Categories> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
     private var categoryId = 0
     private val amount = MediatorLiveData<Amount>().apply { value = Amount() }
-    private var liveCostPrice = MutableLiveData<Long>()
+    private var liveCostPrice = MutableLiveData<Double>()
     private var wholesalePercent: Int = 0
     private var minPercent: Int = 0
     private var maxPercent: Int = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +53,15 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentProductNewBinding.bind(view)
-        abBinding = ActionBarBinding.bind(view)
+        abBinding = ActionBarProductNewBinding.bind(view)
         navController = findNavController()
 
         observeCostChange()
         setupObserver()
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
+            tvRate.text =
+                context?.getString(R.string.dollar_rate_text, settings.dollarRate.toString())
             btnHome.onClick {
                 navController.popBackStack()
             }
@@ -66,7 +69,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         viewModel.getCategories()
 
         binding.apply {
-            etWholesalePrice.addTextChangedListener(MaskWatcherPayment(etWholesalePrice))
+            etWholesalePrice.addTextChangedListener(MaskWatcherPriceDecimal(etWholesalePrice))
             etMinPrice.addTextChangedListener(MaskWatcherPayment(etMinPrice))
             etMaxPrice.addTextChangedListener(MaskWatcherPayment(etMaxPrice))
             etProductQuantity.addTextChangedListener(MaskWatcherNothing(etProductQuantity))
@@ -102,14 +105,19 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             actSpinner.setOnItemClickListener { _, _, i, _ ->
                 tilSpinner.isErrorEnabled = false
                 categoryId = mutableList[i].categoryId
+                wholesalePercent = mutableList[i].percentWholesale
+                minPercent = mutableList[i].percentMin
+                maxPercent = mutableList[i].percentMax
             }
 
-            etCostPrice.addTextChangedListener(MaskWatcherPayment(etCostPrice))
+            etCostPrice.addTextChangedListener(MaskWatcherPriceDecimal(etCostPrice))
             etCostPrice.doOnTextChanged { it, _, _, _ ->
                 if (it.isNullOrEmpty()) {
-                    liveCostPrice.postValue(0)
+                    liveCostPrice.postValue(0.0)
                 } else {
-                    liveCostPrice.postValue(it.toString().getOnlyDigits().toLong())
+                    liveCostPrice.postValue(
+                        it.toString().getOnlyDigits().toDouble()
+                    )
                 }
             }
 
@@ -131,8 +139,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             categoryId,
                             branch,
                             productName,
-                            costPrice.toInt(),
-                            wholesalePrice.toInt(),
+                            costPrice.toDouble(),
+                            wholesalePrice.toDouble(),
                             minPrice.toInt(),
                             maxPrice.toInt(),
                             productQuantity.toInt()
@@ -170,7 +178,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     }
 
     private fun String.getOnlyDigits(): String {
-        val s = this.filter { it.isDigit() }
+        val s = this.filter { it.isDigit() || it == '.' }
         return if (s.isEmpty()) "0" else s
     }
 
@@ -178,20 +186,21 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         amount.addSource(liveCostPrice) {
             val previous = amount.value
             amount.value = previous?.copy(wholesalePrice = it)
-            amount.value = previous?.copy(minPrice = it)
-            amount.value = previous?.copy(maxPrice = it)
+            amount.value = previous?.copy(minPrice = it.toLong())
+            amount.value = previous?.copy(maxPrice = it.toLong())
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeCostChange() {
         liveCostPrice.observe(requireActivity(), {
             val price = it
             binding.apply {
-                val wholesalePrice = (wholesalePercent / 100.0 * price).toLong() + price
-                val minPrice = (minPercent / 100.0 * price).toLong() + price
-                val maxPrice = (maxPercent / 100.0 * price).toLong() + price
+                val wholesalePrice = (wholesalePercent / 100.0 + 1) * price
+                val minPrice = ((minPercent / 100.0 + 1) * price * settings.dollarRate).toLong()
+                val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.dollarRate).toLong()
 
-                etWholesalePrice.setText(rounding(wholesalePrice).toSumFormat)
+                etWholesalePrice.setText("%.3f".format(wholesalePrice).replace(',', '.'))
                 etMinPrice.setText(rounding(minPrice).toSumFormat)
                 etMaxPrice.setText(rounding(maxPrice).toSumFormat)
             }
@@ -216,12 +225,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     if (it.data!!.successful) {
                         mutableList = it.data.payload.toMutableList()
                         mutableList.forEach { data ->
-                            wholesalePercent = data.percentWholesale
-                            minPercent = data.percentMin
-                            maxPercent = data.percentMax
                             if (!categoryName.contains(data.name)) categoryName.add(data.name)
                         }
-                        groupAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
+                        groupAdapter =
+                            ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
                         binding.actSpinner.setAdapter(groupAdapter)
                     } else {
                         showMessage(it.data.message)

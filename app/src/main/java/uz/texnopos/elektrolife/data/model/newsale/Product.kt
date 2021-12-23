@@ -14,7 +14,7 @@ data class Product(
     @SerializedName("product_image")
     val productImage: String,
     @SerializedName("product_cost_price")
-    val productCostPrice: Int,
+    val productCostPrice: Double,
     @SerializedName("price_wholesale")
     val priceWholesale: Double,
     @SerializedName("price_min")

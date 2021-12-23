@@ -29,7 +29,7 @@ class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSale
                 tvName.text = product.productName
                 tvBrand.text = product.productBrand
                 tvCost.text = itemView.context?.getString(
-                    R.string.sum_text,
+                    R.string.dollar_text,
                     product.productCostPrice.toSumFormat
                 )
                 tvRemained.text = itemView.context?.getString(

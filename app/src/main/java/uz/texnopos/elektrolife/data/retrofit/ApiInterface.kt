@@ -19,6 +19,7 @@ import uz.texnopos.elektrolife.data.model.newproduct.ProductId
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.Products
+import uz.texnopos.elektrolife.data.model.signin.DollarRate
 
 interface ApiInterface {
 
@@ -47,7 +48,6 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Query("search") search: String
     ): Observable<GenericResponse<List<ClientInfo>>>
-
 
     @POST("api/client/payment")
     fun payment(
@@ -117,4 +117,9 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Body order: Order
     ): Observable<GenericResponse<Any>>
+
+    @GET("api/usd")
+    fun getDollarRate(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<DollarRate>>
 }
