@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.warehouse
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
@@ -74,21 +75,23 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         val products = it.data.payload
-                        productsList = when (sortType) {
-                            "byFewRemain" -> products
-                                .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
-                            "byProduct" -> products
-                                .sortedBy { t -> t.name.lowercase() }
-                            "byCategory" -> products
-                                .sortedBy { t -> t.name.lowercase() }
-                                .sortedBy { t -> t.category.name.lowercase() }
-                            "byRemainAscend" -> products
-                                .sortedBy { t -> t.remained }
-                            "byRemainDescend" -> products
-                                .sortedByDescending { t -> t.remained }
-                            else -> products
-                        }
-                        adapter.models = productsList
+                        adapter.models = it.data.payload
+//                        when (sortType) {
+//                            "byFewRemain" -> {
+//                                adapter.models = it.data.payload
+//                                    .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+//                            }
+//                            "byProduct" -> products
+//                                .sortedBy { t -> t.name.lowercase() }
+//                            "byCategory" -> products
+//                                .sortedBy { t -> t.name.lowercase() }
+//                                .sortedBy { t -> t.category.name.lowercase() }
+//                            "byRemainAscend" -> products
+//                                .sortedBy { t -> t.remained }
+//                            "byRemainDescend" -> products
+//                                .sortedByDescending { t -> t.remained }
+//                            else -> products
+//                        }
                     } else {
                         showMessage(it.data.message)
                     }

@@ -37,7 +37,7 @@ class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSale
                     product.remained.toSumFormat
                 )
 
-                btnAddToBasket.onClick {
+                itemView.onClick {
                     onItemClick.invoke(product)
                 }
             }

@@ -6,8 +6,10 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +23,7 @@ import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
 class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
     private var liveQuantity = MutableLiveData<Long>()
+    private var visibilityLiveData = MutableLiveData<Boolean>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +34,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         return inflater.inflate(R.layout.dialog_add_to_basket, container, false)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,12 +44,20 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
         binding.apply {
             val remained = product.remained
+            var isVisible = false
+            visibilityLiveData.postValue(isVisible)
 
-            tvWholesale.text = context?.getString(R.string.wholesale_price_text, "0")
-            tvMin.text = context?.getString(R.string.min_price_text, "0")
-            tvMax.text = context?.getString(R.string.max_price_text, "0")
+            tvWholesale.text = context?.getString(
+                R.string.wholesale_price_text,
+                product.priceWholesale.toLong().toSumFormat
+            )
+            tvMin.text =
+                context?.getString(R.string.min_price_text, product.priceMin.toLong().toSumFormat)
+            tvMax.text =
+                context?.getString(R.string.max_price_text, product.priceMax.toLong().toSumFormat)
             tvQuantityCounter.text =
                 context?.getString(R.string.counter_text, "0", remained.toSumFormat)
+            etSumma.setText(product.priceMax.toLong().toSumFormat)
 
             etQuantity.addTextChangedListener(MaskWatcherNothing(etQuantity))
             etSumma.addTextChangedListener(MaskWatcherPrice(etSumma))
@@ -63,16 +75,9 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                     tilQuantity.error = context?.getString(R.string.not_enough_error)
                 }
             }
+
             etSumma.addTextChangedListener {
                 tilSumma.isErrorEnabled = false
-            }
-
-            etQuantity.doOnTextChanged { it, _, _, _ ->
-                if (it.isNullOrEmpty()) {
-                    liveQuantity.postValue(0)
-                } else {
-                    liveQuantity.postValue(it.toString().getOnlyDigits().toLong())
-                }
             }
 
             btnAdd.onClick {
@@ -93,6 +98,20 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                 }
             }
 
+            ivVisible.setOnTouchListener { _, motionEvent ->
+                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    visibilityLiveData.postValue(true)
+                } else {
+                    visibilityLiveData.postValue(false)
+                }
+                return@setOnTouchListener true
+            }
+
+            ivVisible.onClick {
+                isVisible = !isVisible
+                visibilityLiveData.postValue(isVisible)
+            }
+
             btnCancel.onClick {
                 dismiss()
             }
@@ -111,18 +130,12 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun observe() {
-        liveQuantity.observe(requireActivity(), { quantity ->
-            val newWholesale = product.priceWholesale * quantity
-            val newMin = product.priceMin * quantity
-            val newMax = product.priceMax * quantity
-
+        visibilityLiveData.observe(viewLifecycleOwner) {
             binding.apply {
-                tvWholesale.text =
-                    context?.getString(R.string.wholesale_price_text, newWholesale.toSumFormat)
-                tvMin.text = context?.getString(R.string.min_price_text, newMin.toSumFormat)
-                tvMax.text = context?.getString(R.string.max_price_text, newMax.toSumFormat)
+                tvWholesale.isVisible = it
+                tvMin.isVisible = it
             }
-        })
+        }
     }
 
     private var onItemClick: (quantity: Int, summa: String) -> Unit = { _, _ -> }

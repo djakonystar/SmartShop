@@ -136,7 +136,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                             phone = phone,
                             tin = tin,
                             balance = balance,
-                            comment = comment,
+                            comment = comment ?: "",
                             type = type
                         )
                     }

@@ -16,11 +16,11 @@ data class Product(
     @SerializedName("product_cost_price")
     val productCostPrice: Int,
     @SerializedName("price_wholesale")
-    val priceWholesale: Long,
+    val priceWholesale: Double,
     @SerializedName("price_min")
-    val priceMin: Long,
+    val priceMin: Double,
     @SerializedName("price_max")
-    val priceMax: Long,
+    val priceMax: Double,
     val remained: Int,
     var count: Int,
     var salePrice: Long

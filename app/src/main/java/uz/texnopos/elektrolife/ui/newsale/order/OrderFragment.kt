@@ -3,6 +3,7 @@ package uz.texnopos.elektrolife.ui.newsale.order
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -74,7 +75,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             recyclerView.adapter = adapter
             adapter.models = Basket.mutableProducts
             tvTotalPrice.text = context?.getString(R.string.total_sum_text, "0")
-            val totalPrice = productList.sumOf { product -> product.salePrice }
+            val totalPrice = productList.sumOf { product -> product.salePrice * product.count }
 
             price.postValue(totalPrice)
 
@@ -112,7 +113,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                     .setPositiveButton("Ha") { _, _ ->
                         adapter.removeItem(product, position)
                         Basket.mutableProducts.remove(product)
-                        val newPrice = Basket.mutableProducts.sumOf { it.salePrice }
+                        val newPrice =
+                            Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
                         price.postValue(newPrice)
                     }
                 dialog.show()
@@ -138,7 +140,9 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 if (etSearchClient.text.isEmpty()) {
                     clientId = 0
                 }
-                val dialog = AddPaymentDialog(totalPrice)
+                val finalPrice = tvTotalPrice.text.filter { c -> c.isDigit() }.toString().toLong()
+                val dialog = AddPaymentDialog(finalPrice)
+                Log.d("finalPrice", finalPrice.toString())
                 dialog.show(requireActivity().supportFragmentManager, "")
                 dialog.setDate { cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
@@ -147,7 +151,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                             card = card,
                             cash = cash,
                             debt = debt,
-                            price = totalPrice,
+                            price = finalPrice,
                             term = date,
                             description = comment,
                             orders = orderItems

@@ -84,9 +84,6 @@
         <action
             android:id="@+id/action_newProductFragment_to_newCategoryFragment"
             app:destination="@id/newCategoryFragment" />
-        <action
-            android:id="@+id/action_newProductFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/clientsFragment"
