@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.MutableLiveData
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import uz.texnopos.elektrolife.core.extensions.onClick
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.MaskWatcherPrice
+import uz.texnopos.elektrolife.core.MaskWatcherPayment
+import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,8 +60,8 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 type.postValue(list[i])
             }
 
-            etCash.addTextChangedListener(MaskWatcherPrice(etCash))
-            etCard.addTextChangedListener(MaskWatcherPrice(etCard))
+            etCash.addTextChangedListener(MaskWatcherPayment(etCash))
+            etCard.addTextChangedListener(MaskWatcherPayment(etCard))
 
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false

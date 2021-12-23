@@ -13,6 +13,7 @@ import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientsAdapter
 import uz.texnopos.elektrolife.ui.client.ClientsViewModel
+import uz.texnopos.elektrolife.ui.main.MainViewModel
 import uz.texnopos.elektrolife.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
@@ -78,7 +79,7 @@ val viewModelModule = module {
     viewModel { SignInViewModel(get(), get()) }
     viewModel { NewClientViewModel(get(), get()) }
     viewModel { OrderViewModel(get(),get()) }
-
+    viewModel { MainViewModel(get(), get()) }
 }
 
 val adapterModule = module {

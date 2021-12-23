@@ -12,6 +12,7 @@ class Settings(context: Context) {
         const val USER_ROLE = "notROLE"
         const val PRODUCT = "product"
         const val PIN = "pin"
+        const val DOLLAR_RATE = "dollarRate"
     }
 
     private val preferences: SharedPreferences =
@@ -44,4 +45,10 @@ class Settings(context: Context) {
     var role: String
         set(value) = preferences.edit().putString(USER_ROLE,value).apply()
         get() = preferences.getString(USER_ROLE,"")?: ""
+
+    var dollarRate: Float
+        set(value) {
+            preferences.edit().putFloat(DOLLAR_RATE, value).apply()
+        }
+        get() = preferences.getFloat(DOLLAR_RATE, 0.0f)
 }

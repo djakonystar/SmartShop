@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/actionBar"
-        layout="@layout/action_bar" />
+        layout="@layout/action_bar_product_new" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -133,8 +133,7 @@
                     android:id="@+id/etCostPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -155,7 +154,7 @@
                     android:id="@+id/etWholesalePrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
+                    android:digits="0123456789., "
                     android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"

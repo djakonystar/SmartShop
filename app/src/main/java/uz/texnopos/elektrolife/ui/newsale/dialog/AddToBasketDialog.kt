@@ -1,8 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale.dialog
 
 import android.annotation.SuppressLint
-import androidx.core.widget.addTextChangedListener
-import uz.texnopos.elektrolife.core.extensions.onClick
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherNothing
-import uz.texnopos.elektrolife.core.MaskWatcherPrice
+import uz.texnopos.elektrolife.core.MaskWatcherPayment
+import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
@@ -49,7 +48,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
             tvWholesale.text = context?.getString(
                 R.string.wholesale_price_text,
-                product.priceWholesale.toLong().toSumFormat
+                product.priceWholesale.toSumFormat
             )
             tvMin.text =
                 context?.getString(R.string.min_price_text, product.priceMin.toLong().toSumFormat)
@@ -60,7 +59,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             etSumma.setText(product.priceMax.toLong().toSumFormat)
 
             etQuantity.addTextChangedListener(MaskWatcherNothing(etQuantity))
-            etSumma.addTextChangedListener(MaskWatcherPrice(etSumma))
+            etSumma.addTextChangedListener(MaskWatcherPayment(etSumma))
 
             etQuantity.addTextChangedListener {
                 val count = it.toString().getOnlyDigits()

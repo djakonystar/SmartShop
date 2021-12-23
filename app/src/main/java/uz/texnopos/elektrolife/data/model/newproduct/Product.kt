@@ -8,13 +8,13 @@ data class Product(
     val brand: String,
     val name: String,
     @SerializedName("cost_price")
-    val costPrice: Int,
+    val costPrice: Double,
     @SerializedName("price_wholesale")
-    val percentWholesale: Int,
+    val wholesalePrice: Double,
     @SerializedName("price_min")
-    val percentMin: Int,
+    val minPrice: Int,
     @SerializedName("price_max")
-    val percentMax: Int,
+    val maxPrice: Int,
     @SerializedName("new_count")
     val quantity: Int
 )

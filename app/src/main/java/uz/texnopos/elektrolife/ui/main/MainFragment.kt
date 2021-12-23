@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
@@ -18,7 +20,8 @@ import uz.texnopos.elektrolife.ui.newsale.Basket
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private lateinit var navController: NavController
-    private val setting: Settings by inject()
+    private val viewModel: MainViewModel by viewModel()
+    private val settings: Settings by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +57,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 navController.navigate(R.id.action_mainFragment_to_newProductFragment)
             }
 
-            when (setting.role) {
+            when (settings.role) {
                 "seller" -> {
                     newProduct.isEnabled = false
                     ivOther.isVisible = false
@@ -68,6 +71,35 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 else -> showMessage("Administratsiyaga murojaat qiling")
             }
         }
+
+        viewModel.getDollarRate()
+        setUpObservers()
+    }
+
+    private fun setLoading(loading: Boolean) {
+        binding.apply {
+            progressBar.isVisible = loading
+        }
+    }
+
+    private fun setUpObservers() {
+        viewModel.dollarRate.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    if (it.data!!.successful) {
+                        settings.dollarRate = it.data.payload.usd
+                    } else {
+                        showMessage(it.data.message)
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        }
     }
 
     private fun optionsMenu(view: View) {
@@ -75,14 +107,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val menuInflater = optionsMenu.menuInflater
         menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
         optionsMenu.setOnMenuItemClickListener {
-            when (setting.role) {
+            when (settings.role) {
                 "seller" -> {
                     when (it.itemId) {
                         R.id.menuNewPinCode -> {
                             // todo go to setting
                         }
                         R.id.menuNewCategory -> {
-                            showMessage("Administratsyaga murojat qiling")
+                            showMessage("Administratsyaga murojaat qiling")
                         }
                     }
                 }
