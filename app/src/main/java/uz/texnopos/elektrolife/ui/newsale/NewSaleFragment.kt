@@ -49,6 +49,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         categoryViewModel.getProductByName(searchValue)
         setUpObservers()
 
+
         abBinding.apply {
             btnHome.onClick {
                 navController.popBackStack()

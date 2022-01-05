@@ -97,6 +97,7 @@
     <string name="confirm_order">Buyurtmani amalga oshirish</string>
     <string name="delete_product">Delete product</string>
     <string name="total_sum_text">Summa: %s UZS</string>
+    <string name="total_debt_text">Qarz: %s UZS</string>
     <string name="input_correct_info">Aniq ma\'lumot kiriting</string>
     <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
     <string name="add_to_basket_en">Add to basket</string>
