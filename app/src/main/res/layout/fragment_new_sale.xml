@@ -17,24 +17,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBar">
 
-        <ScrollView
+        <HorizontalScrollView
             android:id="@+id/chipGroupScroller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_middle"
             android:layout_marginTop="@dimen/margin_small"
-            android:orientation="vertical"
+            android:scrollbars="none"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroup"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
                 app:singleLine="true"
                 app:singleSelection="true" />
 
-        </ScrollView>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -74,13 +74,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_standard"
         android:contentDescription="@string/basket_en"
-        app:icon="@drawable/ic_shopping_cart_"
         android:text="@string/basket"
-        android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_shopping_cart_"
+        app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:iconTint="@color/white" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

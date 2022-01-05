@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.warehouse
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible

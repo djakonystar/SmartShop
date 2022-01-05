@@ -16,7 +16,7 @@ class Settings(context: Context) {
     }
 
     private val preferences: SharedPreferences =
-        context.getSharedPreferences("WarehousePreferences", Context.MODE_PRIVATE)
+        context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
     var signedIn: Boolean
         set(value) {

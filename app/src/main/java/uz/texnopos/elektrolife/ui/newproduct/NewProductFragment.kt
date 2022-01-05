@@ -123,27 +123,26 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
-                val costPrice = etCostPrice.text.toString().filter { c -> c.isDigit() }
+                val costPrice = etCostPrice.text.toString().getOnlyDigits()
                 val productQuantity = etProductQuantity.text.toString().filter { q -> q.isDigit() }
                 val branch = etBranchName.text.toString()
-                val wholesalePrice = etWholesalePrice.text.toString().filter { w -> w.isDigit() }
+                val wholesalePrice = etWholesalePrice.text.toString().getOnlyDigits()
                 val minPrice = etMinPrice.text.toString().filter { min -> min.isDigit() }
                 val maxPrice = etMaxPrice.text.toString().filter { max -> max.isDigit() }
 
                 if (categoryId != 0 && productName.isNotEmpty() && costPrice.isNotEmpty()
-                    && wholesalePrice.isNotEmpty() && minPrice.isNotEmpty() && maxPrice.isNotEmpty() && productQuantity.isNotEmpty()
+                    && wholesalePrice.isNotEmpty() && minPrice.isNotEmpty() && maxPrice.isNotEmpty()
                 ) {
-                    // todo post request for add new product
                     viewModel.createProduct(
                         Product(
-                            categoryId,
-                            branch,
-                            productName,
-                            costPrice.toDouble(),
-                            wholesalePrice.toDouble(),
-                            minPrice.toInt(),
-                            maxPrice.toInt(),
-                            productQuantity.toInt()
+                            categoryId = categoryId,
+                            brand = branch,
+                            name = productName,
+                            costPrice = costPrice.toDouble(),
+                            wholesalePrice = wholesalePrice.toDouble(),
+                            minPrice = minPrice.toInt(),
+                            maxPrice = maxPrice.toInt(),
+                            quantity = if (productQuantity.isEmpty()) 0 else productQuantity.toInt()
                         )
                     )
                     setupObserverCreatedProduct()
@@ -203,11 +202,22 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 etWholesalePrice.setText("%.3f".format(wholesalePrice).replace(',', '.'))
                 etMinPrice.setText(rounding(minPrice).toSumFormat)
                 etMaxPrice.setText(rounding(maxPrice).toSumFormat)
+
+                if (price == 0.0) {
+                    etWholesalePrice.text!!.clear()
+                    etMinPrice.text!!.clear()
+                    etMaxPrice.text!!.clear()
+                }
             }
         })
     }
 
-    private fun rounding(price: Long) = ((price + 500) / 1000) * 1000
+    private fun rounding(price: Long): Long {
+        val cost = binding.etCostPrice.text.toString().getOnlyDigits().toDouble()
+        val sum = if (cost < 1) 100 else 500
+        val divider = if (cost < 1) 100 else 1000
+        return ((price + sum) / divider) * divider
+    }
 
     private fun setLoading(loading: Boolean) {
         binding.apply {
