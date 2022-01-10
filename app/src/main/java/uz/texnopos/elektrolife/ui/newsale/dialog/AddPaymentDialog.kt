@@ -158,7 +158,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         } else {
                             tilCash.error = context?.getString(R.string.required_field)
                         }
-                        debt = totalPrice - cash
+                        debt = if (cash < totalPrice) totalPrice - cash else 0
                         if (debt > 0) {
                             dateRequired = true
                         }
@@ -181,7 +181,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         } else {
                             tilCard.error = context?.getString(R.string.required_field)
                         }
-                        debt = totalPrice - card
+                        debt = if (card < totalPrice) totalPrice - card else 0
                         if (debt > 0) {
                             dateRequired = true
                         }
@@ -227,7 +227,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         } else {
                             tilCard.error = context?.getString(R.string.required_field)
                         }
-                        debt = totalPrice - (card + cash)
+                        debt = if (card + cash < totalPrice) totalPrice - (card + cash) else 0
                         if (debt > 0) {
                             dateRequired = true
                         }

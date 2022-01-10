@@ -146,7 +146,7 @@ val Number.toSumFormat: String
 val Double.toSumFormat: String
     get() {
         var num = this.toInt().toSumFormat
-        val l = this.toInt().toString().length
+        val l = this.toString().length - this.toInt().toString().length - 1
         val afterPoint = ("%.${l}f".format(this)).substringAfter(',')
         num += if (afterPoint == "0") ".00" else {
             if (afterPoint.length == 1) ".${afterPoint}0"
