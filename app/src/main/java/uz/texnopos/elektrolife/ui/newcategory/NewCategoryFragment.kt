@@ -65,16 +65,25 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
 
             btnAddCategory.onClick {
                 val category = etCategoryName.text.toString()
-                val wholesalePercent = etWholesalePercent.text.toString().filter { p->p.isDigit() }
-                val minPercent = etMinPercent.text.toString().filter { p->p.isDigit() }
-                val maxPercent = etMaxPercent.text.toString().filter { p->p.isDigit() }
-                val minQuantity = etMinQuantity.text.toString().filter { i->i.isDigit() }
+                val wholesalePercent =
+                    etWholesalePercent.text.toString().filter { p -> p.isDigit() }
+                val minPercent = etMinPercent.text.toString().filter { p -> p.isDigit() }
+                val maxPercent = etMaxPercent.text.toString().filter { p -> p.isDigit() }
+                val minQuantity = etMinQuantity.text.toString().filter { i -> i.isDigit() }
 
                 if (category.isNotEmpty() && wholesalePercent.isNotEmpty() && minPercent.isNotEmpty()
-                    && maxPercent.isNotEmpty() && minQuantity.isNotEmpty()) {
-                    viewModel.createdNewCategory( NewCategory(category,minQuantity.toInt(),
-                        Percent(wholesalePercent.toInt(),minPercent.toInt(),maxPercent.toInt())
-                    ))
+                    && maxPercent.isNotEmpty() && minQuantity.isNotEmpty()
+                ) {
+                    viewModel.createdNewCategory(
+                        NewCategory(
+                            category, minQuantity.toInt(),
+                            Percent(
+                                wholesalePercent.toInt(),
+                                minPercent.toInt(),
+                                maxPercent.toInt()
+                            )
+                        )
+                    )
                     setupObserver()
                 } else {
                     if (category.isEmpty()) {
@@ -105,15 +114,18 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
         }
     }
 
-    private fun setupObserver(){
-        viewModel.newCategory.observe(viewLifecycleOwner,{
-            when(it.status){
-                ResourceState.LOADING->{setLoading(true)}
-                ResourceState.SUCCESS->{setLoading(false)
+    private fun setupObserver() {
+        viewModel.newCategory.observe(viewLifecycleOwner, {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    setLoading(true)
+                }
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
                     if (it.data!!.successful) {
                         val alertDialog = AlertDialog.Builder(requireContext())
                         alertDialog.setTitle("Muvaffaqiyatli!")
-                        alertDialog.setMessage("Kategorya muvaffaqiyatli qoshildi!")
+                        alertDialog.setMessage("Kategoriya muvaffaqiyatli qo'shildi!")
                         alertDialog.show()
                         binding.apply {
                             etCategoryName.text!!.clear()
@@ -129,7 +141,10 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                         showMessage(it.data.message)
                     }
                 }
-                ResourceState.ERROR->{setLoading(false)}
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
             }
         })
     }

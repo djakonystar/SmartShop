@@ -1,8 +1,8 @@
 package uz.texnopos.elektrolife.ui.warehouse
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -26,8 +26,8 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var navController: NavController
     private val viewModel: WarehouseViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
-    private var productsList = listOf<Product>()
     private var sortType = "byFewRemain"
+    private var searchValue = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,18 +52,24 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
-                viewModel.getProductsFromWarehouse()
+                viewModel.getProductsByName(searchValue)
             }
 
             etSearch.addTextChangedListener {
-                val products = adapter.models
-                adapter.models = products.filter { product ->
-                    product.name.contains(it.toString(), true)
+                searchValue = it.toString()
+                viewModel.getProductsByName(searchValue)
+            }
+
+            etSearch.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    viewModel.getProductsByName(searchValue)
+                    return@setOnEditorActionListener true
                 }
+                return@setOnEditorActionListener false
             }
         }
 
-        viewModel.getProductsFromWarehouse()
+        viewModel.getProductsByName(searchValue)
         setUpObservers()
     }
 
@@ -75,23 +81,21 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         val products = it.data.payload
-                        adapter.models = it.data.payload
-//                        when (sortType) {
-//                            "byFewRemain" -> {
-//                                adapter.models = it.data.payload
-//                                    .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
-//                            }
-//                            "byProduct" -> products
-//                                .sortedBy { t -> t.name.lowercase() }
-//                            "byCategory" -> products
-//                                .sortedBy { t -> t.name.lowercase() }
-//                                .sortedBy { t -> t.category.name.lowercase() }
-//                            "byRemainAscend" -> products
-//                                .sortedBy { t -> t.remained }
-//                            "byRemainDescend" -> products
-//                                .sortedByDescending { t -> t.remained }
-//                            else -> products
-//                        }
+//                        adapter.models = it.data.payload
+                        adapter.models = when (sortType) {
+                            "byFewRemain" -> products
+                                .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+                            "byProduct" -> products
+                                .sortedBy { t -> t.name.lowercase() }
+                            "byCategory" -> products
+                                .sortedBy { t -> t.name.lowercase() }
+                                .sortedBy { t -> t.category.name?.lowercase() }
+                            "byRemainAscend" -> products
+                                .sortedBy { t -> t.remained }
+                            "byRemainDescend" -> products
+                                .sortedByDescending { t -> t.remained }
+                            else -> products
+                        }
                     } else {
                         showMessage(it.data.message)
                     }
@@ -102,6 +106,8 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 }
             }
         }
+
+
     }
 
     private fun setLoading(loading: Boolean) {
@@ -133,7 +139,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     sortType = "byFewRemain"
                 }
             }
-            viewModel.getProductsFromWarehouse()
+            viewModel.getProductsByName(searchValue)
             return@setOnMenuItemClickListener true
         }
         optionsMenu.show()

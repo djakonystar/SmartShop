@@ -18,6 +18,7 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.dialPhone
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.FragmentClientsBinding
@@ -172,28 +173,15 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                                 }
                             }
                             adapter.models = mutableClient
+                            val debts = mutableClient.filter { c -> c.balance!! < 0 }
+                                .sumOf { c -> c.balance!! }.toLong()
+                            binding.tvDebtPrice.text =
+                                context?.getString(R.string.total_debt_text, debts.toSumFormat)
                             page++
                         } else {
                             showMessage(it.data!!.message)
                         }
                     }
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showMessage(it.message)
-                }
-            }
-        }
-
-        newClientViewModel.registerNewClient.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    showMessage(context?.getString(R.string.client_successfully_added))
-                    mutableClient = mutableListOf()
-                    page = 1
-                    viewModel.getClients(limit, page, binding.etSearch.text.toString())
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

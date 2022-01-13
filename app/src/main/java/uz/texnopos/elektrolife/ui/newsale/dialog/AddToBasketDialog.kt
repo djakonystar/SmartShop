@@ -48,7 +48,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
             tvWholesale.text = context?.getString(
                 R.string.wholesale_price_text,
-                product.priceWholesale.toSumFormat
+                product.priceWholesale.toString()
             )
             tvMin.text =
                 context?.getString(R.string.min_price_text, product.priceMin.toLong().toSumFormat)

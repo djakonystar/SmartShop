@@ -15,6 +15,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,6 +50,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
         )
 
         binding.apply {
+            tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
             actSpinner.setAdapter(ArrayAdapter(requireContext(), R.layout.item_spinner, list))
             actSpinner.setOnFocusChangeListener { _, b ->
                 if (b) {
@@ -158,7 +160,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         } else {
                             tilCash.error = context?.getString(R.string.required_field)
                         }
-                        debt = totalPrice - cash
+                        debt = if (cash < totalPrice) totalPrice - cash else 0
                         if (debt > 0) {
                             dateRequired = true
                         }
@@ -181,7 +183,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         } else {
                             tilCard.error = context?.getString(R.string.required_field)
                         }
-                        debt = totalPrice - card
+                        debt = if (card < totalPrice) totalPrice - card else 0
                         if (debt > 0) {
                             dateRequired = true
                         }
@@ -227,7 +229,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         } else {
                             tilCard.error = context?.getString(R.string.required_field)
                         }
-                        debt = totalPrice - (card + cash)
+                        debt = if (card + cash < totalPrice) totalPrice - (card + cash) else 0
                         if (debt > 0) {
                             dateRequired = true
                         }

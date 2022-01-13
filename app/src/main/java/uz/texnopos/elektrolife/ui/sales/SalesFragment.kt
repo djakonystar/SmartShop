@@ -147,8 +147,11 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     if (it.data!!.successful) {
                         adapter.models = it.data.payload
                         val total = it.data.payload.sumOf { sale -> sale.basket.price }.toLong()
+                        val debts = it.data.payload.sumOf { sale -> sale.basket.debt }.toLong()
                         binding.tvTotalPrice.text =
                             context?.getString(R.string.total_sum_text, total.toSumFormat)
+                        binding.tvDebtPrice.text =
+                            context?.getString(R.string.total_debt_text, debts.toSumFormat)
                     } else {
                         showMessage(it.data.message)
                     }

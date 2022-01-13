@@ -49,6 +49,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         categoryViewModel.getProductByName(searchValue)
         setUpObservers()
 
+
         abBinding.apply {
             btnHome.onClick {
                 navController.popBackStack()
@@ -124,7 +125,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     }
 
     private fun setUpObservers() {
-        categoryViewModel.categories.observe(viewLifecycleOwner, {
+        categoryViewModel.categories.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -138,9 +139,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     showMessage(it.message)
                 }
             }
-        })
+        }
 
-        categoryViewModel.products.observe(viewLifecycleOwner, {
+        categoryViewModel.products.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -153,7 +154,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                             product.categoryId == selectedCategoryId
                         } as MutableList<Product>
                     }
-                    //    Log.d("razmer", productsList.size.toString())
                     productNewSaleAdapter.models = productsList
                     showLottieAnimation(productsList.isEmpty())
                 }
@@ -162,7 +162,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     showMessage(it.message)
                 }
             }
-        })
+        }
     }
 
     private fun addNewChip(category: CatalogCategory) {
