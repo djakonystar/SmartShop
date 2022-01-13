@@ -189,22 +189,5 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                 }
             }
         }
-
-        newClientViewModel.registerNewClient.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    showMessage(context?.getString(R.string.client_successfully_added))
-                    mutableClient = mutableListOf()
-                    page = 1
-                    viewModel.getClients(limit, page, binding.etSearch.text.toString())
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showMessage(it.message)
-                }
-            }
-        }
     }
 }

@@ -72,6 +72,12 @@ interface ApiInterface {
         @Header("Authorization") token: String
     ): Observable<GenericResponse<List<uz.texnopos.elektrolife.data.model.warehouse.Product>>>
 
+    @GET("api/warehouse")
+    fun getProductsFromWarehouse(
+        @Header("Authorization") token: String,
+        @Query("search") search: String
+    ): Observable<GenericResponse<List<uz.texnopos.elektrolife.data.model.warehouse.Product>>>
+
     @POST("api/login")
     fun signIn(
         @Body signInPost: SignInPost

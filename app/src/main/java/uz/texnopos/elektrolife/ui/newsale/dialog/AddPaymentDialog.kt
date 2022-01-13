@@ -15,6 +15,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,6 +50,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
         )
 
         binding.apply {
+            tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
             actSpinner.setAdapter(ArrayAdapter(requireContext(), R.layout.item_spinner, list))
             actSpinner.setOnFocusChangeListener { _, b ->
                 if (b) {

@@ -37,4 +37,24 @@ class WarehouseViewModel(private val api: ApiInterface, private val settings: Se
                 )
         )
     }
+
+    fun getProductsByName(name: String) {
+        mutableWarehouseProducts.value = Resource.loading()
+        compositeDisposable.add(
+            api.getProductsFromWarehouse(
+                "Bearer ${settings.token}", name
+            )
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        mutableWarehouseProducts.value = Resource.success(response)
+                    },
+                    { error ->
+                        mutableWarehouseProducts.value =
+                            Resource.error(error.localizedMessage)
+                    }
+                )
+        )
+    }
 }
