@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_mainFragment_to_newCategoryFragment"
             app:destination="@id/newCategoryFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_financeFragment"
+            app:destination="@id/financeFragment" />
     </fragment>
     <fragment
         android:id="@+id/newClientFragment"
@@ -134,4 +137,47 @@
         <argument android:name="products"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/financeFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.FinanceFragment"
+        android:label="fragment_finance"
+        tools:layout="@layout/fragment_finance" >
+        <action
+            android:id="@+id/action_financeFragment_to_expenseFragment"
+            app:destination="@id/expenseFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_incomeFragment"
+            app:destination="@id/incomeFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_salesFragment"
+            app:destination="@id/salesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expenseFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.expense.ExpenseFragment"
+        android:label="fragment_expense"
+        tools:layout="@layout/fragment_expense" >
+        <action
+            android:id="@+id/action_expenseFragment_to_expenseAddFragment"
+            app:destination="@id/expenseAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/incomeFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.income.IncomeFragment"
+        android:label="fragment_income"
+        tools:layout="@layout/fragment_income" >
+        <action
+            android:id="@+id/action_incomeFragment_to_incomeAddFragment"
+            app:destination="@id/incomeAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expenseAddFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.expense.ExpenseAddFragment"
+        android:label="fragment_expense_add"
+        tools:layout="@layout/fragment_expense_add" />
+    <fragment
+        android:id="@+id/incomeAddFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.income.IncomeAddFragment"
+        android:label="fragment_income_add"
+        tools:layout="@layout/fragment_income_add" />
 </navigation>

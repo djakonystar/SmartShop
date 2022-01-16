@@ -13,6 +13,8 @@ import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientsAdapter
 import uz.texnopos.elektrolife.ui.client.ClientsViewModel
+import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
+import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
 import uz.texnopos.elektrolife.ui.main.MainViewModel
 import uz.texnopos.elektrolife.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
@@ -80,6 +82,7 @@ val viewModelModule = module {
     viewModel { NewClientViewModel(get(), get()) }
     viewModel { OrderViewModel(get(),get()) }
     viewModel { MainViewModel(get(), get()) }
+    viewModel { FinanceViewModel(get(), get()) }
 }
 
 val adapterModule = module {
@@ -89,4 +92,5 @@ val adapterModule = module {
     single { WarehouseAdapter() }
     single { NewSaleProductAdapter() }
     single { OrderAdapter() }
+    single { FinanceDetailAdapter() }
 }

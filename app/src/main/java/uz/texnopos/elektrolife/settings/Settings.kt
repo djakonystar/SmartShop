@@ -13,6 +13,12 @@ class Settings(context: Context) {
         const val PRODUCT = "product"
         const val PIN = "pin"
         const val DOLLAR_RATE = "dollarRate"
+
+        /**
+         * Finance type on creating new **Expense**
+         */
+        const val FINANCE_EXPENSE = "consumption"
+        const val FINANCE_INCOME = "income"
     }
 
     private val preferences: SharedPreferences =

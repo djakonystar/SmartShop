@@ -3,12 +3,17 @@ package uz.texnopos.elektrolife.core
 import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
-import java.lang.Exception
+import com.google.android.material.textfield.TextInputEditText
 import java.util.*
 
-class MaskWatcherPaymentDollar(private val editText: EditText) : TextWatcher {
-    override fun beforeTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {}
+class MaskWatcherPaymentDollar(private val editText: TextInputEditText) : TextWatcher {
+    override fun beforeTextChanged(
+        charSequence: CharSequence,
+        start: Int,
+        count: Int,
+        after: Int,
+    ) {
+    }
 
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
@@ -21,16 +26,22 @@ class MaskWatcherPaymentDollar(private val editText: EditText) : TextWatcher {
                 if (value.startsWith(".")) {
                     editText.setText("0.")
                 }
-                if (value.startsWith("0") && !value.startsWith("0.")) {
-                    editText.setText("")
-                }
+//                if (value.startsWith("0") && !value.startsWith("0.")) {
+//                    editText.setText("")
+//                }
 
                 val str: String = editText.text.toString().replace(" ", "")
                 if (str == "USD") editText.setText("")
-                else{
-                    var d=""
-                    for (i in str) if (i.isDigit()) d+=i
-                    editText.setText("${d.toDecimalFormat()} USD")
+                else {
+                    var dotIndex = str.indexOf('.')
+                    if (dotIndex != -1) dotIndex += 5
+                    var d = ""
+                    val k = dotIndex == -1 || str.length in dotIndex - 1..dotIndex + 1
+                    for (i in str) if ((i.isDigit() || i == '.')) d += i
+                    val o = (if (k) d else d.substring(0, d.length - 1)).toDecimalFormat()
+                    val saved = "$o USD"
+                    editText.setText(saved)
+
                 }
                 editText.setSelection(editText.text.toString().length - 4)
             }

@@ -6,7 +6,7 @@ import android.text.TextWatcher
 import com.google.android.material.textfield.TextInputEditText
 import java.util.*
 
-class MaskWatcherPriceDecimal(private val editText: TextInputEditText) : TextWatcher {
+class MaskWatcherPaymentDecimal(private val editText: TextInputEditText) : TextWatcher {
     override fun beforeTextChanged(
         charSequence: CharSequence,
         start: Int,
@@ -31,7 +31,7 @@ class MaskWatcherPriceDecimal(private val editText: TextInputEditText) : TextWat
 //                }
 
                 val str: String = editText.text.toString().replace(" ", "")
-                if (str == "USD") editText.setText("")
+                if (str == "UZS") editText.setText("")
                 else {
                     var dotIndex = str.indexOf('.')
                     if (dotIndex != -1) dotIndex += 5
@@ -39,7 +39,7 @@ class MaskWatcherPriceDecimal(private val editText: TextInputEditText) : TextWat
                     val k = dotIndex == -1 || str.length in dotIndex - 1..dotIndex + 1
                     for (i in str) if ((i.isDigit() || i == '.')) d += i
                     val o = (if (k) d else d.substring(0, d.length - 1)).toDecimalFormat()
-                    val saved = "$o USD"
+                    val saved = "$o UZS"
                     editText.setText(saved)
 
                 }
