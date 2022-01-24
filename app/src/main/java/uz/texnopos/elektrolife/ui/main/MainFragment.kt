@@ -30,9 +30,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
-            sales.onClick {
-                navController.navigate(R.id.action_mainFragment_to_salesFragment)
-            }
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
@@ -63,10 +60,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     ivOther.isVisible = false
                     iconNewProduct.setBackgroundColor(resources.getColor(R.color.is_enabled_color))
                     titleNewProduct.setBackgroundColor(resources.getColor(R.color.is_enabled_color))
+                    titleFinance.text = context?.getString(R.string.sales)
+                    iconFinance.setImageResource(R.drawable.sales)
+                    finance.onClick {
+                        navController.navigate(R.id.action_mainFragment_to_salesFragment)
+                    }
                 }
                 "admin" -> {
                     newProduct.isEnabled = true
                     ivOther.isVisible = true
+                    finance.onClick {
+                        navController.navigate(R.id.action_mainFragment_to_financeFragment)
+                    }
                 }
                 else -> showMessage("Administratsiyaga murojaat qiling")
             }

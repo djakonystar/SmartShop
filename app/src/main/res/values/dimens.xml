@@ -42,4 +42,5 @@
     <dimen name="chip_min_touch_target_size">4dp</dimen>
     <dimen name="margin_large_standard">24dp</dimen>
     <dimen name="margin_48">48dp</dimen>
+    <dimen name="fab_custom_size">72dp</dimen>
 </resources>

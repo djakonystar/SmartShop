@@ -145,9 +145,9 @@ val Number.toSumFormat: String
 
 val Double.toSumFormat: String
     get() {
-        var num = this.toInt().toSumFormat
-        val l = this.toString().length - this.toInt().toString().length - 1
-        val afterPoint = ("%.${l}f".format(this)).substringAfter(',')
+        var num = this.toLong().toSumFormat
+        val l = this.toString().length - this.toLong().toString().length - 1
+        val afterPoint = ("%.${2}f".format(this)).substringAfter(',')
         num += if (afterPoint == "0") ".00" else {
             if (afterPoint.length == 1) ".${afterPoint}0"
             else ".$afterPoint"
@@ -187,4 +187,23 @@ val String.toPhoneNumberFromFull: String
         return phone
     }
 
-
+/**
+ * Change date format from _yyyy-MM-dd_ to _dd.MM.yyyy_ and vice versa
+ */
+val String.changeDateFormat: String
+    get() {
+        val day: String
+        val month: String
+        val year: String
+        return if (this.contains('-')) {
+            day = this.substring(8..9)
+            month = this.substring(5..6)
+            year = this.substring(0..3)
+            "$day.$month.$year"
+        } else {
+            day = this.substring(0..1)
+            month = this.substring(3..4)
+            year = this.substring(6..9)
+            "$year-$month-$day"
+        }
+    }

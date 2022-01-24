@@ -5,6 +5,9 @@ import retrofit2.http.*
 import uz.texnopos.elektrolife.data.model.clients.ClientInfo
 import uz.texnopos.elektrolife.data.GenericResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.finance.Balance
+import uz.texnopos.elektrolife.data.model.finance.Finance
+import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.data.model.sales.Sales
 import uz.texnopos.elektrolife.data.model.signin.SignInPayload
 import uz.texnopos.elektrolife.data.model.signin.SignInPost
@@ -128,4 +131,35 @@ interface ApiInterface {
     fun getDollarRate(
         @Header("Authorization") token: String
     ): Observable<GenericResponse<DollarRate>>
+
+    /**
+     * Finance: Get cashbox balance
+     */
+    @GET("api/balance")
+    fun getCashboxBalance(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<Balance>>
+
+    /**
+     * Finance: Add new finance detail
+     */
+    @POST("api/consumption/new")
+    fun addFinanceDetail(
+        @Header("Authorization") token: String,
+        @Body finance: FinancePost
+    ): Observable<GenericResponse<List<String>>>
+
+    /**
+     * Finance: Get finance details between two dates.
+     * _to_ - start date;
+     * _do_ - end date;
+     * _type_ - type of finance detail
+     */
+    @GET("api/consumption")
+    fun getFinanceDetails(
+        @Header("Authorization") token: String,
+        @Query("to") from: String,
+        @Query("do") to: String,
+        @Query("type") type: String
+    ): Observable<GenericResponse<List<Finance>>>
 }

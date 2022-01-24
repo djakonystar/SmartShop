@@ -3,7 +3,6 @@ package uz.texnopos.elektrolife.ui.newproduct
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
@@ -69,7 +68,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         viewModel.getCategories()
 
         binding.apply {
-            etWholesalePrice.addTextChangedListener(MaskWatcherPriceDecimal(etWholesalePrice))
+            etWholesalePrice.addTextChangedListener(MaskWatcherPaymentDollar(etWholesalePrice))
             etMinPrice.addTextChangedListener(MaskWatcherPayment(etMinPrice))
             etMaxPrice.addTextChangedListener(MaskWatcherPayment(etMaxPrice))
             etProductQuantity.addTextChangedListener(MaskWatcherNothing(etProductQuantity))
@@ -110,7 +109,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 maxPercent = mutableList[i].percentMax
             }
 
-            etCostPrice.addTextChangedListener(MaskWatcherPriceDecimal(etCostPrice))
+            etCostPrice.addTextChangedListener(MaskWatcherPaymentDollar(etCostPrice))
             etCostPrice.doOnTextChanged { it, _, _, _ ->
                 if (it.isNullOrEmpty()) {
                     liveCostPrice.postValue(0.0)

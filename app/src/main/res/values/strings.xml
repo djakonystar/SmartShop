@@ -117,4 +117,34 @@
     <string name="confirm_remove_uz">Siz rostdan ham ushbu mahsulotni savatdan o\'chirmoqchimisiz?</string>
     <string name="price_visibility_en">Price visibility</string>
     <string name="dollar_rate_text">1$ = %s UZS</string>
+    <string name="finance">Moliya</string>
+    <string name="cashbox_icon">Cashbox Icon</string>
+    <string name="expenses">Xarajatlar</string>
+    <string name="expense_any">Boshqalar</string>
+    <string name="expense_administrative">Ma\'muriy xarajatlar</string>
+    <string name="expense_rent">Ijara to\'lovlari</string>
+    <string name="expense_salary">Oylik</string>
+    <string name="expense_investments">Investitsiyalar</string>
+    <string name="expense_office">Idora</string>
+    <string name="expense_taxes">Soliqlar</string>
+    <string name="expense_household">Uy xarajatlari</string>
+    <string name="expense_any_short">Bosh\nqa</string>
+    <string name="expense_administrative_short">Ma\'m\nxar</string>
+    <string name="expense_rent_short">Ija\nra</string>
+    <string name="expense_salary_short">Oy\nlik</string>
+    <string name="expense_investments_short">Inv\nest</string>
+    <string name="expense_office_short">Ido\nra</string>
+    <string name="expense_taxes_short">So\nliq</string>
+    <string name="expense_household_short">Xo\'j\nxar</string>
+    <string name="new_expense">Yangi xarajat</string>
+    <string name="expense_en">Expense</string>
+    <string name="description">Nomi</string>
+    <string name="category">Kategoriya</string>
+    <string name="payee">Oluvchi</string>
+    <string name="add_expense">Xarajat qo\'shish</string>
+    <string name="not_selected">Tanlanmagan</string>
+    <string name="payer">Beruvchi</string>
+    <string name="add_income">Kirim qo\'shish</string>
+    <string name="incomes">Kirimlar</string>
+    <string name="cashbox_title">Hozir kassada:</string>
 </resources>
