@@ -21,7 +21,6 @@ import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
 
 class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
-    private var liveQuantity = MutableLiveData<Long>()
     private var visibilityLiveData = MutableLiveData<Boolean>()
 
     override fun onCreateView(

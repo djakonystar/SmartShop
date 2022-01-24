@@ -16,12 +16,15 @@ class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
         fun populateModel(model: Client) {
             binding.apply {
                 tvName.text = model.name
-                tvBalance.text = if (model.balance?:0 < 0) {
+                tvBalance.text = if (model.balance ?: 0 < 0) {
                     "-${(-1 * model.balance!!).toString().toSumFormat}"
                 } else {
                     model.balance.toString().toSumFormat
                 }
-                tvUserType.text = if (model.type == 0) "J" else "Yu"
+                tvUserType.text =
+                    if (model.type == 0) itemView.context?.getString(R.string.natural_person_short) else itemView.context?.getString(
+                        R.string.legal_person_short
+                    )
                 itemView.onClick {
                     onItemClick.invoke(model)
                 }

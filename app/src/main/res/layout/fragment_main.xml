@@ -28,6 +28,21 @@
         android:padding="@dimen/padding_small"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toTopOf="@id/new_sale"
+        app:layout_constraintEnd_toStartOf="@id/ivLang"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivLang"
+        android:layout_width="@dimen/action_bar_icon_size"
+        android:layout_height="@dimen/action_bar_icon_size"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/lang_title"
+        android:focusable="true"
+        android:padding="@dimen/padding_small"
+        android:src="@drawable/language"
+        app:layout_constraintBottom_toTopOf="@id/new_sale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

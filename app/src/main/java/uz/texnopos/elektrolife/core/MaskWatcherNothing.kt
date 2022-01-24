@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import uz.texnopos.elektrolife.R
 import java.util.*
 
 class MaskWatcherNothing(private val editText: EditText) : TextWatcher {
@@ -25,11 +26,12 @@ class MaskWatcherNothing(private val editText: EditText) : TextWatcher {
                 }
 
                 val str: String = editText.text.toString().replace(" ", "")
-                if (str == "dona") editText.setText("")
+                if (str == editText.context?.getString(R.string.count)) editText.setText("")
                 else{
                     var d=""
                     for (i in str) if (i.isDigit()) d+=i
-                    editText.setText("${d.toDecimalFormat()} dona")
+                    val count = d.toDecimalFormat()
+                    editText.setText(editText.context?.getString(R.string.count_text, count))
                 }
                 editText.setSelection(editText.text.toString().length - 5)
             }

@@ -121,9 +121,9 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
 
             btnAddPayment.onClick {
                 if (method.isEmpty()) {
-                    showMessage("To'lov turini tanlang")
+                    showMessage(context?.getString(R.string.choose_payment_type))
                 } else if (etPaymentCard.text!!.isEmpty() && etPaymentCash.text!!.isEmpty() && etSearchClient.text!!.isEmpty()) {
-                    showMessage("Iltimos mijozni tanlang va to'lovni to'liq kiriting")
+                    showMessage(context?.getString(R.string.choose_client_and_fill_payment))
                 } else if (rb1.isChecked && etPaymentCash.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
                     cash = etPaymentCash.text.toString()
                     cash = cash.replace("\\s".toRegex(), "")
@@ -144,7 +144,7 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                     comment = etComment.text.toString()
                     viewModel.newPayment(NewPayment(clientId, cash.toInt(), card.toInt(), comment))
                 } else {
-                    showMessage("Iltimos mijozni tanlang va to'lovni to'liq kiriting")
+                    showMessage(context?.getString(R.string.choose_client_and_fill_payment))
                 }
             }
         }
@@ -165,8 +165,8 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         val alertDialog = AlertDialog.Builder(requireContext())
-                        alertDialog.setTitle("Muvaffaqiyatli!")
-                        alertDialog.setMessage("To'lov muvaffaqiyatli amalga oshirildi!")
+                        alertDialog.setTitle(context?.getString(R.string.success))
+                        alertDialog.setMessage(context?.getString(R.string.payment_successfully))
                         alertDialog.show()
                         binding.apply {
                             etSearchClient.text.clear()

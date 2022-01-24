@@ -124,8 +124,8 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         val alertDialog = AlertDialog.Builder(requireContext())
-                        alertDialog.setTitle("Muvaffaqiyatli!")
-                        alertDialog.setMessage("Kategoriya muvaffaqiyatli qo'shildi!")
+                        alertDialog.setTitle(context?.getString(R.string.success))
+                        alertDialog.setMessage(context?.getString(R.string.category_added_successfully))
                         alertDialog.show()
                         binding.apply {
                             etCategoryName.text!!.clear()
