@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         val res = resources
         val dm = res.displayMetrics
         val conf = res.configuration
-        conf.locale = locale
+        conf.setLocale(locale)
         res.updateConfiguration(conf, dm)
     }
 
