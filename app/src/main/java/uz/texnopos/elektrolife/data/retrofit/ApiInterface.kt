@@ -151,9 +151,9 @@ interface ApiInterface {
 
     /**
      * Finance: Get finance details between two dates.
-     * _to_ - start date;
-     * _do_ - end date;
-     * _type_ - type of finance detail
+     * [from] - start date;
+     * [to] - end date;
+     * [type] - type of finance detail
      */
     @GET("api/consumption")
     fun getFinanceDetails(

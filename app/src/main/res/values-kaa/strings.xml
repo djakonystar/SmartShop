@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ElektroLife</string>
     <string name="warehouse">Qoyma</string>
     <string name="clients">Klientler</string>
     <string name="new_client">Jańa klient</string>
     <string name="sales">Satıwlar</string>
     <string name="new_sale">Jańa satıw</string>
     <string name="new_payment">Jańa tólem</string>
-    <string name="home_button">Home Button</string>
     <string name="full_name">F. A. Á.</string>
     <string name="phone_number">Telefon nomer</string>
     <string name="legal_person">Yuridikalıq tárep</string>
@@ -31,21 +29,15 @@
     <string name="mix">Aralas</string>
     <string name="cancel_uzb">Biykarlaw</string>
     <string name="done_uzb">Saylaw</string>
-    <string name="call">Call</string>
-    <string name="uzs">UZS</string>
     <string name="close">Jabıw</string>
     <string name="search">Izlew</string>
     <string name="count_text">%s dana</string>
-    <string name="sum_text">%s UZS</string>
-    <string name="dollar_text">%s USD</string>
-    <string name="sort_button">Sort Button</string>
     <string name="by_product_name">Ónim atı boyınsha</string>
     <string name="by_category">Taraw boyınsha</string>
     <string name="by_remain">Qaldıq boyınsha</string>
     <string name="by_ascend">Ósiw tártibinde</string>
     <string name="by_descend">Kemeyiw tártibinde</string>
     <string name="by_few_remain">Az qalǵanları boyınsha</string>
-    <string name="status_indicator">Status Indicator</string>
     <string name="payment_cash">Naq</string>
     <string name="payment_card">Karta</string>
     <string name="choose_category">Tarawdı saylań</string>
@@ -64,7 +56,6 @@
     <string name="category_name">Taraw atı</string>
     <string name="min_quantity">Minimum muǵdarı</string>
     <string name="min_quantity_hint">Qoymadaǵı usı tarawǵa tiyisli ónimler usı muǵdardan az bolsa az qalǵan esaplanadı</string>
-    <string name="add_new_category_desc">Add New Category</string>
     <string name="search_client_hint">Klienttı atı familiyası boyınsha izlewińiz múmkin</string>
     <string name="add_payment">Tólemdi qosıw</string>
     <string name="choose_payment_method">Tólem túrin saylań</string>
@@ -92,34 +83,23 @@
     <string name="max_price_text">Bahası: %s UZS</string>
     <string name="quantity">Sanı</string>
     <string name="pay">Tólew</string>
-    <string name="counter_text">%s/%s</string>
     <string name="not_enough_error">Ónim jeterli emes!</string>
-    <string name="basket_en">Basket</string>
     <string name="confirm_order">Buyırtpanı ámelge asırıw</string>
-    <string name="delete_product">Delete product</string>
     <string name="total_sum_text">Summa: %s UZS</string>
     <string name="total_debt_text">Qarız: %s UZS</string>
     <string name="input_correct_info">Anıq maǵlıwmat kiritiń</string>
     <string name="basket_empty_warning">Aldın sebetke ónim qosıń!</string>
-    <string name="add_to_basket_en">Add to basket</string>
     <string name="choose_date_uz">Sáneni saylań</string>
-    <string name="add_client_en">Add Client</string>
-    <string name="add_category_en">Add Category</string>
     <string name="product_added_successfully">Ónim tabıslı qosıldı!</string>
     <string name="product_quantity_helper">Qoymaǵa usı ónimnen qansha muǵdarda qosılıwı</string>
     <string name="set_duration">Múddetti kórsetiń</string>
     <string name="today">Búgin</string>
-    <string name="type_of_payment_three">%s/%s/%s</string>
-    <string name="type_of_payment_two">%s/%s</string>
     <string name="start_date">...dan</string>
     <string name="end_date">...ǵa shekem</string>
     <string name="calculate">Esaplaw</string>
     <string name="remove_uz">Óshiriw</string>
     <string name="confirm_remove_uz">Siz haqıyqatında da usı ónimdi sebetten óshirmekshisiz be?</string>
-    <string name="price_visibility_en">Price visibility</string>
-    <string name="dollar_rate_text">1$ = %s UZS</string>
     <string name="finance">Finans</string>
-    <string name="cashbox_icon">Cashbox Icon</string>
     <string name="expenses">Shıǵinlar</string>
     <string name="expense_any">Basqalar</string>
     <string name="expense_administrative">Administratsiyalıq shıǵınlar</string>
@@ -138,7 +118,6 @@
     <string name="expense_taxes_short">Sa\nlıq</string>
     <string name="expense_household_short">Xoj\nalıq</string>
     <string name="new_expense">Jańa shıǵın</string>
-    <string name="expense_en">Expense</string>
     <string name="description">Atı</string>
     <string name="category">Taraw</string>
     <string name="payee">Alıwshı</string>

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">ElektroLife</string>
     <string name="warehouse">Omborxona</string>
     <string name="clients">Mijozlar</string>
     <string name="new_client">Yangi mijoz</string>
     <string name="sales">Sotuvlar</string>
     <string name="new_sale">Yangi sotuv</string>
     <string name="new_payment">Yangi to\'lov</string>
-    <string name="home_button">Home Button</string>
     <string name="full_name">F. I. Sh.</string>
     <string name="phone_number">Telefon raqam</string>
     <string name="legal_person">Yuridik shaxs</string>
@@ -31,21 +29,15 @@
     <string name="mix">Aralash</string>
     <string name="cancel_uzb">Bekorlash</string>
     <string name="done_uzb">Saylash</string>
-    <string name="call">Call</string>
-    <string name="uzs">UZS</string>
     <string name="close">Yopish</string>
     <string name="search">Izlash</string>
     <string name="count_text">%s dona</string>
-    <string name="sum_text">%s UZS</string>
-    <string name="dollar_text">%s USD</string>
-    <string name="sort_button">Sort Button</string>
     <string name="by_product_name">Mahsulot nomi bo\'yicha</string>
     <string name="by_category">Kategoriya bo\'yicha</string>
     <string name="by_remain">Qoldiq bo\'yicha</string>
     <string name="by_ascend">O\'sish tartibida</string>
     <string name="by_descend">Kamayish tartibida</string>
     <string name="by_few_remain">Kam qolganlar bo\'yicha</string>
-    <string name="status_indicator">Status Indicator</string>
     <string name="payment_cash">Naqd</string>
     <string name="payment_card">Karta</string>
     <string name="choose_category">Kategoriyani tanlang</string>
@@ -64,7 +56,6 @@
     <string name="category_name">Kategoriya nomi</string>
     <string name="min_quantity">Minimum miqdori</string>
     <string name="min_quantity_hint">Omborxonadagi ushbu kategoriyaga tegishli mahsulotlar shu miqdordan oz bo\'lsa kam qolgan hisoblanadi</string>
-    <string name="add_new_category_desc">Add New Category</string>
     <string name="search_client_hint">Mijozni ism sharifi bo\'yicha izlashingiz mumkin</string>
     <string name="add_payment">To\'lovni qo\'shish</string>
     <string name="choose_payment_method">To\'lov turini tanlang</string>
@@ -92,34 +83,23 @@
     <string name="max_price_text">Narxi: %s UZS</string>
     <string name="quantity">Soni</string>
     <string name="pay">To\'lash</string>
-    <string name="counter_text">%s/%s</string>
     <string name="not_enough_error">Mahsulot yetarli emas!</string>
-    <string name="basket_en">Basket</string>
     <string name="confirm_order">Buyurtmani amalga oshirish</string>
-    <string name="delete_product">Delete product</string>
     <string name="total_sum_text">Summa: %s UZS</string>
     <string name="total_debt_text">Qarz: %s UZS</string>
     <string name="input_correct_info">Aniq ma\'lumot kiriting</string>
     <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
-    <string name="add_to_basket_en">Add to basket</string>
     <string name="choose_date_uz">Sanani tanlang</string>
-    <string name="add_client_en">Add Client</string>
-    <string name="add_category_en">Add Category</string>
     <string name="product_added_successfully">Mahsulot muvaffaqiyatli qo\'shildi!</string>
     <string name="product_quantity_helper">Omborxonaga shu mahsulotdan qancha miqdorda qo\'shilishi</string>
     <string name="set_duration">Muddatni ko\'rsating</string>
     <string name="today">Bugun</string>
-    <string name="type_of_payment_three">%s/%s/%s</string>
-    <string name="type_of_payment_two">%s/%s</string>
     <string name="start_date" tools:ignore="TypographyEllipsis">...dan</string>
     <string name="end_date" tools:ignore="TypographyEllipsis">...gacha</string>
     <string name="calculate">Hisoblash</string>
     <string name="remove_uz">O\'chirish</string>
     <string name="confirm_remove_uz">Siz rostdan ham ushbu mahsulotni savatdan o\'chirmoqchimisiz?</string>
-    <string name="price_visibility_en">Price visibility</string>
-    <string name="dollar_rate_text">1$ = %s UZS</string>
     <string name="finance">Moliya</string>
-    <string name="cashbox_icon">Cashbox Icon</string>
     <string name="expenses">Xarajatlar</string>
     <string name="expense_any">Boshqalar</string>
     <string name="expense_administrative">Ma\'muriy xarajatlar</string>
@@ -150,19 +130,10 @@
     <string name="cashbox_title">Hozir kassada:</string>
     <string name="natural_person_short">J</string>
     <string name="legal_person_short">Yu</string>
-    <string name="expense_any_back" translatable="false">Boshqalar</string>
-    <string name="expense_administrative_back" translatable="false">Ma\'muriy xarajatlar</string>
-    <string name="expense_rent_back" translatable="false">Ijara to\'lovlari</string>
-    <string name="expense_salary_back" translatable="false">Oylik</string>
-    <string name="expense_investments_back" translatable="false">Investitsiyalar</string>
-    <string name="expense_office_back" translatable="false">Idora</string>
-    <string name="expense_taxes_back" translatable="false">Soliqlar</string>
-    <string name="expense_household_back" translatable="false">Uy xarajatlari</string>
     <string name="category_added_successfully">Kategoriya muvaffaqiyatli qo\'shildi!</string>
     <string name="choose_payment_type">To\'lov turini tanlang</string>
     <string name="choose_client_and_fill_payment">Iltimos mijozni tanlang va to\'lovni to\'liq kiriting</string>
     <string name="payment_successfully">To\'lov muvaffaqiyatli amalga oshirildi!</string>
     <string name="count">dona</string>
     <string name="lang_name">O\'zbek</string>
-    <string name="lang_title" translatable="false">Язык/Til</string>
 </resources>
