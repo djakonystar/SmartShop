@@ -68,7 +68,11 @@ class NewClientFragment : Fragment(R.layout.fragment_client_new) {
                     address = etAddress.text.toString()
 
                     if (name.isNotEmpty() && phone.length == 9 && tin.length == 9 && address.isNotEmpty()) {
-                        Snackbar.make(binding.btnAdd, "Success", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            binding.btnAdd,
+                            context?.getString(R.string.success)!!,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     } else {
                         if (name.isEmpty()) tilName.error = getString(R.string.required_field)
                         if (phone.length != 9) tilPhone.error = getString(R.string.required_field)
@@ -77,7 +81,11 @@ class NewClientFragment : Fragment(R.layout.fragment_client_new) {
                     }
                 } else {
                     if (name.isNotEmpty() && phone.length == 9) {
-                        Snackbar.make(binding.btnAdd, "Success", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            binding.btnAdd,
+                            context?.getString(R.string.success)!!,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     } else {
                         if (name.isEmpty()) tilName.error = getString(R.string.required_field)
                         if (phone.length != 9) tilPhone.error = getString(R.string.required_field)

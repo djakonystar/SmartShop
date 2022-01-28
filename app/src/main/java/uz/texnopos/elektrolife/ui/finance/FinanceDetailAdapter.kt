@@ -21,19 +21,19 @@ class FinanceDetailAdapter : BaseAdapter<Finance, FinanceDetailAdapter.FinanceDe
                 tvPayee.text = model.payee
 
                 tvCategoryName.text = when (model.category) {
-                    itemView.context?.getString(R.string.expense_administrative) ->
+                    itemView.context?.getString(R.string.expense_administrative_back) ->
                         itemView.context?.getString(R.string.expense_administrative_short)
-                    itemView.context?.getString(R.string.expense_rent) ->
+                    itemView.context?.getString(R.string.expense_rent_back) ->
                         itemView.context?.getString(R.string.expense_rent_short)
-                    itemView.context?.getString(R.string.expense_salary) ->
+                    itemView.context?.getString(R.string.expense_salary_back) ->
                         itemView.context?.getString(R.string.expense_salary_short)
-                    itemView.context?.getString(R.string.expense_investments) ->
+                    itemView.context?.getString(R.string.expense_investments_back) ->
                         itemView.context?.getString(R.string.expense_investments_short)
-                    itemView.context?.getString(R.string.expense_office) ->
+                    itemView.context?.getString(R.string.expense_office_back) ->
                         itemView.context?.getString(R.string.expense_office_short)
-                    itemView.context?.getString(R.string.expense_taxes) ->
+                    itemView.context?.getString(R.string.expense_taxes_back) ->
                         itemView.context?.getString(R.string.expense_taxes_short)
-                    itemView.context?.getString(R.string.expense_household) ->
+                    itemView.context?.getString(R.string.expense_household_back) ->
                         itemView.context?.getString(R.string.expense_household_short)
                     else -> itemView.context?.getString(R.string.expense_any_short)
                 }

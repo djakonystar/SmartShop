@@ -15,6 +15,7 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.main.dialog.LangDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -47,6 +48,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 //                optionsMenu(it)
                 navController.navigate(MainFragmentDirections.actionMainFragmentToNewCategoryFragment())
             }
+            ivLang.onClick {
+                val dialog = LangDialog()
+                dialog.show(requireActivity().supportFragmentManager, "LangDialog")
+            }
             newSale.onClick {
                 navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
             }
@@ -73,7 +78,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         navController.navigate(R.id.action_mainFragment_to_financeFragment)
                     }
                 }
-                else -> showMessage("Administratsiyaga murojaat qiling")
+                else -> showMessage("Error with roles")
             }
         }
 
@@ -119,7 +124,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                             // todo go to setting
                         }
                         R.id.menuNewCategory -> {
-                            showMessage("Administratsyaga murojaat qiling")
+                            //todo add category
                         }
                     }
                 }

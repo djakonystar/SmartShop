@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.warehouse
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
@@ -17,7 +16,6 @@ class WarehouseAdapter : BaseAdapter<Product, WarehouseAdapter.WarehouseViewHold
         fun populateModel(model: Product) {
             binding.apply {
                 tvName.text = model.name
-                Log.d("testtest", "${model.brand} ${model.name}")
                 tvFirm.text = model.brand
                 tvCategory.text = model.category.name ?: ""
                 tvCount.text = itemView.context?.getString(R.string.count_text, model.remained.toString())

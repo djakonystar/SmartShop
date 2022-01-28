@@ -13,6 +13,8 @@ class Settings(context: Context) {
         const val PRODUCT = "product"
         const val PIN = "pin"
         const val DOLLAR_RATE = "dollarRate"
+        const val FIRST_RUN = "firstRun"
+        const val LANGUAGE = "language"
 
         /**
          * Finance type on creating new **Expense**
@@ -57,4 +59,12 @@ class Settings(context: Context) {
             preferences.edit().putFloat(DOLLAR_RATE, value).apply()
         }
         get() = preferences.getFloat(DOLLAR_RATE, 0.0f)
+
+    var firstRun: Boolean
+        set(value) = preferences.edit().putBoolean(FIRST_RUN, value).apply()
+        get() = preferences.getBoolean(FIRST_RUN, true)
+
+    var language: String
+        set(value) = preferences.edit().putString(LANGUAGE, value).apply()
+        get() = preferences.getString(LANGUAGE, "ru") ?: "ru"
 }

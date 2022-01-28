@@ -13,30 +13,28 @@ import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
-class NewCategoryViewModel(private val api: ApiInterface, private val settings: Settings): ViewModel() {
+class NewCategoryViewModel(private val api: ApiInterface, private val settings: Settings) :
+    ViewModel() {
     private var compositeDisposable = CompositeDisposable()
-    private var _newCategory: MutableLiveData<Resource<GenericResponse<CategoryId>>> = MutableLiveData()
+    private var _newCategory: MutableLiveData<Resource<GenericResponse<CategoryId>>> =
+        MutableLiveData()
     val newCategory: LiveData<Resource<GenericResponse<CategoryId>>> get() = _newCategory
 
-    fun createdNewCategory(newCategory: NewCategory){
+    fun createdNewCategory(newCategory: NewCategory) {
         _newCategory.value = Resource.loading()
         compositeDisposable.add(api.createdCategory("Bearer ${settings.token}", newCategory)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                if (it.successful)
-                    {
+                    if (it.successful) {
                         _newCategory.value = Resource.success(it)
-                    }
-                    else
-                    {
+                    } else {
                         _newCategory.value = Resource.error(it.message)
                     }
-                }
-                ,
+                },
                 {
-                _newCategory.value = Resource.error(it.localizedMessage)
+                    _newCategory.value = Resource.error(it.localizedMessage)
                 }
             )
         )
