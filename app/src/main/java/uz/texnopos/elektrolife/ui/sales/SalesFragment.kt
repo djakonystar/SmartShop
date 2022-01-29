@@ -1,9 +1,13 @@
 package uz.texnopos.elektrolife.ui.sales
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
@@ -17,6 +21,7 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.data.model.sales.Sales
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentSalesBinding
 import java.text.SimpleDateFormat
@@ -28,6 +33,8 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private lateinit var navController: NavController
     private val adapter: SalesAdapter by inject()
     private val viewModel: SalesViewModel by viewModel()
+    private var typeOfPayment = MutableLiveData<Int>()
+    private var allSales = listOf<Sales>()
     private var dateFromInLong = System.currentTimeMillis()
     private var dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
     private var dateFromForBackend =
@@ -36,6 +43,8 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private var dateTo = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateToInLong)
     private var dateToForBackend =
         SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateToInLong)
+    private var lastTotalPrice = 0L
+    private var lastDebtPrice = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,7 +101,10 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     etDateFrom.setText(dateFrom)
                 }
 
-                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
+                datePickerDialog.show(
+                    requireActivity().supportFragmentManager,
+                    datePickerDialog.tag
+                )
             }
 
             etDateTo.onClick {
@@ -115,15 +127,23 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     etDateTo.setText(dateTo)
                 }
 
-                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
+                datePickerDialog.show(
+                    requireActivity().supportFragmentManager,
+                    datePickerDialog.tag
+                )
             }
 
             btnCalculate.onClick {
                 viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
             }
+
+            chipGroup.setOnCheckedChangeListener { _, checkedId ->
+                typeOfPayment.postValue(checkedId)
+                Log.d("checkedId", checkedId.toString())
+            }
         }
 
-
+        typeOfPayment.postValue(-1)
         viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
         setUpObservers()
     }
@@ -139,19 +159,25 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     }
 
     private fun setUpObservers() {
-        viewModel.orders.observe(viewLifecycleOwner, {
+        viewModel.orders.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        adapter.models = it.data.payload
-                        val total = it.data.payload.sumOf { sale -> sale.basket.price }.toLong()
-                        val debts = it.data.payload.sumOf { sale -> sale.basket.debt }.toLong()
-                        binding.tvTotalPrice.text =
-                            context?.getString(R.string.total_sum_text, total.toSumFormat)
-                        binding.tvDebtPrice.text =
-                            context?.getString(R.string.total_debt_text, debts.toSumFormat)
+                        allSales = it.data.payload
+                        adapter.models = when (typeOfPayment.value) {
+                            1 -> allSales.filter { s -> s.basket.cash > 0 }
+                            2 -> allSales.filter { s -> s.basket.card > 0 }
+                            3 -> allSales.filter { s -> s.basket.debt > 0 }
+                            else -> allSales
+                        }
+                        val total = adapter.models.sumOf { sale -> sale.basket.price }.toLong()
+                        val debts = adapter.models.sumOf { sale -> sale.basket.debt }.toLong()
+                        animateTotalPrice(lastTotalPrice, total)
+                        animateDebtPrice(lastDebtPrice, debts)
+                        lastTotalPrice = total
+                        lastDebtPrice = debts
                     } else {
                         showMessage(it.data.message)
                     }
@@ -161,6 +187,49 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     showMessage(it.message)
                 }
             }
-        })
+        }
+
+        typeOfPayment.observe(viewLifecycleOwner) {
+            adapter.models = when (typeOfPayment.value) {
+                1 -> allSales.filter { s -> s.basket.cash > 0 }
+                2 -> allSales.filter { s -> s.basket.card > 0 }
+                3 -> allSales.filter { s -> s.basket.debt > 0 }
+                else -> allSales
+            }
+            val total = adapter.models.sumOf { sale -> sale.basket.price }.toLong()
+            val debts = adapter.models.sumOf { sale -> sale.basket.debt }.toLong()
+            animateTotalPrice(lastTotalPrice, total)
+            animateDebtPrice(lastDebtPrice, debts)
+            lastTotalPrice = total
+            lastDebtPrice = debts
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun animateTotalPrice(start: Long, end: Long) {
+        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+        animator.addUpdateListener {
+            val newValue = (it.animatedValue as Float).toLong().toSumFormat
+            binding.tvTotalPrice.text = context?.getString(
+                R.string.total_sum_text,
+                newValue
+            )
+        }
+        animator.duration = 500
+        animator.start()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun animateDebtPrice(start: Long, end: Long) {
+        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+        animator.addUpdateListener {
+            val newValue = (it.animatedValue as Float).toLong().toSumFormat
+            binding.tvDebtPrice.text = context?.getString(
+                R.string.total_debt_text,
+                newValue
+            )
+        }
+        animator.duration = 500
+        animator.start()
     }
 }
