@@ -15,8 +15,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_middle"
         android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_middle"
         android:hint="@string/start_date"
         app:layout_constraintEnd_toStartOf="@id/tilDateTo"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,8 +40,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_middle"
-        android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:hint="@string/end_date"
         app:layout_constraintEnd_toStartOf="@id/btnCalculate"
         app:layout_constraintStart_toEndOf="@id/tilDateFrom"
@@ -70,10 +70,65 @@
         android:paddingHorizontal="32dp"
         android:text="@string/calculate"
         android:textSize="@dimen/text_size_larger"
-        app:layout_constraintBottom_toTopOf="@id/swipeRefresh"
+        app:layout_constraintBottom_toTopOf="@id/chipGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tilDateTo"
         tools:ignore="SpUsage" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard_middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilDateFrom"
+        app:singleLine="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_middle"
+            android:text="@string/payment_cash"
+            android:textColor="@color/chip_text_color"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            app:chipBackgroundColor="@color/chip_background_color"
+            app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
+            app:chipStrokeColor="@color/app_main_color"
+            app:chipStrokeWidth="1dp"
+            tools:ignore="SpUsage" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_middle"
+            android:text="@string/payment_card"
+            android:textColor="@color/chip_text_color"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            app:chipBackgroundColor="@color/chip_background_color"
+            app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
+            app:chipStrokeColor="@color/app_main_color"
+            app:chipStrokeWidth="1dp"
+            tools:ignore="SpUsage" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_middle"
+            android:text="@string/payment_debt"
+            android:textColor="@color/chip_text_color"
+            android:textSize="@dimen/item_text_size_standard_tablet"
+            app:chipBackgroundColor="@color/chip_background_color"
+            app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
+            app:chipStrokeColor="@color/app_main_color"
+            app:chipStrokeWidth="1dp"
+            tools:ignore="SpUsage" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -82,7 +137,7 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginBottom="@dimen/margin_48"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilDateFrom">
+        app:layout_constraintTop_toBottomOf="@id/chipGroup">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -116,24 +171,24 @@
             android:id="@+id/tvTotalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginVertical="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvDebtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginVertical="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/error_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
