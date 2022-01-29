@@ -135,4 +135,5 @@
     <string name="payment_successfully">Оплачено!</string>
     <string name="count">штук</string>
     <string name="lang_name">Русский</string>
+    <string name="sum_of_sale">Сумма продажи:</string>
 </resources>

@@ -164,4 +164,8 @@
     <string name="count">dona</string>
     <string name="lang_name">O\'zbek</string>
     <string name="lang_title" translatable="false">Язык/Til</string>
+    <string name="debt_icon" translatable="false">Debt Icon</string>
+    <string name="cash_icon" translatable="false">Cash Icon</string>
+    <string name="card_icon" translatable="false">Card Icon</string>
+    <string name="sum_of_sale">Sotuv summasi:</string>
 </resources>
