@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="myKeyboardItem1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="background">@drawable/bg_mykeyboard_item</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/myBlack</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+</resources>

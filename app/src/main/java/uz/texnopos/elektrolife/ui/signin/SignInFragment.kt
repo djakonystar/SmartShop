@@ -8,6 +8,8 @@ import android.os.Vibrator
 import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -46,6 +48,9 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                     viewModel.signIn(signIn = signIn)
                 }
             }
+
+            val ic: InputConnection? = etPassword.onCreateInputConnection(EditorInfo())
+            keyboard.setInputConnection(ic)
         }
 
         setUpObservers()
