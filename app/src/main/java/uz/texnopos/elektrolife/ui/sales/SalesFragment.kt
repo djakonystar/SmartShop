@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
@@ -33,7 +32,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private lateinit var navController: NavController
     private val adapter: SalesAdapter by inject()
     private val viewModel: SalesViewModel by viewModel()
-    private var typeOfPayment = MutableLiveData<Int>()
+    private var typeOfPayment: Int = -1
     private var allSales = listOf<Sales>()
     private var dateFromInLong = System.currentTimeMillis()
     private var dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
@@ -138,12 +137,13 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             }
 
             chipGroup.setOnCheckedChangeListener { _, checkedId ->
-                typeOfPayment.postValue(checkedId)
-                Log.d("checkedId", checkedId.toString())
+                typeOfPayment = checkedId % 3
+                filterSales(typeOfPayment)
+                Log.d("checkedId", "CheckedChipId: $checkedId")
+                Log.d("checkedId", "TypeOfPayment: $typeOfPayment")
             }
         }
 
-        typeOfPayment.postValue(-1)
         viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
         setUpObservers()
     }
@@ -166,18 +166,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         allSales = it.data.payload
-                        adapter.models = when (typeOfPayment.value) {
-                            1 -> allSales.filter { s -> s.basket.cash > 0 }
-                            2 -> allSales.filter { s -> s.basket.card > 0 }
-                            3 -> allSales.filter { s -> s.basket.debt > 0 }
-                            else -> allSales
-                        }
-                        val total = adapter.models.sumOf { sale -> sale.basket.price }.toLong()
-                        val debts = adapter.models.sumOf { sale -> sale.basket.debt }.toLong()
-                        animateTotalPrice(lastTotalPrice, total)
-                        animateDebtPrice(lastDebtPrice, debts)
-                        lastTotalPrice = total
-                        lastDebtPrice = debts
+                        filterSales(typeOfPayment)
                     } else {
                         showMessage(it.data.message)
                     }
@@ -188,21 +177,21 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 }
             }
         }
+    }
 
-        typeOfPayment.observe(viewLifecycleOwner) {
-            adapter.models = when (typeOfPayment.value) {
-                1 -> allSales.filter { s -> s.basket.cash > 0 }
-                2 -> allSales.filter { s -> s.basket.card > 0 }
-                3 -> allSales.filter { s -> s.basket.debt > 0 }
-                else -> allSales
-            }
-            val total = adapter.models.sumOf { sale -> sale.basket.price }.toLong()
-            val debts = adapter.models.sumOf { sale -> sale.basket.debt }.toLong()
-            animateTotalPrice(lastTotalPrice, total)
-            animateDebtPrice(lastDebtPrice, debts)
-            lastTotalPrice = total
-            lastDebtPrice = debts
+    private fun filterSales(id: Int) {
+        adapter.models = when (id) {
+            1 -> allSales.filter { s -> s.basket.cash > 0 }
+            2 -> allSales.filter { s -> s.basket.card > 0 }
+            0 -> allSales.filter { s -> s.basket.debt > 0 }
+            else -> allSales
         }
+        val total = adapter.models.sumOf { sale -> sale.basket.price }.toLong()
+        val debts = adapter.models.sumOf { sale -> sale.basket.debt }.toLong()
+        animateTotalPrice(lastTotalPrice, total)
+        animateDebtPrice(lastDebtPrice, debts)
+        lastTotalPrice = total
+        lastDebtPrice = debts
     }
 
     @SuppressLint("SetTextI18n")

@@ -7,8 +7,8 @@
     android:layout_marginHorizontal="@dimen/margin_middle"
     android:layout_marginVertical="@dimen/margin_small"
     android:background="@color/white"
-    android:foreground="?attr/selectableItemBackground"
     android:elevation="@dimen/elevation_standard"
+    android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/radius_card_view">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,6 +22,7 @@
             android:layout_marginStart="@dimen/margin_middle"
             android:contentDescription="@string/status_indicator"
             android:src="@drawable/red_eclipse"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvClientName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvClientName" />
@@ -30,7 +31,7 @@
             android:id="@+id/tvClientName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginTop="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
             android:clickable="true"
@@ -40,21 +41,35 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toStartOf="@id/tvPaymentInfo"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toEndOf="@id/dot"
             app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/tvTotalPriceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_middle"
+            android:text="@string/sum_of_sale"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvClientName"
             tools:ignore="SpUsage" />
 
         <TextView
             android:id="@+id/tvTotalPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_middle"
-            android:textColor="@color/app_main_color"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="-5dp"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toStartOf="@id/tvPaymentInfo"
-            app:layout_constraintStart_toEndOf="@id/dot"
-            app:layout_constraintTop_toBottomOf="@id/tvClientName"
+            android:textColor="@color/app_main_color"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalPriceTitle"
             tools:ignore="SpUsage" />
 
         <View
@@ -66,7 +81,7 @@
             android:background="#787878"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
+            app:layout_constraintTop_toBottomOf="@id/tvDebtPrice" />
 
         <TextView
             android:id="@+id/tvPaymentInfo"
@@ -75,26 +90,95 @@
             android:layout_marginEnd="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textSize="@dimen/text_size_larger"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvClientName"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="SpUsage" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.62" />
+
+        <ImageView
+            android:id="@+id/ivCash"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_cash"
+            app:layout_constraintBottom_toBottomOf="@id/tvCashPrice"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/tvCashPrice"
+            app:tint="@color/app_main_color" />
+
+        <TextView
+            android:id="@+id/tvCashPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintBottom_toBottomOf="@id/tvClientName"
+            app:layout_constraintStart_toEndOf="@id/ivCash"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivCard"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_card"
+            app:layout_constraintBottom_toBottomOf="@id/tvCardPrice"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/tvCardPrice"
+            app:tint="@color/app_main_color" />
+
+        <TextView
+            android:id="@+id/tvCardPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintStart_toEndOf="@id/ivCard"
+            app:layout_constraintTop_toBottomOf="@id/tvCashPrice"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivDebt"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/debt_icon"
+            android:src="@drawable/ic_debt"
+            app:layout_constraintBottom_toBottomOf="@id/tvDebtPrice"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/tvDebtPrice"
+            app:tint="@color/error_color" />
 
         <TextView
             android:id="@+id/tvDebtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:textColor="@color/error_color"
+            android:layout_marginStart="@dimen/margin_middle"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/tvTotalPrice"
+            android:textColor="@color/error_color"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintStart_toEndOf="@id/ivDebt"
+            app:layout_constraintTop_toBottomOf="@id/tvCardPrice"
             tools:ignore="SpUsage" />
 
         <TextView
             android:id="@+id/tvSellerName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_middle"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginVertical="@dimen/margin_middle"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvDate"

@@ -118,7 +118,6 @@
     <string name="expense_taxes_short">So\nliq</string>
     <string name="expense_household_short">Xo\'j\nxar</string>
     <string name="new_expense">Yangi xarajat</string>
-    <string name="expense_en">Expense</string>
     <string name="description">Nomi</string>
     <string name="category">Kategoriya</string>
     <string name="payee">Oluvchi</string>
@@ -136,4 +135,5 @@
     <string name="payment_successfully">To\'lov muvaffaqiyatli amalga oshirildi!</string>
     <string name="count">dona</string>
     <string name="lang_name">O\'zbek</string>
+    <string name="sum_of_sale">Sotuv summasi:</string>
 </resources>
