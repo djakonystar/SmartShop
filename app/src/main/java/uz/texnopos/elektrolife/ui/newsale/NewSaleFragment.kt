@@ -73,6 +73,13 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         binding.apply {
             recyclerView.adapter = productNewSaleAdapter
 
+            swipeRefresh.setOnRefreshListener {
+                swipeRefresh.isRefreshing = false
+                setLoading(false)
+                categoryViewModel.getCategories()
+                categoryViewModel.getProductByName(searchValue)
+            }
+
             productNewSaleAdapter.onItemClickListener { product ->
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, "")
@@ -141,7 +148,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
         }
 
-        categoryViewModel.products.observe(viewLifecycleOwner) {
+        categoryViewModel.  products.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {

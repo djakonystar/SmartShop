@@ -42,20 +42,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <HorizontalScrollView
+                android:id="@+id/chipGroupScroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_middle"
+                android:layout_marginTop="@dimen/margin_small"
+                android:scrollbars="none"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    app:singleLine="true"
+                    app:singleSelection="true" />
+
+            </HorizontalScrollView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_small"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupScroller"
                 tools:listitem="@layout/item_warehouse"
                 tools:itemCount="3"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/not_found" />
 
     <ProgressBar
         android:id="@+id/progressBar"

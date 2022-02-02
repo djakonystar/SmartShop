@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.warehouse
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.PopupMenu
@@ -9,15 +10,18 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.warehouse.Product
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
+import uz.texnopos.elektrolife.ui.newsale.CategoriesViewModel
 import java.util.*
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
@@ -25,9 +29,14 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
     private val viewModel: WarehouseViewModel by viewModel()
+    private val categoryViewModel: CategoriesViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
     private var sortType = "byFewRemain"
+    private var productsList = mutableListOf<Product>()
+    private var allProductsList = mutableListOf<Product>()
     private var searchValue = ""
+    private var selectedCategoryId = -1
+    private var selectedChipId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +61,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
+                categoryViewModel.getCategories()
                 viewModel.getProductsByName(searchValue)
             }
 
@@ -69,6 +79,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
         }
 
+        categoryViewModel.getCategories()
         viewModel.getProductsByName(searchValue)
         setUpObservers()
     }
@@ -80,22 +91,30 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        val products = it.data.payload
+                        allProductsList = it.data.payload as MutableList<Product>
+                        productsList = if (selectedCategoryId == -1) {
+                            it.data.payload as MutableList<Product>
+                        } else {
+                            it.data.payload.filter { product ->
+                                product.category.id == selectedCategoryId
+                            } as MutableList<Product>
+                        }
 //                        adapter.models = it.data.payload
                         adapter.models = when (sortType) {
-                            "byFewRemain" -> products
+                            "byFewRemain" -> productsList
                                 .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
-                            "byProduct" -> products
+                            "byProduct" -> productsList
                                 .sortedBy { t -> t.name.lowercase() }
-                            "byCategory" -> products
+                            "byCategory" -> productsList
                                 .sortedBy { t -> t.name.lowercase() }
                                 .sortedBy { t -> t.category.name?.lowercase() }
-                            "byRemainAscend" -> products
+                            "byRemainAscend" -> productsList
                                 .sortedBy { t -> t.remained }
-                            "byRemainDescend" -> products
+                            "byRemainDescend" -> productsList
                                 .sortedByDescending { t -> t.remained }
-                            else -> products
+                            else -> productsList
                         }
+                        showLottieAnimation(productsList.isEmpty())
                     } else {
                         showMessage(it.data.message)
                     }
@@ -107,7 +126,21 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
         }
 
-
+        categoryViewModel.categories.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    it.data!!.forEach { category ->
+                        addNewChip(category)
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        }
     }
 
     private fun setLoading(loading: Boolean) {
@@ -143,5 +176,58 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             return@setOnMenuItemClickListener true
         }
         optionsMenu.show()
+    }
+
+    private fun addNewChip(category: CatalogCategory) {
+        try {
+            binding.apply {
+                val inflater = LayoutInflater.from(requireContext())
+
+                val newChip =
+                    inflater.inflate(R.layout.item_chip_choice, chipGroup, false) as Chip
+                newChip.text = category.name
+
+                chipGroup.addView(newChip)
+
+                newChip.setOnCheckedChangeListener { buttonView, isChecked ->
+                    selectedCategoryId = if (isChecked) {
+                        chipGroup.check((buttonView as Chip).id)
+                        category.id
+                    } else {
+                        -1
+                    }
+
+                    if (selectedCategoryId != -1) {
+                        viewModel.getProductsByName(searchValue)
+                    } else {
+                        adapter.models = when (sortType) {
+                            "byFewRemain" -> allProductsList
+                                .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+                            "byProduct" -> allProductsList
+                                .sortedBy { t -> t.name.lowercase() }
+                            "byCategory" -> allProductsList
+                                .sortedBy { t -> t.name.lowercase() }
+                                .sortedBy { t -> t.category.name?.lowercase() }
+                            "byRemainAscend" -> allProductsList
+                                .sortedBy { t -> t.remained }
+                            "byRemainDescend" -> allProductsList
+                                .sortedByDescending { t -> t.remained }
+                            else -> allProductsList
+                        }
+                        showLottieAnimation(allProductsList.isEmpty())
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            showMessage(e.localizedMessage)
+        }
+    }
+
+    private fun showLottieAnimation(show: Boolean) {
+        binding.apply {
+            lottieAnimation.isVisible = show
+            recyclerView.isVisible = !show
+            lottieAnimation.playAnimation()
+        }
     }
 }
