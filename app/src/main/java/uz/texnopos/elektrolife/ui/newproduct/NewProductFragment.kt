@@ -68,6 +68,12 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         viewModel.getCategories()
 
         binding.apply {
+            swipeRefresh.setOnRefreshListener {
+                swipeRefresh.isRefreshing = false
+                setLoading(false)
+                viewModel.getCategories()
+            }
+
             etWholesalePrice.addTextChangedListener(MaskWatcherPaymentDollar(etWholesalePrice))
             etMinPrice.addTextChangedListener(MaskWatcherPayment(etMinPrice))
             etMaxPrice.addTextChangedListener(MaskWatcherPayment(etMaxPrice))

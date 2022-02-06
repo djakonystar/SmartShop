@@ -82,13 +82,10 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
             productNewSaleAdapter.onItemClickListener { product ->
                 val dialog = AddToBasketDialog(product)
-                dialog.show(requireActivity().supportFragmentManager, "")
-                Basket.addProduct(product) { p ->
-                    dialog.onItemClickListener { quantity, totalPrice ->
-                        Basket.setProduct(p, quantity, totalPrice.toLong())
-                    }
+                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                dialog.onItemClickListener { quantity, totalPrice ->
+                    Basket.setProduct(product, quantity, totalPrice.toLong())
                 }
-
                 dialog.onDismissListener {
                     hideSoftKeyboard(btnFab)
                 }
@@ -148,7 +145,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
         }
 
-        categoryViewModel.  products.observe(viewLifecycleOwner) {
+        categoryViewModel.products.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {

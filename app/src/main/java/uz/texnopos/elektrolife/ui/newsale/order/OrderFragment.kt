@@ -105,7 +105,25 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                     clientId = listIds.getValue(clientName)
                 }
 
-            adapter.onItemClickListener { product, position ->
+            adapter.onPlusCounterClickListener { product ->
+                Basket.addProduct(product) {
+                    adapter.plusCount(product)
+                    val newPrice =
+                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                    price.postValue(newPrice)
+                }
+            }
+
+            adapter.onMinusCounterClickListener { product ->
+                Basket.minusProduct(product) {
+                    adapter.minusCount(product)
+                    val newPrice =
+                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                    price.postValue(newPrice)
+                }
+            }
+
+            adapter.onDeleteItemClickListener { product, position ->
                 //todo custom dialog
                 val dialog = AlertDialog.Builder(requireContext())
                     .setTitle(context?.getString(R.string.remove_uz))
@@ -144,6 +162,15 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 val dialog = AddPaymentDialog(finalPrice)
                 Log.d("finalPrice", finalPrice.toString())
                 dialog.show(requireActivity().supportFragmentManager, "")
+                val orders: MutableList<OrderItem> = mutableListOf()
+                Log.d("products", "Products: ${Basket.products.joinToString(", ")}")
+                Basket.products.forEachIndexed { index, product ->
+                    orders.add(
+                        index,
+                        OrderItem(product.productId, product.count, product.salePrice)
+                    )
+                    Log.d("products", "Orders: ${orders.joinToString(", ")}")
+                }
                 dialog.setDate { cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
                         Order(
@@ -154,7 +181,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                             price = finalPrice,
                             term = date,
                             description = comment,
-                            orders = orderItems
+                            orders = orders
                         )
                     )
                 }
