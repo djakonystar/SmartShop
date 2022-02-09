@@ -45,15 +45,15 @@
                         android:focusable="false"
                         android:inputType="none"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/item_text_size_standard_tablet"
+                        android:textSize="@dimen/item_text_size_standard_mobile"
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/ivAddCategory"
-                    android:layout_width="@dimen/action_bar_icon_size"
-                    android:layout_height="@dimen/action_bar_icon_size"
+                    android:layout_width="@dimen/action_bar_icon_size_mobile"
+                    android:layout_height="@dimen/action_bar_icon_size_mobile"
                     android:layout_marginEnd="@dimen/margin_standard"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/add_new_category_desc"

@@ -97,10 +97,10 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             }
 
             ivVisible.setOnTouchListener { _, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    visibilityLiveData.postValue(true)
-                } else {
+                if (motionEvent.action == MotionEvent.ACTION_UP) {
                     visibilityLiveData.postValue(false)
+                } else {
+                    visibilityLiveData.postValue(true)
                 }
                 return@setOnTouchListener true
             }

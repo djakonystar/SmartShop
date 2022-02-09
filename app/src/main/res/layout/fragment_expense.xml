@@ -52,7 +52,7 @@
             android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginTop="@dimen/margin_middle"
             android:hint="@string/end_date"
-            app:layout_constraintEnd_toStartOf="@id/btnCalculate"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tilDateFrom"
             app:layout_constraintTop_toBottomOf="@id/actionBar">
 
@@ -73,28 +73,30 @@
             android:id="@+id/btnCalculate"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/margin_small"
             android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginBottom="@dimen/margin_middle"
             android:paddingHorizontal="32dp"
             android:text="@string/calculate"
             android:textSize="@dimen/text_size_larger"
             app:layout_constraintBottom_toTopOf="@id/tvTotalSum"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tilDateTo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilDateFrom"
             tools:ignore="SpUsage" />
 
         <TextView
             android:id="@+id/tvTotalSum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_standard"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="28dp"
+            android:textSize="@dimen/finance_item_title_size_mobile"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilDateFrom"
+            app:layout_constraintTop_toBottomOf="@id/btnCalculate"
             tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -132,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_standard"
         android:contentDescription="@string/expense_en"
-        app:fabCustomSize="@dimen/fab_custom_size"
+        app:fabCustomSize="@dimen/fab_custom_size_mobile"
         android:src="@drawable/ic_add_48"
         app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

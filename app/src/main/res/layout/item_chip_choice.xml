@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/padding_middle"
     android:textColor="@color/chip_text_color"
-    android:textSize="@dimen/item_text_size_standard_tablet"
+    android:textSize="@dimen/item_text_size_standard_mobile"
     app:chipBackgroundColor="@color/chip_background_color"
     app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
     app:chipStrokeColor="@color/app_main_color"
