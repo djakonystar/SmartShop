@@ -49,6 +49,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
     private var price = MutableLiveData<Long>()
+    private var basketListener = MutableLiveData<List<Product>>()
     private val gson = Gson()
     private var clientName = ""
     private var clientId: Int = 0
@@ -82,13 +83,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             price.observe(viewLifecycleOwner) { sum ->
                 tvTotalPrice.text = context?.getString(R.string.total_sum_text, sum.toSumFormat)
             }
-
-            val orderItems: MutableList<OrderItem> = mutableListOf()
-            productList.forEachIndexed { index, product ->
-                orderItems.add(
-                    index,
-                    OrderItem(product.productId, product.count, product.salePrice)
-                )
+            basketListener.observe(viewLifecycleOwner) { orders ->
+                if (orders.isEmpty()) navController.popBackStack()
             }
 
             etSearchClient.addTextChangedListener {
@@ -128,12 +124,13 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 val dialog = AlertDialog.Builder(requireContext())
                     .setTitle(context?.getString(R.string.remove_uz))
                     .setMessage(context?.getString(R.string.confirm_remove_uz))
-                    .setPositiveButton("Ha") { _, _ ->
+                    .setPositiveButton(context?.getString(R.string.yes)) { _, _ ->
                         adapter.removeItem(product, position)
                         Basket.mutableProducts.remove(product)
                         val newPrice =
                             Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
                         price.postValue(newPrice)
+                        basketListener.postValue(Basket.mutableProducts)
                     }
                 dialog.show()
             }

@@ -76,6 +76,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
+                chipGroup.removeAllViews()
                 categoryViewModel.getCategories()
                 categoryViewModel.getProductByName(searchValue)
             }
