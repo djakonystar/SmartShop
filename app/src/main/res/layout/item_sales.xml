@@ -51,10 +51,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginBottom="@dimen/margin_middle"
             android:text="@string/sum_of_sale"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            android:textSize="@dimen/text_size_item_small"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toTopOf="@id/tvTotalPrice"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvClientName"
             tools:ignore="SpUsage" />
@@ -64,9 +64,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_standard"
-            android:layout_marginTop="-5dp"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
+            app:layout_constraintBottom_toTopOf="@id/view"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTotalPriceTitle"
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.62" />
+            app:layout_constraintGuide_percent="0.58" />
 
         <ImageView
             android:id="@+id/ivCash"

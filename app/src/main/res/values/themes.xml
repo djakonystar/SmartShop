@@ -36,7 +36,7 @@
 
     <style name="TextAppearance.ElektroLife.TwentyTwo" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/item_text_size_standard_tablet</item>
+        <item name="android:textSize">@dimen/item_text_size_standard_mobile</item>
     </style>
 
     <style name="ThemeOverlay.ElektroLife.TextInputLayout" parent="">

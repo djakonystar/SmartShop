@@ -61,6 +61,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
+                chipGroup.removeAllViews()
                 categoryViewModel.getCategories()
                 viewModel.getProductsByName(searchValue)
             }

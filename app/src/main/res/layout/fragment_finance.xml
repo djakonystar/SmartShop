@@ -64,8 +64,8 @@
 
                 <ImageView
                     android:id="@+id/ivCashboxIcon"
-                    android:layout_width="@dimen/img_standard_height"
-                    android:layout_height="@dimen/img_standard_height"
+                    android:layout_width="@dimen/img_standard_height_mobile"
+                    android:layout_height="@dimen/img_standard_height_mobile"
                     android:contentDescription="@string/cashbox_icon"
                     android:layout_marginEnd="@dimen/margin_standard"
                     android:src="@drawable/coins"
@@ -104,7 +104,7 @@
                 android:layout_marginVertical="@dimen/margin_large_standard"
                 android:text="@string/sales"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textSize="28dp"
+                android:textSize="@dimen/finance_item_title_size_mobile"
                 app:layout_constraintStart_toEndOf="@id/ivSalesIcon"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -112,8 +112,8 @@
 
             <ImageView
                 android:id="@+id/ivSalesIcon"
-                android:layout_width="@dimen/img_standard_height"
-                android:layout_height="@dimen/img_standard_height"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
                 android:contentDescription="@string/cashbox_icon"
                 android:layout_marginStart="@dimen/margin_standard"
                 android:src="@drawable/sales"
@@ -123,8 +123,8 @@
 
             <ImageView
                 android:id="@+id/ivSalesGotoIcon"
-                android:layout_width="@dimen/img_standard_height"
-                android:layout_height="@dimen/img_standard_height"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
                 android:contentDescription="@string/cashbox_icon"
                 android:layout_marginEnd="@dimen/margin_standard"
                 android:padding="@dimen/padding_middle"
@@ -164,7 +164,7 @@
                 android:layout_marginVertical="@dimen/margin_large_standard"
                 android:text="@string/incomes"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textSize="28dp"
+                android:textSize="@dimen/finance_item_title_size_mobile"
                 app:layout_constraintStart_toEndOf="@id/ivIncomesIcon"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -172,8 +172,8 @@
 
             <ImageView
                 android:id="@+id/ivIncomesIcon"
-                android:layout_width="@dimen/img_standard_height"
-                android:layout_height="@dimen/img_standard_height"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
                 android:contentDescription="@string/cashbox_icon"
                 android:layout_marginStart="@dimen/margin_standard"
                 android:src="@drawable/income"
@@ -183,8 +183,8 @@
 
             <ImageView
                 android:id="@+id/ivIncomesGotoIcon"
-                android:layout_width="@dimen/img_standard_height"
-                android:layout_height="@dimen/img_standard_height"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
                 android:contentDescription="@string/cashbox_icon"
                 android:layout_marginEnd="@dimen/margin_standard"
                 android:padding="@dimen/padding_middle"
@@ -224,7 +224,7 @@
                 android:layout_marginVertical="@dimen/margin_large_standard"
                 android:text="@string/expenses"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textSize="28dp"
+                android:textSize="@dimen/finance_item_title_size_mobile"
                 app:layout_constraintStart_toEndOf="@id/ivExpensesIcon"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -232,8 +232,8 @@
 
             <ImageView
                 android:id="@+id/ivExpensesIcon"
-                android:layout_width="@dimen/img_standard_height"
-                android:layout_height="@dimen/img_standard_height"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
                 android:contentDescription="@string/cashbox_icon"
                 android:layout_marginStart="@dimen/margin_standard"
                 android:src="@drawable/pie_chart"
@@ -243,8 +243,8 @@
 
             <ImageView
                 android:id="@+id/ivExpensesGotoIcon"
-                android:layout_width="@dimen/img_standard_height"
-                android:layout_height="@dimen/img_standard_height"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
                 android:contentDescription="@string/cashbox_icon"
                 android:layout_marginEnd="@dimen/margin_standard"
                 android:padding="@dimen/padding_middle"

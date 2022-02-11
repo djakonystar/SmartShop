@@ -8,8 +8,8 @@
 
         <ImageView
             android:id="@+id/btnHome"
-            android:layout_width="@dimen/action_bar_icon_size"
-            android:layout_height="@dimen/action_bar_icon_size"
+            android:layout_width="@dimen/action_bar_icon_size_mobile"
+            android:layout_height="@dimen/action_bar_icon_size_mobile"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_middle"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -43,7 +43,7 @@
             android:paddingVertical="@dimen/padding_standard_middle"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/item_text_size_standard_tablet"
+            android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
