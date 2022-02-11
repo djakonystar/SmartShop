@@ -168,4 +168,5 @@
     <string name="cash_icon" translatable="false">Cash Icon</string>
     <string name="card_icon" translatable="false">Card Icon</string>
     <string name="sum_of_sale">Sotuv summasi:</string>
+    <string name="yes">Ha</string>
 </resources>

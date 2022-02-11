@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="@dimen/dialog_sale_min_width">
+    android:minWidth="@dimen/dialog_sale_min_width_mobile">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -19,7 +19,7 @@
         android:text="@string/add_to_basket"
         android:textAllCaps="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/item_text_size_standard_tablet"
+        android:textSize="@dimen/item_text_size_standard_mobile"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,8 +28,8 @@
 
     <ImageView
         android:id="@+id/ivVisible"
-        android:layout_width="@dimen/action_bar_icon_size"
-        android:layout_height="@dimen/action_bar_icon_size"
+        android:layout_width="@dimen/action_bar_icon_size_mobile"
+        android:layout_height="@dimen/action_bar_icon_size_mobile"
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -98,7 +98,7 @@
             android:maxLength="12"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/item_text_size_standard_tablet"
+            android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -111,7 +111,7 @@
         android:layout_marginEnd="@dimen/margin_middle"
         android:text="@string/counter_text"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_larger"
+        android:textSize="@dimen/text_size_standard"
         app:layout_constraintEnd_toEndOf="@id/tilQuantity"
         app:layout_constraintTop_toBottomOf="@id/tilQuantity"
         tools:ignore="SpUsage" />
@@ -137,7 +137,7 @@
             android:maxLength="19"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/item_text_size_standard_tablet"
+            android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -146,15 +146,14 @@
         android:id="@+id/btnAdd"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:layout_marginVertical="@dimen/margin_32"
+        android:layout_marginVertical="@dimen/margin_standard"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_32"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:paddingHorizontal="32dp"
         android:text="@string/add"
         android:textSize="@dimen/text_size_larger"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnCancel"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilSumma"
         tools:ignore="SpUsage" />
 
@@ -163,16 +162,17 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:layout_marginVertical="@dimen/margin_32"
-        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:paddingHorizontal="32dp"
         android:text="@string/cancel_uzb"
         android:textSize="@dimen/text_size_larger"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnAdd"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilSumma"
+        app:layout_constraintTop_toBottomOf="@id/btnAdd"
         tools:ignore="SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

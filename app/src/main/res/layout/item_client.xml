@@ -17,8 +17,8 @@
 
         <View
             android:id="@+id/userTypeBackground"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="@dimen/finance_category_height_mobile"
+            android:layout_height="@dimen/finance_category_height_mobile"
             android:layout_marginStart="@dimen/margin_standard"
             android:background="@drawable/shape_rounded_field"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +32,7 @@
             android:fontFamily="@font/rubik_mono_one"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/item_text_size_standard_tablet"
+            android:textSize="@dimen/item_text_size_standard_mobile"
             app:layout_constraintStart_toStartOf="@id/userTypeBackground"
             app:layout_constraintEnd_toEndOf="@id/userTypeBackground"
             app:layout_constraintTop_toTopOf="@id/userTypeBackground"
@@ -50,8 +50,7 @@
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/card_view_item_text_size"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintEnd_toStartOf="@id/ivPayment"
             app:layout_constraintStart_toEndOf="@id/userTypeBackground"
             app:layout_constraintTop_toTopOf="parent"
@@ -64,7 +63,7 @@
             android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             android:textColor="@color/app_main_color"
-            android:textSize="@dimen/card_view_item_text_size"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/userTypeBackground"
             app:layout_constraintTop_toBottomOf="@id/tvName"
@@ -77,15 +76,15 @@
             android:layout_marginStart="@dimen/margin_middle"
             android:text="@string/uzs"
             android:textColor="@color/app_main_color"
-            android:textSize="@dimen/card_view_item_text_size"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="@id/tvBalance"
             app:layout_constraintStart_toEndOf="@id/tvBalance"
             tools:ignore="SpUsage" />
 
         <ImageView
             android:id="@+id/ivPhone"
-            android:layout_width="@dimen/image_height"
-            android:layout_height="@dimen/image_height"
+            android:layout_width="@dimen/img_standard_height"
+            android:layout_height="@dimen/img_standard_height"
             android:layout_marginVertical="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -99,8 +98,8 @@
 
         <ImageView
             android:id="@+id/ivPayment"
-            android:layout_width="@dimen/image_height"
-            android:layout_height="@dimen/image_height"
+            android:layout_width="@dimen/img_standard_height"
+            android:layout_height="@dimen/img_standard_height"
             android:layout_marginEnd="@dimen/margin_standard"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/add_payment"

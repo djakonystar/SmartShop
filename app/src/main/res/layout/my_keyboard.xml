@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btOne"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -21,7 +21,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btTwo"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -33,7 +33,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btThree"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -45,7 +45,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btFour"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp"
         tools:ignore="MissingConstraints">
 
@@ -58,7 +58,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btFive"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -70,7 +70,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btSix"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -82,7 +82,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btSeven"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -94,7 +94,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btEight"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -106,7 +106,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btNine"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp"
         tools:ignore="MissingConstraints">
 
@@ -120,7 +120,7 @@
     <ImageView
         android:id="@+id/btFingerPrint"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         android:clickable="false"
         android:padding="12dp"
         android:src="@drawable/ic_fingerprint"
@@ -130,7 +130,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/btZero"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         app:cardCornerRadius="16dp">
 
         <TextView
@@ -142,7 +142,7 @@
     <ImageView
         android:id="@+id/btBackspace"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="@dimen/keyboard_button_height_mobile"
         android:padding="16dp"
         android:src="@drawable/ic_backspace" />
 

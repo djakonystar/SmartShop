@@ -17,8 +17,8 @@
 
         <View
             android:id="@+id/categoryBackground"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="@dimen/finance_category_height_mobile"
+            android:layout_height="@dimen/finance_category_height_mobile"
             android:layout_marginStart="@dimen/margin_standard"
             android:background="@drawable/shape_rounded_field"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
             android:textAllCaps="true"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/title_text_size"
+            android:textSize="@dimen/title_text_size_mobile"
             app:layout_constraintBottom_toBottomOf="@id/categoryBackground"
             app:layout_constraintEnd_toEndOf="@id/categoryBackground"
             app:layout_constraintStart_toStartOf="@id/categoryBackground"
@@ -54,7 +54,6 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            android:textColor="@color/black"
             app:layout_constraintEnd_toStartOf="@id/tvPayee"
             app:layout_constraintStart_toEndOf="@id/categoryBackground"
             app:layout_constraintTop_toTopOf="parent"
@@ -81,7 +80,7 @@
             android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginTop="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            android:textSize="@dimen/title_text_size"
+            android:textSize="@dimen/text_size_standard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />

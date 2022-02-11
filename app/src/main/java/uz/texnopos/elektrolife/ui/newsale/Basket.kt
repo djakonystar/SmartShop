@@ -27,7 +27,7 @@ class Basket {
         fun minusProduct(product: Product, onComplete: (product: Product) -> Unit) {
             mutableProducts.forEachIndexed { index, p ->
                 if (p.productId == product.productId) {
-                    if (mutableProducts[index].count > 0)
+                    if (mutableProducts[index].count > 1)
                         mutableProducts[index].count--
                     onComplete.invoke(mutableProducts[index])
                     return
