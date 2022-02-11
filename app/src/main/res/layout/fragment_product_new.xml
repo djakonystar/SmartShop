@@ -10,222 +10,229 @@
         android:id="@+id/actionBar"
         layout="@layout/action_bar_product_new" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilSpinner"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/choose_category"
-                app:endIconTint="@color/app_main_color"
-                app:layout_constraintEnd_toStartOf="@id/ivAddCategory"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:id="@+id/actSpinner"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilSpinner"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/choose_category"
+                    app:endIconTint="@color/app_main_color"
+                    app:layout_constraintEnd_toStartOf="@id/ivAddCategory"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/actSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/item_text_size_standard_mobile"
+                        tools:ignore="SpUsage" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/ivAddCategory"
+                    android:layout_width="@dimen/action_bar_icon_size_mobile"
+                    android:layout_height="@dimen/action_bar_icon_size_mobile"
+                    android:layout_marginEnd="@dimen/margin_standard"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/add_new_category_desc"
+                    android:foregroundGravity="center_vertical"
+                    android:padding="@dimen/padding_middle"
+                    android:src="@drawable/ic_baseline_post_add_24"
+                    app:layout_constraintBottom_toBottomOf="@id/tilSpinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tilSpinner"
+                    app:layout_constraintTop_toTopOf="@id/tilSpinner"
+                    app:tint="@color/app_main_color" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilProductName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/item_text_size_standard_tablet"
-                    tools:ignore="SpUsage" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/product_name"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilSpinner">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etProductName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        tools:ignore="SpUsage" />
 
-            <ImageView
-                android:id="@+id/ivAddCategory"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:layout_marginEnd="@dimen/margin_standard"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/add_new_category_desc"
-                android:foregroundGravity="center_vertical"
-                android:padding="@dimen/padding_middle"
-                android:src="@drawable/ic_baseline_post_add_24"
-                app:layout_constraintBottom_toBottomOf="@id/tilSpinner"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tilSpinner"
-                app:layout_constraintTop_toTopOf="@id/tilSpinner"
-                app:tint="@color/app_main_color" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilProductName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/product_name"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilSpinner">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProductName"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilProductQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    tools:ignore="SpUsage" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/product_quantity"
+                    app:endIconMode="clear_text"
+                    app:helperText="@string/product_quantity_helper"
+                    app:layout_constraintTop_toBottomOf="@id/tilProductName">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etProductQuantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789 "
+                        android:inputType="number"
+                        android:maxLength="9"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilProductQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/product_quantity"
-                app:helperText="@string/product_quantity_helper"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilProductName">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProductQuantity"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilBranchName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
-                    android:inputType="number"
-                    android:maxLength="9"
-                    android:singleLine="true"
-                    tools:ignore="SpUsage" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/brand_name"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilProductQuantity">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBranchName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"
+                        tools:ignore="SpUsage" />
 
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilBranchName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/brand_name"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilProductQuantity">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etBranchName"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"
-                    tools:ignore="SpUsage" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCostPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/cost_price"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilBranchName">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etCostPrice"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCostPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:maxLength="19"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    tools:ignore="SpUsage" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/cost_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilBranchName">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCostPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilWholesalePrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/wholesale_price"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilCostPrice">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etWholesalePrice"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilWholesalePrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789., "
-                    android:inputType="number"
-                    android:maxLength="19"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    tools:ignore="SpUsage" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/wholesale_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilCostPrice">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etWholesalePrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789., "
+                        android:inputType="number"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMinPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/min_price"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilWholesalePrice">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMinPrice"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMinPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
-                    android:inputType="number"
-                    android:maxLength="19"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    tools:ignore="SpUsage" />
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/min_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilWholesalePrice">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMinPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789 "
+                        android:inputType="number"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMaxPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/max_price"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/tilMinPrice">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMaxPrice"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMaxPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
-                    android:inputType="number"
-                    android:maxLength="19"
-                    android:maxLines="1"
-                    android:singleLine="true"
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/max_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilMinPrice">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMaxPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789 "
+                        android:inputType="number"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnAddProduct"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
+                    android:layout_marginVertical="@dimen/margin_standard"
+                    android:backgroundTint="@color/app_main_color"
+                    android:paddingHorizontal="@dimen/button_padding_horizontal"
+                    android:text="@string/add_new_product"
+                    android:textSize="@dimen/text_size_larger"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tilMaxPrice"
                     tools:ignore="SpUsage" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/btnAddProduct"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height"
-                android:layout_marginVertical="@dimen/margin_standard"
-                android:layout_marginHorizontal="@dimen/margin_standard"
-                android:backgroundTint="@color/app_main_color"
-                android:paddingHorizontal="@dimen/button_padding_horizontal"
-                android:text="@string/add_new_product"
-                android:textSize="@dimen/text_size_larger"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilMaxPrice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:ignore="SpUsage" />
+        </ScrollView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"

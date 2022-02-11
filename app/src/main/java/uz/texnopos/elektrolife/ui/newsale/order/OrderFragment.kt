@@ -49,6 +49,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
     private var price = MutableLiveData<Long>()
+    private var basketListener = MutableLiveData<List<Product>>()
     private val gson = Gson()
     private var clientName = ""
     private var clientId: Int = 0
@@ -82,13 +83,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             price.observe(viewLifecycleOwner) { sum ->
                 tvTotalPrice.text = context?.getString(R.string.total_sum_text, sum.toSumFormat)
             }
-
-            val orderItems: MutableList<OrderItem> = mutableListOf()
-            productList.forEachIndexed { index, product ->
-                orderItems.add(
-                    index,
-                    OrderItem(product.productId, product.count, product.salePrice)
-                )
+            basketListener.observe(viewLifecycleOwner) { orders ->
+                if (orders.isEmpty()) navController.popBackStack()
             }
 
             etSearchClient.addTextChangedListener {
@@ -105,17 +101,36 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                     clientId = listIds.getValue(clientName)
                 }
 
-            adapter.onItemClickListener { product, position ->
+            adapter.onPlusCounterClickListener { product ->
+                Basket.addProduct(product) {
+                    adapter.plusCount(product)
+                    val newPrice =
+                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                    price.postValue(newPrice)
+                }
+            }
+
+            adapter.onMinusCounterClickListener { product ->
+                Basket.minusProduct(product) {
+                    adapter.minusCount(product)
+                    val newPrice =
+                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                    price.postValue(newPrice)
+                }
+            }
+
+            adapter.onDeleteItemClickListener { product, position ->
                 //todo custom dialog
                 val dialog = AlertDialog.Builder(requireContext())
                     .setTitle(context?.getString(R.string.remove_uz))
                     .setMessage(context?.getString(R.string.confirm_remove_uz))
-                    .setPositiveButton("Ha") { _, _ ->
+                    .setPositiveButton(context?.getString(R.string.yes)) { _, _ ->
                         adapter.removeItem(product, position)
                         Basket.mutableProducts.remove(product)
                         val newPrice =
                             Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
                         price.postValue(newPrice)
+                        basketListener.postValue(Basket.mutableProducts)
                     }
                 dialog.show()
             }
@@ -144,6 +159,15 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 val dialog = AddPaymentDialog(finalPrice)
                 Log.d("finalPrice", finalPrice.toString())
                 dialog.show(requireActivity().supportFragmentManager, "")
+                val orders: MutableList<OrderItem> = mutableListOf()
+                Log.d("products", "Products: ${Basket.products.joinToString(", ")}")
+                Basket.products.forEachIndexed { index, product ->
+                    orders.add(
+                        index,
+                        OrderItem(product.productId, product.count, product.salePrice)
+                    )
+                    Log.d("products", "Orders: ${orders.joinToString(", ")}")
+                }
                 dialog.setDate { cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
                         Order(
@@ -154,7 +178,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                             price = finalPrice,
                             term = date,
                             description = comment,
-                            orders = orderItems
+                            orders = orders
                         )
                     )
                 }

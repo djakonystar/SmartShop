@@ -37,8 +37,8 @@
 
     <ImageView
         android:id="@+id/btnAddClient"
-        android:layout_width="@dimen/action_bar_icon_size"
-        android:layout_height="@dimen/action_bar_icon_size"
+        android:layout_width="@dimen/action_bar_icon_size_mobile"
+        android:layout_height="@dimen/action_bar_icon_size_mobile"
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"

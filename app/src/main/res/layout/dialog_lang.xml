@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="@dimen/dialog_min_width"
+    android:minWidth="@dimen/dialog_sale_min_width_mobile"
     tools:context=".ui.main.dialog.LangDialog">
 
     <TextView
@@ -15,7 +15,7 @@
         android:text="@string/lang_title"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-        android:textSize="28dp"
+        android:textSize="@dimen/lang_title_mobile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

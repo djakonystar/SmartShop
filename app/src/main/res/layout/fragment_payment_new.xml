@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/item_text_size_standard_tablet"
+                    android:textSize="@dimen/item_text_size_standard_mobile"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
