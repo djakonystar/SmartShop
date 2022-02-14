@@ -32,7 +32,7 @@ import uz.texnopos.elektrolife.ui.warehouse.WarehouseAdapter
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 import java.util.concurrent.TimeUnit
 
-private const val baseUrl = "http://electro-life.texnopos.site/"
+private const val baseUrl = "https://qonirat-shop.texnopos.site"
 private const val timeOut = 50L
 
 val networkModule = module {

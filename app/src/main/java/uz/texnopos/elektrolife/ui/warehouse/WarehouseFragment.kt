@@ -97,18 +97,18 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                             it.data.payload as MutableList<Product>
                         } else {
                             it.data.payload.filter { product ->
-                                product.category.id == selectedCategoryId
+                                product.category?.id == selectedCategoryId
                             } as MutableList<Product>
                         }
 //                        adapter.models = it.data.payload
                         adapter.models = when (sortType) {
                             "byFewRemain" -> productsList
-                                .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+                                .sortedBy { t -> t.remained / (t.category?.minCount?.toDouble() ?: 0.0) }
                             "byProduct" -> productsList
                                 .sortedBy { t -> t.name.lowercase() }
                             "byCategory" -> productsList
                                 .sortedBy { t -> t.name.lowercase() }
-                                .sortedBy { t -> t.category.name?.lowercase() }
+                                .sortedBy { t -> t.category?.name?.lowercase() }
                             "byRemainAscend" -> productsList
                                 .sortedBy { t -> t.remained }
                             "byRemainDescend" -> productsList
@@ -203,12 +203,12 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     } else {
                         adapter.models = when (sortType) {
                             "byFewRemain" -> allProductsList
-                                .sortedBy { t -> t.remained / t.category.minCount.toDouble() }
+                                .sortedBy { t -> t.remained / (t.category?.minCount?.toDouble() ?: 0.0) }
                             "byProduct" -> allProductsList
                                 .sortedBy { t -> t.name.lowercase() }
                             "byCategory" -> allProductsList
                                 .sortedBy { t -> t.name.lowercase() }
-                                .sortedBy { t -> t.category.name?.lowercase() }
+                                .sortedBy { t -> t.category?.name?.lowercase() }
                             "byRemainAscend" -> allProductsList
                                 .sortedBy { t -> t.remained }
                             "byRemainDescend" -> allProductsList

@@ -17,7 +17,7 @@ class WarehouseAdapter : BaseAdapter<Product, WarehouseAdapter.WarehouseViewHold
             binding.apply {
                 tvName.text = model.name
                 tvFirm.text = model.brand
-                tvCategory.text = model.category.name ?: ""
+                tvCategory.text = model.category?.name ?: ""
                 tvCount.text = itemView.context?.getString(R.string.count_text, model.remained.toString())
             }
         }
