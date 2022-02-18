@@ -48,6 +48,7 @@
         android:contentDescription="@string/add_client_en"
         android:padding="@dimen/padding_small"
         android:src="@drawable/ic_person_add_48"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
