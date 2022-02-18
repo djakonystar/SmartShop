@@ -39,11 +39,12 @@
 <!--        app:layout_constraintBottom_toBottomOf="parent"-->
 <!--        app:layout_constraintTop_toBottomOf="@id/tilSearch">-->
 
+<!--    marginBottom was 48dp-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/margin_middle"
-            android:layout_marginBottom="@dimen/margin_48"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tilSearch">
 
@@ -67,6 +68,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_sheet_bg"
         android:elevation="@dimen/elevation_standard"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView

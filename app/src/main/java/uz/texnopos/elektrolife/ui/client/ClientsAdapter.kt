@@ -17,8 +17,12 @@ class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
             binding.apply {
                 tvName.text = model.name
                 tvBalance.text = if (model.balance ?: 0 < 0) {
+                    tvBalance.setTextColor(itemView.resources.getColor(R.color.error_color))
+                    tvSum.setTextColor(itemView.resources.getColor(R.color.error_color))
                     "-${(-1 * model.balance!!).toString().toSumFormat}"
                 } else {
+                    tvBalance.setTextColor(itemView.resources.getColor(R.color.app_main_color))
+                    tvSum.setTextColor(itemView.resources.getColor(R.color.app_main_color))
                     model.balance.toString().toSumFormat
                 }
                 tvUserType.text =
