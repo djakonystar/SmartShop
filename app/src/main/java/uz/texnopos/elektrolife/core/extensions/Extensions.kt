@@ -147,7 +147,8 @@ val Double.toSumFormat: String
     get() {
         var num = this.toLong().toSumFormat
         val l = this.toString().length - this.toLong().toString().length - 1
-        val afterPoint = ("%.${2}f".format(this)).substringAfter('.')
+        val formattedNum = "%.${2}f".format(this)
+        val afterPoint = formattedNum.substring(formattedNum.length - 2, formattedNum.length)
         num += if (afterPoint == "0") ".00" else {
             if (afterPoint.length == 1) ".${afterPoint}0"
             else ".$afterPoint"
