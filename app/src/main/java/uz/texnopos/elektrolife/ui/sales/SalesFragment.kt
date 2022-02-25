@@ -4,11 +4,13 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -20,6 +22,7 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.sales.Sales
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentSalesBinding
@@ -33,6 +36,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private val adapter: SalesAdapter by inject()
     private val viewModel: SalesViewModel by viewModel()
     private var typeOfPayment: Int = -1
+    private val typesOfPayment = mutableSetOf<Int>()
     private var allSales = listOf<Sales>()
     private var dateFromInLong = System.currentTimeMillis()
     private var dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
@@ -136,11 +140,17 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 viewModel.getOrdersByDate(dateFromForBackend, dateToForBackend)
             }
 
-            chipGroup.setOnCheckedChangeListener { _, checkedId ->
-                typeOfPayment = checkedId % 3
-                filterSales(typeOfPayment)
-                Log.d("checkedId", "CheckedChipId: $checkedId")
-                Log.d("checkedId", "TypeOfPayment: $typeOfPayment")
+//            chipGroup.setOnCheckedChangeListener { group, checkedId ->
+//                typeOfPayment = checkedId % 3
+//                Log.d("selectedIds", "CheckedChipIds: ${chipGroup.checkedChipIds.joinToString()}")
+//                typesOfPayment.clear()
+//                filterSales(group.checkedChipIds.map { it % 3 }.sorted())
+//                Log.d("selectedIds", "CheckedChipId: $checkedId")
+//                Log.d("selectedIds", "TypeOfPayment: $typeOfPayment")
+//            }
+
+            listOf(1, 2, 0).forEach {
+                addNewChip(it)
             }
         }
 
@@ -166,7 +176,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         allSales = it.data.payload
-                        filterSales(typeOfPayment)
+                        filterSales()
                     } else {
                         showMessage(it.data.message)
                     }
@@ -179,6 +189,9 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         }
     }
 
+    /**
+     * Filtering sales by [id] only for single selection type
+     */
     private fun filterSales(id: Int) {
         adapter.models = when (id) {
             1 -> allSales.filter { s -> s.basket.cash > 0 }
@@ -192,6 +205,72 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         animateDebtPrice(lastDebtPrice, debts)
         lastTotalPrice = total
         lastDebtPrice = debts
+    }
+
+    /**
+     * Filtering sales by selected IDs only for multiple selection type
+     */
+    private fun filterSales() {
+        val ids = typesOfPayment.sorted()
+        Log.d("selectedIds", "IDs: ${ids.joinToString()}")
+        adapter.models = when {
+            ids.isEmpty() -> allSales
+            ids.size == 3 -> {
+                allSales.filter { s -> s.basket.cash > 0 && s.basket.card > 0 && s.basket.debt > 0 }
+            }
+            ids.size == 2 -> {
+                if (ids[0] == 1 && ids[1] == 2) {
+                    allSales.filter { s -> s.basket.cash > 0 && s.basket.card > 0 && s.basket.debt == 0.0 }
+                } else if (ids[0] == 0 && ids[1] == 1) {
+                    allSales.filter { s -> s.basket.cash > 0 && s.basket.debt > 0 && s.basket.card == 0.0 }
+                } else {
+                    allSales.filter { s -> s.basket.card > 0 && s.basket.debt > 0 && s.basket.cash == 0.0 }
+                }
+            }
+            ids.size == 1 -> {
+                when (ids[0]) {
+                    1 -> allSales.filter { s -> s.basket.cash > 0 && s.basket.card == 0.0 && s.basket.debt == 0.0 }
+                    2 -> allSales.filter { s -> s.basket.card > 0 && s.basket.cash == 0.0 && s.basket.debt == 0.0 }
+                    else -> allSales.filter { s -> s.basket.debt > 0 && s.basket.cash == 0.0 && s.basket.card == 0.0 }
+                }
+            }
+            else -> allSales
+        }
+        val total = adapter.models.sumOf { sale -> sale.basket.price }.toLong()
+        val debts = adapter.models.sumOf { sale -> sale.basket.debt }.toLong()
+        animateTotalPrice(lastTotalPrice, total)
+        animateDebtPrice(lastDebtPrice, debts)
+        lastTotalPrice = total
+        lastDebtPrice = debts
+    }
+
+    private fun addNewChip(type: Int) {
+        try {
+            binding.apply {
+                val inflater = LayoutInflater.from(requireContext())
+
+                val newChip =
+                    inflater.inflate(R.layout.item_chip_choice, chipGroup, false) as Chip
+                newChip.text = when (type) {
+                    1 -> context?.getString(R.string.payment_cash)
+                    2 -> context?.getString(R.string.payment_card)
+                    else -> context?.getString(R.string.payment_debt)
+                }
+
+                chipGroup.addView(newChip)
+
+                newChip.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        typesOfPayment.add(type)
+                    } else {
+                        typesOfPayment.remove(type)
+                    }
+                    filterSales()
+                }
+            }
+        } catch (e: Exception) {
+            showMessage(e.localizedMessage)
+        }
     }
 
     @SuppressLint("SetTextI18n")

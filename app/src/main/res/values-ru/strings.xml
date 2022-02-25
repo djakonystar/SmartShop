@@ -137,4 +137,5 @@
     <string name="lang_name">Русский</string>
     <string name="sum_of_sale">Сумма продажи:</string>
     <string name="yes">Да</string>
+    <string name="error">Ошибка!</string>
 </resources>

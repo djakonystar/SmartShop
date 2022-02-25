@@ -169,4 +169,5 @@
     <string name="card_icon" translatable="false">Card Icon</string>
     <string name="sum_of_sale">Sotuv summasi:</string>
     <string name="yes">Ha</string>
+    <string name="error">Xatolik!</string>
 </resources>

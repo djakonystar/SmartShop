@@ -5,10 +5,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
@@ -23,36 +21,24 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
-import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.OrderItem
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentOrderBinding
-import uz.texnopos.elektrolife.ui.client.ClientsViewModel
-import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newsale.Basket
-import uz.texnopos.elektrolife.ui.newsale.dialog.AddClientDialog
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddPaymentDialog
 
 class OrderFragment : Fragment(R.layout.fragment_order) {
-
     private lateinit var binding: FragmentOrderBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
-    private lateinit var adapterArray: ArrayAdapter<String>
     private val viewModelOrder: OrderViewModel by viewModel()
-    private val viewModelClient: ClientsViewModel by viewModel()
-    private val viewModelNewClient: NewClientViewModel by viewModel()
     private val adapter: OrderAdapter by inject()
     private val safeArgs: OrderFragmentArgs by navArgs()
-    private var list: MutableSet<String> = mutableSetOf()
-    private var listIds: MutableMap<String, Int> = mutableMapOf()
     private var price = MutableLiveData<Long>()
     private var basketListener = MutableLiveData<List<Product>>()
     private val gson = Gson()
-    private var clientName = ""
-    private var clientId: Int = 0
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,20 +72,6 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             basketListener.observe(viewLifecycleOwner) { orders ->
                 if (orders.isEmpty()) navController.popBackStack()
             }
-
-            etSearchClient.addTextChangedListener {
-                val searchValue = it.toString()
-                if (searchValue.isNotEmpty()) {
-                    list.clear()
-                    viewModelClient.searchClient(searchValue)
-                }
-            }
-
-            etSearchClient.onItemClickListener =
-                AdapterView.OnItemClickListener { parent, _, position, _ ->
-                    clientName = parent.getItemAtPosition(position).toString()
-                    clientId = listIds.getValue(clientName)
-                }
 
             adapter.onPlusCounterClickListener { product ->
                 Basket.addProduct(product) {
@@ -135,40 +107,18 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 dialog.show()
             }
 
-            btnAddClient.onClick {
-                val dialog = AddClientDialog()
-                dialog.show(requireActivity().supportFragmentManager, "")
-                dialog.setData { name, inn, phone, type, comment ->
-                    viewModelNewClient.registerNewClient(
-                        RegisterClient(
-                            name = name,
-                            phone = phone,
-                            inn = inn,
-                            about = comment,
-                            clientType = type
-                        )
-                    )
-                }
-            }
-
             btnOrder.onClick {
-                if (etSearchClient.text.isEmpty()) {
-                    clientId = 0
-                }
                 val finalPrice = tvTotalPrice.text.filter { c -> c.isDigit() }.toString().toLong()
                 val dialog = AddPaymentDialog(finalPrice)
-                Log.d("finalPrice", finalPrice.toString())
                 dialog.show(requireActivity().supportFragmentManager, "")
                 val orders: MutableList<OrderItem> = mutableListOf()
-                Log.d("products", "Products: ${Basket.products.joinToString(", ")}")
                 Basket.products.forEachIndexed { index, product ->
                     orders.add(
                         index,
                         OrderItem(product.productId, product.count, product.salePrice)
                     )
-                    Log.d("products", "Orders: ${orders.joinToString(", ")}")
                 }
-                dialog.setDate { cash, card, debt, date, comment ->
+                dialog.setDate { clientId, cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
                         Order(
                             id = clientId,
@@ -191,7 +141,6 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
-            btnAddClient.isEnabled = !loading
             recyclerView.isEnabled = !loading
             btnOrder.isEnabled = !loading
         }
@@ -199,20 +148,6 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setUpObservers() {
-        viewModelNewClient.registerNewClient.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    showMessage(context?.getString(R.string.client_successfully_added))
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showMessage(it.message)
-                }
-            }
-        }
-
         viewModelOrder.orderState.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
@@ -220,7 +155,6 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                     setLoading(false)
                     Basket.mutableProducts.clear()
                     binding.apply {
-                        etSearchClient.text.clear()
                         tvTotalPrice.text = ""
                         adapter.models.clear()
                         adapter.notifyDataSetChanged()
@@ -230,38 +164,14 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                     alertDialog.setTitle(context?.getString(R.string.success))
                     alertDialog.setMessage(context?.getString(R.string.order_successfully_done))
                     alertDialog.show()
+                    basketListener.postValue(Basket.mutableProducts)
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
-                }
-            }
-        }
-
-        viewModelClient.searchClient.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    if (it.data!!.successful) {
-                        it.data.payload.forEach { data ->
-                            list.add("${data.name}, ${data.phone}")
-                            if (!listIds.contains("${data.name}, ${data.phone}")) listIds["${data.name}, ${data.phone}"] =
-                                data.clientId
-                            adapterArray = ArrayAdapter(
-                                requireContext(),
-                                R.layout.item_spinner,
-                                list.toMutableList()
-                            )
-                            binding.etSearchClient.setAdapter(adapterArray)
-                        }
-                    } else {
-                        showMessage(it.data.message)
-                    }
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showMessage(it.message)
+                    val alertDialog = AlertDialog.Builder(requireContext())
+                    alertDialog.setTitle(context?.getString(R.string.error))
+                    alertDialog.setMessage(it.message)
+                    alertDialog.show()
                 }
             }
         }

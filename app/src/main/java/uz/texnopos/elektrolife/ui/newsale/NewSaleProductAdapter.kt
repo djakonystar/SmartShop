@@ -27,6 +27,7 @@ class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSale
         fun populateModel(product: Product) {
             binding.apply {
                 tvName.text = product.productName
+                tvName.isSelected = true
                 tvBrand.text = product.productBrand
                 tvCost.text = itemView.context?.getString(
                     R.string.dollar_text,
