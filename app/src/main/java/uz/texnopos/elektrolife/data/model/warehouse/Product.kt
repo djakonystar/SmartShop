@@ -9,6 +9,6 @@ data class Product(
     val name: String,
     @SerializedName("product_brand")
     val brand: String,
-    val category: Category,
+    val category: Category?,
     val remained: Int
 )

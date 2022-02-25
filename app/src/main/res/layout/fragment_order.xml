@@ -10,47 +10,6 @@
         android:id="@+id/actionBar"
         layout="@layout/action_bar" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilClient"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_middle"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:hint="@string/choose_client"
-        app:endIconTint="@color/app_main_color"
-        app:layout_constraintEnd_toStartOf="@id/btnAddClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actionBar"
-        app:startIconDrawable="@drawable/ic_baseline_person_search"
-        app:startIconTint="@color/app_main_color">
-
-        <AutoCompleteTextView
-            android:id="@+id/etSearchClient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            tools:ignore="SpUsage" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/btnAddClient"
-        android:layout_width="@dimen/action_bar_icon_size_mobile"
-        android:layout_height="@dimen/action_bar_icon_size_mobile"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="?selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:contentDescription="@string/add"
-        android:focusable="true"
-        android:padding="@dimen/padding_middle"
-        android:src="@drawable/ic_baseline_person_add_alt_1_24"
-        app:layout_constraintBottom_toBottomOf="@id/tilClient"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actionBar"
-        app:tint="@color/app_main_color" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -60,7 +19,7 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilClient"
+        app:layout_constraintTop_toBottomOf="@id/actionBar"
         tools:listitem="@layout/item_order_dialog" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

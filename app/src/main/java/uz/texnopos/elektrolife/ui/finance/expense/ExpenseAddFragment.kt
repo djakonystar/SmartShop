@@ -71,7 +71,7 @@ class ExpenseAddFragment : Fragment(R.layout.fragment_expense_add) {
             actCategory.setOnItemClickListener { adapterView, _, i, _ ->
                 tilCategory.isErrorEnabled = false
                 if (adapterView.getItemAtPosition(i) != getString(R.string.not_selected)) {
-                    selectedCategory = i + 3
+                    selectedCategory = i + 1
                 }
             }
 

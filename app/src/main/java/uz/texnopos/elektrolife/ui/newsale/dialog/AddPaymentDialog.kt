@@ -8,21 +8,31 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.MutableLiveData
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
+import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
+import uz.texnopos.elektrolife.ui.client.ClientsViewModel
+import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
-    private var type = MutableLiveData<String>()
+    private val clientsViewModel: ClientsViewModel by viewModel()
+    private val newClientsViewModel: NewClientViewModel by viewModel()
+    private var list: MutableSet<String> = mutableSetOf()
+    private var listIds: MutableMap<String, Int> = mutableMapOf()
+    private var clientName = ""
+    private var clientId = 0
     private var date = ""
     private var dateForBackend = ""
     private var dateInLong = System.currentTimeMillis()
@@ -41,41 +51,55 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
 
         binding = DialogAddPaymentBinding.bind(view)
 
-        observe()
-        val list = arrayListOf(
-            context?.getString(R.string.payment_cash),
-            context?.getString(R.string.payment_card),
-            context?.getString(R.string.payment_debt),
-            context?.getString(R.string.payment_mix)
-        )
-
         binding.apply {
             tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
-            actSpinner.setAdapter(ArrayAdapter(requireContext(), R.layout.item_spinner, list))
-            actSpinner.setOnFocusChangeListener { _, b ->
-                if (b) {
-                    actSpinner.showDropDown()
-                }
-                tilSpinner.isErrorEnabled = false
-            }
-            actSpinner.setOnItemClickListener { _, _, i, _ ->
-                type.postValue(list[i])
-            }
 
             etCash.addTextChangedListener(MaskWatcherPayment(etCash))
             etCard.addTextChangedListener(MaskWatcherPayment(etCard))
 
+            etSearchClient.addTextChangedListener {
+                list.clear()
+                clientsViewModel.searchClient(it.toString())
+            }
+            etSearchClient.setOnItemClickListener { adapterView, _, i, _ ->
+                clientName = adapterView.getItemAtPosition(i).toString()
+                clientId = listIds.getValue(clientName)
+            }
+            btnAddClient.onClick {
+                val dialog = AddClientDialog()
+                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                dialog.setData { name, inn, phone, type, comment ->
+                    newClientsViewModel.registerNewClient(
+                        RegisterClient(
+                            name = name,
+                            phone = phone,
+                            inn = inn,
+                            about = comment,
+                            clientType = type
+                        )
+                    )
+                }
+            }
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
             }
+            btnCashMagnet.onClick {
+                etCard.text?.clear()
+                etCash.setText(totalPrice.toString())
+            }
             etCard.addTextChangedListener {
                 tilCard.isErrorEnabled = false
+            }
+            btnCardMagnet.onClick {
+                etCash.text?.clear()
+                etCard.setText(totalPrice.toString())
             }
             etDate.addTextChangedListener {
                 tilDate.isErrorEnabled = false
             }
 
             etDate.onClick {
+                tilDate.isEnabled = false
                 val datePickerDialog = MaterialDatePicker.Builder.datePicker()
                     .setTitleText(context?.getString(R.string.choose_date_uz))
                     .setSelection(dateInLong)
@@ -94,7 +118,14 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                     etDate.setText(date)
                 }
 
-                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
+                datePickerDialog.addOnDismissListener {
+                    tilDate.isEnabled = true
+                }
+
+                datePickerDialog.show(
+                    requireActivity().supportFragmentManager,
+                    datePickerDialog.tag
+                )
             }
 
             btnAdd.onClick {
@@ -105,156 +136,105 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 dismiss()
             }
         }
+
+        setUpObservers()
     }
 
     private fun String.getOnlyDigits(): String {
         val s = this.filter { it.isDigit() }
-        return if (s.isEmpty()) "0" else s
+        return s.ifEmpty { "0" }
     }
 
-    private fun observe() {
-        type.observe(requireActivity(), {
-            binding.apply {
-                when (it) {
-                    context?.getString(R.string.payment_cash) -> {
-                        tilCash.isVisible = true
-                        tilCard.isVisible = false
-                        tilDate.isVisible = true
-                        tilComment.isVisible = true
-                    }
-                    context?.getString(R.string.payment_card) -> {
-                        tilCash.isVisible = false
-                        tilCard.isVisible = true
-                        tilDate.isVisible = true
-                        tilComment.isVisible = true
-                    }
-                    context?.getString(R.string.payment_debt) -> {
-                        tilCash.isVisible = false
-                        tilCard.isVisible = false
-                        tilDate.isVisible = true
-                        tilComment.isVisible = true
-                    }
-                    context?.getString(R.string.payment_mix) -> {
-                        tilCash.isVisible = true
-                        tilCard.isVisible = true
-                        tilDate.isVisible = true
-                        tilComment.isVisible = true
+    private fun setLoading(loading: Boolean) {
+        binding.apply {
+            progressBar.isVisible = loading
+            mainContainer.isEnabled = !loading
+        }
+    }
+
+    private fun setUpObservers() {
+        clientsViewModel.searchClient.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    if (it.data!!.successful) {
+                        it.data.payload.forEach { client ->
+                            list.add("${client.name}, ${client.phone}")
+                            if (!listIds.contains("${client.name}, ${client.phone}"))
+                                listIds["${client.name}, ${client.phone}"] = client.clientId
+                            val arrayAdapter = ArrayAdapter(
+                                requireContext(),
+                                R.layout.item_spinner,
+                                list.toMutableList()
+                            )
+                            binding.apply {
+                                etSearchClient.setAdapter(arrayAdapter)
+                                etSearchClient.showDropDown()
+                            }
+                        }
+                    } else {
+                        showMessage(it.data.message)
                     }
                 }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
             }
-        })
+        }
+
+        newClientsViewModel.registerNewClient.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    showMessage(context?.getString(R.string.client_successfully_added))
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        }
     }
 
     private fun checkAndSend() {
-        type.observe(requireActivity(), {
-            var cash = 0L
-            var card = 0L
-            var debt: Long
+        binding.apply {
+            val selectedClient = etSearchClient.text.toString()
+            if (selectedClient.isEmpty()) clientId = 0
+            val cash = etCash.text.toString().getOnlyDigits().toLong()
+            val card = etCard.text.toString().getOnlyDigits().toLong()
+            val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0
             var dateRequired = false
-            var comment: String
-            binding.apply {
-                when (it) {
-                    context?.getString(R.string.payment_cash) -> {
-                        if (etCash.text.toString().isNotEmpty()) {
-                            cash = etCash.text.toString().getOnlyDigits().toLong()
-                        } else {
-                            tilCash.error = context?.getString(R.string.required_field)
-                        }
-                        debt = if (cash < totalPrice) totalPrice - cash else 0
-                        if (debt > 0) {
-                            dateRequired = true
-                        }
-                        comment = etComment.text.toString()
-                        if (dateRequired) {
-                            if (date.isEmpty()) {
-                                tilDate.error = context?.getString(R.string.required_field)
-                            } else {
-                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                                dismiss()
-                            }
-                        } else {
-                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                            dismiss()
-                        }
-                    }
-                    context?.getString(R.string.payment_card) -> {
-                        if (etCard.text.toString().isNotEmpty()) {
-                            card = etCard.text.toString().getOnlyDigits().toLong()
-                        } else {
-                            tilCard.error = context?.getString(R.string.required_field)
-                        }
-                        debt = if (card < totalPrice) totalPrice - card else 0
-                        if (debt > 0) {
-                            dateRequired = true
-                        }
-                        comment = etComment.text.toString()
-                        if (dateRequired) {
-                            if (date.isEmpty()) {
-                                tilDate.error = context?.getString(R.string.required_field)
-                            } else {
-                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                                dismiss()
-                            }
-                        } else {
-                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                            dismiss()
-                        }
-                    }
-                    context?.getString(R.string.payment_debt) -> {
-                        debt = totalPrice
-                        if (debt > 0) {
-                            dateRequired = true
-                        }
-                        comment = etComment.text.toString()
-                        if (dateRequired) {
-                            if (date.isEmpty()) {
-                                tilDate.error = context?.getString(R.string.required_field)
-                            } else {
-                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                                dismiss()
-                            }
-                        } else {
-                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                            dismiss()
-                        }
-                    }
-                    context?.getString(R.string.payment_mix) -> {
-                        if (etCash.text.toString().isNotEmpty()) {
-                            cash = etCash.text.toString().getOnlyDigits().toLong()
-                        } else {
-                            tilCash.error = context?.getString(R.string.required_field)
-                        }
-                        if (etCard.text.toString().isNotEmpty()) {
-                            card = etCard.text.toString().getOnlyDigits().toLong()
-                        } else {
-                            tilCard.error = context?.getString(R.string.required_field)
-                        }
-                        debt = if (card + cash < totalPrice) totalPrice - (card + cash) else 0
-                        if (debt > 0) {
-                            dateRequired = true
-                        }
-                        comment = etComment.text.toString()
-                        if (dateRequired) {
-                            if (date.isEmpty()) {
-                                tilDate.error = context?.getString(R.string.required_field)
-                            } else {
-                                sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                                dismiss()
-                            }
-                        } else {
-                            sendDate.invoke(cash, card, debt, dateForBackend, comment)
-                            dismiss()
-                        }
-                    }
-                }
+            val comment = etComment.text.toString()
+
+            if (debt > 0) {
+                dateRequired = true
             }
-        })
+            if (dateRequired) {
+                if (date.isEmpty() || clientId == 0) {
+                    if (date.isEmpty()) {
+                        tilDate.error = context?.getString(R.string.required_field)
+                    }
+                    if (clientId == 0) {
+                        tilClient.error = context?.getString(R.string.required_field)
+                    }
+                } else {
+                    sendDate.invoke(clientId, cash, card, debt, dateForBackend, comment)
+                    dismiss()
+                }
+            } else {
+                sendDate.invoke(clientId, cash, card, debt, dateForBackend, comment)
+                dismiss()
+            }
+        }
     }
 
-    private var sendDate: (cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit =
-        { _: Long, _: Long, _: Long, _: String, _: String -> }
+    private var sendDate: (clientId: Int, cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit =
+        { _: Int, _: Long, _: Long, _: Long, _: String, _: String -> }
 
-    fun setDate(sendDate: (cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit) {
+    fun setDate(sendDate: (clientId: Int, cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit) {
         this.sendDate = sendDate
     }
 }

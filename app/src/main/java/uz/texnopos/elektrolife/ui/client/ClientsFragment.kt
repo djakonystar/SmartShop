@@ -68,13 +68,13 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
         }
 
         binding.apply {
-            swipeRefresh.setOnRefreshListener {
-                setLoading(false)
-                swipeRefresh.isRefreshing = false
-                mutableClient = mutableListOf()
-                page = 1
-                viewModel.getClients(limit, page, etSearch.text.toString())
-            }
+//            swipeRefresh.setOnRefreshListener {
+//                setLoading(false)
+//                swipeRefresh.isRefreshing = false
+//                mutableClient = mutableListOf()
+//                page = 1
+//                viewModel.getClients(limit, page, etSearch.text.toString())
+//            }
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = layoutManager
@@ -155,7 +155,8 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
-            swipeRefresh.isEnabled = !loading
+            recyclerView.isEnabled = !loading
+//            swipeRefresh.isEnabled = !loading
         }
     }
 

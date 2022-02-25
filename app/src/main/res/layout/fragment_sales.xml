@@ -86,51 +86,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnCalculate"
         app:singleLine="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_middle"
-            android:text="@string/payment_cash"
-            android:textColor="@color/chip_text_color"
-            android:textSize="@dimen/item_text_size_standard_mobile"
-            app:chipBackgroundColor="@color/chip_background_color"
-            app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
-            app:chipStrokeColor="@color/app_main_color"
-            app:chipStrokeWidth="1dp"
-            tools:ignore="SpUsage" />
-
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_middle"
-            android:text="@string/payment_card"
-            android:textColor="@color/chip_text_color"
-            android:textSize="@dimen/item_text_size_standard_mobile"
-            app:chipBackgroundColor="@color/chip_background_color"
-            app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
-            app:chipStrokeColor="@color/app_main_color"
-            app:chipStrokeWidth="1dp"
-            tools:ignore="SpUsage" />
-
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_middle"
-            android:text="@string/payment_debt"
-            android:textColor="@color/chip_text_color"
-            android:textSize="@dimen/item_text_size_standard_mobile"
-            app:chipBackgroundColor="@color/chip_background_color"
-            app:chipMinTouchTargetSize="@dimen/chip_min_touch_target_size"
-            app:chipStrokeColor="@color/app_main_color"
-            app:chipStrokeWidth="1dp"
-            tools:ignore="SpUsage" />
-
-    </com.google.android.material.chip.ChipGroup>
+        app:singleSelection="false" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
