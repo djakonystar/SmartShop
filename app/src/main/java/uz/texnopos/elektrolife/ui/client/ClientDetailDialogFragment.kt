@@ -38,7 +38,7 @@ class ClientDetailDialogFragment(private val client: Client) : DialogFragment() 
                 "${client.balance.toString().toSumFormat} UZS"
             }
             tvPhone.text = client.phone.toPhoneNumber
-            tvComment.text = client.comment
+            tvComment.text = client.comment ?: ""
             if (client.type == 1) {
                 tvTIN.text = client.tin!!.toSumFormat
             } else {

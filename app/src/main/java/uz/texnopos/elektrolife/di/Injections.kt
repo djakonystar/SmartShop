@@ -11,8 +11,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
-import uz.texnopos.elektrolife.ui.client.ClientsAdapter
-import uz.texnopos.elektrolife.ui.client.ClientsViewModel
+import uz.texnopos.elektrolife.ui.client.ClientAdapter
+import uz.texnopos.elektrolife.ui.client.ClientViewModel
+import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentAdapter
+import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentViewModel
+import uz.texnopos.elektrolife.ui.client.detail.sale.ClientSalesViewModel
 import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
 import uz.texnopos.elektrolife.ui.main.MainViewModel
@@ -76,21 +79,24 @@ val viewModelModule = module {
     viewModel { SalesViewModel(get(), get())}
     viewModel { NewCategoryViewModel(get(), get()) }
     viewModel { NewProductViewModel(get(),get()) }
-    viewModel { ClientsViewModel(get(), get()) }
+    viewModel { ClientViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
     viewModel { SignInViewModel(get(), get()) }
     viewModel { NewClientViewModel(get(), get()) }
     viewModel { OrderViewModel(get(),get()) }
     viewModel { MainViewModel(get(), get()) }
     viewModel { FinanceViewModel(get(), get()) }
+    viewModel { ClientPaymentViewModel(get(), get()) }
+    viewModel { ClientSalesViewModel(get(), get()) }
 }
 
 val adapterModule = module {
-    single { ClientsAdapter() }
+    single { ClientAdapter() }
     single { SalesAdapter() }
     single { SalesDetailAdapter() }
     single { WarehouseAdapter() }
     single { NewSaleProductAdapter() }
     single { OrderAdapter() }
     single { FinanceDetailAdapter() }
+    single { ClientPaymentAdapter() }
 }

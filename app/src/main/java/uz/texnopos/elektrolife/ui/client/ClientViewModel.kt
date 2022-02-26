@@ -16,7 +16,7 @@ import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.concurrent.TimeUnit
 
-class ClientsViewModel(private val api: ApiInterface, private val settings: Settings) :
+class ClientViewModel(private val api: ApiInterface, private val settings: Settings) :
     ViewModel() {
     private val compositeDisposable = CompositeDisposable()
     private val searchSubject = BehaviorSubject.create<String>()

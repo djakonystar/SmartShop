@@ -138,4 +138,6 @@
     <string name="sum_of_sale">Sotuv summasi:</string>
     <string name="yes">Ha</string>
     <string name="error">Xatolik!</string>
+    <string name="purchases">Xaridlar</string>
+    <string name="payments">To\'lovlar</string>
 </resources>

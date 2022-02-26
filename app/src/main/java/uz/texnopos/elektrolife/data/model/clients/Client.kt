@@ -12,7 +12,7 @@ data class Client(
     var tin: String? = null,
     val balance: Int?,
     @SerializedName("about")
-    val comment: String = "",
+    val comment: String? = "",
     @SerializedName("user_type")
     val type: Int
 )

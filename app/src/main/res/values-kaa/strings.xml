@@ -138,4 +138,6 @@
     <string name="sum_of_sale">Satıw summası:</string>
     <string name="yes">Awa</string>
     <string name="error">Qátelik!</string>
+    <string name="purchases">Satıp alıwlar</string>
+    <string name="payments">Tólemler</string>
 </resources>

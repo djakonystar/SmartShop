@@ -10,7 +10,7 @@ import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.databinding.ItemClientBinding
 
-class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
+class ClientAdapter : BaseAdapter<Client, ClientAdapter.ClientsViewHolder>() {
     inner class ClientsViewHolder(private val binding: ItemClientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun populateModel(model: Client) {
@@ -37,6 +37,9 @@ class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
                 }
                 ivPayment.onClick {
                     onPaymentClick.invoke(model)
+                }
+                ivInfo.onClick {
+                    onInfoClick.invoke(model)
                 }
             }
         }
@@ -65,5 +68,10 @@ class ClientsAdapter : BaseAdapter<Client, ClientsAdapter.ClientsViewHolder>() {
     private var onPaymentClick: (model: Client) -> Unit = {}
     fun setOnPaymentClickListener(onPaymentClick: (model: Client) -> Unit) {
         this.onPaymentClick = onPaymentClick
+    }
+
+    private var onInfoClick: (model: Client) -> Unit = {}
+    fun setOnInfoClickListener(onInfoClick: (model: Client) -> Unit) {
+        this.onInfoClick = onInfoClick
     }
 }
