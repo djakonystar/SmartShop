@@ -21,6 +21,7 @@
             android:layout_height="@dimen/finance_category_height_mobile"
             android:layout_marginStart="@dimen/margin_standard"
             android:background="@drawable/shape_rounded_field"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,8 +84,8 @@
 
         <ImageView
             android:id="@+id/ivPhone"
-            android:layout_width="@dimen/img_standard_height"
-            android:layout_height="@dimen/img_standard_height"
+            android:layout_width="@dimen/img_standard_height_mobile"
+            android:layout_height="@dimen/img_standard_height_mobile"
             android:layout_marginVertical="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -98,8 +99,8 @@
 
         <ImageView
             android:id="@+id/ivPayment"
-            android:layout_width="@dimen/img_standard_height"
-            android:layout_height="@dimen/img_standard_height"
+            android:layout_width="@dimen/img_standard_height_mobile"
+            android:layout_height="@dimen/img_standard_height_mobile"
             android:layout_marginEnd="@dimen/margin_standard"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/add_payment"
@@ -109,6 +110,20 @@
             app:layout_constraintEnd_toStartOf="@id/ivPhone"
             app:layout_constraintTop_toTopOf="@id/ivPhone"
             app:tint="@color/payment_icon_color" />
+
+        <ImageView
+            android:id="@+id/ivInfo"
+            android:layout_width="@dimen/img_standard_height_mobile"
+            android:layout_height="@dimen/img_standard_height_mobile"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_payment"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_info_48"
+            app:layout_constraintBottom_toBottomOf="@id/ivPhone"
+            app:layout_constraintEnd_toStartOf="@id/ivPayment"
+            app:layout_constraintTop_toTopOf="@id/ivPhone"
+            app:tint="@color/app_main_color" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

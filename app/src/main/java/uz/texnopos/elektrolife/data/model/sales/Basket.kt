@@ -8,10 +8,6 @@ data class Basket(
     val cash: Double,
     val debt: Double,
     val price: Double,
-    val term: String,
-    val description: String,
-    @SerializedName("is_deleted")
-    val isDeleted: Boolean,
     @SerializedName("created_at")
     val createdAt: String
 )

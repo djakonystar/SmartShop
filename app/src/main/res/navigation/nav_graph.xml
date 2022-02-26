@@ -22,9 +22,6 @@
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragment_to_newClientFragment"
-            app:destination="@id/newClientFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_newSaleFragment"
             app:destination="@id/newSaleFragment" />
         <action
@@ -57,11 +54,6 @@
             app:destination="@id/financeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newClientFragment"
-        android:name="uz.texnopos.elektrolife.ui.newclient.NewClientFragment"
-        android:label="fragment_client_new"
-        tools:layout="@layout/fragment_client_new" />
-    <fragment
         android:id="@+id/newSaleFragment"
         android:name="uz.texnopos.elektrolife.ui.newsale.NewSaleFragment"
         android:label="NewSaleFragment"
@@ -90,12 +82,15 @@
     </fragment>
     <fragment
         android:id="@+id/clientsFragment"
-        android:name="uz.texnopos.elektrolife.ui.client.ClientsFragment"
+        android:name="uz.texnopos.elektrolife.ui.client.ClientFragment"
         android:label="fragment_clients"
-        tools:layout="@layout/fragment_clients" >
+        tools:layout="@layout/fragment_client" >
         <action
             android:id="@+id/action_clientsFragment_to_newPayment"
             app:destination="@id/newPayment" />
+        <action
+            android:id="@+id/action_clientsFragment_to_clientDetailFragment"
+            app:destination="@id/clientDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/salesFragment"
@@ -190,5 +185,17 @@
             app:destination="@id/signInFragment"
             app:popUpTo="@id/startFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/clientDetailFragment"
+        android:name="uz.texnopos.elektrolife.ui.client.detail.ClientDetailFragment"
+        android:label="fragment_client_detail"
+        tools:layout="@layout/fragment_client_detail" >
+        <argument
+            android:name="client"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_clientDetailFragment_to_detailSalesFragment"
+            app:destination="@id/detailSalesFragment" />
     </fragment>
 </navigation>

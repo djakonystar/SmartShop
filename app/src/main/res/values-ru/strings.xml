@@ -138,4 +138,6 @@
     <string name="sum_of_sale">Сумма продажи:</string>
     <string name="yes">Да</string>
     <string name="error">Ошибка!</string>
+    <string name="purchases">Покупки</string>
+    <string name="payments">Платежи</string>
 </resources>

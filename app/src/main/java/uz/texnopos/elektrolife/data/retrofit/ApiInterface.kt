@@ -5,6 +5,7 @@ import retrofit2.http.*
 import uz.texnopos.elektrolife.data.model.clients.ClientInfo
 import uz.texnopos.elektrolife.data.GenericResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.clients.ClientPayment
 import uz.texnopos.elektrolife.data.model.finance.Balance
 import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
@@ -162,4 +163,22 @@ interface ApiInterface {
         @Query("do") to: String,
         @Query("type") type: String
     ): Observable<GenericResponse<List<Finance>>>
+
+    /**
+     * Get payment history of client
+     */
+    @GET("api/client/payment/history")
+    fun getClientPayments(
+        @Header("Authorization") token: String,
+        @Query("client_id") clientId: Int
+    ): Observable<GenericResponse<List<ClientPayment>>>
+
+    /**
+     * Get sales history of client
+     */
+    @GET("api/client/{client_id}/orders")
+    fun getSalesOfClient(
+        @Header("Authorization") token: String,
+        @Path("client_id") clientId: Int
+    ): Observable<GenericResponse<List<Sales>>>
 }

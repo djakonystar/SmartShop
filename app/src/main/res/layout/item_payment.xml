@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_middle"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:background="@color/white"
+    android:elevation="@dimen/elevation_standard"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="@dimen/radius_card_view">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.54" />
+
+        <ImageView
+            android:id="@+id/ivCash"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_cash"
+            app:layout_constraintBottom_toBottomOf="@id/tvCash"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvCash"
+            app:tint="@color/app_main_color" />
+
+        <TextView
+            android:id="@+id/tvCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintStart_toEndOf="@id/ivCash"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivCard"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_card"
+            app:layout_constraintBottom_toBottomOf="@id/tvCard"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/tvCard"
+            app:tint="@color/app_main_color" />
+
+        <TextView
+            android:id="@+id/tvCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintStart_toEndOf="@id/ivCard"
+            app:layout_constraintTop_toTopOf="@id/tvCash"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivVendor"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_vendor_48"
+            app:layout_constraintBottom_toBottomOf="@id/tvVendor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvVendor" />
+
+        <TextView
+            android:id="@+id/tvVendor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_middle"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivDate"
+            app:layout_constraintStart_toEndOf="@id/ivVendor"
+            app:layout_constraintTop_toBottomOf="@id/tvCash"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivDate"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_time_48"
+            app:layout_constraintBottom_toBottomOf="@id/tvDate"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/tvDate" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintBottom_toBottomOf="@id/tvVendor"
+            app:layout_constraintStart_toEndOf="@id/ivDate"
+            app:layout_constraintTop_toTopOf="@id/tvVendor"
+            tools:ignore="SpUsage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

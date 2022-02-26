@@ -21,18 +21,18 @@ import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
-import uz.texnopos.elektrolife.databinding.FragmentClientsBinding
 import uz.texnopos.elektrolife.databinding.ActionBarClientBinding
+import uz.texnopos.elektrolife.databinding.FragmentClientBinding
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddClientDialog
 
-class ClientsFragment : Fragment(R.layout.fragment_clients) {
-    private lateinit var binding: FragmentClientsBinding
+class ClientFragment : Fragment(R.layout.fragment_client) {
+    private lateinit var binding: FragmentClientBinding
     private lateinit var abBinding: ActionBarClientBinding
     private lateinit var navController: NavController
-    private val viewModel: ClientsViewModel by viewModel()
+    private val viewModel: ClientViewModel by viewModel()
     private val newClientViewModel: NewClientViewModel by viewModel()
-    private val adapter: ClientsAdapter by inject()
+    private val adapter: ClientAdapter by inject()
     private var isLoading = false
     private var page = 1
     private var limit = 50
@@ -41,7 +41,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentClientsBinding.bind(view)
+        binding = FragmentClientBinding.bind(view)
         abBinding = ActionBarClientBinding.bind(view)
         navController = findNavController()
 
@@ -116,20 +116,7 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
             })
 
             adapter.setOnItemClickListener { client ->
-                val clientDetailDialogFragment = ClientDetailDialogFragment(client)
-                clientDetailDialogFragment.show(
-                    requireActivity().supportFragmentManager,
-                    "ClientDetail"
-                )
-            }
-
-            adapter.setOnPhoneClickListener { phone ->
-                phone.dialPhone(requireActivity())
-            }
-
-            adapter.setOnPaymentClickListener { client ->
-                val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-                val jsonString = gsonPretty.toJson(
+                val clientStr = GsonBuilder().setPrettyPrinting().create().toJson(
                     client.apply {
                         Client(
                             id = id,
@@ -143,7 +130,38 @@ class ClientsFragment : Fragment(R.layout.fragment_clients) {
                     }
                 )
                 navController.navigate(
-                    ClientsFragmentDirections.actionClientsFragmentToNewPayment(client = jsonString)
+                    ClientFragmentDirections.actionClientsFragmentToClientDetailFragment(clientStr)
+                )
+            }
+
+            adapter.setOnPhoneClickListener { phone ->
+                phone.dialPhone(requireActivity())
+            }
+
+            adapter.setOnPaymentClickListener { client ->
+                val clientStr = GsonBuilder().setPrettyPrinting().create().toJson(
+                    client.apply {
+                        Client(
+                            id = id,
+                            name = name,
+                            phone = phone,
+                            tin = tin,
+                            balance = balance,
+                            comment = comment ?: "",
+                            type = type
+                        )
+                    }
+                )
+                navController.navigate(
+                    ClientFragmentDirections.actionClientsFragmentToNewPayment(client = clientStr)
+                )
+            }
+
+            adapter.setOnInfoClickListener { client ->
+                val clientDetailDialogFragment = ClientDetailDialogFragment(client = client)
+                clientDetailDialogFragment.show(
+                    requireActivity().supportFragmentManager,
+                    clientDetailDialogFragment.tag
                 )
             }
         }

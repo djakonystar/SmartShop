@@ -20,14 +20,14 @@ import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
-import uz.texnopos.elektrolife.ui.client.ClientsViewModel
+import uz.texnopos.elektrolife.ui.client.ClientViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
-    private val clientsViewModel: ClientsViewModel by viewModel()
+    private val clientViewModel: ClientViewModel by viewModel()
     private val newClientsViewModel: NewClientViewModel by viewModel()
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
@@ -59,7 +59,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
 
             etSearchClient.addTextChangedListener {
                 list.clear()
-                clientsViewModel.searchClient(it.toString())
+                clientViewModel.searchClient(it.toString())
             }
             etSearchClient.setOnItemClickListener { adapterView, _, i, _ ->
                 clientName = adapterView.getItemAtPosition(i).toString()
@@ -153,7 +153,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     }
 
     private fun setUpObservers() {
-        clientsViewModel.searchClient.observe(viewLifecycleOwner) {
+        clientViewModel.searchClient.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
