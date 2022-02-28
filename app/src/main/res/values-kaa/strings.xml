@@ -140,4 +140,6 @@
     <string name="error">Qátelik!</string>
     <string name="purchases">Satıp alıwlar</string>
     <string name="payments">Tólemler</string>
+    <string name="transaction">Tranzakciya</string>
+    <string name="transaction_successful">Tranzakciya tabıslı ámelge asırıldı!</string>
 </resources>

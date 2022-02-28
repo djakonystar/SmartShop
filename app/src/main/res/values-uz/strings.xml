@@ -140,4 +140,6 @@
     <string name="error">Xatolik!</string>
     <string name="purchases">Xaridlar</string>
     <string name="payments">To\'lovlar</string>
+    <string name="transaction">Tranzaksiya</string>
+    <string name="transaction_successful">Tranzaksiya muvaffaqiyatli amalga oshirildi!</string>
 </resources>

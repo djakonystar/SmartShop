@@ -140,4 +140,6 @@
     <string name="error">Ошибка!</string>
     <string name="purchases">Покупки</string>
     <string name="payments">Платежи</string>
+    <string name="transaction">Транзакция</string>
+    <string name="transaction_successful">Транзакция выполнено успешно!</string>
 </resources>
