@@ -9,7 +9,8 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "uz.texnopos.smartshoptest"
+        applicationId "uz.texnopos.smartshop"
+//        applicationId "uz.texnopos.smartshoptest"
         minSdk 23
         targetSdk 31
         versionCode 1
