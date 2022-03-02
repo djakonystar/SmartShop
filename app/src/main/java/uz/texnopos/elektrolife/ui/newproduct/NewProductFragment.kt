@@ -16,7 +16,10 @@ import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.*
+import uz.texnopos.elektrolife.core.MaskWatcherNothing
+import uz.texnopos.elektrolife.core.MaskWatcherPayment
+import uz.texnopos.elektrolife.core.MaskWatcherPaymentDollar
+import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
@@ -26,6 +29,8 @@ import uz.texnopos.elektrolife.data.model.newproduct.Product
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
+import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
@@ -33,6 +38,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var navController: NavController
     private lateinit var groupAdapter: ArrayAdapter<String>
     private val viewModel: NewProductViewModel by viewModel()
+    private val warehouseViewModel: WarehouseViewModel by viewModel()
     private val settings: Settings by inject()
     private var mutableList: MutableList<Categories> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
@@ -42,6 +48,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private var wholesalePercent: Int = 0
     private var minPercent: Int = 0
     private var maxPercent: Int = 0
+    private var list: MutableSet<String> = mutableSetOf()
+    private var listProducts: MutableMap<String, uz.texnopos.elektrolife.data.model.warehouse.Product> =
+        mutableMapOf()
+    private var productName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +89,21 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etMaxPrice.addTextChangedListener(MaskWatcherPayment(etMaxPrice))
             etProductQuantity.addTextChangedListener(MaskWatcherNothing(etProductQuantity))
 
-            etProductName.addTextChangedListener {
+            etSearchProduct.addTextChangedListener {
                 tilProductName.isErrorEnabled = false
+                if (it.toString().isNotEmpty()) {
+                    list.clear()
+                    warehouseViewModel.getProductsByName(it.toString())
+                }
+            }
+            etSearchProduct.setOnItemClickListener { adapterView, _, i, _ ->
+                productName = adapterView.getItemAtPosition(i).toString()
+                val product = listProducts.getValue(productName)
+                val dialog = TransactionDialog(product)
+                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                dialog.setOnDismissListener {
+                    etSearchProduct.text.clear()
+                }
             }
             etProductQuantity.addTextChangedListener {
                 tilProductQuantity.isErrorEnabled = false
@@ -127,7 +150,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             }
 
             btnAddProduct.onClick {
-                val productName = etProductName.text.toString()
+                val productName = etSearchProduct.text.toString()
                 val costPrice = etCostPrice.text.toString().getOnlyDigits()
                 val productQuantity = etProductQuantity.text.toString().filter { q -> q.isDigit() }
                 val branch = etBranchName.text.toString()
@@ -183,7 +206,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
     private fun String.getOnlyDigits(): String {
         val s = this.filter { it.isDigit() || it == '.' }
-        return if (s.isEmpty()) "0" else s
+        return s.ifEmpty { "0" }
     }
 
     private fun merge() {
@@ -197,7 +220,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
     @SuppressLint("SetTextI18n")
     private fun observeCostChange() {
-        liveCostPrice.observe(requireActivity(), {
+        liveCostPrice.observe(requireActivity()) {
             val price = it
             binding.apply {
                 val wholesalePrice = (wholesalePercent / 100.0 + 1) * price
@@ -214,7 +237,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     etMaxPrice.text!!.clear()
                 }
             }
-        })
+        }
     }
 
     private fun rounding(price: Long): Long {
@@ -232,7 +255,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     }
 
     private fun setupObserver() {
-        viewModel.categories.observe(viewLifecycleOwner, {
+        viewModel.categories.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -254,12 +277,53 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     showMessage(it.message)
                 }
             }
-        })
+        }
 
+        warehouseViewModel.warehouseProducts.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    if (it.data!!.successful) {
+                        it.data.payload.forEach { product ->
+                            list.add(product.name)
+                            if (!listProducts.contains(product.name)) listProducts[product.name] =
+                                product
+                        }
+                        binding.apply {
+                            if (etSearchProduct.text.isEmpty()) {
+                                list.clear()
+                                val arrayAdapter = ArrayAdapter(
+                                    requireContext(),
+                                    R.layout.item_spinner,
+                                    list.toMutableList()
+                                )
+                                etSearchProduct.setAdapter(arrayAdapter)
+                                etSearchProduct.dismissDropDown()
+                            } else {
+                                val arrayAdapter = ArrayAdapter(
+                                    requireContext(),
+                                    R.layout.item_spinner,
+                                    list.toMutableList()
+                                )
+                                etSearchProduct.setAdapter(arrayAdapter)
+                                etSearchProduct.showDropDown()
+                            }
+                        }
+                    } else {
+                        showMessage(it.data.message)
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        }
     }
 
     private fun setupObserverCreatedProduct() {
-        viewModel.createProduct.observe(viewLifecycleOwner, {
+        viewModel.createProduct.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -271,7 +335,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                         alertDialog.show()
                         binding.apply {
                             actSpinner.text.clear()
-                            etProductName.text!!.clear()
+                            etSearchProduct.text!!.clear()
                             etMinPrice.text!!.clear()
                             etMaxPrice.text!!.clear()
                             etCostPrice.text!!.clear()
@@ -289,6 +353,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     showMessage(it.message)
                 }
             }
-        })
+        }
     }
 }

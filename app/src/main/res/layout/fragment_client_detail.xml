@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:scrollbarStyle="insideInset"
         app:layout_constraintTop_toBottomOf="@id/actionBar"
-        app:tabMode="auto" />
+        app:tabMode="fixed" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

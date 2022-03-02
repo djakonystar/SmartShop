@@ -45,7 +45,6 @@ class ClientViewModel(private val api: ApiInterface, private val settings: Setti
                     mutableSearchClient.value = Resource.error(error.localizedMessage)
                 }
             )
-        Log.d("getClient", searchSubject.value ?: "")
     }
 
     fun getClients(limit: Int, page: Int, search: String) {

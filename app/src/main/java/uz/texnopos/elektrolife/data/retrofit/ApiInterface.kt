@@ -20,6 +20,7 @@ import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.data.model.newproduct.Categories
 import uz.texnopos.elektrolife.data.model.newproduct.Product
 import uz.texnopos.elektrolife.data.model.newproduct.ProductId
+import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.Products
@@ -181,4 +182,13 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Path("client_id") clientId: Int
     ): Observable<GenericResponse<List<Sales>>>
+
+    /**
+     * Add-on new quantity to existing product (Transaction)
+     */
+    @POST("api/warehouse")
+    fun newTransaction(
+        @Header("Authorization") token: String,
+        @Body transaction: Transaction
+    ): Observable<GenericResponse<List<Any>>>
 }

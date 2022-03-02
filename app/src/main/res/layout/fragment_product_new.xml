@@ -68,18 +68,22 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilProductName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_standard"
                     android:hint="@string/product_name"
-                    app:endIconMode="clear_text"
+                    app:endIconMode="dropdown_menu"
+                    app:endIconTint="@color/app_main_color"
                     app:layout_constraintTop_toBottomOf="@id/tilSpinner">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etProductName"
+                    <AutoCompleteTextView
+                        android:id="@+id/etSearchProduct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:dropDownHeight="wrap_content"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +109,6 @@
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilBranchName"
