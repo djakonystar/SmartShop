@@ -19,22 +19,43 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
 
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableBalance: MutableLiveData<Resource<GenericResponse<Balance>>> =
+    private var mutableCashboxBalance: MutableLiveData<Resource<GenericResponse<Balance>>> =
         MutableLiveData()
-    val balance: LiveData<Resource<GenericResponse<Balance>>> = mutableBalance
+    val cashboxBalance: LiveData<Resource<GenericResponse<Balance>>> = mutableCashboxBalance
 
-    fun getCashboxBalance() {
-        mutableBalance.value = Resource.loading()
+    fun getCashboxBalance(from: String, to: String) {
+        mutableCashboxBalance.value = Resource.loading()
         compositeDisposable.add(
-            api.getCashboxBalance("Bearer ${settings.token}")
+            api.getCashboxBalance("Bearer ${settings.token}", from, to)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableBalance.value = Resource.success(response)
+                        mutableCashboxBalance.value = Resource.success(response)
                     },
                     { error ->
-                        mutableBalance.value = Resource.error(error.localizedMessage)
+                        mutableCashboxBalance.value = Resource.error(error.localizedMessage)
+                    }
+                )
+        )
+    }
+
+    private var mutableProfit: MutableLiveData<Resource<GenericResponse<Balance>>> =
+        MutableLiveData()
+    val profit: LiveData<Resource<GenericResponse<Balance>>> = mutableProfit
+
+    fun getProfit(from: String, to: String) {
+        mutableProfit.value = Resource.loading()
+        compositeDisposable.add(
+            api.getProfit("Bearer ${settings.token}", from, to)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        mutableProfit.value = Resource.success(response)
+                    },
+                    { error ->
+                        mutableProfit.value = Resource.error(error.localizedMessage)
                     }
                 )
         )
@@ -84,5 +105,10 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
                     }
                 )
         )
+    }
+
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
     }
 }

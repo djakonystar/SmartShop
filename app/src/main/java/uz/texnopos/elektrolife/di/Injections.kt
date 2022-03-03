@@ -36,8 +36,8 @@ import uz.texnopos.elektrolife.ui.warehouse.WarehouseAdapter
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 import java.util.concurrent.TimeUnit
 
-//private const val baseUrl = "https://electro-life.my-project.site" // Test
-private const val baseUrl = "https://electro-life.texnopos.site" // ElectroLife
+private const val baseUrl = "https://electro-life.my-project.site" // Test
+//private const val baseUrl = "https://electro-life.texnopos.site" // ElectroLife
 //private const val baseUrl = "http://lux-gadget.texnopos.site" // LuxGadget
 //private const val baseUrl = "https://qonirat-shop.texnopos.site" // Qońirat Shop
 private const val timeOut = 50L

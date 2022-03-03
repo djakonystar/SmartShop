@@ -135,11 +135,23 @@ interface ApiInterface {
     ): Observable<GenericResponse<DollarRate>>
 
     /**
-     * Finance: Get cashbox balance
+     * Finance: Get cashbox balance in date range [from] - [to]
      */
     @GET("api/balance")
     fun getCashboxBalance(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("to") from: String,
+        @Query("do") to: String
+    ): Observable<GenericResponse<Balance>>
+
+    /**
+     * Finance: Get profit in date range [from] - [to]
+     */
+    @GET("api/profit")
+    fun getProfit(
+        @Header("Authorization") token: String,
+        @Query("to") from: String,
+        @Query("do") to: String
     ): Observable<GenericResponse<Balance>>
 
     /**
