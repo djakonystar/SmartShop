@@ -1,6 +1,5 @@
 package uz.texnopos.elektrolife.ui.client
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.model.clients.ClientInfo
 import uz.texnopos.elektrolife.data.GenericResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
@@ -25,9 +23,9 @@ class ClientViewModel(private val api: ApiInterface, private val settings: Setti
         MutableLiveData()
     val clients: LiveData<Resource<GenericResponse<List<Client>>>> = mutableClients
 
-    private var mutableSearchClient: MutableLiveData<Resource<GenericResponse<List<ClientInfo>>>> =
+    private var mutableSearchClient: MutableLiveData<Resource<GenericResponse<List<Client>>>> =
         MutableLiveData()
-    val searchClient: LiveData<Resource<GenericResponse<List<ClientInfo>>>> get() = mutableSearchClient
+    val searchClient: LiveData<Resource<GenericResponse<List<Client>>>> get() = mutableSearchClient
 
     init {
         searchSubject

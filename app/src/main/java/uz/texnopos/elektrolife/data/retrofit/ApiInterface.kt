@@ -2,7 +2,6 @@ package uz.texnopos.elektrolife.data.retrofit
 
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.*
-import uz.texnopos.elektrolife.data.model.clients.ClientInfo
 import uz.texnopos.elektrolife.data.GenericResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.clients.ClientPayment
@@ -38,7 +37,7 @@ interface ApiInterface {
     fun getClients(
         @Header("Authorization") token: String,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<ClientInfo>>>
+    ): Observable<GenericResponse<List<Client>>>
 
     @GET("api/clients")
     fun getClients(
@@ -52,7 +51,7 @@ interface ApiInterface {
     fun getClientsByName(
         @Header("Authorization") token: String,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<ClientInfo>>>
+    ): Observable<GenericResponse<List<Client>>>
 
     @POST("api/client/payment")
     fun payment(

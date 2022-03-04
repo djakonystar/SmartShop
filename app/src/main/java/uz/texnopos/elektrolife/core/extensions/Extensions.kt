@@ -208,3 +208,8 @@ val String.changeDateFormat: String
             "$year-$month-$day"
         }
     }
+
+fun String.getOnlyDigits(): String {
+    val s = this.filter { it.isDigit() }
+    return s.ifEmpty { "0" }
+}

@@ -15,6 +15,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.getOnlyDigits
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
@@ -140,11 +141,6 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
         setUpObservers()
     }
 
-    private fun String.getOnlyDigits(): String {
-        val s = this.filter { it.isDigit() }
-        return s.ifEmpty { "0" }
-    }
-
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
@@ -162,7 +158,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                         it.data.payload.forEach { client ->
                             list.add("${client.name}, ${client.phone}")
                             if (!listIds.contains("${client.name}, ${client.phone}"))
-                                listIds["${client.name}, ${client.phone}"] = client.clientId
+                                listIds["${client.name}, ${client.phone}"] = client.id
                             val arrayAdapter = ArrayAdapter(
                                 requireContext(),
                                 R.layout.item_spinner,

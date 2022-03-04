@@ -1,15 +1,16 @@
 package uz.texnopos.elektrolife.ui.newpayment
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,9 +19,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.getOnlyDigits
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showMessage
-import uz.texnopos.elektrolife.core.extensions.visibility
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
@@ -30,26 +32,27 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private lateinit var binding: FragmentPaymentNewBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
+    private lateinit var client: Client
     private val viewModel: NewPaymentViewModel by viewModel()
     private val args: NewPaymentFragmentArgs by navArgs()
-    private var method: String = ""
-    private var cash = ""
-    private var card = ""
     private var clientId: Int = 0
-    private var comment: String = ""
     private var searchValue: String = ""
     private var clientName = ""
+    private var clientNameLiveData = MutableLiveData<String>()
     private var list: MutableSet<String> = mutableSetOf()
-    private var listIds: MutableMap<String, Int> = mutableMapOf()
+    private var listClients: MutableMap<String, Client> = mutableMapOf()
     private lateinit var adapter: ArrayAdapter<String>
 
-
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentPaymentNewBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
+        client = Client(0, "", "", "", 0, "", 0)
+
+        viewModel.searchClient("")
         setUpObservers()
 
         val fromClientFragment = args.client != "null"
@@ -63,89 +66,52 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
 
         binding.apply {
             if (fromClientFragment) {
-                val client = Gson().fromJson(args.client, Client::class.java)
+                client = Gson().fromJson(args.client, Client::class.java)
                 tilClient.isEnabled = false
-                etSearchClient.setText(client.name)
+                list.add("${client.name}, ${client.phone}")
+                if (!listClients.contains("${client.name}, ${client.phone}"))
+                    listClients["${client.name}, ${client.phone}"] = client
+                etSearchClient.setText("${client.name}, ${client.phone}")
+                clientNameLiveData.postValue(etSearchClient.text.toString())
                 clientId = client.id
             }
 
-            etPaymentCard.addTextChangedListener(MaskWatcherPayment(etPaymentCard))
-            etPaymentCash.addTextChangedListener(MaskWatcherPayment(etPaymentCash))
+            etCard.addTextChangedListener(MaskWatcherPayment(etCard))
+            etCash.addTextChangedListener(MaskWatcherPayment(etCash))
+            tvBalance.text = context?.getString(R.string.sum_text, "0")
 
-            tvMethodStr.text = view.context.getString(R.string.method_uzb)
-            rb1.text = view.context.getString(R.string.cash_uzb)
-            rb2.text = view.context.getString(R.string.uzcard)
-            rb3.text = view.context.getString(R.string.mix)
-
-            rb1.onClick {
-                etPaymentCash.text = null
-                etPaymentCard.text = null
-                method = view.context.getString(R.string.cash_uzb)
-                tilPaymentCash.visibility(true)
-                tilPaymentCard.visibility(false)
-            }
-            rb2.onClick {
-                etPaymentCash.text = null
-                etPaymentCard.text = null
-                method = view.context.getString(R.string.uzcard)
-                tilPaymentCash.visibility(false)
-                tilPaymentCard.visibility(true)
-            }
-            rb3.onClick {
-                etPaymentCash.text = null
-                etPaymentCard.text = null
-                method = view.context.getString(R.string.mix)
-                tilPaymentCash.visibility(true)
-                tilPaymentCard.visibility(true)
-            }
-            etSearchClient.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-                clientName = parent.getItemAtPosition(position).toString()
-                clientId = listIds.getValue(clientName)
-            }
-            etSearchClient.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            etSearchClient.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, _, position, _ ->
+                    tilClient.isErrorEnabled = false
+                    clientName = parent.getItemAtPosition(position).toString()
+                    client = listClients.getValue(clientName)
+                    clientId = client.id
                 }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    if (p0?.length!! > 0) {
-                        list.clear()
-                        searchValue = p0.toString()
-                        viewModel.searchClient(searchValue)
+            etSearchClient.addTextChangedListener {
+                clientNameLiveData.postValue(it.toString())
+                list.clear()
+                searchValue = it.toString()
+                viewModel.searchClient(searchValue)
+            }
+            btnCashMagnet.onClick {
+                client.balance?.let { balance ->
+                    if (balance < 0) {
+                        etCard.text?.clear()
+                        etCash.setText((-balance).toString())
                     }
                 }
-
-            })
+            }
+            btnCardMagnet.onClick {
+                client.balance?.let { balance ->
+                    if (balance < 0) {
+                        etCash.text?.clear()
+                        etCard.setText((-balance).toString())
+                    }
+                }
+            }
 
             btnAddPayment.onClick {
-                if (method.isEmpty()) {
-                    showMessage(context?.getString(R.string.choose_payment_type))
-                } else if (etPaymentCard.text!!.isEmpty() && etPaymentCash.text!!.isEmpty() && etSearchClient.text!!.isEmpty()) {
-                    showMessage(context?.getString(R.string.choose_client_and_fill_payment))
-                } else if (rb1.isChecked && etPaymentCash.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
-                    cash = etPaymentCash.text.toString()
-                    cash = cash.replace("\\s".toRegex(), "")
-                    cash = cash.substring(0, cash.length - 3)
-                    viewModel.newPayment(NewPayment(clientId, cash.toInt(), 0, comment))
-                } else if (rb2.isChecked && etPaymentCard.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
-                    card = etPaymentCard.text.toString()
-                    card = card.replace("\\s".toRegex(), "")
-                    card = card.substring(0, card.length - 3)
-                    viewModel.newPayment(NewPayment(clientId, 0, card.toInt(), comment))
-                } else if (rb3.isChecked && etPaymentCash.text!!.isNotEmpty() && etPaymentCard.text!!.isNotEmpty() && etSearchClient.text!!.isNotEmpty()) {
-                    cash = etPaymentCash.text.toString()
-                    cash = cash.replace("\\s".toRegex(), "")
-                    cash = cash.substring(0, cash.length - 3)
-                    card = etPaymentCard.text.toString()
-                    card = card.replace("\\s".toRegex(), "")
-                    card = card.substring(0, card.length - 3)
-                    comment = etComment.text.toString()
-                    viewModel.newPayment(NewPayment(clientId, cash.toInt(), card.toInt(), comment))
-                } else {
-                    showMessage(context?.getString(R.string.choose_client_and_fill_payment))
-                }
+                checkAndSend()
             }
         }
     }
@@ -170,8 +136,9 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                         alertDialog.show()
                         binding.apply {
                             etSearchClient.text.clear()
-                            etPaymentCard.text!!.clear()
-                            etPaymentCash.text!!.clear()
+                            tilClient.isEnabled = true
+                            etCard.text!!.clear()
+                            etCash.text!!.clear()
                             etComment.text!!.clear()
                         }
                     } else {
@@ -185,25 +152,85 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
             }
         }
 
-        viewModel.searchClient.observe(viewLifecycleOwner,{
-            when(it.status){
-                ResourceState.LOADING->setLoading(true)
-                ResourceState.SUCCESS->{setLoading(false)
-                if (it.data!!.successful)
-                {
-                    it.data.payload.forEach {data->
-                        list.add("${data.name}, ${data.phone}")
-                        if (!listIds.contains("${data.name}, ${data.phone}")) listIds["${data.name}, ${data.phone}"]=data.clientId
-                        adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,list.toMutableList())
-                        binding.etSearchClient.setAdapter(adapter)
-                 }
-                }else{
-                    Toast.makeText(requireContext(), it.data.message, Toast.LENGTH_SHORT).show()}
-                }
-                ResourceState.ERROR->{
+        viewModel.searchClient.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
                     setLoading(false)
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()}
+                    if (it.data!!.successful) {
+                        it.data.payload.forEach { client1 ->
+                            list.add("${client1.name}, ${client1.phone}")
+                            if (!listClients.contains("${client1.name}, ${client1.phone}"))
+                                listClients["${client1.name}, ${client1.phone}"] = client1
+                            adapter = ArrayAdapter(
+                                requireContext(),
+                                R.layout.item_spinner,
+                                list.toMutableList()
+                            )
+                            binding.etSearchClient.setAdapter(adapter)
+                            binding.etSearchClient.showDropDown()
+                        }
+                    } else {
+                        showMessage(it.data.message)
+                    }
                 }
-        })
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        }
+
+        clientNameLiveData.observe(viewLifecycleOwner) {
+            binding.apply {
+                if (listClients.containsKey(it)) {
+                    val currentClient = listClients.getValue(it)
+                    tvBalance.text =
+                        context?.getString(R.string.sum_text, currentClient.balance?.toSumFormat)
+                    currentClient.balance?.let { balance ->
+                        tvBalance.setTextColor(
+                            when {
+                                balance < 0 -> {
+                                    ContextCompat.getColor(requireContext(), R.color.error_color)
+                                }
+                                balance > 0 -> {
+                                    ContextCompat.getColor(requireContext(), R.color.app_main_color)
+                                }
+                                else -> {
+                                    ContextCompat.getColor(requireContext(), R.color.black)
+                                }
+                            }
+                        )
+                    }
+                } else {
+                    tvBalance.text = context?.getString(R.string.sum_text, "0")
+                    tvBalance.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                }
+            }
+        }
+    }
+
+    private fun checkAndSend() {
+        binding.apply {
+            val selectedClient = etSearchClient.text.toString()
+            if (!listClients.containsKey(selectedClient)) clientId = -1
+            val cash = etCash.text.toString().getOnlyDigits().toLong()
+            val card = etCard.text.toString().getOnlyDigits().toLong()
+            val comment = etComment.text.toString()
+
+            if (clientId == -1) {
+                tilClient.error = context?.getString(R.string.required_field)
+                etSearchClient.showDropDown()
+            } else {
+                viewModel.newPayment(
+                    NewPayment(
+                        clientId = clientId,
+                        cash = cash,
+                        card = card,
+                        description = comment
+                    )
+                )
+            }
+        }
     }
 }
