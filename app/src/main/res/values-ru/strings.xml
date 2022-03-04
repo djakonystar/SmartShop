@@ -125,7 +125,7 @@
     <string name="payer">Плательщик</string>
     <string name="add_income">Добавить доход</string>
     <string name="incomes">Доходы</string>
-    <string name="cashbox_title">Сейчас в кассе:</string>
+    <string name="cashbox_title">Касса</string>
     <string name="total_debt_text">Долг: %s UZS</string>
     <string name="natural_person_short">Ф</string>
     <string name="legal_person_short">Ю</string>
@@ -142,4 +142,6 @@
     <string name="payments">Платежи</string>
     <string name="transaction">Транзакция</string>
     <string name="transaction_successful">Транзакция выполнено успешно!</string>
+    <string name="choose_range">Выберите диапазон</string>
+    <string name="profit_title">Прибыль</string>
 </resources>

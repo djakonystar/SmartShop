@@ -100,7 +100,7 @@
     <string name="remove_uz">Óshiriw</string>
     <string name="confirm_remove_uz">Siz haqıyqatında da usı ónimdi sebetten óshirmekshisiz be?</string>
     <string name="finance">Finans</string>
-    <string name="expenses">Shıǵinlar</string>
+    <string name="expenses">Shıǵınlar</string>
     <string name="expense_any">Basqalar</string>
     <string name="expense_administrative">Administratsiyalıq shıǵınlar</string>
     <string name="expense_rent">Ijara tólemleri</string>
@@ -126,7 +126,7 @@
     <string name="payer">Beriwshi</string>
     <string name="add_income">Kirim qosıw</string>
     <string name="incomes">Kirimler</string>
-    <string name="cashbox_title">Házir kassada:</string>
+    <string name="cashbox_title">Kassa</string>
     <string name="natural_person_short">F</string>
     <string name="legal_person_short">Yu</string>
     <string name="category_added_successfully">Taraw tabıslı qosıldı!</string>
@@ -142,4 +142,6 @@
     <string name="payments">Tólemler</string>
     <string name="transaction">Tranzakciya</string>
     <string name="transaction_successful">Tranzakciya tabıslı ámelge asırıldı!</string>
+    <string name="choose_range">Aralıqtı saylań</string>
+    <string name="profit_title">Sap payda</string>
 </resources>

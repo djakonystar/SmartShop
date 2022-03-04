@@ -126,7 +126,7 @@
     <string name="payer">Beruvchi</string>
     <string name="add_income">Kirim qo\'shish</string>
     <string name="incomes">Kirimlar</string>
-    <string name="cashbox_title">Hozir kassada:</string>
+    <string name="cashbox_title">Kassa</string>
     <string name="natural_person_short">J</string>
     <string name="legal_person_short">Yu</string>
     <string name="category_added_successfully">Kategoriya muvaffaqiyatli qo\'shildi!</string>
@@ -142,4 +142,6 @@
     <string name="payments">To\'lovlar</string>
     <string name="transaction">Tranzaksiya</string>
     <string name="transaction_successful">Tranzaksiya muvaffaqiyatli amalga oshirildi!</string>
+    <string name="choose_range">Oraliqni tanlang</string>
+    <string name="profit_title">Sof foyda</string>
 </resources>

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-<!--    <string name="app_name" translatable="false">SmartShop Test</string>-->
-    <string name="app_name" translatable="false">SmartShop</string>
+    <string name="app_name" translatable="false">SmartShop Test</string>
+<!--    <string name="app_name" translatable="false">SmartShop</string>-->
     <string name="warehouse">Omborxona</string>
     <string name="clients">Mijozlar</string>
     <string name="new_client">Yangi mijoz</string>
@@ -147,7 +147,7 @@
     <string name="payer">Beruvchi</string>
     <string name="add_income">Kirim qo\'shish</string>
     <string name="incomes">Kirimlar</string>
-    <string name="cashbox_title">Hozir kassada:</string>
+    <string name="cashbox_title">Kassa</string>
     <string name="natural_person_short">J</string>
     <string name="legal_person_short">Yu</string>
     <string name="expense_any_back" translatable="false">Boshqalar</string>
@@ -175,4 +175,7 @@
     <string name="payments">To\'lovlar</string>
     <string name="transaction">Tranzaksiya</string>
     <string name="transaction_successful">Tranzaksiya muvaffaqiyatli amalga oshirildi!</string>
+    <string name="choose_range">Oraliqni tanlang</string>
+    <string name="date_range_text" translatable="false">%s - %s</string>
+    <string name="profit_title">Sof foyda</string>
 </resources>
