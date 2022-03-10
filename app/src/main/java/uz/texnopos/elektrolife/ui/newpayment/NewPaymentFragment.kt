@@ -52,7 +52,6 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
         navController = findNavController()
         client = Client(0, "", "", "", 0, "", 0)
 
-        viewModel.searchClient("")
         setUpObservers()
 
         val fromClientFragment = args.client != "null"
@@ -74,6 +73,8 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 etSearchClient.setText("${client.name}, ${client.phone}")
                 clientNameLiveData.postValue(etSearchClient.text.toString())
                 clientId = client.id
+            } else {
+                viewModel.searchClient("")
             }
 
             etCard.addTextChangedListener(MaskWatcherPayment(etCard))
