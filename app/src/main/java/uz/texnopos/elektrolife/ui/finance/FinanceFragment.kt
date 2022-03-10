@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
@@ -22,6 +23,7 @@ import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentFinanceBinding
+import uz.texnopos.elektrolife.settings.Settings
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,6 +32,7 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val viewModel: FinanceViewModel by viewModel()
+    private val settings: Settings by inject()
     private val calendarHelper = CalendarHelper()
     private var lastSumOfCashbox = 0.0
     private var lastSumOfProfit = 0.0
@@ -55,6 +58,10 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
             btnHome.onClick {
                 navController.popBackStack()
             }
+        }
+
+        if (settings.role == "CEO" || settings.role == "ceo") {
+            binding.cardProfit.isVisible = true
         }
 
         binding.apply {
