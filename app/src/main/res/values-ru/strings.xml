@@ -144,4 +144,5 @@
     <string name="transaction_successful">Транзакция выполнено успешно!</string>
     <string name="choose_range">Выберите диапазон</string>
     <string name="profit_title">Прибыль</string>
+    <string name="err_valid_sum">Введите корректную сумму</string>
 </resources>
