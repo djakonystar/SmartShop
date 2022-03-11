@@ -38,6 +38,7 @@
                     android:background="@color/white"
                     android:elevation="@dimen/elevation_standard"
                     app:cardCornerRadius="@dimen/radius_card_view"
+                    app:layout_constraintBottom_toTopOf="@id/cardProfit"
                     app:layout_constraintTop_toBottomOf="@id/actionBar">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -139,10 +140,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_standard"
-                    android:layout_marginTop="@dimen/margin_middle"
                     android:layout_marginBottom="@dimen/margin_standard"
                     android:background="@color/white"
                     android:elevation="@dimen/elevation_standard"
+                    android:visibility="gone"
                     app:cardCornerRadius="@dimen/radius_card_view"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cardCashbox">
