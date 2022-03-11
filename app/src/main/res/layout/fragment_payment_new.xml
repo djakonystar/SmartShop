@@ -26,7 +26,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_middle"
+                android:layout_marginHorizontal="@dimen/margin_standard"
                 android:hint="@string/choose_client"
                 app:helperText="@string/search_client_hint"
                 app:layout_constraintTop_toTopOf="parent"
@@ -44,107 +44,103 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tvMethodStr"
+                android:id="@+id/tvBalance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_standard"
-                android:textSize="@dimen/text_size_standard"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilClient"
                 tools:ignore="SpUsage" />
 
-            <RadioGroup
-                android:id="@+id/rg"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCash"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_standard_middle"
-                android:padding="@dimen/padding_standard_middle"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:layout_marginEnd="@dimen/margin_middle"
+                android:hint="@string/cash_cost"
+                app:endIconMode="clear_text"
+                app:helperText="@string/cash_pay_helper"
+                app:layout_constraintEnd_toStartOf="@id/btnCashMagnet"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvMethodStr">
+                app:layout_constraintTop_toBottomOf="@id/tvBalance">
 
-                <RadioButton
-                    android:id="@+id/rb1"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCash"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_standard"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    tools:ignore="RtlSymmetry,SpUsage" />
+                    android:digits="0123456789 "
+                    android:inputType="number"
+                    android:maxLength="19"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/item_text_size_standard_mobile"
+                    tools:ignore="SpUsage" />
 
-                <RadioButton
-                    android:id="@+id/rb2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_standard"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    tools:ignore="RtlSymmetry,SpUsage" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/rb3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_standard"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    tools:ignore="RtlSymmetry,SpUsage" />
+            <ImageView
+                android:id="@+id/btnCashMagnet"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:layout_marginEnd="@dimen/margin_standard"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/add"
+                android:focusable="true"
+                android:padding="2dp"
+                android:src="@drawable/magnet"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tilCash"
+                app:tint="@color/app_main_color" />
 
-            </RadioGroup>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCard"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/rg">
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:layout_marginEnd="@dimen/margin_middle"
+                android:hint="@string/card_cost"
+                app:endIconMode="clear_text"
+                app:helperText="@string/card_pay_helper"
+                app:layout_constraintEnd_toStartOf="@id/btnCardMagnet"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilCash">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilPaymentCash"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_standard"
-                    android:layout_marginTop="@dimen/margin_standard"
-                    android:hint="@string/cash_cost"
-                    android:visibility="gone"
-                    app:endIconMode="clear_text"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:digits="0123456789 "
+                    android:inputType="number"
+                    android:maxLength="19"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/item_text_size_standard_mobile"
+                    tools:ignore="SpUsage" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPaymentCash"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789 "
-                        android:inputType="number"
-                        android:maxLength="19"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="SpUsage" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilPaymentCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_standard"
-                    android:layout_marginTop="@dimen/margin_standard"
-                    android:hint="@string/card_cost"
-                    android:visibility="gone"
-                    app:endIconMode="clear_text"
-                    app:layout_constraintTop_toBottomOf="@id/tilPaymentCash">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPaymentCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789 "
-                        android:inputType="number"
-                        android:maxLength="19"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        tools:ignore="SpUsage" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/btnCardMagnet"
+                android:layout_width="@dimen/img_standard_height_mobile"
+                android:layout_height="@dimen/img_standard_height_mobile"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:layout_marginEnd="@dimen/margin_standard"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/add"
+                android:focusable="true"
+                android:padding="2dp"
+                android:src="@drawable/magnet"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tilCard"
+                app:tint="@color/app_main_color" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilComment"
@@ -154,7 +150,7 @@
                 android:layout_marginTop="@dimen/margin_standard"
                 android:hint="@string/comment"
                 app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@id/constraint">
+                app:layout_constraintTop_toBottomOf="@id/tilCard">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etComment"

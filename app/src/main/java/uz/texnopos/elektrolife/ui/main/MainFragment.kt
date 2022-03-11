@@ -71,7 +71,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         navController.navigate(R.id.action_mainFragment_to_salesFragment)
                     }
                 }
-                "admin" -> {
+                "admin", "CEO", "ceo" -> {
                     newProduct.isEnabled = true
                     ivOther.isVisible = false
                     finance.onClick {
