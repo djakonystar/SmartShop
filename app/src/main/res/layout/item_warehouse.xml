@@ -69,8 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:textColor="@color/app_main_color"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/app_main_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvName"
             tools:ignore="SpUsage" />
