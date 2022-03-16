@@ -19,7 +19,7 @@
     <dimen name="padding_middle">8dp</dimen>
     <dimen name="elevation_standard">8dp</dimen>
     <dimen name="action_bar_title_size">20dp</dimen>
-    <dimen name="action_bar_title_size_mobile">16dp</dimen>
+    <dimen name="action_bar_title_size_mobile">18dp</dimen>
     <dimen name="til_corner_radius">8dp</dimen>
     <dimen name="button_padding_horizontal">48dp</dimen>
     <dimen name="item_text_size_standard_tablet">22dp</dimen>
@@ -61,4 +61,6 @@
     <dimen name="finance_category_height_mobile">48dp</dimen>
     <dimen name="client_detail_title_size">26dp</dimen>
     <dimen name="client_detail_title_size_mobile">20dp</dimen>
+
+
 </resources>

@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,13 +69,13 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
         }
 
         binding.apply {
-//            swipeRefresh.setOnRefreshListener {
-//                setLoading(false)
-//                swipeRefresh.isRefreshing = false
-//                mutableClient = mutableListOf()
-//                page = 1
-//                viewModel.getClients(limit, page, etSearch.text.toString())
-//            }
+            swipeRefresh.setOnRefreshListener {
+                setLoading(false)
+                swipeRefresh.isRefreshing = false
+                mutableClient = mutableListOf()
+                page = 1
+                viewModel.getClients(limit, page, etSearch.text.toString())
+            }
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = layoutManager
@@ -174,7 +175,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
         binding.apply {
             progressBar.isVisible = loading
             recyclerView.isEnabled = !loading
-//            swipeRefresh.isEnabled = !loading
+            swipeRefresh.isEnabled = !loading
         }
     }
 
@@ -208,5 +209,23 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 }
             }
         }
+
+        newClientViewModel.registerNewClient.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    setLoading(true)
+                }
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    mutableClient = mutableListOf()
+                    viewModel.getClients(limit, 1, "")
+
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showMessage(it.message)
+                }
+            }
+        })
     }
 }
