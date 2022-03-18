@@ -178,4 +178,5 @@
     <string name="choose_range">Oraliqni tanlang</string>
     <string name="date_range_text" translatable="false">%s - %s</string>
     <string name="profit_title">Sof foyda</string>
+    <string name="err_valid_sum">Haqiqiy summa kiriting</string>
 </resources>

@@ -11,17 +11,22 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
+import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherNothing
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
+import uz.texnopos.elektrolife.core.extensions.getOnlyDigits
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
+import uz.texnopos.elektrolife.settings.Settings
 
 class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
+    private val settings: Settings by inject()
     private var visibilityLiveData = MutableLiveData<Boolean>()
+    private var sumLiveData = MutableLiveData<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +43,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
         binding = DialogAddToBasketBinding.bind(view)
 
-        observe()
+        setUpObservers()
 
         binding.apply {
             val remained = product.remained
@@ -75,7 +80,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             }
 
             etSumma.addTextChangedListener {
-                tilSumma.isErrorEnabled = false
+                sumLiveData.postValue(it.toString().getOnlyDigits().toLong())
             }
 
             btnAdd.onClick {
@@ -121,17 +126,24 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         onDismiss.invoke()
     }
 
-    private fun String.getOnlyDigits(): String {
-        val s = this.filter { it.isDigit() }
-        return if (s.isEmpty()) "0" else s
-    }
-
     @SuppressLint("SetTextI18n")
-    private fun observe() {
+    private fun setUpObservers() {
         visibilityLiveData.observe(viewLifecycleOwner) {
             binding.apply {
                 tvWholesale.isVisible = it
                 tvMin.isVisible = it
+            }
+        }
+
+        sumLiveData.observe(viewLifecycleOwner) { sum ->
+            binding.apply {
+                if (sum < product.priceWholesale * settings.dollarRate || sum > product.priceMax) {
+                    if (!tilSumma.isErrorEnabled) {
+                        tilSumma.error = context?.getString(R.string.err_valid_sum)
+                    }
+                } else {
+                    tilSumma.isErrorEnabled = false
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -54,6 +55,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
 
         binding.apply {
             tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
+            calculateDebt()
 
             etCash.addTextChangedListener(MaskWatcherPayment(etCash))
             etCard.addTextChangedListener(MaskWatcherPayment(etCard))
@@ -83,6 +85,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
             }
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
+                calculateDebt()
             }
             btnCashMagnet.onClick {
                 etCard.text?.clear()
@@ -90,6 +93,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
             }
             etCard.addTextChangedListener {
                 tilCard.isErrorEnabled = false
+                calculateDebt()
             }
             btnCardMagnet.onClick {
                 etCash.text?.clear()
@@ -192,6 +196,32 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                     showMessage(it.message)
                 }
             }
+        }
+    }
+
+    private fun calculateDebt() {
+        binding.apply {
+            val cashPrice = etCash.text.toString().getOnlyDigits().toLong()
+            val cardPrice = etCard.text.toString().getOnlyDigits().toLong()
+            val remind = totalPrice - cashPrice - cardPrice
+            if (remind > 0) {
+                tvDebtPrice.text = context?.getString(R.string.sum_text, "-${remind.toSumFormat}")
+            } else {
+                tvDebtPrice.text = context?.getString(R.string.sum_text, (-remind).toSumFormat)
+            }
+
+            btnAdd.isEnabled = remind >= 0
+
+            tvDebtPrice.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    when {
+                        remind > 0 -> R.color.error_color
+                        remind == 0L -> R.color.black
+                        else -> R.color.app_main_color
+                    }
+                )
+            )
         }
     }
 
