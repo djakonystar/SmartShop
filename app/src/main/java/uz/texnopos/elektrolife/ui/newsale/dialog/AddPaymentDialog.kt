@@ -210,6 +210,8 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 tvDebtPrice.text = context?.getString(R.string.sum_text, (-remind).toSumFormat)
             }
 
+            btnAdd.isEnabled = remind >= 0
+
             tvDebtPrice.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
