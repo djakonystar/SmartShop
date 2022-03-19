@@ -47,6 +47,11 @@ class LangDialog : DialogFragment() {
                 dismiss()
                 (requireActivity() as MainActivity).setNewLocale()
             }
+            tvEng.onClick {
+                settings.language = "en"
+                dismiss()
+                (requireActivity() as MainActivity).setNewLocale()
+            }
         }
     }
 }
