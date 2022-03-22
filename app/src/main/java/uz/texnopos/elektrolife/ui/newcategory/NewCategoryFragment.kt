@@ -1,6 +1,5 @@
 package uz.texnopos.elektrolife.ui.newcategory
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -19,6 +18,7 @@ import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
 import uz.texnopos.elektrolife.data.model.newcategory.Percent
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentCategoryNewBinding
+import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 
 class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
     private lateinit var binding: FragmentCategoryNewBinding
@@ -115,7 +115,7 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
     }
 
     private fun setupObserver() {
-        viewModel.newCategory.observe(viewLifecycleOwner, {
+        viewModel.newCategory.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     setLoading(true)
@@ -123,19 +123,21 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        val alertDialog = AlertDialog.Builder(requireContext())
-                        alertDialog.setTitle(context?.getString(R.string.success))
-                        alertDialog.setMessage(context?.getString(R.string.category_added_successfully))
-                        alertDialog.show()
+                        val successDialog =
+                            SuccessDialog(getString(R.string.category_added_successfully))
+                        successDialog.setOnPositiveButtonClickListener {
+                            navController.popBackStack()
+                        }
+                        successDialog.show(
+                            requireActivity().supportFragmentManager,
+                            successDialog.tag
+                        )
                         binding.apply {
                             etCategoryName.text!!.clear()
                             etMaxPercent.text!!.clear()
                             etMinPercent.text!!.clear()
                             etMinQuantity.text!!.clear()
                             etWholesalePercent.text!!.clear()
-                        }
-                        alertDialog.setOnDismissListener {
-                            navController.navigate(R.id.action_newCategoryFragment_to_newProductFragment)
                         }
                     } else {
                         showMessage(it.data.message)
@@ -146,6 +148,6 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                     showMessage(it.message)
                 }
             }
-        })
+        }
     }
 }
