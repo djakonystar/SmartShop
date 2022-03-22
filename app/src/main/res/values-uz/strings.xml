@@ -145,4 +145,5 @@
     <string name="choose_range">Oraliqni tanlang</string>
     <string name="profit_title">Sof foyda</string>
     <string name="err_valid_sum">Haqiqiy summa kiriting</string>
+    <string name="warning">Ishonchingiz komilmi?</string>
 </resources>

@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.newpayment
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -27,6 +26,7 @@ import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentPaymentNewBinding
+import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 
 class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private lateinit var binding: FragmentPaymentNewBinding
@@ -131,10 +131,14 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        val alertDialog = AlertDialog.Builder(requireContext())
-                        alertDialog.setTitle(context?.getString(R.string.success))
-                        alertDialog.setMessage(context?.getString(R.string.payment_successfully))
-                        alertDialog.show()
+                        val successDialog = SuccessDialog(getString(R.string.payment_successfully))
+                        successDialog.setOnPositiveButtonClickListener {
+                            navController.popBackStack()
+                        }
+                        successDialog.show(
+                            requireActivity().supportFragmentManager,
+                            successDialog.tag
+                        )
                         binding.apply {
                             etSearchClient.text.clear()
                             tilClient.isEnabled = true

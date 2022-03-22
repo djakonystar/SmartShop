@@ -19,6 +19,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
 
 fun View.visibility(visibility: Boolean): View {
     if (visibility) {
@@ -35,7 +36,13 @@ fun View.enabled(isEnabled: Boolean): View {
 }
 
 fun Fragment.showMessage(msg: String?) {
-    Toast.makeText(this.requireContext(), msg, Toast.LENGTH_LONG).show()
+    val errorDialog = ErrorDialog(msg!!)
+    errorDialog.show(this.requireActivity().supportFragmentManager, errorDialog.tag)
+}
+
+fun Fragment.showError(message: String?) {
+    val errorDialog = ErrorDialog(message!!)
+    errorDialog.show(this.requireActivity().supportFragmentManager, errorDialog.tag)
 }
 
 fun ViewGroup.inflate(@LayoutRes id: Int): View =
