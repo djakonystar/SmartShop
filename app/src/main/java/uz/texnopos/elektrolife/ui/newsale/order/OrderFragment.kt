@@ -16,7 +16,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.OrderItem
@@ -164,7 +164,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

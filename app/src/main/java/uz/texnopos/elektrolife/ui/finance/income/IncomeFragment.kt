@@ -17,7 +17,7 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.changeDateFormat
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentExpenseBinding
@@ -153,12 +153,12 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                         startAnimationCounter(lastSum, newSum)
                         lastSum = newSum
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

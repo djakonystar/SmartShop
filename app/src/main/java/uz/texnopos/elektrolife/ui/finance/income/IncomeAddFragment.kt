@@ -18,7 +18,8 @@ import uz.texnopos.elektrolife.core.MaskWatcherPaymentDecimal
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.changeDateFormat
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.showSuccess
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentIncomeAddBinding
@@ -161,15 +162,15 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        showMessage(context?.getString(R.string.success))
+                        showSuccess(context?.getString(R.string.success))
                         navController.popBackStack()
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

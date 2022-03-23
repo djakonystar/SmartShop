@@ -12,7 +12,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.main.dialog.LangDialog
@@ -78,7 +78,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         navController.navigate(R.id.action_mainFragment_to_financeFragment)
                     }
                 }
-                else -> showMessage("Error with roles")
+                else -> showError("Error with roles")
             }
         }
 
@@ -101,12 +101,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     if (it.data!!.successful) {
                         settings.dollarRate = it.data.payload.usd
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

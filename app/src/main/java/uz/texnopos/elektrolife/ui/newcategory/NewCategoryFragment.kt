@@ -13,7 +13,7 @@ import uz.texnopos.elektrolife.core.MaskWatcherNothing
 import uz.texnopos.elektrolife.core.MaskWatcherPercent
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
 import uz.texnopos.elektrolife.data.model.newcategory.Percent
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
@@ -140,12 +140,12 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                             etWholesalePercent.text!!.clear()
                         }
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

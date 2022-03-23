@@ -20,7 +20,7 @@ import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.getOnlyDigits
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
@@ -147,12 +147,12 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                             etComment.text!!.clear()
                         }
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -176,12 +176,12 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                             binding.etSearchClient.showDropDown()
                         }
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

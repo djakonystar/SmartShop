@@ -16,7 +16,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.warehouse.Product
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
@@ -117,12 +117,12 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         }
                         showLottieAnimation(productsList.isEmpty())
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -138,7 +138,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -220,7 +220,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 }
             }
         } catch (e: Exception) {
-            showMessage(e.localizedMessage)
+            showError(e.localizedMessage)
         }
     }
 
