@@ -43,6 +43,11 @@ class StartFragment : Fragment(R.layout.fragment_start) {
                 (requireActivity() as MainActivity).setNewLocale()
                 settings.firstRun = false
             }
+            tvEng.onClick{
+                settings.language = "en"
+                (requireActivity() as MainActivity).setNewLocale()
+                settings.firstRun = false
+            }
         }
     }
 }
