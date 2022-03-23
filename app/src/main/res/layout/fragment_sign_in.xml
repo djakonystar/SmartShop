@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.signin.SignInFragment">
 
+    <TextView
+        android:id="@+id/tvPincode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_middle"
+        android:text="CEO: 1111\nAdmin: 2222\nSeller: 3333"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpUsage" />
+
     <ImageView
         android:id="@+id/ivLock"
         android:layout_width="@dimen/login_lock_icon_size"
