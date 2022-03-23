@@ -7,7 +7,7 @@ Sales, invoicing, income inventory control and expenses - all in one place.<br/>
 **SmartShop** helps business owners move work forward.<br/>
 **SmartShop** is the flexible work management tool that empowers all business owners to track, control and run their work easily.<br/><br/>
 
-With Smartshop you can<br/><br/>
+### ***With Smartshop you can***<br/><br/>
 
 ## Finance 
 - This feature enables you to view your reports: sales, expenses, incomes and profit sorted by date, access to cashbox as well.
