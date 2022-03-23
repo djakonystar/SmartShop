@@ -35,5 +35,5 @@ English, Russian, Uzbek, Karakalpak
 - SmartShop has various user types: CEO, Administrator, and Seller. Through this you can set the limits of users and save your business information in a secure.
 - You can automatically access the web version best used on a computer.
 
-<br/>
+<br/><br/>
 SmartShop is working in test mode; you can add any information or remove your information as well. If you want to run your business with SmartShop, contact us on texnopos_company@gmail.com. Your feedback and suggestions are important to us!
