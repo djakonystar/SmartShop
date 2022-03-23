@@ -20,7 +20,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.sales.Sales
@@ -178,12 +178,12 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                         allSales = it.data.payload
                         filterSales()
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -269,7 +269,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 }
             }
         } catch (e: Exception) {
-            showMessage(e.localizedMessage)
+            showError(e.localizedMessage)
         }
     }
 

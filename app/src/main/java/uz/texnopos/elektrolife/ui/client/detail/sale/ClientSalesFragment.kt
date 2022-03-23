@@ -11,7 +11,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.sales.Sales
 import uz.texnopos.elektrolife.databinding.FragmentClientSaleBinding
@@ -68,12 +68,12 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
                     if (it.data!!.successful) {
                         adapter.models = it.data.payload
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }

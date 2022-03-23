@@ -20,7 +20,7 @@ import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.MaskWatcherPaymentDollar
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newproduct.Amount
 import uz.texnopos.elektrolife.data.model.newproduct.Categories
@@ -269,12 +269,12 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
                         binding.actSpinner.setAdapter(groupAdapter)
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -311,12 +311,12 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             }
                         }
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -346,12 +346,12 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             categoryId = 0
                         }
                     } else {
-                        showMessage(it.data.message)
+                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
