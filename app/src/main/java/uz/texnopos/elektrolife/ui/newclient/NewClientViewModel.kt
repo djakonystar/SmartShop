@@ -41,6 +41,10 @@ class NewClientViewModel(private val api:ApiInterface, private val settings: Set
                 }
             )
         )
+    }
 
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
     }
 }

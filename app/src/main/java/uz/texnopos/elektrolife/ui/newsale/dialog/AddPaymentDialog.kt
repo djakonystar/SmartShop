@@ -186,7 +186,6 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    dismiss()
                     showSuccess(context?.getString(R.string.client_successfully_added))
                 }
                 ResourceState.ERROR -> {

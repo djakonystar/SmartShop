@@ -106,7 +106,7 @@ class AddClientDialog : DialogFragment() {
     }
 
     private fun observe() {
-        type.observe(requireActivity(), {
+        type.observe(requireActivity()) {
             if (it == context?.getString(R.string.legal_person)) {
                 binding.apply {
                     tilName.isVisible = true
@@ -122,7 +122,7 @@ class AddClientDialog : DialogFragment() {
                     tilComment.isVisible = true
                 }
             }
-        })
+        }
     }
 
 
