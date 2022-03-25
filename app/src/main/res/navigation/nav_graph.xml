@@ -146,6 +146,9 @@
         <action
             android:id="@+id/action_financeFragment_to_salesFragment"
             app:destination="@id/salesFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_reportsFragment"
+            app:destination="@id/reportsFragment" />
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
@@ -198,4 +201,9 @@
             android:id="@+id/action_clientDetailFragment_to_detailSalesFragment"
             app:destination="@id/detailSalesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.reports.ReportsFragment"
+        android:label="fragment_reports"
+        tools:layout="@layout/fragment_reports" />
 </navigation>

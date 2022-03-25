@@ -19,51 +19,13 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
 
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableCashboxBalance: MutableLiveData<Resource<GenericResponse<Balance>>> =
-        MutableLiveData()
-    val cashboxBalance: LiveData<Resource<GenericResponse<Balance>>> = mutableCashboxBalance
-
-    fun getCashboxBalance(from: String, to: String) {
-        mutableCashboxBalance.value = Resource.loading()
-        compositeDisposable.add(
-            api.getCashboxBalance("Bearer ${settings.token}", from, to)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { response ->
-                        mutableCashboxBalance.value = Resource.success(response)
-                    },
-                    { error ->
-                        mutableCashboxBalance.value = Resource.error(error.localizedMessage)
-                    }
-                )
-        )
-    }
-
-    private var mutableProfit: MutableLiveData<Resource<GenericResponse<Balance>>> =
-        MutableLiveData()
-    val profit: LiveData<Resource<GenericResponse<Balance>>> = mutableProfit
-
-    fun getProfit(from: String, to: String) {
-        mutableProfit.value = Resource.loading()
-        compositeDisposable.add(
-            api.getProfit("Bearer ${settings.token}", from, to)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { response ->
-                        mutableProfit.value = Resource.success(response)
-                    },
-                    { error ->
-                        mutableProfit.value = Resource.error(error.localizedMessage)
-                    }
-                )
-        )
-    }
-
     private var mutableFinancePost: MutableLiveData<Resource<GenericResponse<List<String>>>> =
         MutableLiveData()
     val financePost: LiveData<Resource<GenericResponse<List<String>>>> = mutableFinancePost
+
+    private var mutableFinanceDetails: MutableLiveData<Resource<GenericResponse<List<Finance>>>> =
+        MutableLiveData()
+    val financeDetails: LiveData<Resource<GenericResponse<List<Finance>>>> = mutableFinanceDetails
 
     fun addFinanceDetail(finance: FinancePost) {
         mutableFinancePost.value = Resource.loading()
@@ -83,10 +45,6 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
                 )
         )
     }
-
-    private var mutableFinanceDetails: MutableLiveData<Resource<GenericResponse<List<Finance>>>> =
-        MutableLiveData()
-    val financeDetails: LiveData<Resource<GenericResponse<List<Finance>>>> = mutableFinanceDetails
 
     fun getFinanceDetails(from: String, to: String, type: String) {
         mutableFinanceDetails.value = Resource.loading()

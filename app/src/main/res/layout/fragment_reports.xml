@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.finance.reports.ReportsFragment">
+
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardCashbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:layout_marginBottom="@dimen/margin_standard"
+                android:background="@color/white"
+                android:elevation="@dimen/elevation_standard"
+                app:cardCornerRadius="@dimen/radius_card_view"
+                app:layout_constraintBottom_toTopOf="@id/cardProfit"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivCashboxTitle"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:src="@drawable/cashbox"
+                        app:layout_constraintBottom_toBottomOf="@id/tvTitleCashbox"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvTitleCashbox"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tvTitleCashbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginTop="@dimen/margin_standard"
+                        android:text="@string/cashbox_title"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        app:layout_constraintStart_toEndOf="@id/ivCashboxTitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="SpUsage" />
+
+                    <ImageView
+                        android:id="@+id/ivCashboxDate"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:src="@drawable/ic_time_48"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRangeCashbox"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvRangeCashbox"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tvRangeCashbox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        android:textSize="@dimen/text_size_standard"
+                        app:layout_constraintEnd_toStartOf="@id/btnCashboxDate"
+                        app:layout_constraintStart_toEndOf="@id/ivCashboxDate"
+                        app:layout_constraintTop_toBottomOf="@id/tvTitleCashbox"
+                        tools:ignore="SpUsage" />
+
+                    <ImageView
+                        android:id="@+id/ivCashboxMoney"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:src="@drawable/ic_cash"
+                        app:layout_constraintBottom_toBottomOf="@id/tvCashboxMoney"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvCashboxMoney"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tvCashboxMoney"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:layout_marginBottom="@dimen/margin_standard"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        android:textColor="@color/app_main_color"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btnCashboxDate"
+                        app:layout_constraintStart_toEndOf="@id/ivCashboxMoney"
+                        app:layout_constraintTop_toBottomOf="@id/tvRangeCashbox" />
+
+                    <ImageView
+                        android:id="@+id/btnCashboxDate"
+                        android:layout_width="@dimen/img_standard_height_mobile"
+                        android:layout_height="@dimen/img_standard_height_mobile"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/padding_small"
+                        android:src="@drawable/ic_calendar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/app_main_color" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardProfit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:layout_marginBottom="@dimen/margin_standard"
+                android:background="@color/white"
+                android:elevation="@dimen/elevation_standard"
+                app:cardCornerRadius="@dimen/radius_card_view"
+                app:layout_constraintTop_toBottomOf="@id/cardCashbox">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivProfitTitle"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:src="@drawable/profit"
+                        app:layout_constraintBottom_toBottomOf="@id/tvTitleProfit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvTitleProfit"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tvTitleProfit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginTop="@dimen/margin_standard"
+                        android:text="@string/profit_title"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        app:layout_constraintStart_toEndOf="@id/ivProfitTitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="SpUsage" />
+
+                    <ImageView
+                        android:id="@+id/ivProfitDate"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:src="@drawable/ic_time_48"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRangeProfit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvRangeProfit"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tvRangeProfit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        android:textSize="@dimen/text_size_standard"
+                        app:layout_constraintEnd_toStartOf="@id/btnProfitDate"
+                        app:layout_constraintStart_toEndOf="@id/ivProfitDate"
+                        app:layout_constraintTop_toBottomOf="@id/tvTitleProfit"
+                        tools:ignore="SpUsage" />
+
+                    <ImageView
+                        android:id="@+id/ivProfitMoney"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:src="@drawable/ic_cash"
+                        app:layout_constraintBottom_toBottomOf="@id/tvProfitMoney"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvProfitMoney"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tvProfitMoney"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:layout_marginBottom="@dimen/margin_standard"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        android:textColor="@color/app_main_color"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btnProfitDate"
+                        app:layout_constraintStart_toEndOf="@id/ivProfitMoney"
+                        app:layout_constraintTop_toBottomOf="@id/tvRangeProfit" />
+
+                    <ImageView
+                        android:id="@+id/btnProfitDate"
+                        android:layout_width="@dimen/img_standard_height_mobile"
+                        android:layout_height="@dimen/img_standard_height_mobile"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/padding_small"
+                        android:src="@drawable/ic_calendar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/app_main_color" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

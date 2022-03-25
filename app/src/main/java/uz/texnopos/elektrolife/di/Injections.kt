@@ -19,6 +19,7 @@ import uz.texnopos.elektrolife.ui.client.detail.sale.ClientSalesViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionViewModel
 import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
+import uz.texnopos.elektrolife.ui.finance.reports.ReportsViewModel
 import uz.texnopos.elektrolife.ui.main.MainViewModel
 import uz.texnopos.elektrolife.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
@@ -91,6 +92,7 @@ val viewModelModule = module {
     viewModel { OrderViewModel(get(),get()) }
     viewModel { MainViewModel(get(), get()) }
     viewModel { FinanceViewModel(get(), get()) }
+    viewModel { ReportsViewModel(get(), get()) }
     viewModel { ClientPaymentViewModel(get(), get()) }
     viewModel { ClientSalesViewModel(get(), get()) }
     viewModel { TransactionViewModel(get(), get()) }
