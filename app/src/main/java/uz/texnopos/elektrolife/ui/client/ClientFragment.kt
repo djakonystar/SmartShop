@@ -18,7 +18,7 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.dialPhone
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
@@ -199,13 +199,13 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                                 context?.getString(R.string.total_debt_text, debts.toSumFormat)
                             page++
                         } else {
-                            showMessage(it.data!!.message)
+                            showError(it.data!!.message)
                         }
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -223,7 +223,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         })

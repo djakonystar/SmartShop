@@ -19,7 +19,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarSearchBinding
@@ -141,7 +141,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -164,7 +164,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    showMessage(it.message)
+                    showError(it.message)
                 }
             }
         }
@@ -198,7 +198,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
         } catch (e: Exception) {
-            showMessage(e.localizedMessage)
+            showError(e.localizedMessage)
         }
     }
 

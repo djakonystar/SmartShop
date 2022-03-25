@@ -1,12 +1,9 @@
 package uz.texnopos.elektrolife.ui.newsale.order
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
@@ -19,13 +16,15 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
+import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.OrderItem
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentOrderBinding
+import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
+import uz.texnopos.elektrolife.ui.dialog.WarningDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddPaymentDialog
 
@@ -92,19 +91,16 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             }
 
             adapter.onDeleteItemClickListener { product, position ->
-                //todo custom dialog
-                val dialog = AlertDialog.Builder(requireContext())
-                    .setTitle(context?.getString(R.string.remove_uz))
-                    .setMessage(context?.getString(R.string.confirm_remove_uz))
-                    .setPositiveButton(context?.getString(R.string.yes)) { _, _ ->
-                        adapter.removeItem(product, position)
-                        Basket.mutableProducts.remove(product)
-                        val newPrice =
-                            Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
-                        price.postValue(newPrice)
-                        basketListener.postValue(Basket.mutableProducts)
-                    }
-                dialog.show()
+                val dialog = WarningDialog(getString(R.string.confirm_remove_uz))
+                dialog.setOnPositiveButtonClickListener {
+                    adapter.removeItem(product, position)
+                    Basket.mutableProducts.remove(product)
+                    val newPrice =
+                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                    price.postValue(newPrice)
+                    basketListener.postValue(Basket.mutableProducts)
+                }
+                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
             }
 
             btnOrder.onClick {
@@ -160,18 +156,15 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         adapter.notifyDataSetChanged()
                     }
 
-                    val alertDialog = AlertDialog.Builder(requireContext())
-                    alertDialog.setTitle(context?.getString(R.string.success))
-                    alertDialog.setMessage(context?.getString(R.string.order_successfully_done))
-                    alertDialog.show()
-                    basketListener.postValue(Basket.mutableProducts)
+                    val dialog = SuccessDialog(getString(R.string.order_successfully_done))
+                    dialog.setOnPositiveButtonClickListener {
+                        navController.popBackStack(R.id.mainFragment, false)
+                    }
+                    dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    val alertDialog = AlertDialog.Builder(requireContext())
-                    alertDialog.setTitle(context?.getString(R.string.error))
-                    alertDialog.setMessage(it.message)
-                    alertDialog.show()
+                    showError(it.message)
                 }
             }
         }
