@@ -32,6 +32,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private lateinit var binding: FragmentOrderBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
+    private lateinit var addPaymentDialog: AddPaymentDialog
     private val viewModelOrder: OrderViewModel by viewModel()
     private val adapter: OrderAdapter by inject()
     private val safeArgs: OrderFragmentArgs by navArgs()
@@ -105,8 +106,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
 
             btnOrder.onClick {
                 val finalPrice = tvTotalPrice.text.filter { c -> c.isDigit() }.toString().toLong()
-                val dialog = AddPaymentDialog(finalPrice)
-                dialog.show(requireActivity().supportFragmentManager, "")
+                addPaymentDialog = AddPaymentDialog(finalPrice)
+                addPaymentDialog.show(requireActivity().supportFragmentManager, "")
                 val orders: MutableList<OrderItem> = mutableListOf()
                 Basket.products.forEachIndexed { index, product ->
                     orders.add(
@@ -114,7 +115,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         OrderItem(product.productId, product.count, product.salePrice)
                     )
                 }
-                dialog.setDate { clientId, cash, card, debt, date, comment ->
+                addPaymentDialog.setDate { clientId, cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
                         Order(
                             id = clientId,
@@ -158,6 +159,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
 
                     val dialog = SuccessDialog(getString(R.string.order_successfully_done))
                     dialog.setOnPositiveButtonClickListener {
+                        addPaymentDialog.dismiss()
                         navController.popBackStack(R.id.mainFragment, false)
                     }
                     dialog.show(requireActivity().supportFragmentManager, dialog.tag)
