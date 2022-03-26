@@ -146,4 +146,5 @@
     <string name="profit_title">Прибыль</string>
     <string name="err_valid_sum">Введите корректную сумму</string>
     <string name="warning">Вы уверены?</string>
+    <string name="reports">Отчеты</string>
 </resources>

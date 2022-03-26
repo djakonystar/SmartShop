@@ -17,6 +17,7 @@ class MaskWatcherNothing(private val editText: EditText) : TextWatcher {
         try {
             editText.removeTextChangedListener(this)
             val value: String = editText.text.toString()
+            val dimen: String = editText.context?.getString(R.string.count)!!
             if (value != "") {
                 if (value.startsWith(".")) {
                     editText.setText("0.")
@@ -33,7 +34,7 @@ class MaskWatcherNothing(private val editText: EditText) : TextWatcher {
                     val count = d.toDecimalFormat()
                     editText.setText(editText.context?.getString(R.string.count_text, count))
                 }
-                editText.setSelection(editText.text.toString().length - 5)
+                editText.setSelection(editText.text.toString().length - dimen.length - 1)
             }
             editText.addTextChangedListener(this)
             return

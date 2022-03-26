@@ -31,7 +31,7 @@
     <string name="done_uzb">Select</string>
     <string name="close">Close</string>
     <string name="search">Search</string>
-    <string name="count_text">%s</string>
+    <string name="count_text">%s pcs</string>
     <string name="by_product_name">By product name</string>
     <string name="by_category">By category</string>
     <string name="by_remain">By residue</string>
@@ -133,7 +133,7 @@
     <string name="choose_payment_type">Select payment type</string>
     <string name="choose_client_and_fill_payment">Please select a client and enter the payment in full</string>
     <string name="payment_successfully">Payment completed successfully!</string>
-    <string name="count">Count</string>
+    <string name="count">pcs</string>
     <string name="lang_name">English</string>
     <string name="sum_of_sale">Sale sum:</string>
     <string name="yes">Yes</string>
@@ -144,4 +144,7 @@
     <string name="transaction_successful">Transaction completed successfully!</string>
     <string name="choose_range">Select range</string>
     <string name="profit_title">Profit</string>
+    <string name="warning">Are you sure?</string>
+    <string name="reports">Reports</string>
+    <string name="err_valid_sum">Enter the valid sum</string>
 </resources>

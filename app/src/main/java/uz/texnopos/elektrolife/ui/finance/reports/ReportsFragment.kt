@@ -1,4 +1,4 @@
-package uz.texnopos.elektrolife.ui.finance
+package uz.texnopos.elektrolife.ui.finance.reports
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
@@ -22,18 +21,15 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
-import uz.texnopos.elektrolife.databinding.FragmentFinanceBinding
-import uz.texnopos.elektrolife.settings.Settings
-import uz.texnopos.elektrolife.ui.finance.reports.ReportsViewModel
+import uz.texnopos.elektrolife.databinding.FragmentReportsBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FinanceFragment : Fragment(R.layout.fragment_finance) {
-    private lateinit var binding: FragmentFinanceBinding
+class ReportsFragment : Fragment(R.layout.fragment_reports) {
+    private lateinit var binding: FragmentReportsBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val viewModel: ReportsViewModel by viewModel()
-    private val settings: Settings by inject()
     private val calendarHelper = CalendarHelper()
     private var lastSumOfCashbox = 0.0
     private var lastSumOfProfit = 0.0
@@ -50,24 +46,15 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentFinanceBinding.bind(view)
+        binding = FragmentReportsBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
 
         abBinding.apply {
-            tvTitle.text = context?.getString(R.string.finance)
+            tvTitle.text = getString(R.string.reports)
             btnHome.onClick {
                 navController.popBackStack()
             }
-        }
-
-        if (settings.role == "CEO" || settings.role == "ceo") {
-            binding.topContainer.isVisible = false
-            binding.cardReports.isVisible = true
-        } else if (settings.role == "Admin" || settings.role == "admin" || settings.role == "ADMIN") {
-            binding.topContainer.isVisible = true
-            binding.cardProfit.isVisible = false
-            binding.cardReports.isVisible = false
         }
 
         binding.apply {
@@ -160,19 +147,6 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
                 btnProfitDate.isEnabled = false
             }
 
-            cardSales.onClick {
-                navController.navigate(R.id.action_financeFragment_to_salesFragment)
-            }
-            cardIncomes.onClick {
-                navController.navigate(R.id.action_financeFragment_to_incomeFragment)
-            }
-            cardExpenses.onClick {
-                navController.navigate(R.id.action_financeFragment_to_expenseFragment)
-            }
-            cardReports.onClick {
-                navController.navigate(R.id.action_financeFragment_to_reportsFragment)
-            }
-
             tvRangeCashbox.text =
                 context?.getString(R.string.date_range_text, cashboxDateFrom, cashboxDateTo)
             tvRangeProfit.text =
@@ -190,7 +164,8 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
-            swipeRefresh.isEnabled = !loading
+            btnCashboxDate.isEnabled = !loading
+            btnProfitDate.isEnabled = !loading
         }
     }
 
