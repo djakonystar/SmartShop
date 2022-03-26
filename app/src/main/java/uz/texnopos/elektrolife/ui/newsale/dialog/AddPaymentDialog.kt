@@ -20,12 +20,14 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
+import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
+    private lateinit var addClientDialog: AddClientDialog
     private val clientViewModel: ClientViewModel by viewModel()
     private val newClientsViewModel: NewClientViewModel by viewModel()
     private var list: MutableSet<String> = mutableSetOf()
@@ -66,9 +68,9 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 clientId = listIds.getValue(clientName)
             }
             btnAddClient.onClick {
-                val dialog = AddClientDialog()
-                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                dialog.setData { name, inn, phone, type, comment ->
+                addClientDialog = AddClientDialog()
+                addClientDialog.show(requireActivity().supportFragmentManager, addClientDialog.tag)
+                addClientDialog.setData { name, inn, phone, type, comment ->
                     newClientsViewModel.registerNewClient(
                         RegisterClient(
                             name = name,
@@ -186,7 +188,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    showSuccess(context?.getString(R.string.client_successfully_added))
+                    val successDialog = SuccessDialog(getString(R.string.client_successfully_added))
+                    successDialog.setOnDismissListener {
+                        addClientDialog.dismiss()
+                    }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

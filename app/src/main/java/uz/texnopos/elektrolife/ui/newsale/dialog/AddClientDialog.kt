@@ -80,7 +80,6 @@ class AddClientDialog : DialogFragment() {
                     if (typeOf == 1) {
                         if (inn.isNotEmpty() && inn.length == 9) {
                             sendData.invoke(name, inn, phone, typeOf, comment)
-                            dismiss()
                         } else {
                             tilInn.error =
                                 if (inn.isNotEmpty()) context?.getString(R.string.required_field)
@@ -88,7 +87,6 @@ class AddClientDialog : DialogFragment() {
                         }
                     } else {
                         sendData.invoke(name, inn, phone, typeOf, comment)
-                        dismiss()
                     }
                 } else {
                     if (typeOf == -1) tilSpinner.error = context?.getString(R.string.required_field)

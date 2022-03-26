@@ -1,5 +1,7 @@
 package uz.texnopos.elektrolife.ui.client.detail.payment
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -9,6 +11,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.databinding.FragmentClientPaymentBinding
 
@@ -17,6 +20,7 @@ class ClientPaymentFragment(private val client: Client) :
     private lateinit var binding: FragmentClientPaymentBinding
     private val adapter: ClientPaymentAdapter by inject()
     private val viewModel: ClientPaymentViewModel by viewModel()
+    private var lastSum = 0.0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +36,7 @@ class ClientPaymentFragment(private val client: Client) :
             }
         }
 
+        animateTotalSum(lastSum, lastSum)
         viewModel.getClientPayments(clientId = client.id)
         setUpObservers()
     }
@@ -51,6 +56,10 @@ class ClientPaymentFragment(private val client: Client) :
                     setLoading(false)
                     if (it.data!!.successful) {
                         adapter.models = it.data.payload
+                        var newSum = it.data.payload.sumOf { p -> p.cash }
+                        newSum += it.data.payload.sumOf { p -> p.card }
+                        animateTotalSum(lastSum, newSum.toDouble())
+                        lastSum = newSum.toDouble()
                     } else {
                         showError(it.data.message)
                     }
@@ -61,5 +70,20 @@ class ClientPaymentFragment(private val client: Client) :
                 }
             }
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun animateTotalSum(start: Double, end: Double) {
+        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+        animator.addUpdateListener {
+            val newValue = "%.2f".format((it.animatedValue as Float).toDouble())
+                .replace(',', '.').toDouble().toSumFormat
+            binding.tvTotalPrice.text = context?.getString(
+                R.string.total_sum_text,
+                newValue
+            )
+        }
+        animator.duration = 300
+        animator.start()
     }
 }

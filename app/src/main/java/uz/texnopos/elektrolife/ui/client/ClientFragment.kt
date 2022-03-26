@@ -24,6 +24,7 @@ import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.ActionBarClientBinding
 import uz.texnopos.elektrolife.databinding.FragmentClientBinding
+import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddClientDialog
 
@@ -31,6 +32,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
     private lateinit var binding: FragmentClientBinding
     private lateinit var abBinding: ActionBarClientBinding
     private lateinit var navController: NavController
+    private lateinit var addClientDialog: AddClientDialog
     private val viewModel: ClientViewModel by viewModel()
     private val newClientViewModel: NewClientViewModel by viewModel()
     private val adapter: ClientAdapter by inject()
@@ -52,9 +54,9 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 navController.popBackStack()
             }
             btnAddClient.onClick {
-                val dialog = AddClientDialog()
-                dialog.show(requireActivity().supportFragmentManager, "")
-                dialog.setData { name, inn, phone, type, comment ->
+                addClientDialog = AddClientDialog()
+                addClientDialog.show(requireActivity().supportFragmentManager, "")
+                addClientDialog.setData { name, inn, phone, type, comment ->
                     newClientViewModel.registerNewClient(
                         RegisterClient(
                             name = name,
@@ -210,22 +212,24 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
             }
         }
 
-        newClientViewModel.registerNewClient.observe(viewLifecycleOwner, Observer {
+        newClientViewModel.registerNewClient.observe(viewLifecycleOwner) {
             when (it.status) {
-                ResourceState.LOADING -> {
-                    setLoading(true)
-                }
+                ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    mutableClient = mutableListOf()
-                    viewModel.getClients(limit, 1, "")
-
+                    val successDialog = SuccessDialog(getString(R.string.client_successfully_added))
+                    successDialog.show(requireActivity().supportFragmentManager, successDialog.tag)
+                    successDialog.setOnDismissListener {
+                        mutableClient = mutableListOf()
+                        viewModel.getClients(limit, 1, "")
+                        addClientDialog.dismiss()
+                    }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
                     showError(it.message)
                 }
             }
-        })
+        }
     }
 }
