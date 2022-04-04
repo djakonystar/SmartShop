@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
 import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
+import uz.texnopos.elektrolife.ui.dialog.WarningDialog
 
 fun View.visibility(visibility: Boolean): View {
     if (visibility) {
@@ -40,14 +41,22 @@ fun Fragment.showMessage(msg: String?) {
     Toast.makeText(this.requireContext(), msg, Toast.LENGTH_LONG).show()
 }
 
-fun Fragment.showError(message: String?) {
+fun Fragment.showError(message: String?): ErrorDialog {
     val errorDialog = ErrorDialog(message!!)
     errorDialog.show(this.requireActivity().supportFragmentManager, errorDialog.tag)
+    return errorDialog
 }
 
-fun Fragment.showSuccess(message: String?) {
+fun Fragment.showSuccess(message: String?): SuccessDialog {
     val successDialog = SuccessDialog(message!!)
     successDialog.show(this.requireActivity().supportFragmentManager, successDialog.tag)
+    return successDialog
+}
+
+fun Fragment.showWarning(message: String?): WarningDialog {
+    val warningDialog = WarningDialog(message!!)
+    warningDialog.show(this.requireActivity().supportFragmentManager, warningDialog.tag)
+    return warningDialog
 }
 
 fun ViewGroup.inflate(@LayoutRes id: Int): View =

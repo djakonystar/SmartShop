@@ -15,16 +15,12 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.OrderItem
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentOrderBinding
-import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
-import uz.texnopos.elektrolife.ui.dialog.WarningDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddPaymentDialog
 
@@ -92,16 +88,15 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             }
 
             adapter.onDeleteItemClickListener { product, position ->
-                val dialog = WarningDialog(getString(R.string.confirm_remove_uz))
-                dialog.setOnPositiveButtonClickListener {
-                    adapter.removeItem(product, position)
-                    Basket.mutableProducts.remove(product)
-                    val newPrice =
-                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
-                    price.postValue(newPrice)
-                    basketListener.postValue(Basket.mutableProducts)
-                }
-                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                showWarning(getString(R.string.confirm_remove_uz))
+                    .setOnPositiveButtonClickListener {
+                        adapter.removeItem(product, position)
+                        Basket.mutableProducts.remove(product)
+                        val newPrice =
+                            Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                        price.postValue(newPrice)
+                        basketListener.postValue(Basket.mutableProducts)
+                    }
             }
 
             btnOrder.onClick {
@@ -157,12 +152,11 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         adapter.notifyDataSetChanged()
                     }
 
-                    val dialog = SuccessDialog(getString(R.string.order_successfully_done))
-                    dialog.setOnPositiveButtonClickListener {
-                        addPaymentDialog.dismiss()
-                        navController.popBackStack(R.id.mainFragment, false)
-                    }
-                    dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                    showSuccess(getString(R.string.order_successfully_done))
+                        .setOnPositiveButtonClickListener {
+                            addPaymentDialog.dismiss()
+                            navController.popBackStack(R.id.mainFragment, false)
+                        }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

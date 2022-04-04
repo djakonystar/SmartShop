@@ -20,7 +20,6 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
-import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -188,10 +187,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    val successDialog = SuccessDialog(getString(R.string.client_successfully_added))
-                    successDialog.setOnDismissListener {
-                        addClientDialog.dismiss()
-                    }
+                    showSuccess(getString(R.string.client_successfully_added))
+                        .setOnPositiveButtonClickListener {
+                            addClientDialog.dismiss()
+                        }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

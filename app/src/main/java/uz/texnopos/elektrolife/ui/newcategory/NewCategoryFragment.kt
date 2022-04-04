@@ -14,11 +14,11 @@ import uz.texnopos.elektrolife.core.MaskWatcherPercent
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.showSuccess
 import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
 import uz.texnopos.elektrolife.data.model.newcategory.Percent
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentCategoryNewBinding
-import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 
 class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
     private lateinit var binding: FragmentCategoryNewBinding
@@ -123,15 +123,10 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        val successDialog =
-                            SuccessDialog(getString(R.string.category_added_successfully))
-                        successDialog.setOnPositiveButtonClickListener {
-                            navController.popBackStack()
-                        }
-                        successDialog.show(
-                            requireActivity().supportFragmentManager,
-                            successDialog.tag
-                        )
+                        showSuccess(getString(R.string.category_added_successfully))
+                            .setOnPositiveButtonClickListener {
+                                navController.popBackStack()
+                            }
                         binding.apply {
                             etCategoryName.text!!.clear()
                             etMaxPercent.text!!.clear()
