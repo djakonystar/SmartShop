@@ -1,5 +1,7 @@
 package uz.texnopos.elektrolife.core.extensions
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -19,6 +21,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
 import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 
@@ -225,3 +228,33 @@ fun String.getOnlyDigits(): String {
     val s = this.filter { it.isDigit() }
     return s.ifEmpty { "0" }
 }
+
+@SuppressLint("SetTextI18n")
+fun animateDebtPrice(start: Long, end: Long, textView: TextView, view: View) {
+    val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+    animator.addUpdateListener {
+        val newValue = (it.animatedValue as Float).toLong().toSumFormat
+        textView.text = view.context.getString(
+            R.string.total_debt_text,
+            newValue
+        )
+    }
+    animator.duration = 500
+    animator.start()
+}
+
+@SuppressLint("SetTextI18n")
+fun animateTotalPrice(start: Long, end: Long, textView: TextView, view: View) {
+    val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+    animator.addUpdateListener {
+        val newValue = (it.animatedValue as Float).toLong().toSumFormat
+        textView.text = view.context.getString(
+            R.string.total_sum_text,
+            newValue
+        )
+    }
+    animator.duration = 500
+    animator.start()
+}
+
+
