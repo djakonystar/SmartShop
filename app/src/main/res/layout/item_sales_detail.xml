@@ -32,7 +32,6 @@
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvCost"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvProductName"
@@ -57,10 +56,31 @@
             android:layout_marginBottom="@dimen/margin_standard"
             android:textColor="@color/app_main_color"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCount"
             tools:ignore="SpUsage" />
+
+        <View
+            android:id="@+id/blackLine"
+            android:layout_width="match_parent"
+            android:layout_height="0.4dp"
+            android:layout_marginHorizontal="@dimen/margin_large_standard"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/tvBrand" />
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/blackLine"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:textColor="@color/black"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

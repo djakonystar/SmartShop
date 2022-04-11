@@ -19,6 +19,9 @@ class SalesAdapter : BaseAdapter<Sales, SalesAdapter.SalesViewHolder>() {
         fun populateModel(sales: Sales) {
             binding.apply {
                 val basket = sales.basket
+                tvCardPrice.isSelected = true
+                tvCashPrice.isSelected = true
+                tvDebtPrice.isSelected = true
                 tvClientName.text = sales.clientName
                 tvTotalPrice.text = itemView.context?.getString(
                     R.string.sum_text,

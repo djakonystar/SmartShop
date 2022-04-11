@@ -19,6 +19,9 @@ class SalesDetailAdapter : BaseAdapter<Product, SalesDetailAdapter.DetailViewHol
                 tvBrand.text = product.productBrand
                 tvCount.text = itemView.context?.getString(R.string.count_text, product.count.toSumFormat)
                 tvCost.text = itemView.context?.getString(R.string.sum_text, product.price.toSumFormat)
+
+                val total = product.count * product.price
+                tvTotalPrice.text = itemView.context?.getString(R.string.sum_text, total.toSumFormat)
             }
         }
     }

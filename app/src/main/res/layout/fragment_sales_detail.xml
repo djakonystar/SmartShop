@@ -34,11 +34,127 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginVertical="@dimen/margin_middle"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomContainer"
         app:layout_constraintTop_toBottomOf="@id/tilSearch"
         tools:listitem="@layout/item_sales_detail" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_bg"
+        android:elevation="@dimen/elevation_standard"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvDebtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/error_color"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
+
+        <ImageView
+            android:id="@+id/ivCash"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_cash"
+            app:layout_constraintBottom_toBottomOf="@id/tvCashPrice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvCashPrice"
+            app:tint="@color/app_main_color" />
+
+        <TextView
+            android:id="@+id/tvCashPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lineHalf"
+            app:layout_constraintStart_toEndOf="@id/ivCash"
+            app:layout_constraintTop_toBottomOf="@id/tvDebtPrice"
+            tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/ivCard"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_card"
+            app:layout_constraintBottom_toBottomOf="@id/tvCardPrice"
+            app:layout_constraintStart_toEndOf="@id/lineHalf"
+            app:layout_constraintTop_toTopOf="@id/tvCardPrice"
+            app:tint="@color/app_main_color" />
+
+        <TextView
+            android:id="@+id/tvCardPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivCard"
+            app:layout_constraintTop_toBottomOf="@id/tvDebtPrice"
+            tools:ignore="SpUsage" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/lineHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
