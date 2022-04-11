@@ -21,6 +21,7 @@ import uz.texnopos.elektrolife.core.MaskWatcherPaymentDollar
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.showSuccess
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newproduct.Amount
 import uz.texnopos.elektrolife.data.model.newproduct.Categories
@@ -28,7 +29,6 @@ import uz.texnopos.elektrolife.data.model.newproduct.Product
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
 import uz.texnopos.elektrolife.settings.Settings
-import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
@@ -329,11 +329,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        val dialog = SuccessDialog(getString(R.string.product_added_successfully))
-                        dialog.setOnPositiveButtonClickListener {
-                            navController.popBackStack()
-                        }
-                        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                        showSuccess(getString(R.string.product_added_successfully))
+                            .setOnPositiveButtonClickListener {
+                                navController.popBackStack()
+                            }
                         binding.apply {
                             actSpinner.text.clear()
                             etSearchProduct.text!!.clear()

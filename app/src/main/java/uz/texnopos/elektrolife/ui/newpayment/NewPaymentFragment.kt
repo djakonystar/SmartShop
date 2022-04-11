@@ -18,15 +18,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.getOnlyDigits
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentPaymentNewBinding
-import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 
 class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
     private lateinit var binding: FragmentPaymentNewBinding
@@ -131,14 +127,10 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        val successDialog = SuccessDialog(getString(R.string.payment_successfully))
-                        successDialog.setOnPositiveButtonClickListener {
-                            navController.popBackStack()
-                        }
-                        successDialog.show(
-                            requireActivity().supportFragmentManager,
-                            successDialog.tag
-                        )
+                        showSuccess(getString(R.string.payment_successfully))
+                            .setOnPositiveButtonClickListener {
+                                navController.popBackStack()
+                            }
                         binding.apply {
                             etSearchClient.text.clear()
                             tilClient.isEnabled = true
