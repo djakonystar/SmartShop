@@ -77,7 +77,7 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
                     cashboxDateFrom.changeDateFormat,
                     cashboxDateTo.changeDateFormat
                 )
-                viewModel.getProfit(profitDateFrom.changeDateFormat, profitDateTo.changeDateFormat)
+//                viewModel.getProfit(profitDateFrom.changeDateFormat, profitDateTo.changeDateFormat)
             }
 
             btnCashboxDate.onClick {
@@ -183,7 +183,7 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
             cashboxDateFrom.changeDateFormat,
             cashboxDateTo.changeDateFormat
         )
-        viewModel.getProfit(profitDateFrom.changeDateFormat, profitDateTo.changeDateFormat)
+//        viewModel.getProfit(profitDateFrom.changeDateFormat, profitDateTo.changeDateFormat)
         setUpObservers()
     }
 
