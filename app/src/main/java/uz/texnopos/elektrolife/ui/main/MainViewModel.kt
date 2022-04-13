@@ -35,4 +35,9 @@ class MainViewModel(private val api: ApiInterface, private val settings: Setting
                 )
         )
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 }

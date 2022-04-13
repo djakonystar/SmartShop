@@ -39,6 +39,9 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         navController = findNavController()
 
         binding.apply {
+            tvPincode.isVisible = requireActivity().packageName == "uz.texnopos.smartshoptest" ||
+                    requireActivity().packageName == "uz.texnopos.smartshopteststore"
+
             etPassword.addTextChangedListener {
                 if (it.toString().length == 4) {
                     val signIn = SignInPost(
