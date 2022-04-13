@@ -8,26 +8,30 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.data.GenericResponse
-import uz.texnopos.elektrolife.data.model.signin.DollarRate
+import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
 class MainViewModel(private val api: ApiInterface, private val settings: Settings) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableDollarRate: MutableLiveData<Resource<GenericResponse<DollarRate>>> =
+    private var mutableDollarRate: MutableLiveData<Resource<GenericResponse<List<Currency>>>> =
         MutableLiveData()
-    val dollarRate: LiveData<Resource<GenericResponse<DollarRate>>> = mutableDollarRate
+    val dollarRate: LiveData<Resource<GenericResponse<List<Currency>>>> = mutableDollarRate
 
-    fun getDollarRate() {
+    fun getCurrency() {
         mutableDollarRate.value = Resource.loading()
         compositeDisposable.add(
-            api.getDollarRate("Bearer ${settings.token}")
+            api.getCurrency("Bearer ${settings.token}")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableDollarRate.value = Resource.success(response)
+                        if (response.isSuccessful) {
+                            mutableDollarRate.value = Resource.success(response.body()!!)
+                        } else {
+                            mutableDollarRate.postValue(Resource.error(response.message()))
+                        }
                     },
                     { error ->
                         mutableDollarRate.value = Resource.error(error.localizedMessage)

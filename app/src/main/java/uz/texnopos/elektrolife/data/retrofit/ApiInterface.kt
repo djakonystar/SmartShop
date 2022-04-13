@@ -1,16 +1,19 @@
 package uz.texnopos.elektrolife.data.retrofit
 
 import io.reactivex.rxjava3.core.Observable
+import retrofit2.Response
 import retrofit2.http.*
 import uz.texnopos.elektrolife.data.GenericResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.clients.ClientPayment
+import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.model.finance.Balance
+import uz.texnopos.elektrolife.data.model.finance.Cashier
 import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.data.model.sales.Sales
-import uz.texnopos.elektrolife.data.model.signin.SignInPayload
-import uz.texnopos.elektrolife.data.model.signin.SignInPost
+import uz.texnopos.elektrolife.data.model.signin.SignInResponse
+import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryId
 import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
@@ -23,11 +26,13 @@ import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.newsale.Products
-import uz.texnopos.elektrolife.data.model.signin.DollarRate
+
+typealias newSaleProduct = uz.texnopos.elektrolife.data.model.newsale.Product
+typealias warehouseProduct = uz.texnopos.elektrolife.data.model.warehouse.Product
 
 interface ApiInterface {
 
-    @POST("api/register")
+    @POST("api/register/client")
     fun registerNewClient(
         @Header("Authorization") token: String,
         @Body registerClient: RegisterClient
@@ -74,18 +79,18 @@ interface ApiInterface {
     @GET("api/warehouse")
     fun getProductsFromWarehouse(
         @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<uz.texnopos.elektrolife.data.model.warehouse.Product>>>
+    ): Observable<GenericResponse<List<warehouseProduct>>>
 
     @GET("api/warehouse")
     fun getProductsFromWarehouse(
         @Header("Authorization") token: String,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<uz.texnopos.elektrolife.data.model.warehouse.Product>>>
+    ): Observable<GenericResponse<List<warehouseProduct>>>
 
     @POST("api/login")
     fun signIn(
-        @Body signInPost: SignInPost
-    ): Observable<GenericResponse<SignInPayload>>
+        @Body signIn: SignIn
+    ): Observable<GenericResponse<SignInResponse>>
 
     @POST("api/categories")
     fun createdCategory(
@@ -102,14 +107,14 @@ interface ApiInterface {
     fun getProductsByCategoryId(
         @Header("Authorization") token: String,
         @Query("category") categoryId: Int
-    ): Observable<GenericResponse<Products>>
+    ): Observable<GenericResponse<List<newSaleProduct>>>
 
     @GET("api/products")
     fun getProduct(
         @Header("Authorization") token: String,
         @Query("search") name: String,
         @Query("limit") limit: Int
-    ): Observable<GenericResponse<Products>>
+    ): Observable<GenericResponse<List<newSaleProduct>>>
 
     @POST("api/products")
     fun createdProduct(
@@ -128,30 +133,20 @@ interface ApiInterface {
         @Body order: Order
     ): Observable<GenericResponse<Any>>
 
-    @GET("api/usd")
-    fun getDollarRate(
+    @GET("api/currency")
+    fun getCurrency(
         @Header("Authorization") token: String
-    ): Observable<GenericResponse<DollarRate>>
+    ): Observable<Response<GenericResponse<List<Currency>>>>
 
     /**
-     * Finance: Get cashbox balance in date range [from] - [to]
+     * Finance: Get cashbox balance and profit in date range [from] - [to]
      */
-    @GET("api/balance")
-    fun getCashboxBalance(
+    @GET("api/casheir")
+    fun getCashier(
         @Header("Authorization") token: String,
         @Query("to") from: String,
         @Query("do") to: String
-    ): Observable<GenericResponse<Balance>>
-
-    /**
-     * Finance: Get profit in date range [from] - [to]
-     */
-    @GET("api/profit")
-    fun getProfit(
-        @Header("Authorization") token: String,
-        @Query("to") from: String,
-        @Query("do") to: String
-    ): Observable<GenericResponse<Balance>>
+    ): Observable<GenericResponse<Cashier>>
 
     /**
      * Finance: Add new finance detail

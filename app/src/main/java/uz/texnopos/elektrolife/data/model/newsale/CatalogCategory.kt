@@ -6,10 +6,10 @@ data class CatalogCategory(
     @SerializedName("category_id")
     val id: Int,
     val name: String,
-    @SerializedName("percent_wholesale")
-    val percentWholesale: Int,
-    @SerializedName("percent_min")
-    val percentMin: Int,
-    @SerializedName("percent_max")
-    val percentMax: Int
+    @SerializedName("whole_percent")
+    val percentWholesale: Double,
+    @SerializedName("min_percent")
+    val percentMin: Double,
+    @SerializedName("max_percent")
+    val percentMax: Double
 )

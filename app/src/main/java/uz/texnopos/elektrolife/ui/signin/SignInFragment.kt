@@ -21,7 +21,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.data.model.signin.SignInPost
+import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.databinding.FragmentSignInBinding
 import uz.texnopos.elektrolife.settings.Settings
 
@@ -41,7 +41,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.apply {
             etPassword.addTextChangedListener {
                 if (it.toString().length == 4) {
-                    val signIn = SignInPost(
+                    val signIn = SignIn(
                         pincode = it.toString()
                     )
                     pincode = it.toString()

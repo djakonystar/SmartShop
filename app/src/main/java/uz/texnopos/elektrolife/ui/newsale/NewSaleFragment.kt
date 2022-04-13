@@ -151,12 +151,12 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    allProductsList = it.data!!.products as MutableList<Product>
+                    allProductsList = it.data!! as MutableList<Product>
                     productsList = if (selectedCategoryId == -1) {
-                        it.data.products as MutableList<Product>
+                        it.data as MutableList<Product>
                     } else {
-                        it.data.products.filter { product ->
-                            product.categoryId == selectedCategoryId
+                        it.data.filter { product ->
+                            product.category.id == selectedCategoryId
                         } as MutableList<Product>
                     }
                     productNewSaleAdapter.models = productsList

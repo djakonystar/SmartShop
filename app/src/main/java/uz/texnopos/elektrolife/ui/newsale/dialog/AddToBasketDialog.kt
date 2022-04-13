@@ -46,21 +46,31 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         setUpObservers()
 
         binding.apply {
-            val remained = product.remained
+            val r = product.warehouse.count
+            val remained = if (r % 1 == 0.0) r.toInt() else r
             var isVisible = false
             visibilityLiveData.postValue(isVisible)
 
             tvWholesale.text = context?.getString(
                 R.string.wholesale_price_text,
-                product.priceWholesale.toString()
+                product.wholesalePrice.price.toSumFormat,
+                product.wholesalePrice.code
             )
             tvMin.text =
-                context?.getString(R.string.min_price_text, product.priceMin.toLong().toSumFormat)
+                context?.getString(
+                    R.string.min_price_text,
+                    product.minPrice.price.toSumFormat,
+                    product.minPrice.code
+                )
             tvMax.text =
-                context?.getString(R.string.max_price_text, product.priceMax.toLong().toSumFormat)
+                context?.getString(
+                    R.string.max_price_text,
+                    product.maxPrice.price.toSumFormat,
+                    product.maxPrice.code
+                )
             tvQuantityCounter.text =
                 context?.getString(R.string.counter_text, "0", remained.toSumFormat)
-            etSumma.setText(product.priceMax.toLong().toSumFormat)
+            etSumma.setText(product.maxPrice.price.toSumFormat)
 
             etQuantity.addTextChangedListener(MaskWatcherNothing(etQuantity))
             etSumma.addTextChangedListener(MaskWatcherPayment(etSumma))
@@ -74,7 +84,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                         count.toSumFormat,
                         remained.toSumFormat
                     )
-                if (count.toInt() > remained) {
+                if (count.toInt() > remained.toDouble()) {
                     tilQuantity.error = context?.getString(R.string.not_enough_error)
                 }
             }
@@ -137,7 +147,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
         sumLiveData.observe(viewLifecycleOwner) { sum ->
             binding.apply {
-                if (sum < product.priceWholesale * settings.dollarRate || sum > product.priceMax) {
+                if (sum < product.wholesalePrice.price * settings.usdToUzs || sum > product.maxPrice.price) {
                     if (!tilSumma.isErrorEnabled) {
                         tilSumma.error = context?.getString(R.string.err_valid_sum)
                     }

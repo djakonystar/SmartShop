@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.extensions.checkAndFormatPhone
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.toPhoneNumber
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.databinding.DialogClientDetailBinding
@@ -37,7 +37,7 @@ class ClientDetailDialogFragment(private val client: Client) : DialogFragment() 
             } else {
                 "${client.balance.toString().toSumFormat} UZS"
             }
-            tvPhone.text = client.phone.toPhoneNumber
+            tvPhone.text = client.phone.checkAndFormatPhone
             tvComment.text = client.comment ?: ""
             if (client.type == 1) {
                 tvTIN.text = client.tin!!.toSumFormat

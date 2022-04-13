@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.newsale.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
     private var clientName = ""
-    private var clientId = 0
+    private var clientId = -1
     private var date = ""
     private var dateForBackend = ""
     private var dateInLong = System.currentTimeMillis()
@@ -64,7 +65,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
             }
             etSearchClient.setOnItemClickListener { adapterView, _, i, _ ->
                 clientName = adapterView.getItemAtPosition(i).toString()
+                Log.d("Payment", clientName)
                 clientId = listIds.getValue(clientName)
+                Log.d("Payment", clientId.toString())
+                Log.d("Payment", listIds.toString())
             }
             btnAddClient.onClick {
                 addClientDialog = AddClientDialog()
@@ -76,7 +80,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                             phone = phone,
                             inn = inn,
                             about = comment,
-                            clientType = type
+                            clientType = if (type == 1) "Y" else "J"
                         )
                     )
                 }
@@ -117,7 +121,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 datePickerDialog.addOnPositiveButtonClickListener {
                     dateInLong = it
                     date = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateInLong)
-                    dateForBackend = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateInLong)
+                    dateForBackend = date.changeDateFormat
                     etDate.setText(date)
                 }
 
@@ -229,7 +233,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private fun checkAndSend() {
         binding.apply {
             val selectedClient = etSearchClient.text.toString()
-            if (selectedClient.isEmpty()) clientId = 0
+            Log.d("Payment", selectedClient)
+            Log.d("Payment", clientId.toString())
+            if (selectedClient.isEmpty()) clientId = -1
+            Log.d("Payment", clientId.toString())
             val cash = etCash.text.toString().getOnlyDigits().toLong()
             val card = etCard.text.toString().getOnlyDigits().toLong()
             val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0
@@ -240,11 +247,11 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                 dateRequired = true
             }
             if (dateRequired) {
-                if (date.isEmpty() || clientId == 0) {
+                if (date.isEmpty() || clientId == -1) {
                     if (date.isEmpty()) {
                         tilDate.error = context?.getString(R.string.required_field)
                     }
-                    if (clientId == 0) {
+                    if (clientId == -1) {
                         tilClient.error = context?.getString(R.string.required_field)
                     }
                 } else {

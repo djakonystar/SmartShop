@@ -1,6 +1,6 @@
 package uz.texnopos.elektrolife.data.model.signin
 
-data class SignInPayload(
+data class SignInResponse(
     val role: String,
     val name: String,
     val token: String

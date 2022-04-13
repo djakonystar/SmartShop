@@ -24,7 +24,7 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         @SuppressLint("SetTextI18n")
         fun populateModel(model: Product, position: Int) {
             binding.apply {
-                tvName.text = model.productName
+                tvName.text = model.name
                 tvQuantity.text =
                     itemView.context?.getString(R.string.count_text, model.count.toSumFormat)
                 tvCost.text =

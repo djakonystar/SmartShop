@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale
 
 
-import android.util.Log
 import uz.texnopos.elektrolife.data.model.newsale.Product
 
 class Basket {
@@ -12,8 +11,8 @@ class Basket {
 
         fun addProduct(product: Product, onComplete: (product: Product) -> Unit) {
             mutableProducts.forEachIndexed { index, p ->
-                if (p.productId == product.productId) {
-                    if (mutableProducts[index].count < product.remained)
+                if (p.id == product.id) {
+                    if (mutableProducts[index].count < product.warehouse.count)
                         mutableProducts[index].count++
                     onComplete.invoke(mutableProducts[index])
                     return
@@ -26,7 +25,7 @@ class Basket {
 
         fun minusProduct(product: Product, onComplete: (product: Product) -> Unit) {
             mutableProducts.forEachIndexed { index, p ->
-                if (p.productId == product.productId) {
+                if (p.id == product.id) {
                     if (mutableProducts[index].count > 1)
                         mutableProducts[index].count--
                     onComplete.invoke(mutableProducts[index])
@@ -42,7 +41,7 @@ class Basket {
             product.count = count
             product.salePrice = totalPrice
             mutableProducts.forEachIndexed { _, p ->
-                if (p.productId == product.productId) {
+                if (p.id == product.id) {
                     p.count = count
                     p.salePrice = totalPrice
                     return
@@ -53,7 +52,7 @@ class Basket {
 
         fun deleteProduct(product: Product, onComplete: (product: Product) -> Unit) {
             mutableProducts.forEachIndexed { index, p ->
-                if (p.productId == product.productId) {
+                if (p.id == product.id) {
                     mutableProducts[index].count
                     onComplete.invoke(mutableProducts[index])
                     return

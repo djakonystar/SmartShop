@@ -37,7 +37,7 @@
     <string name="search">Izlash</string>
     <string name="count_text">%s dona</string>
     <string name="sum_text" translatable="false">%s UZS</string>
-    <string name="dollar_text" translatable="false">%s USD</string>
+    <string name="price_text" translatable="false">%s %s</string>
     <string name="sort_button" translatable="false">Sort Button</string>
     <string name="by_product_name">Mahsulot nomi bo\'yicha</string>
     <string name="by_category">Kategoriya bo\'yicha</string>
@@ -87,9 +87,9 @@
     <string name="debt_pay_date_helper">Qarz to\'lanadigan oxirgi muddat (agar qarz qolgan bo\'lsa)</string>
     <string name="payment_mix">Aralash</string>
     <string name="add_to_basket">Savatga qo\'shish</string>
-    <string name="wholesale_price_text">Ulgurji: %s USD</string>
-    <string name="min_price_text">Minimum: %s UZS</string>
-    <string name="max_price_text">Narxi: %s UZS</string>
+    <string name="wholesale_price_text">Ulgurji: %s %s</string>
+    <string name="min_price_text">Minimum: %s %s</string>
+    <string name="max_price_text">Narxi: %s %s</string>
     <string name="quantity">Soni</string>
     <string name="pay">To\'lash</string>
     <string name="counter_text" translatable="false">%s/%s</string>

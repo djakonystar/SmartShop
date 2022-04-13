@@ -1,5 +1,5 @@
 package uz.texnopos.elektrolife.data.model.signin
 
-data class SignInPost(
+data class SignIn(
     val pincode: String
 )

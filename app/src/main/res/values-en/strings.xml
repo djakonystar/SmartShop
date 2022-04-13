@@ -78,9 +78,9 @@
     <string name="debt_pay_date_helper">Debt maturity (if debt remains)</string>
     <string name="payment_mix">Mix</string>
     <string name="add_to_basket">Add to cart</string>
-    <string name="wholesale_price_text">Wholesale: %s USD</string>
-    <string name="min_price_text">Minimum: %s UZS</string>
-    <string name="max_price_text">Price: %s UZS</string>
+    <string name="wholesale_price_text">Wholesale: %s %s</string>
+    <string name="min_price_text">Minimum: %s %s</string>
+    <string name="max_price_text">Price: %s %s</string>
     <string name="quantity">Quantity</string>
     <string name="pay">Pay</string>
     <string name="not_enough_error">Not enough product!</string>
