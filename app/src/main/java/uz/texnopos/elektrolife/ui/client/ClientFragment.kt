@@ -58,7 +58,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                             phone = phone,
                             inn = inn,
                             about = comment,
-                            clientType = type
+                            clientType = if (type == 1) "Y" else "J"
                         )
                     )
                 }

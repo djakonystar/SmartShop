@@ -70,7 +70,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
             tvRate.text =
-                context?.getString(R.string.dollar_rate_text, settings.dollarRate.toString())
+                context?.getString(R.string.dollar_rate_text, settings.usdToUzs.toString())
             btnHome.onClick {
                 navController.popBackStack()
             }
@@ -224,8 +224,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             val price = it
             binding.apply {
                 val wholesalePrice = (wholesalePercent / 100.0 + 1) * price
-                val minPrice = ((minPercent / 100.0 + 1) * price * settings.dollarRate).toLong()
-                val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.dollarRate).toLong()
+                val minPrice = ((minPercent / 100.0 + 1) * price * settings.usdToUzs).toLong()
+                val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.usdToUzs).toLong()
 
                 etWholesalePrice.setText("%.3f".format(wholesalePrice).replace(',', '.'))
                 etMinPrice.setText(rounding(minPrice).toSumFormat)

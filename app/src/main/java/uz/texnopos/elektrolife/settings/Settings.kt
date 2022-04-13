@@ -12,7 +12,7 @@ class Settings(context: Context) {
         const val USER_ROLE = "notROLE"
         const val PRODUCT = "product"
         const val PIN = "pin"
-        const val DOLLAR_RATE = "dollarRate"
+        const val USD_UZS = "usdToUzs"
         const val FIRST_RUN = "firstRun"
         const val LANGUAGE = "language"
 
@@ -54,11 +54,11 @@ class Settings(context: Context) {
         set(value) = preferences.edit().putString(USER_ROLE,value).apply()
         get() = preferences.getString(USER_ROLE,"")?: ""
 
-    var dollarRate: Float
+    var usdToUzs: Float
         set(value) {
-            preferences.edit().putFloat(DOLLAR_RATE, value).apply()
+            preferences.edit().putFloat(USD_UZS, value).apply()
         }
-        get() = preferences.getFloat(DOLLAR_RATE, 0.0f)
+        get() = preferences.getFloat(USD_UZS, 0.0f)
 
     var firstRun: Boolean
         set(value) = preferences.edit().putBoolean(FIRST_RUN, value).apply()

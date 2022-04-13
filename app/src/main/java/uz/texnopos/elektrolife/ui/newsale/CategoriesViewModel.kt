@@ -8,6 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
+import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.data.model.newsale.Products
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
@@ -40,8 +41,8 @@ class CategoriesViewModel(private val api: ApiInterface, private val settings: S
         )
     }
 
-    private var _products: MutableLiveData<Resource<Products>> = MutableLiveData()
-    val products: LiveData<Resource<Products>> get() = _products
+    private var _products: MutableLiveData<Resource<List<Product>>> = MutableLiveData()
+    val products: LiveData<Resource<List<Product>>> get() = _products
 
     fun getProductsByCategoryId(categoryId: Int) {
         _products.value = Resource.loading()

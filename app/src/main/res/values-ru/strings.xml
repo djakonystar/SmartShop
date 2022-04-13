@@ -78,9 +78,9 @@
     <string name="debt_pay_date_helper">Срок погашения долга (если остался долг)</string>
     <string name="payment_mix">Смешанный</string>
     <string name="add_to_basket">Добавить в корзинку</string>
-    <string name="wholesale_price_text">Оптовая: %s USD</string>
-    <string name="min_price_text">Минимум: %s UZS</string>
-    <string name="max_price_text">Цена: %s UZS</string>
+    <string name="wholesale_price_text">Оптовая: %s %s</string>
+    <string name="min_price_text">Минимум: %s %s</string>
+    <string name="max_price_text">Цена: %s %s</string>
     <string name="quantity">Количество</string>
     <string name="pay">Оплатить</string>
     <string name="not_enough_error">Недостаточно продукта!</string>

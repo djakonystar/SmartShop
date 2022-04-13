@@ -82,7 +82,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
-        viewModel.getDollarRate()
+        viewModel.getCurrency()
         setUpObservers()
     }
 
@@ -99,7 +99,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {
-                        settings.dollarRate = it.data.payload.usd
+                        it.data.payload.forEach { currency ->
+                            when (currency.code) {
+                                "UZS" -> currency.rate.forEach { rate ->
+                                    when (rate.code) {
+                                        "USD" -> settings.usdToUzs = rate.rate
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         showError(it.data.message)
                     }

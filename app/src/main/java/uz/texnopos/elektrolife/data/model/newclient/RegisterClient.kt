@@ -6,8 +6,9 @@ data class RegisterClient(
     @SerializedName("full_name")
     val name: String,
     val phone: String,
+    @SerializedName("tin")
     val inn: String?,
     val about: String,
-    @SerializedName("user_type")
-    val clientType: Int
+    @SerializedName("type")
+    val clientType: String
 )

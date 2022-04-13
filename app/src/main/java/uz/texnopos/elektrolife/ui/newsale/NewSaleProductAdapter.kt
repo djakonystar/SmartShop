@@ -26,16 +26,19 @@ class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSale
         RecyclerView.ViewHolder(binding.root) {
         fun populateModel(product: Product) {
             binding.apply {
-                tvName.text = product.productName
+                tvName.text = product.name
                 tvName.isSelected = true
-                tvBrand.text = product.productBrand
+                tvBrand.text = product.brand
                 tvCost.text = itemView.context?.getString(
-                    R.string.dollar_text,
-                    product.productCostPrice.toSumFormat
+                    R.string.price_text,
+                    product.costPrice.price.toSumFormat,
+                    product.costPrice.code
                 )
+                val remained = product.warehouse.count
                 tvRemained.text = itemView.context?.getString(
                     R.string.count_text,
-                    product.remained.toSumFormat
+                    if (remained % 1 == 0.0) remained.toInt().toSumFormat
+                    else remained.toSumFormat
                 )
 
                 itemView.onClick {

@@ -35,17 +35,13 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     private val viewModel: ReportsViewModel by viewModel()
     private val settings: Settings by inject()
     private val calendarHelper = CalendarHelper()
-    private var lastSumOfCashbox = 0.0
-    private var lastSumOfProfit = 0.0
+    private var lastSumOfCashboxCash = 0.0
+    private var lastSumOfCashboxCard = 0.0
     private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
     private var cashboxDateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
     private var cashboxDateFrom = calendarHelper.firstDayOfCurrentMonth
     private var cashboxDateToInLong = calendarHelper.currentDateMillis
     private var cashboxDateTo = calendarHelper.currentDate
-    private var profitDateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
-    private var profitDateFrom = calendarHelper.firstDayOfCurrentMonth
-    private var profitDateToInLong = calendarHelper.currentDateMillis
-    private var profitDateTo = calendarHelper.currentDate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,23 +57,24 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
             }
         }
 
-        if (settings.role == "CEO" || settings.role == "ceo") {
+        if (settings.role == "ceo") {
             binding.topContainer.isVisible = false
             binding.cardReports.isVisible = true
-        } else if (settings.role == "Admin" || settings.role == "admin" || settings.role == "ADMIN") {
+        } else if (settings.role == "admin") {
             binding.topContainer.isVisible = true
-            binding.cardProfit.isVisible = false
             binding.cardReports.isVisible = false
+            viewModel.getCashbox(cashboxDateFrom.changeDateFormat, cashboxDateTo.changeDateFormat)
         }
 
         binding.apply {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
-                viewModel.getCashboxBalance(
-                    cashboxDateFrom.changeDateFormat,
-                    cashboxDateTo.changeDateFormat
-                )
-//                viewModel.getProfit(profitDateFrom.changeDateFormat, profitDateTo.changeDateFormat)
+                if (settings.role == "admin") {
+                    viewModel.getCashbox(
+                        cashboxDateFrom.changeDateFormat,
+                        cashboxDateTo.changeDateFormat
+                    )
+                }
             }
 
             btnCashboxDate.onClick {
@@ -106,7 +103,7 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
                     tvRangeCashbox.text =
                         context?.getString(R.string.date_range_text, cashboxDateFrom, cashboxDateTo)
 
-                    viewModel.getCashboxBalance(
+                    viewModel.getCashbox(
                         cashboxDateFrom.changeDateFormat,
                         cashboxDateTo.changeDateFormat
                     )
@@ -118,46 +115,6 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
 
                 dateRangePicker.show(requireActivity().supportFragmentManager, dateRangePicker.tag)
                 btnCashboxDate.isEnabled = false
-            }
-
-            btnProfitDate.onClick {
-                val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                    .setSelection(
-                        Pair(
-                            calendarHelper.firstDayOfCurrentMonthMillis,
-                            calendarHelper.currentDateMillis
-                        )
-                    )
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setValidator(DateValidatorPointBackward.before(calendarHelper.currentDateMillis))
-                            .build()
-                    )
-                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
-                    .setTitleText(R.string.choose_range)
-                    .build()
-
-                dateRangePicker.addOnPositiveButtonClickListener { dates: Pair<Long, Long> ->
-                    profitDateFromInLong = dates.first
-                    profitDateFrom = simpleDateFormat.format(profitDateFromInLong)
-                    profitDateToInLong = dates.second
-                    profitDateTo = simpleDateFormat.format(profitDateToInLong)
-
-                    tvRangeProfit.text =
-                        context?.getString(R.string.date_range_text, profitDateFrom, profitDateTo)
-
-                    viewModel.getProfit(
-                        profitDateFrom.changeDateFormat,
-                        profitDateTo.changeDateFormat
-                    )
-                }
-
-                dateRangePicker.addOnDismissListener {
-                    btnProfitDate.isEnabled = true
-                }
-
-                dateRangePicker.show(requireActivity().supportFragmentManager, dateRangePicker.tag)
-                btnProfitDate.isEnabled = false
             }
 
             cardSales.onClick {
@@ -175,15 +132,8 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
 
             tvRangeCashbox.text =
                 context?.getString(R.string.date_range_text, cashboxDateFrom, cashboxDateTo)
-            tvRangeProfit.text =
-                context?.getString(R.string.date_range_text, profitDateFrom, profitDateTo)
         }
 
-        viewModel.getCashboxBalance(
-            cashboxDateFrom.changeDateFormat,
-            cashboxDateTo.changeDateFormat
-        )
-//        viewModel.getProfit(profitDateFrom.changeDateFormat, profitDateTo.changeDateFormat)
         setUpObservers()
     }
 
@@ -195,38 +145,17 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     }
 
     private fun setUpObservers() {
-        viewModel.cashboxBalance.observe(viewLifecycleOwner) {
+        viewModel.cashbox.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        val newSum = it.data.payload.balance
-                        animateCashboxBalance(lastSumOfCashbox, newSum)
-                        lastSumOfCashbox = newSum
-                    } else {
-                        showError(it.data.message)
-                    }
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showError(it.message)
-                }
-            }
-        }
-
-        viewModel.profit.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    if (it.data!!.successful) {
-                        val newSum = it.data.payload.balance
-                        animateProfitBalance(lastSumOfProfit, newSum)
-                        lastSumOfProfit = newSum
-                    } else {
-                        showError(it.data.message)
-                    }
+                    val newCashSum = it.data!!.payload.cash
+                    val newCardSum = it.data.payload.card
+                    animateCashboxCash(lastSumOfCashboxCash, newCashSum)
+                    animateCashboxCard(lastSumOfCashboxCard, newCardSum)
+                    lastSumOfCashboxCash = newCashSum
+                    lastSumOfCashboxCard = newCardSum
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -237,12 +166,12 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun animateCashboxBalance(start: Double, end: Double) {
+    private fun animateCashboxCash(start: Double, end: Double) {
         val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
         animator.addUpdateListener {
             val newValue = "%.2f".format((it.animatedValue as Float).toDouble())
                 .replace(',', '.').toDouble().toSumFormat
-            binding.tvCashboxMoney.text = context?.getString(
+            binding.tvCashboxCash.text = context?.getString(
                 R.string.sum_text,
                 newValue
             )
@@ -252,12 +181,12 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun animateProfitBalance(start: Double, end: Double) {
+    private fun animateCashboxCard(start: Double, end: Double) {
         val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
         animator.addUpdateListener {
             val newValue = "%.2f".format((it.animatedValue as Float).toDouble())
                 .replace(',', '.').toDouble().toSumFormat
-            binding.tvProfitMoney.text = context?.getString(
+            binding.tvCashboxCard.text = context?.getString(
                 R.string.sum_text,
                 newValue
             )

@@ -78,9 +78,9 @@
     <string name="debt_pay_date_helper">Qarz to\'lanadigan oxirgi muddat (agar qarz qolgan bo\'lsa)</string>
     <string name="payment_mix">Aralash</string>
     <string name="add_to_basket">Savatga qo\'shish</string>
-    <string name="wholesale_price_text">Ulgurji: %s USD</string>
-    <string name="min_price_text">Minimum: %s UZS</string>
-    <string name="max_price_text">Narxi: %s UZS</string>
+    <string name="wholesale_price_text">Ulgurji: %s %s</string>
+    <string name="min_price_text">Minimum: %s %s</string>
+    <string name="max_price_text">Narxi: %s %s</string>
     <string name="quantity">Soni</string>
     <string name="pay">To\'lash</string>
     <string name="not_enough_error">Mahsulot yetarli emas!</string>

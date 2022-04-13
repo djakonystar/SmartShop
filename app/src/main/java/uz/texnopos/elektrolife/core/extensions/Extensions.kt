@@ -180,6 +180,14 @@ val Double.toSumFormat: String
         return num
     }
 
+val String.checkAndFormatPhone: String
+    get() {
+        if (this.length == 13) {
+            return this.substring(4).toPhoneNumber
+        }
+        return this.toPhoneNumber
+    }
+
 val String.toPhoneNumber: String
     get() {
         val arr = this.toCharArray()

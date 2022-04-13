@@ -78,9 +78,9 @@
     <string name="debt_pay_date_helper">Qarız tólenetuǵın aqırǵı múddet (eger qarız qalǵan bolsa)</string>
     <string name="payment_mix">Aralas</string>
     <string name="add_to_basket">Sebetke qosıw</string>
-    <string name="wholesale_price_text">Kótere: %s USD</string>
-    <string name="min_price_text">Minimum: %s UZS</string>
-    <string name="max_price_text">Bahası: %s UZS</string>
+    <string name="wholesale_price_text">Kótere: %s %s</string>
+    <string name="min_price_text">Minimum: %s %s</string>
+    <string name="max_price_text">Bahası: %s %s</string>
     <string name="quantity">Sanı</string>
     <string name="pay">Tólew</string>
     <string name="not_enough_error">Ónim jeterli emes!</string>

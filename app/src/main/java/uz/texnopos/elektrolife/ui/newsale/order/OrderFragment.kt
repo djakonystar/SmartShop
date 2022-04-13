@@ -107,7 +107,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 Basket.products.forEachIndexed { index, product ->
                     orders.add(
                         index,
-                        OrderItem(product.productId, product.count, product.salePrice)
+                        OrderItem(product.id, product.count, product.salePrice)
                     )
                 }
                 addPaymentDialog.setDate { clientId, cash, card, debt, date, comment ->
