@@ -85,7 +85,7 @@
     <string name="pay">Оплатить</string>
     <string name="not_enough_error">Недостаточно продукта!</string>
     <string name="confirm_order">Выполнить заказ</string>
-    <string name="total_sum_text">Сумма: %s UZS</string>
+    <string name="total_sum_text">Сумма: %s %s</string>
     <string name="input_correct_info">Введите действительный данный</string>
     <string name="basket_empty_warning">Сначала добавьте товар в корзину!</string>
     <string name="choose_date_uz">Выберите дату</string>
@@ -126,7 +126,7 @@
     <string name="add_income">Добавить доход</string>
     <string name="incomes">Доходы</string>
     <string name="cashbox_title">Касса</string>
-    <string name="total_debt_text">Долг: %s UZS</string>
+    <string name="total_debt_text">Долг: %s %s</string>
     <string name="natural_person_short">Ф</string>
     <string name="legal_person_short">Ю</string>
     <string name="category_added_successfully">Категория добавлено успешно!</string>

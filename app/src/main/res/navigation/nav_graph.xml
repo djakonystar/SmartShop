@@ -107,7 +107,7 @@
         android:name="uz.texnopos.elektrolife.ui.sales.detail.SalesDetailFragment"
         android:label="DetailSalesFragment" >
         <argument
-            android:name="detail"
+            android:name="basket"
             app:argType="string" />
     </fragment>
     <fragment

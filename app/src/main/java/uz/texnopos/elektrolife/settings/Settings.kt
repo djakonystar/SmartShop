@@ -15,6 +15,7 @@ class Settings(context: Context) {
         const val USD_UZS = "usdToUzs"
         const val FIRST_RUN = "firstRun"
         const val LANGUAGE = "language"
+        const val CURRENCY = "currency"
 
         /**
          * Finance type on creating new **Expense**
@@ -67,4 +68,8 @@ class Settings(context: Context) {
     var language: String
         set(value) = preferences.edit().putString(LANGUAGE, value).apply()
         get() = preferences.getString(LANGUAGE, "ru") ?: "ru"
+
+    var currency: String
+        set(value) = preferences.edit().putString(CURRENCY, value).apply()
+        get() = preferences.getString(CURRENCY, "UZS") ?: "UZS"
 }

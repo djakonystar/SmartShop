@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.GenericResponse
+import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
@@ -66,5 +66,4 @@ class ClientViewModel(private val api: ApiInterface, private val settings: Setti
         mutableSearchClient.value = Resource.loading()
         searchSubject.onNext(search)
     }
-
 }

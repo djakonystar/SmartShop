@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,7 @@ import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
+class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
     private lateinit var addClientDialog: AddClientDialog
     private val clientViewModel: ClientViewModel by viewModel()
@@ -56,7 +55,6 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
             tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
             calculateDebt()
 
-            etCash.addTextChangedListener(MaskWatcherPayment(etCash))
             etCard.addTextChangedListener(MaskWatcherPayment(etCard))
 
             etSearchClient.addTextChangedListener {
@@ -65,10 +63,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
             }
             etSearchClient.setOnItemClickListener { adapterView, _, i, _ ->
                 clientName = adapterView.getItemAtPosition(i).toString()
-                Log.d("Payment", clientName)
                 clientId = listIds.getValue(clientName)
-                Log.d("Payment", clientId.toString())
-                Log.d("Payment", listIds.toString())
             }
             btnAddClient.onClick {
                 addClientDialog = AddClientDialog()
@@ -206,8 +201,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
 
     private fun calculateDebt() {
         binding.apply {
-            val cashPrice = etCash.text.toString().getOnlyDigits().toLong()
-            val cardPrice = etCard.text.toString().getOnlyDigits().toLong()
+            val cashPrice =
+                etCash.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
+            val cardPrice =
+                etCard.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
             val remind = totalPrice - cashPrice - cardPrice
             if (remind > 0) {
                 tvDebtPrice.text = context?.getString(R.string.sum_text, "-${remind.toSumFormat}")
@@ -222,7 +219,7 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
                     requireContext(),
                     when {
                         remind > 0 -> R.color.error_color
-                        remind == 0L -> R.color.black
+                        remind == 0.0 -> R.color.black
                         else -> R.color.app_main_color
                     }
                 )
@@ -233,13 +230,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
     private fun checkAndSend() {
         binding.apply {
             val selectedClient = etSearchClient.text.toString()
-            Log.d("Payment", selectedClient)
-            Log.d("Payment", clientId.toString())
             if (selectedClient.isEmpty()) clientId = -1
-            Log.d("Payment", clientId.toString())
-            val cash = etCash.text.toString().getOnlyDigits().toLong()
-            val card = etCard.text.toString().getOnlyDigits().toLong()
-            val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0
+            val cash = etCash.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
+            val card = etCard.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
+            val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0.0
             var dateRequired = false
             val comment = etComment.text.toString()
 
@@ -263,10 +257,10 @@ class AddPaymentDialog(private val totalPrice: Long) : DialogFragment() {
         }
     }
 
-    private var sendDate: (clientId: Int, cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit =
-        { _: Int, _: Long, _: Long, _: Long, _: String, _: String -> }
+    private var sendDate: (clientId: Int, cash: Double, card: Double, debt: Double, date: String, comment: String) -> Unit =
+        { _: Int, _: Double, _: Double, _: Double, _: String, _: String -> }
 
-    fun setDate(sendDate: (clientId: Int, cash: Long, card: Long, debt: Long, date: String, comment: String) -> Unit) {
+    fun sendData(sendDate: (clientId: Int, cash: Double, card: Double, debt: Double, date: String, comment: String) -> Unit) {
         this.sendDate = sendDate
     }
 }

@@ -85,8 +85,8 @@
     <string name="pay">To\'lash</string>
     <string name="not_enough_error">Mahsulot yetarli emas!</string>
     <string name="confirm_order">Buyurtmani amalga oshirish</string>
-    <string name="total_sum_text">Summa: %s UZS</string>
-    <string name="total_debt_text">Qarz: %s UZS</string>
+    <string name="total_sum_text">Summa: %s %s</string>
+    <string name="total_debt_text">Qarz: %s %s</string>
     <string name="input_correct_info">Aniq ma\'lumot kiriting</string>
     <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
     <string name="choose_date_uz">Sanani tanlang</string>

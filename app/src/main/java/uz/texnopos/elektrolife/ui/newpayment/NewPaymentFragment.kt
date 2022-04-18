@@ -46,7 +46,7 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
         binding = FragmentPaymentNewBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
-        client = Client(0, "", "", "", 0, "", 0)
+        client = Client(0, "", "", "", 0, "", "J")
 
         setUpObservers()
 

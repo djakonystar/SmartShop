@@ -26,7 +26,7 @@ class ClientAdapter : BaseAdapter<Client, ClientAdapter.ClientsViewHolder>() {
                     model.balance.toString().toSumFormat
                 }
                 tvUserType.text =
-                    if (model.type == 0) itemView.context?.getString(R.string.natural_person_short) else itemView.context?.getString(
+                    if (model.type == "J") itemView.context?.getString(R.string.natural_person_short) else itemView.context?.getString(
                         R.string.legal_person_short
                     )
                 itemView.onClick {

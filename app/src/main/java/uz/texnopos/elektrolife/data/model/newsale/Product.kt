@@ -20,5 +20,5 @@ data class Product(
     @SerializedName("qr_code_name")
     val qrCode: String,
     var count: Int,
-    var salePrice: Long
+    var salePrice: Double
 )

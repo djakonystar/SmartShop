@@ -37,7 +37,7 @@ class Basket {
             onComplete.invoke(product)
         }
 
-        fun setProduct(product: Product, count: Int, totalPrice: Long) {
+        fun setProduct(product: Product, count: Int, totalPrice: Double) {
             product.count = count
             product.salePrice = totalPrice
             mutableProducts.forEachIndexed { _, p ->

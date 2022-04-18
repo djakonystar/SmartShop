@@ -21,6 +21,7 @@ import uz.texnopos.elektrolife.data.model.newsale.OrderItem
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentOrderBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddPaymentDialog
 
@@ -31,10 +32,12 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private lateinit var addPaymentDialog: AddPaymentDialog
     private val viewModelOrder: OrderViewModel by viewModel()
     private val adapter: OrderAdapter by inject()
+    private val settings: Settings by inject()
     private val safeArgs: OrderFragmentArgs by navArgs()
-    private var price = MutableLiveData<Long>()
+    private var price = MutableLiveData<Double>()
     private var basketListener = MutableLiveData<List<Product>>()
     private val gson = Gson()
+    private var unitId = -1
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,13 +60,14 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
 
             recyclerView.adapter = adapter
             adapter.models = Basket.mutableProducts
-            tvTotalPrice.text = context?.getString(R.string.total_sum_text, "0")
+            tvTotalPrice.text = context?.getString(R.string.total_sum_text, "0", settings.currency)
             val totalPrice = productList.sumOf { product -> product.salePrice * product.count }
 
             price.postValue(totalPrice)
 
             price.observe(viewLifecycleOwner) { sum ->
-                tvTotalPrice.text = context?.getString(R.string.total_sum_text, sum.toSumFormat)
+                tvTotalPrice.text =
+                    context?.getString(R.string.total_sum_text, sum.toSumFormat, settings.currency)
             }
             basketListener.observe(viewLifecycleOwner) { orders ->
                 if (orders.isEmpty()) navController.popBackStack()
@@ -100,24 +104,24 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             }
 
             btnOrder.onClick {
-                val finalPrice = tvTotalPrice.text.filter { c -> c.isDigit() }.toString().toLong()
+                val finalPrice =
+                    tvTotalPrice.text.filter { c -> c.isDigit() || c == '.' }.toString().toDouble()
                 addPaymentDialog = AddPaymentDialog(finalPrice)
                 addPaymentDialog.show(requireActivity().supportFragmentManager, "")
                 val orders: MutableList<OrderItem> = mutableListOf()
                 Basket.products.forEachIndexed { index, product ->
                     orders.add(
                         index,
-                        OrderItem(product.id, product.count, product.salePrice)
+                        OrderItem(product.id, product.count, 1, product.salePrice)
                     )
                 }
-                addPaymentDialog.setDate { clientId, cash, card, debt, date, comment ->
+                addPaymentDialog.sendData { clientId, cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
                         Order(
                             id = clientId,
                             card = card,
                             cash = cash,
                             debt = debt,
-                            price = finalPrice,
                             term = date,
                             description = comment,
                             orders = orders

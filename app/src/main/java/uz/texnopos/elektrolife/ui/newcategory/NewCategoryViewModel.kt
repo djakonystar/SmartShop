@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.GenericResponse
+import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryId
 import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface

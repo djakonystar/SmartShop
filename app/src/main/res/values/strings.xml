@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-<!--    <string name="app_name" translatable="false">SmartShop Test</string>-->
-    <string name="app_name" translatable="false">SmartShop</string>
+    <string name="app_name" translatable="false">SmartShop Test</string>
+<!--    <string name="app_name" translatable="false">SmartShop</string>-->
     <string name="warehouse">Omborxona</string>
     <string name="clients">Mijozlar</string>
     <string name="new_client">Yangi mijoz</string>
@@ -97,8 +97,8 @@
     <string name="basket_en" translatable="false">Basket</string>
     <string name="confirm_order">Buyurtmani amalga oshirish</string>
     <string name="delete_product" translatable="false">Delete product</string>
-    <string name="total_sum_text">Summa: %s UZS</string>
-    <string name="total_debt_text">Qarz: %s UZS</string>
+    <string name="total_sum_text">Summa: %s %s</string>
+    <string name="total_debt_text">Qarz: %s %s</string>
     <string name="input_correct_info">Aniq ma\'lumot kiriting</string>
     <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
     <string name="add_to_basket_en" translatable="false">Add to basket</string>
@@ -181,4 +181,5 @@
     <string name="err_valid_sum">Haqiqiy summa kiriting</string>
     <string name="warning">Ishonchingiz komilmi?</string>
     <string name="reports">Hisobotlar</string>
+    <string name="price_icon" translatable="false">Price icon</string>
 </resources>

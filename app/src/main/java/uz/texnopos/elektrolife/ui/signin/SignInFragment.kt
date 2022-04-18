@@ -5,12 +5,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -74,20 +72,20 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         val user = it.data.payload
-                        login(true, user.name, user.token, "")
+                        login(true, user.token, "")
                     } else {
-                        login(false, "", "", requireContext().getString(R.string.wrong_pincode))
+                        login(false, "", requireContext().getString(R.string.wrong_pincode))
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    login(false, "", "", it.message!!)
+                    login(false, "", it.message!!)
                 }
             }
         }
     }
 
-    private fun login(login: Boolean, username: String, token: String, error: String) {
+    private fun login(login: Boolean, token: String, error: String) {
         if (login) {
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
@@ -95,10 +93,10 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             navController.navigate(R.id.action_signInFragment_to_mainFragment)
         } else {
             val snackbar = Snackbar.make(binding.etPassword, error, Snackbar.LENGTH_SHORT)
-            val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-            params.width = FrameLayout.LayoutParams.MATCH_PARENT
-            snackbar.view.layoutParams = params
+//            val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
+//            params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+//            params.width = FrameLayout.LayoutParams.MATCH_PARENT
+//            snackbar.view.layoutParams = params
             snackbar.show()
 
             val shake = AnimationUtils.loadAnimation(requireContext(), R.anim.shake)

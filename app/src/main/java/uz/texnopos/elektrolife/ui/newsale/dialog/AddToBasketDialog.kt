@@ -3,6 +3,7 @@ package uz.texnopos.elektrolife.ui.newsale.dialog
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -13,20 +14,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.MaskWatcherNothing
-import uz.texnopos.elektrolife.core.MaskWatcherPayment
-import uz.texnopos.elektrolife.core.extensions.getOnlyDigits
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
 import uz.texnopos.elektrolife.settings.Settings
+
 
 class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
     private val settings: Settings by inject()
     private var visibilityLiveData = MutableLiveData<Boolean>()
-    private var sumLiveData = MutableLiveData<Long>()
+    private var sumLiveData = MutableLiveData<String>()
+    private var sumLiveCheck = MutableLiveData<String>()
+    private var quantityLiveCheck = MutableLiveData<Pair<String, Boolean>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +51,8 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             var isVisible = false
             visibilityLiveData.postValue(isVisible)
 
-            tvWholesale.text = context?.getString(
+
+            tvWholesale.text = getString(
                 R.string.wholesale_price_text,
                 product.wholesalePrice.price.toSumFormat,
                 product.wholesalePrice.code
@@ -68,37 +69,47 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                     product.maxPrice.price.toSumFormat,
                     product.maxPrice.code
                 )
-            tvQuantityCounter.text =
-                context?.getString(R.string.counter_text, "0", remained.toSumFormat)
+            tilQuantity.suffixText = "/$remained"
+//            tvQuantityCounter.isVisible = false
+//            tvQuantityCounter.text =
+//                context?.getString(R.string.counter_text, "0", remained.toSumFormat)
+            tilSumma.suffixText = settings.currency
             etSumma.setText(product.maxPrice.price.toSumFormat)
 
-            etQuantity.addTextChangedListener(MaskWatcherNothing(etQuantity))
-            etSumma.addTextChangedListener(MaskWatcherPayment(etSumma))
+            if (remained is Int) {
+                etQuantity.setBlockFilter("-,.")
+            } else {
+                etQuantity.setDoubleFilter
+            }
+            etSumma.setBlockFilter("-,")
 
             etQuantity.addTextChangedListener {
-                val count = it.toString().getOnlyDigits()
+                quantityLiveCheck.postValue(Pair(it.toString(), remained is Int))
+                val count =
+                    it.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
                 tilQuantity.isErrorEnabled = false
-                tvQuantityCounter.text =
-                    context?.getString(
-                        R.string.counter_text,
-                        count.toSumFormat,
-                        remained.toSumFormat
-                    )
-                if (count.toInt() > remained.toDouble()) {
+//                tvQuantityCounter.text =
+                context?.getString(
+                    R.string.counter_text,
+                    count.toSumFormat,
+                    remained.toSumFormat
+                )
+                if (count > remained.toDouble() || count <= 0.0) {
                     tilQuantity.error = context?.getString(R.string.not_enough_error)
                 }
             }
 
             etSumma.addTextChangedListener {
-                sumLiveData.postValue(it.toString().getOnlyDigits().toLong())
+                sumLiveData.postValue(it.toString().filter { s -> s.isDigit() || s == '.' })
+                sumLiveCheck.postValue(it.toString())
             }
 
             btnAdd.onClick {
                 val quantity = etQuantity.text.toString()
                 var sum = etSumma.text.toString()
-                if (quantity.isNotEmpty() && !tilQuantity.isErrorEnabled && sum.isNotEmpty()) {
+                if (quantity.isNotEmpty() && !tilQuantity.isErrorEnabled && sum.isNotEmpty() && !tilSumma.isErrorEnabled) {
                     val quantityInt = quantity.getOnlyDigits().toInt()
-                    sum = sum.getOnlyDigits()
+                    sum = sum.filter { s -> s.isDigit() || s == '.' }
                     onItemClick.invoke(quantityInt, sum)
                     dismiss()
                 } else {
@@ -145,7 +156,8 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             }
         }
 
-        sumLiveData.observe(viewLifecycleOwner) { sum ->
+        sumLiveData.observe(viewLifecycleOwner) { s ->
+            val sum = s.ifEmpty { "0" }.toDouble()
             binding.apply {
                 if (sum < product.wholesalePrice.price * settings.usdToUzs || sum > product.maxPrice.price) {
                     if (!tilSumma.isErrorEnabled) {
@@ -154,6 +166,20 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                 } else {
                     tilSumma.isErrorEnabled = false
                 }
+            }
+        }
+
+        sumLiveCheck.observe(viewLifecycleOwner) { sumText ->
+            binding.apply {
+                if (!sumText.contains('.')) etSumma.setBlockFilter("-,")
+                else etSumma.setDoubleFilter
+            }
+        }
+
+        quantityLiveCheck.observe(viewLifecycleOwner) { quantity ->
+            binding.apply {
+                if (!quantity.first.contains('.') && !quantity.second) etQuantity.setBlockFilter("-,")
+                else etQuantity.setDoubleFilter
             }
         }
     }

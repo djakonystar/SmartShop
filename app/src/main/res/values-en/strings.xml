@@ -85,8 +85,8 @@
     <string name="pay">Pay</string>
     <string name="not_enough_error">Not enough product!</string>
     <string name="confirm_order">Complete the order</string>
-    <string name="total_sum_text">Sum: %s UZS</string>
-    <string name="total_debt_text">Debt: %s UZS</string>
+    <string name="total_sum_text">Sum: %s %s</string>
+    <string name="total_debt_text">Debt: %s %s</string>
     <string name="input_correct_info">Enter exact details</string>
     <string name="basket_empty_warning">First, add the item to your cart!</string>
     <string name="choose_date_uz">Select a date</string>

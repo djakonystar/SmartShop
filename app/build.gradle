@@ -9,13 +9,13 @@ android {
     compileSdk 31
 
     defaultConfig {
-//        applicationId "uz.texnopos.smartshoptest" // Test
+        applicationId "uz.texnopos.smartshoptest" // Test
 //        applicationId "uz.texnopos.smartshopteststore" // Test PlayStore
 //        applicationId "uz.texnopos.smartshopel" // ElektroLife
 //        applicationId "uz.texnopos.smartshopluxgg" // LuxGadget
 //        applicationId "uz.texnopos.smartshopcs" // Computer Service
 //        applicationId "uz.texnopos.smartshopks" // Qońırat Shop
-        applicationId "uz.texnopos.smartshoptexas" // Taxiatas
+//        applicationId "uz.texnopos.smartshoptexas" // Taxiatas
         minSdk 23
         targetSdk 31
         versionCode 2

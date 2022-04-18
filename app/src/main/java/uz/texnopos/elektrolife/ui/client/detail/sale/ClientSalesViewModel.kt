@@ -7,8 +7,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.GenericResponse
-import uz.texnopos.elektrolife.data.model.sales.Sales
+import uz.texnopos.elektrolife.data.model.PagingResponse
+import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
@@ -16,22 +16,53 @@ class ClientSalesViewModel(private val api: ApiInterface, private val settings: 
     ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableClientSales: MutableLiveData<Resource<GenericResponse<List<Sales>>>> =
+    private var mutableBaskets: MutableLiveData<Resource<PagingResponse<List<Basket>>>> =
         MutableLiveData()
-    val clientSales: LiveData<Resource<GenericResponse<List<Sales>>>> = mutableClientSales
+    val baskets: LiveData<Resource<PagingResponse<List<Basket>>>> = mutableBaskets
 
-    fun getClientSales(clientId: Int) {
-        mutableClientSales.value = Resource.loading()
+    fun basketsOfUser(userId: Int) {
+        mutableBaskets.value = Resource.loading()
         compositeDisposable.add(
-            api.getSalesOfClient("Bearer ${settings.token}", clientId)
+            api.basketsOfUser(token = "Bearer ${settings.token}", userId = userId, page = 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableClientSales.value = Resource.success(response)
+                        if (response.successful) {
+                            mutableBaskets.value = Resource.success(response.payload)
+                        } else {
+                            mutableBaskets.value = Resource.error(response.message)
+                        }
                     },
                     { error ->
-                        mutableClientSales.value = Resource.error(error.localizedMessage)
+                        mutableBaskets.value = Resource.error(error.message)
+                    }
+                )
+        )
+    }
+
+    fun basketsOfUser(userId: Int, from: String, to: String) {
+        mutableBaskets.value = Resource.loading()
+        compositeDisposable.add(
+            api.basketsOfUser(
+                token = "Bearer ${settings.token}",
+                userId = userId,
+                from = from,
+                to = to,
+                page = 1
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        if (response.successful) {
+                            mutableBaskets.value = Resource.success(response.payload)
+                        } else {
+                            mutableBaskets.value = Resource.error(response.message)
+                        }
+                    },
+                    { error ->
+                        mutableBaskets.value = Resource.error(error.message)
                     }
                 )
         )

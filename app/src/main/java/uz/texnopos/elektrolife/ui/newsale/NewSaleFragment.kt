@@ -85,7 +85,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.onItemClickListener { quantity, totalPrice ->
-                    Basket.setProduct(product, quantity, totalPrice.toLong())
+                    Basket.setProduct(product, quantity, totalPrice.toDouble())
                 }
                 dialog.onDismissListener {
                     hideSoftKeyboard(btnFab)

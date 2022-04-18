@@ -81,22 +81,26 @@
         android:id="@+id/tilQuantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_middle"
         android:hint="@string/quantity"
         app:endIconMode="clear_text"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/unitPicker"
+        app:layout_constraintEnd_toStartOf="@id/unitPicker"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMax">
+        app:layout_constraintTop_toBottomOf="@id/tvMax"
+        app:suffixTextColor="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etQuantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:digits="0123456789 "
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:maxLength="12"
             android:singleLine="true"
+            android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
@@ -112,6 +116,7 @@
         android:text="@string/counter_text"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_standard"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/tilQuantity"
         app:layout_constraintTop_toBottomOf="@id/tilQuantity"
         tools:ignore="SpUsage" />
@@ -120,13 +125,15 @@
         android:id="@+id/tilSumma"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:hint="@string/sum_uzb"
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantityCounter">
+        app:layout_constraintTop_toBottomOf="@id/unitPicker"
+        app:suffixTextColor="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSumma"
@@ -136,11 +143,21 @@
             android:inputType="number"
             android:maxLength="19"
             android:singleLine="true"
+            android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <NumberPicker
+        android:id="@+id/unitPicker"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:layout_marginEnd="@dimen/margin_standard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMax" />
 
     <Button
         android:id="@+id/btnAdd"
@@ -162,10 +179,10 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginBottom="@dimen/margin_standard"
         android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
         android:paddingHorizontal="32dp"
         android:text="@string/cancel_uzb"
         android:textSize="@dimen/text_size_larger"

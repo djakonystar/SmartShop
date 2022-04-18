@@ -32,13 +32,14 @@ import uz.texnopos.elektrolife.ui.newsale.order.OrderViewModel
 import uz.texnopos.elektrolife.ui.sales.SalesAdapter
 import uz.texnopos.elektrolife.ui.sales.SalesViewModel
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailAdapter
+import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailViewModel
 import uz.texnopos.elektrolife.ui.signin.SignInViewModel
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseAdapter
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 import java.util.concurrent.TimeUnit
 
 //private const val baseUrl = "https://electro-life.my-project.site" // Test
-private const val baseUrl = "http://computer-service-new.my-project.site" // Test-new
+private const val baseUrl = "http://smart-shop.my-project.site" // Test-new
 //private const val baseUrl = "https://electro-life.texnopos.site" // ElectroLife
 //private const val baseUrl = "http://lux-gadget.texnopos.site" // LuxGadget
 //private const val baseUrl = "https://computer-service.texnopos.site" // Computer Service
@@ -98,12 +99,13 @@ val viewModelModule = module {
     viewModel { ClientPaymentViewModel(get(), get()) }
     viewModel { ClientSalesViewModel(get(), get()) }
     viewModel { TransactionViewModel(get(), get()) }
+    viewModel { SalesDetailViewModel(get(), get()) }
 }
 
 val adapterModule = module {
     single { ClientAdapter() }
-    single { SalesAdapter() }
-    single { SalesDetailAdapter() }
+    single { SalesAdapter(get()) }
+    single { SalesDetailAdapter(get()) }
     single { WarehouseAdapter() }
     single { NewSaleProductAdapter() }
     single { OrderAdapter() }

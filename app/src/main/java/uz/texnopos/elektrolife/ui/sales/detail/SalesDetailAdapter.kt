@@ -4,24 +4,41 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
+import uz.texnopos.elektrolife.core.extensions.checkModule
 import uz.texnopos.elektrolife.core.extensions.inflate
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.core.extensions.unitConverter
+import uz.texnopos.elektrolife.data.model.sales.Order
 import uz.texnopos.elektrolife.data.model.sales.Product
 import uz.texnopos.elektrolife.databinding.ItemSalesDetailBinding
+import uz.texnopos.elektrolife.settings.Settings
 
-class SalesDetailAdapter : BaseAdapter<Product, SalesDetailAdapter.DetailViewHolder>() {
+class SalesDetailAdapter(private val settings: Settings) :
+    BaseAdapter<Order, SalesDetailAdapter.DetailViewHolder>() {
 
     inner class DetailViewHolder(private val binding: ItemSalesDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun populateModel(product: Product) {
+        fun populateModel(order: Order) {
             binding.apply {
-                tvProductName.text = product.productName
-                tvBrand.text = product.productBrand
-                tvCount.text = itemView.context?.getString(R.string.count_text, product.count.toSumFormat)
-                tvCost.text = itemView.context?.getString(R.string.sum_text, product.price.toSumFormat)
+                tvProductName.text = order.productName
+                tvBrand.text = order.brand
+                tvCount.text = itemView.context?.getString(
+                    R.string.price_text,
+                    order.count.checkModule.toSumFormat,
+                    order.unitId.unitConverter(tvCount.context)
+                )
+                tvCost.text = itemView.context?.getString(
+                    R.string.price_text,
+                    order.price.checkModule.toSumFormat,
+                    settings.currency
+                )
 
-                val total = product.count * product.price
-                tvTotalPrice.text = itemView.context?.getString(R.string.sum_text, total.toSumFormat)
+                val total = order.count * order.price
+                tvTotalPrice.text = itemView.context?.getString(
+                    R.string.price_text,
+                    total.checkModule.toSumFormat,
+                    settings.currency
+                )
             }
         }
     }

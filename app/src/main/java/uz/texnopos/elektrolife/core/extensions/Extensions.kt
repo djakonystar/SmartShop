@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
+import android.text.InputFilter
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
@@ -14,6 +15,7 @@ import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
@@ -22,23 +24,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
 import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 import uz.texnopos.elektrolife.ui.dialog.WarningDialog
-
-fun View.visibility(visibility: Boolean): View {
-    if (visibility) {
-        this.visibility = View.VISIBLE
-    } else {
-        this.visibility = View.GONE
-    }
-    return this
-}
-
-fun View.enabled(isEnabled: Boolean): View {
-    this.isEnabled = isEnabled
-    return this
-}
 
 fun Fragment.showMessage(msg: String?) {
     Toast.makeText(this.requireContext(), msg, Toast.LENGTH_LONG).show()
@@ -118,26 +107,12 @@ val Int.dpToFloat: Float
     get() = (this / Resources.getSystem().displayMetrics.density)
 
 fun String.dialPhone(activity: Activity) {
-    val phone = "+998$this"
+    var phone = "+998"
+    if (this.length == 9) phone += this
+    else phone = this
     val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(phone)))
     activity.startActivity(intent)
 }
-
-fun String.dialPhoneFull(activity: Activity) {
-    val phone = this
-    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(phone)))
-    activity.startActivity(intent)
-}
-
-val String.ifContainsLatin: Boolean
-    get() {
-        this.forEach {
-            if (it.code in 65..90 || it.code in 97..122) {
-                return true
-            }
-        }
-        return false
-    }
 
 val String.toSumFormat: String
     get() {
@@ -170,7 +145,6 @@ val Number.toSumFormat: String
 val Double.toSumFormat: String
     get() {
         var num = this.toLong().toSumFormat
-        val l = this.toString().length - this.toLong().toString().length - 1
         val formattedNum = "%.${2}f".format(this)
         val afterPoint = formattedNum.substring(formattedNum.length - 2, formattedNum.length)
         num += if (afterPoint == "0") ".00" else {
@@ -180,10 +154,10 @@ val Double.toSumFormat: String
         return num
     }
 
-val String.checkAndFormatPhone: String
+val String.toPhoneFormat: String
     get() {
         if (this.length == 13) {
-            return this.substring(4).toPhoneNumber
+            return this.substring(4).toPhoneFormat
         }
         return this.toPhoneNumber
     }
@@ -191,22 +165,6 @@ val String.checkAndFormatPhone: String
 val String.toPhoneNumber: String
     get() {
         val arr = this.toCharArray()
-        var phone = "+998 ("
-        arr.forEachIndexed { index, c ->
-            phone += c
-            if (index == 1) {
-                phone += ") "
-            }
-            if (index == 4 || index == 6) {
-                phone += " "
-            }
-        }
-        return phone
-    }
-
-val String.toPhoneNumberFromFull: String
-    get() {
-        val arr = this.substring(4..this.lastIndex).toCharArray()
         var phone = "+998 ("
         arr.forEachIndexed { index, c ->
             phone += c
@@ -247,13 +205,14 @@ fun String.getOnlyDigits(): String {
 }
 
 @SuppressLint("SetTextI18n")
-fun animateDebtPrice(start: Long, end: Long, textView: TextView, view: View) {
+fun animateDebtPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
     animator.addUpdateListener {
-        val newValue = (it.animatedValue as Float).toLong().toSumFormat
-        textView.text = view.context.getString(
+        val newValue = (it.animatedValue as Float).toDouble()
+        textView.text = textView.context.getString(
             R.string.total_debt_text,
-            newValue
+            newValue.checkModule.toSumFormat,
+            settings.currency
         )
     }
     animator.duration = 500
@@ -261,17 +220,41 @@ fun animateDebtPrice(start: Long, end: Long, textView: TextView, view: View) {
 }
 
 @SuppressLint("SetTextI18n")
-fun animateTotalPrice(start: Long, end: Long, textView: TextView, view: View) {
+fun animateTotalPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
     animator.addUpdateListener {
-        val newValue = (it.animatedValue as Float).toLong().toSumFormat
-        textView.text = view.context.getString(
+        val newValue = (it.animatedValue as Float).toDouble()
+        textView.text = textView.context.getString(
             R.string.total_sum_text,
-            newValue
+            newValue.checkModule.toSumFormat,
+            settings.currency
         )
     }
     animator.duration = 500
     animator.start()
 }
 
+val EditText.setDoubleFilter: Unit
+    get() {
+        val filter = InputFilter { source, _, _, _, _, _ ->
+            if (source != null && "-,.".contains("" + source)) "" else null
+        }
+        this.filters = arrayOf(filter)
+    }
 
+fun EditText.setBlockFilter(block: String) {
+    val filter = InputFilter { source, _, _, _, _, _ ->
+        if (source != null && block.contains("" + source)) "" else null
+    }
+    this.filters = arrayOf(filter)
+}
+
+val Double.checkModule: Number
+    get() {
+        return if (this % 1 == 0.0) this.toLong()
+        else this
+    }
+
+fun Int.unitConverter(context: Context): String {
+    return Constants.getUnitName(context, this)
+}
