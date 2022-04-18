@@ -18,22 +18,21 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
-import uz.texnopos.elektrolife.data.model.warehouse.Product
+import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
 import uz.texnopos.elektrolife.ui.newsale.CategoriesViewModel
-import java.util.*
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var binding: FragmentWarehouseBinding
     private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
     private val viewModel: WarehouseViewModel by viewModel()
-    private val categoryViewModel: CategoriesViewModel by viewModel()
+    private val categoriesViewModel: CategoriesViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
     private var sortType = "byFewRemain"
-    private var productsList = mutableListOf<Product>()
-    private var allProductsList = mutableListOf<Product>()
+    private var productsList = mutableListOf<WarehouseItem>()
+    private var allProductsList = mutableListOf<WarehouseItem>()
     private var searchValue = ""
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
@@ -62,26 +61,26 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
                 chipGroup.removeAllViews()
-                categoryViewModel.getCategories()
-                viewModel.getProductsByName(searchValue)
+                categoriesViewModel.getCategories()
+                viewModel.warehouseProducts(searchValue)
             }
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                viewModel.getProductsByName(searchValue)
+                viewModel.warehouseProducts(searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.getProductsByName(searchValue)
+                    viewModel.warehouseProducts(searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
         }
 
-        categoryViewModel.getCategories()
-        viewModel.getProductsByName(searchValue)
+        categoriesViewModel.getCategories()
+        viewModel.warehouseProducts(searchValue)
         setUpObservers()
     }
 
@@ -91,34 +90,31 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        allProductsList = it.data.payload as MutableList<Product>
-                        productsList = if (selectedCategoryId == -1) {
-                            it.data.payload as MutableList<Product>
-                        } else {
-                            it.data.payload.filter { product ->
-                                product.category?.id == selectedCategoryId
-                            } as MutableList<Product>
-                        }
-//                        adapter.models = it.data.payload
-                        adapter.models = when (sortType) {
-                            "byFewRemain" -> productsList
-                                .sortedBy { t -> t.remained / (t.category?.minCount?.toDouble() ?: 0.0) }
-                            "byProduct" -> productsList
-                                .sortedBy { t -> t.name.lowercase() }
-                            "byCategory" -> productsList
-                                .sortedBy { t -> t.name.lowercase() }
-                                .sortedBy { t -> t.category?.name?.lowercase() }
-                            "byRemainAscend" -> productsList
-                                .sortedBy { t -> t.remained }
-                            "byRemainDescend" -> productsList
-                                .sortedByDescending { t -> t.remained }
-                            else -> productsList
-                        }
-                        showLottieAnimation(productsList.isEmpty())
+                    allProductsList = it.data!! as MutableList<WarehouseItem>
+                    productsList = if (selectedCategoryId == -1) {
+                        it.data as MutableList<WarehouseItem>
                     } else {
-                        showError(it.data.message)
+                        it.data.filter { product ->
+                            product.category.id == selectedCategoryId
+                        } as MutableList<WarehouseItem>
                     }
+                    adapter.models = productsList
+//                        adapter.models = it.data.payload
+//                        adapter.models = when (sortType) {
+//                            "byFewRemain" -> productsList
+//                                .sortedBy { t -> t.count / (t.category.minCount?.toDouble() ?: 0.0) }
+//                            "byProduct" -> productsList
+//                                .sortedBy { t -> t.name.lowercase() }
+//                            "byCategory" -> productsList
+//                                .sortedBy { t -> t.name.lowercase() }
+//                                .sortedBy { t -> t.category?.name?.lowercase() }
+//                            "byRemainAscend" -> productsList
+//                                .sortedBy { t -> t.remained }
+//                            "byRemainDescend" -> productsList
+//                                .sortedByDescending { t -> t.remained }
+//                            else -> productsList
+//                        }
+                    showLottieAnimation(productsList.isEmpty())
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -127,7 +123,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
         }
 
-        categoryViewModel.categories.observe(viewLifecycleOwner) {
+        categoriesViewModel.categories.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -173,7 +169,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     sortType = "byFewRemain"
                 }
             }
-            viewModel.getProductsByName(searchValue)
+            viewModel.warehouseProducts(searchValue)
             return@setOnMenuItemClickListener true
         }
         optionsMenu.show()
@@ -199,22 +195,25 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     }
 
                     if (selectedCategoryId != -1) {
-                        viewModel.getProductsByName(searchValue)
+                        viewModel.warehouseProducts(searchValue)
                     } else {
-                        adapter.models = when (sortType) {
-                            "byFewRemain" -> allProductsList
-                                .sortedBy { t -> t.remained / (t.category?.minCount?.toDouble() ?: 0.0) }
-                            "byProduct" -> allProductsList
-                                .sortedBy { t -> t.name.lowercase() }
-                            "byCategory" -> allProductsList
-                                .sortedBy { t -> t.name.lowercase() }
-                                .sortedBy { t -> t.category?.name?.lowercase() }
-                            "byRemainAscend" -> allProductsList
-                                .sortedBy { t -> t.remained }
-                            "byRemainDescend" -> allProductsList
-                                .sortedByDescending { t -> t.remained }
-                            else -> allProductsList
-                        }
+                        adapter.models = allProductsList
+//                        adapter.models = when (sortType) {
+//                            "byFewRemain" -> allProductsList
+//                                .sortedBy { t ->
+//                                    t.remained / (t.category?.minCount?.toDouble() ?: 0.0)
+//                                }
+//                            "byProduct" -> allProductsList
+//                                .sortedBy { t -> t.name.lowercase() }
+//                            "byCategory" -> allProductsList
+//                                .sortedBy { t -> t.name.lowercase() }
+//                                .sortedBy { t -> t.category?.name?.lowercase() }
+//                            "byRemainAscend" -> allProductsList
+//                                .sortedBy { t -> t.remained }
+//                            "byRemainDescend" -> allProductsList
+//                                .sortedByDescending { t -> t.remained }
+//                            else -> allProductsList
+//                        }
                         showLottieAnimation(allProductsList.isEmpty())
                     }
                 }

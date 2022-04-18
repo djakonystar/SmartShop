@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.warehouse.Product
+import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.concurrent.TimeUnit
@@ -19,17 +20,25 @@ class WarehouseViewModel(private val api: ApiInterface, private val settings: Se
     private val compositeDisposable = CompositeDisposable()
     private val searchSubject = BehaviorSubject.create<String>()
 
+    private var mutableWarehouseProducts: MutableLiveData<Resource<List<WarehouseItem>>> =
+        MutableLiveData()
+    val warehouseProducts: LiveData<Resource<List<WarehouseItem>>> = mutableWarehouseProducts
+
     init {
         searchSubject
             .debounce(700, TimeUnit.MILLISECONDS)
             .switchMap {
-                api.getProductsFromWarehouse("Bearer ${settings.token}", it)
+                api.warehouseProducts("Bearer ${settings.token}", it)
                     .subscribeOn(Schedulers.io())
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { response ->
-                    mutableWarehouseProducts.value = Resource.success(response)
+                    if (response.successful) {
+                        mutableWarehouseProducts.value = Resource.success(response.payload)
+                    } else {
+                        mutableWarehouseProducts.value = Resource.error(response.message)
+                    }
                 },
                 { error ->
                     mutableWarehouseProducts.value = Resource.error(error.localizedMessage)
@@ -37,20 +46,19 @@ class WarehouseViewModel(private val api: ApiInterface, private val settings: Se
             )
     }
 
-    private var mutableWarehouseProducts: MutableLiveData<Resource<GenericResponse<List<Product>>>> =
-        MutableLiveData()
-    val warehouseProducts: LiveData<Resource<GenericResponse<List<Product>>>> =
-        mutableWarehouseProducts
-
-    fun getProductsFromWarehouse() {
+    fun warehouseProducts() {
         mutableWarehouseProducts.value = Resource.loading()
         compositeDisposable.add(
-            api.getProductsFromWarehouse("Bearer ${settings.token}")
+            api.warehouseProducts("Bearer ${settings.token}")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableWarehouseProducts.value = Resource.success(response)
+                        if (response.successful) {
+                            mutableWarehouseProducts.value = Resource.success(response.payload)
+                        } else {
+                            mutableWarehouseProducts.value = Resource.error(response.message)
+                        }
                     },
                     { error ->
                         mutableWarehouseProducts.value = Resource.error(error.localizedMessage)
@@ -59,8 +67,13 @@ class WarehouseViewModel(private val api: ApiInterface, private val settings: Se
         )
     }
 
-    fun getProductsByName(name: String) {
+    fun warehouseProducts(name: String) {
         mutableWarehouseProducts.value = Resource.loading()
         searchSubject.onNext(name)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

@@ -10,16 +10,19 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.checkModule
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.databinding.FragmentClientPaymentBinding
+import uz.texnopos.elektrolife.settings.Settings
 
 class ClientPaymentFragment(private val client: Client) :
     Fragment(R.layout.fragment_client_payment) {
     private lateinit var binding: FragmentClientPaymentBinding
-    private val adapter: ClientPaymentAdapter by inject()
     private val viewModel: ClientPaymentViewModel by viewModel()
+    private val adapter: ClientPaymentAdapter by inject()
+    private val settings: Settings by inject()
     private var lastSum = 0.0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,10 +80,11 @@ class ClientPaymentFragment(private val client: Client) :
         val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
         animator.addUpdateListener {
             val newValue = "%.2f".format((it.animatedValue as Float).toDouble())
-                .replace(',', '.').toDouble().toSumFormat
+                .replace(',', '.').toDouble().checkModule.toSumFormat
             binding.tvTotalPrice.text = context?.getString(
                 R.string.total_sum_text,
-                newValue
+                newValue,
+                settings.currency
             )
         }
         animator.duration = 300

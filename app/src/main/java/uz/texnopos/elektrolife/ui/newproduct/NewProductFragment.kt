@@ -26,6 +26,7 @@ import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newproduct.Amount
 import uz.texnopos.elektrolife.data.model.newproduct.Categories
 import uz.texnopos.elektrolife.data.model.newproduct.Product
+import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -49,8 +50,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private var minPercent: Int = 0
     private var maxPercent: Int = 0
     private var list: MutableSet<String> = mutableSetOf()
-    private var listProducts: MutableMap<String, uz.texnopos.elektrolife.data.model.warehouse.Product> =
-        mutableMapOf()
+    private var listProducts: MutableMap<String, WarehouseItem> = mutableMapOf()
     private var productName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,13 +93,13 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 tilProductName.isErrorEnabled = false
                 if (it.toString().isNotEmpty()) {
                     list.clear()
-                    warehouseViewModel.getProductsByName(it.toString())
+                    warehouseViewModel.warehouseProducts(it.toString())
                 }
             }
             etSearchProduct.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
-                val product = listProducts.getValue(productName)
-                val dialog = TransactionDialog(product)
+                val warehouseItem = listProducts.getValue(productName)
+                val dialog = TransactionDialog(warehouseItem.product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
                     etSearchProduct.text.clear()
@@ -284,34 +284,30 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        it.data.payload.forEach { product ->
-                            list.add(product.name)
-                            if (!listProducts.contains(product.name)) listProducts[product.name] =
-                                product
+                    it.data!!.forEach { warehouseItem ->
+                        list.add(warehouseItem.product.name)
+                        if (!listProducts.contains(warehouseItem.product.name)) listProducts[warehouseItem.product.name] =
+                            warehouseItem
+                    }
+                    binding.apply {
+                        if (etSearchProduct.text.isEmpty()) {
+                            list.clear()
+                            val arrayAdapter = ArrayAdapter(
+                                requireContext(),
+                                R.layout.item_spinner,
+                                list.toMutableList()
+                            )
+                            etSearchProduct.setAdapter(arrayAdapter)
+                            etSearchProduct.dismissDropDown()
+                        } else {
+                            val arrayAdapter = ArrayAdapter(
+                                requireContext(),
+                                R.layout.item_spinner,
+                                list.toMutableList()
+                            )
+                            etSearchProduct.setAdapter(arrayAdapter)
+                            etSearchProduct.showDropDown()
                         }
-                        binding.apply {
-                            if (etSearchProduct.text.isEmpty()) {
-                                list.clear()
-                                val arrayAdapter = ArrayAdapter(
-                                    requireContext(),
-                                    R.layout.item_spinner,
-                                    list.toMutableList()
-                                )
-                                etSearchProduct.setAdapter(arrayAdapter)
-                                etSearchProduct.dismissDropDown()
-                            } else {
-                                val arrayAdapter = ArrayAdapter(
-                                    requireContext(),
-                                    R.layout.item_spinner,
-                                    list.toMutableList()
-                                )
-                                etSearchProduct.setAdapter(arrayAdapter)
-                                etSearchProduct.showDropDown()
-                            }
-                        }
-                    } else {
-                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
@@ -328,24 +324,20 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        showSuccess(getString(R.string.product_added_successfully))
-                            .setOnPositiveButtonClickListener {
-                                navController.popBackStack()
-                            }
-                        binding.apply {
-                            actSpinner.text.clear()
-                            etSearchProduct.text!!.clear()
-                            etMinPrice.text!!.clear()
-                            etMaxPrice.text!!.clear()
-                            etCostPrice.text!!.clear()
-                            etWholesalePrice.text!!.clear()
-                            etBranchName.text!!.clear()
-                            etProductQuantity.text!!.clear()
-                            categoryId = 0
+                    showSuccess(getString(R.string.product_added_successfully))
+                        .setOnPositiveButtonClickListener {
+                            navController.popBackStack()
                         }
-                    } else {
-                        showError(it.data.message)
+                    binding.apply {
+                        actSpinner.text.clear()
+                        etSearchProduct.text!!.clear()
+                        etMinPrice.text!!.clear()
+                        etMaxPrice.text!!.clear()
+                        etCostPrice.text!!.clear()
+                        etWholesalePrice.text!!.clear()
+                        etBranchName.text!!.clear()
+                        etProductQuantity.text!!.clear()
+                        categoryId = 0
                     }
                 }
                 ResourceState.ERROR -> {

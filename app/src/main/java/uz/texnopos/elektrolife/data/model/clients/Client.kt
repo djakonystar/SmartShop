@@ -12,5 +12,5 @@ data class Client(
     @SerializedName("about")
     val comment: String? = "",
     @SerializedName("user_type")
-    val type: String
+    val type: String?
 )

@@ -28,6 +28,7 @@ import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.signin.SignInResponse
+import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 
 interface ApiInterface {
 
@@ -132,15 +133,15 @@ interface ApiInterface {
     ): Observable<GenericResponse<List<orderBasket>>>
 
     @GET("api/warehouse")
-    fun getProductsFromWarehouse(
+    fun warehouseProducts(
         @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<warehouseProduct>>>
+    ): Observable<GenericResponse<List<WarehouseItem>>>
 
     @GET("api/warehouse")
-    fun getProductsFromWarehouse(
+    fun warehouseProducts(
         @Header("Authorization") token: String,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<warehouseProduct>>>
+    ): Observable<GenericResponse<List<WarehouseItem>>>
 
     @POST("api/login")
     fun signIn(
