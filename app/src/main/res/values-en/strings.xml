@@ -147,4 +147,5 @@
     <string name="warning">Are you sure?</string>
     <string name="reports">Reports</string>
     <string name="err_valid_sum">Enter the valid sum</string>
+    <string name="measure_text">Measure</string>
 </resources>

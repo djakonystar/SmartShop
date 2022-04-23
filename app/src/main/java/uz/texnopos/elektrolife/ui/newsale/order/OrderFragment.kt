@@ -24,12 +24,14 @@ import uz.texnopos.elektrolife.databinding.FragmentOrderBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddPaymentDialog
+import uz.texnopos.elektrolife.ui.newsale.dialog.EditBasketProductDialog
 
 class OrderFragment : Fragment(R.layout.fragment_order) {
     private lateinit var binding: FragmentOrderBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private lateinit var addPaymentDialog: AddPaymentDialog
+    private lateinit var editBasketProduct: EditBasketProductDialog
     private val viewModelOrder: OrderViewModel by viewModel()
     private val adapter: OrderAdapter by inject()
     private val settings: Settings by inject()
@@ -37,7 +39,6 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private var price = MutableLiveData<Double>()
     private var basketListener = MutableLiveData<List<Product>>()
     private val gson = Gson()
-    private var unitId = -1
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,9 +60,10 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             val productList = gson.fromJson<List<Product>>(safeArgs.products, myType)
 
             recyclerView.adapter = adapter
-            adapter.models = Basket.mutableProducts
+            adapter.models = Basket.products.toMutableList()
             tvTotalPrice.text = context?.getString(R.string.total_sum_text, "0", settings.currency)
-            val totalPrice = productList.sumOf { product -> product.salePrice * product.count }
+            val totalPrice =
+                productList.sumOf { product -> product.salePrice * product.count }
 
             price.postValue(totalPrice)
 
@@ -74,32 +76,48 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             }
 
             adapter.onPlusCounterClickListener { product ->
-                Basket.addProduct(product) {
-                    adapter.plusCount(product)
-                    val newPrice =
-                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
-                    price.postValue(newPrice)
-                }
+                // TODO: Edit product
+//                Basket.addProduct(product) {
+//                    adapter.plusCount(product)
+//                    val newPrice =
+//                        Basket.products.sumOf { product -> product.salePrice * product.count as Int }
+//                    price.postValue(newPrice)
+//                }
             }
 
             adapter.onMinusCounterClickListener { product ->
-                Basket.minusProduct(product) {
-                    adapter.minusCount(product)
-                    val newPrice =
-                        Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
-                    price.postValue(newPrice)
+                // TODO: Edit product
+//                Basket.minusProduct(product) {
+//                    adapter.minusCount(product)
+//                    val newPrice =
+//                        Basket.products.sumOf { product -> product.salePrice * product.count as Int }
+//                    price.postValue(newPrice)
+//                }
+            }
+
+            adapter.setOnEditClickListener { product, position ->
+                editBasketProduct = EditBasketProductDialog(product)
+                editBasketProduct.setOnItemAddedListener { quantity, salePrice ->
+                    Basket.setProduct(product, quantity, salePrice.toDouble())
+                    adapter.notifyItemChanged(position)
                 }
+
+                editBasketProduct.show(
+                    requireActivity().supportFragmentManager,
+                    editBasketProduct.tag
+                )
             }
 
             adapter.onDeleteItemClickListener { product, position ->
                 showWarning(getString(R.string.confirm_remove_uz))
                     .setOnPositiveButtonClickListener {
                         adapter.removeItem(product, position)
-                        Basket.mutableProducts.remove(product)
-                        val newPrice =
-                            Basket.mutableProducts.sumOf { product -> product.salePrice * product.count }
+                        Basket.deleteProduct(product)
+                        val newPrice = Basket.products.sumOf { product ->
+                            product.salePrice * product.count
+                        }
                         price.postValue(newPrice)
-                        basketListener.postValue(Basket.mutableProducts)
+                        basketListener.postValue(Basket.products)
                     }
             }
 
@@ -149,7 +167,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    Basket.mutableProducts.clear()
+                    Basket.clear()
                     binding.apply {
                         tvTotalPrice.text = ""
                         adapter.models.clear()

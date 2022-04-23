@@ -14,10 +14,9 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
+import uz.texnopos.elektrolife.data.model.newclient.Client
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
@@ -55,8 +54,6 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
             tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
             calculateDebt()
 
-            etCard.addTextChangedListener(MaskWatcherPayment(etCard))
-
             etSearchClient.addTextChangedListener {
                 list.clear()
                 clientViewModel.searchClient(it.toString())
@@ -70,7 +67,7 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
                 addClientDialog.show(requireActivity().supportFragmentManager, addClientDialog.tag)
                 addClientDialog.setData { name, inn, phone, type, comment ->
                     newClientsViewModel.registerNewClient(
-                        RegisterClient(
+                        Client(
                             name = name,
                             phone = phone,
                             inn = inn,
@@ -201,10 +198,8 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
 
     private fun calculateDebt() {
         binding.apply {
-            val cashPrice =
-                etCash.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
-            val cardPrice =
-                etCard.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
+            val cashPrice = etCash.text.toString().toDouble
+            val cardPrice = etCard.text.toString().toDouble
             val remind = totalPrice - cashPrice - cardPrice
             if (remind > 0) {
                 tvDebtPrice.text = context?.getString(R.string.sum_text, "-${remind.toSumFormat}")

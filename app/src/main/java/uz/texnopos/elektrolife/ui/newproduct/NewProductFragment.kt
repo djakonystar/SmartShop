@@ -1,6 +1,5 @@
 package uz.texnopos.elektrolife.ui.newproduct
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -8,55 +7,55 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.MaskWatcherNothing
-import uz.texnopos.elektrolife.core.MaskWatcherPayment
-import uz.texnopos.elektrolife.core.MaskWatcherPaymentDollar
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.showSuccess
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
-import uz.texnopos.elektrolife.data.model.newproduct.Amount
-import uz.texnopos.elektrolife.data.model.newproduct.Categories
+import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.data.model.category.CategoryResponse
+import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.Product
+import uz.texnopos.elektrolife.data.model.newproduct.Warehouse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
+import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
     private lateinit var abBinding: ActionBarProductNewBinding
     private lateinit var navController: NavController
-    private lateinit var groupAdapter: ArrayAdapter<String>
+    private lateinit var categoriesAdapter: ArrayAdapter<String>
     private val viewModel: NewProductViewModel by viewModel()
     private val warehouseViewModel: WarehouseViewModel by viewModel()
+    private val currencyViewModel: CurrencyViewModel by viewModel()
+    private val categoryViewModel: CategoryViewModel by viewModel()
     private val settings: Settings by inject()
-    private var mutableList: MutableList<Categories> = mutableListOf()
+    private var mutableList: MutableList<CategoryResponse> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
-    private var categoryId = 0
-    private val amount = MediatorLiveData<Amount>().apply { value = Amount() }
+    private var categoryId = -1
     private var liveCostPrice = MutableLiveData<Double>()
-    private var wholesalePercent: Int = 0
-    private var minPercent: Int = 0
-    private var maxPercent: Int = 0
+    private var categoryNameLiveData = MutableLiveData<String>()
+    private var wholesalePercent: Double = 0.0
+    private var minPercent: Double = 0.0
+    private var maxPercent: Double = 0.0
     private var list: MutableSet<String> = mutableSetOf()
     private var listProducts: MutableMap<String, WarehouseItem> = mutableMapOf()
+    private var mapOfCurrency: MutableMap<Int, String> = mutableMapOf()
     private var productName = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        merge()
-    }
+    private val measureUnitsList = Constants.getUnits()
+    private var unitId: Int = 1
+    private var measureUnitLiveData: MutableLiveData<Int> = MutableLiveData(1)
+    private var currencyIds = mutableListOf(-1, -1, -1, -1)
+    private var currencyRate = mutableMapOf<String, Double>()
+    private var currencyLiveData = MutableLiveData<Pair<Double, MutableList<Int>>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,8 +64,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         abBinding = ActionBarProductNewBinding.bind(view)
         navController = findNavController()
 
-        observeCostChange()
-        setupObserver()
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
             tvRate.text =
@@ -75,126 +72,180 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 navController.popBackStack()
             }
         }
-        viewModel.getCategories()
 
         binding.apply {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
-                viewModel.getCategories()
+                currencyViewModel.getCurrency()
+                categoryViewModel.getCategories()
             }
 
-            etWholesalePrice.addTextChangedListener(MaskWatcherPaymentDollar(etWholesalePrice))
-            etMinPrice.addTextChangedListener(MaskWatcherPayment(etMinPrice))
-            etMaxPrice.addTextChangedListener(MaskWatcherPayment(etMaxPrice))
-            etProductQuantity.addTextChangedListener(MaskWatcherNothing(etProductQuantity))
-
-            etSearchProduct.addTextChangedListener {
+            etProductName.addTextChangedListener {
                 tilProductName.isErrorEnabled = false
                 if (it.toString().isNotEmpty()) {
                     list.clear()
                     warehouseViewModel.warehouseProducts(it.toString())
                 }
             }
-            etSearchProduct.setOnItemClickListener { adapterView, _, i, _ ->
+
+            etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
                 val warehouseItem = listProducts.getValue(productName)
                 val dialog = TransactionDialog(warehouseItem.product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
-                    etSearchProduct.text.clear()
+                    etProductName.text.clear()
                 }
             }
+
             etProductQuantity.addTextChangedListener {
                 tilProductQuantity.isErrorEnabled = false
             }
+
+            etCostPrice.filterForDouble
             etCostPrice.addTextChangedListener {
                 tilCostPrice.isErrorEnabled = false
             }
+
             etWholesalePrice.addTextChangedListener {
                 tilWholesalePrice.isErrorEnabled = false
             }
+
             etMinPrice.addTextChangedListener {
                 tilMinPrice.isErrorEnabled = false
             }
+
             etMaxPrice.addTextChangedListener {
                 tilMaxPrice.isErrorEnabled = false
             }
 
-            groupAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
-            actSpinner.setAdapter(groupAdapter)
-            actSpinner.setOnFocusChangeListener { _, b ->
+            categoriesAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
+            actCategory.setAdapter(categoriesAdapter)
+            actCategory.setOnFocusChangeListener { _, b ->
                 if (b) {
-                    actSpinner.showDropDown()
-                    tilSpinner.isErrorEnabled = false
+                    actCategory.showDropDown()
+                    tilCategory.isErrorEnabled = false
                 }
             }
 
-            actSpinner.setOnItemClickListener { _, _, i, _ ->
-                tilSpinner.isErrorEnabled = false
-                categoryId = mutableList[i].categoryId
-                wholesalePercent = mutableList[i].percentWholesale
-                minPercent = mutableList[i].percentMin
-                maxPercent = mutableList[i].percentMax
+            actCategory.setOnItemClickListener { _, _, i, _ ->
+                tilCategory.isErrorEnabled = false
+                categoryId = mutableList[i].id
+                wholesalePercent = mutableList[i].wholePercent
+                minPercent = mutableList[i].minPercent
+                maxPercent = mutableList[i].maxPercent
             }
 
-            etCostPrice.addTextChangedListener(MaskWatcherPaymentDollar(etCostPrice))
+            actCategory.doOnTextChanged { text, _, _, _ ->
+                categoryNameLiveData.postValue(text.toString())
+            }
+
+            val unitAdapter =
+                ArrayAdapter(requireContext(), R.layout.item_spinner, measureUnitsList)
+            actMeasureUnit.setAdapter(unitAdapter)
+            actMeasureUnit.threshold = 200
+            actMeasureUnit.setText(measureUnitsList[0])
+            unitId = 1
+            measureUnitLiveData.postValue(unitId)
+
+            actMeasureUnit.setOnItemClickListener { _, _, i, _ ->
+                tilMeasureUnit.isErrorEnabled = false
+                unitId = i + 1
+                measureUnitLiveData.postValue(unitId)
+            }
+
             etCostPrice.doOnTextChanged { it, _, _, _ ->
-                if (it.isNullOrEmpty()) {
-                    liveCostPrice.postValue(0.0)
-                } else {
-                    liveCostPrice.postValue(
-                        it.toString().getOnlyDigits().toDouble()
-                    )
-                }
+                liveCostPrice.postValue(it.toString().toDouble)
+            }
+
+            actCostCurrency.threshold = 100
+            actWholesaleCurrency.threshold = 100
+            actMinCurrency.threshold = 100
+            actMaxCurrency.threshold = 100
+
+            actCostCurrency.setOnItemClickListener { _, _, i, _ ->
+                tilCostCurrency.isErrorEnabled = false
+                currencyIds[0] = i + 1
+            }
+
+            actWholesaleCurrency.setOnItemClickListener { _, _, i, _ ->
+                tilWholesaleCurrency.isErrorEnabled = false
+                currencyIds[1] = i + 1
+            }
+
+            actMinCurrency.setOnItemClickListener { _, _, i, _ ->
+                tilMinCurrency.isErrorEnabled = false
+                currencyIds[2] = i + 1
+            }
+
+            actMaxCurrency.setOnItemClickListener { _, _, i, _ ->
+                tilMaxCurrency.isErrorEnabled = false
+                currencyIds[3] = i + 1
             }
 
             btnAddProduct.onClick {
-                val productName = etSearchProduct.text.toString()
-                val costPrice = etCostPrice.text.toString().getOnlyDigits()
-                val productQuantity = etProductQuantity.text.toString().filter { q -> q.isDigit() }
-                val branch = etBranchName.text.toString()
-                val wholesalePrice = etWholesalePrice.text.toString().getOnlyDigits()
-                val minPrice = etMinPrice.text.toString().filter { min -> min.isDigit() }
-                val maxPrice = etMaxPrice.text.toString().filter { max -> max.isDigit() }
+                val productName = etProductName.text.toString()
+                val costPrice = etCostPrice.text.toString().toDouble
+                val productQuantity = etProductQuantity.text.toString().toDouble
+                val brand = etBrand.text.toString()
+                val wholesalePrice = etWholesalePrice.text.toString().toDouble
+                val minPrice = etMinPrice.text.toString().toDouble
+                val maxPrice = etMaxPrice.text.toString().toDouble
 
-                if (categoryId != 0 && productName.isNotEmpty() && costPrice.isNotEmpty()
-                    && wholesalePrice.isNotEmpty() && minPrice.isNotEmpty() && maxPrice.isNotEmpty()
+                if (categoryId != -1 && productName.isNotEmpty() && costPrice != 0.0 &&
+                    wholesalePrice != 0.0 && minPrice != 0.0 && maxPrice != 0.0 &&
+                    checkCurrencies && unitId != -1
                 ) {
                     viewModel.createProduct(
                         Product(
                             categoryId = categoryId,
-                            brand = branch,
                             name = productName,
-                            costPrice = costPrice.toDouble(),
-                            wholesalePrice = wholesalePrice.toDouble(),
-                            minPrice = minPrice.toInt(),
-                            maxPrice = maxPrice.toInt(),
-                            quantity = if (productQuantity.isEmpty()) 0 else productQuantity.toInt()
+                            brand = brand,
+                            costPrice = Price(currencyIds[0], costPrice),
+                            wholesalePrice = Price(currencyIds[1], wholesalePrice),
+                            minPrice = Price(currencyIds[2], minPrice),
+                            maxPrice = Price(currencyIds[3], maxPrice),
+                            warehouse = Warehouse(unitId, productQuantity)
                         )
                     )
-                    setupObserverCreatedProduct()
                 } else {
-                    if (categoryId == 0) {
-                        tilSpinner.error = context?.getString(R.string.required_field)
+                    if (categoryId == -1) {
+                        tilCategory.error = context?.getString(R.string.required_field)
                     }
                     if (productName.isEmpty()) {
                         tilProductName.error = context?.getString(R.string.required_field)
                     }
-                    if (wholesalePrice.isEmpty()) {
+                    if (unitId == -1) {
+                        tilMeasureUnit.error = getString(R.string.required_field)
+                    }
+                    if (costPrice == 0.0) {
+                        tilCostPrice.error = context?.getString(R.string.required_field)
+                    }
+                    if (wholesalePrice == 0.0) {
                         tilWholesalePrice.error = context?.getString(R.string.required_field)
                     }
-                    if (minPrice.isEmpty()) {
+                    if (minPrice == 0.0) {
                         tilMinPrice.error = context?.getString(R.string.required_field)
                     }
-                    if (maxPrice.isEmpty()) {
+                    if (maxPrice == 0.0) {
                         tilMaxPrice.error = context?.getString(R.string.required_field)
                     }
-                    if (productQuantity.isEmpty()) {
+                    if (productQuantity == 0.0) {
                         tilProductQuantity.error = context?.getString(R.string.required_field)
                     }
-                    if (costPrice.isEmpty()) {
-                        tilCostPrice.error = context?.getString(R.string.required_field)
+                    if (!checkCurrencies) {
+                        currencyIds.forEachIndexed { index, element ->
+                            if (element == -1) {
+                                when (index) {
+                                    0 -> tilCostCurrency.error = getString(R.string.required_field)
+                                    1 -> tilWholesaleCurrency.error =
+                                        getString(R.string.required_field)
+                                    2 -> tilMinCurrency.error = getString(R.string.required_field)
+                                    3 -> tilMaxCurrency.error = getString(R.string.required_field)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -202,50 +253,26 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 navController.navigate(R.id.action_newProductFragment_to_newCategoryFragment)
             }
         }
-    }
 
-    private fun String.getOnlyDigits(): String {
-        val s = this.filter { it.isDigit() || it == '.' }
-        return s.ifEmpty { "0" }
-    }
-
-    private fun merge() {
-        amount.addSource(liveCostPrice) {
-            val previous = amount.value
-            amount.value = previous?.copy(wholesalePrice = it)
-            amount.value = previous?.copy(minPrice = it.toLong())
-            amount.value = previous?.copy(maxPrice = it.toLong())
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun observeCostChange() {
-        liveCostPrice.observe(requireActivity()) {
-            val price = it
-            binding.apply {
-                val wholesalePrice = (wholesalePercent / 100.0 + 1) * price
-                val minPrice = ((minPercent / 100.0 + 1) * price * settings.usdToUzs).toLong()
-                val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.usdToUzs).toLong()
-
-                etWholesalePrice.setText("%.3f".format(wholesalePrice).replace(',', '.'))
-                etMinPrice.setText(rounding(minPrice).toSumFormat)
-                etMaxPrice.setText(rounding(maxPrice).toSumFormat)
-
-                if (price == 0.0) {
-                    etWholesalePrice.text!!.clear()
-                    etMinPrice.text!!.clear()
-                    etMaxPrice.text!!.clear()
-                }
-            }
-        }
+        currencyViewModel.getCurrency()
+        categoryViewModel.getCategories()
+        setUpObservers()
     }
 
     private fun rounding(price: Long): Long {
-        val cost = binding.etCostPrice.text.toString().getOnlyDigits().toDouble()
+        val costText = binding.etCostPrice.text.toString()
+        val cost = if (costText == "." || costText.isEmpty()) 0.0 else costText.toDouble()
         val sum = if (cost < 1) 100 else 500
         val divider = if (cost < 1) 100 else 1000
         return ((price + sum) / divider) * divider
     }
+
+    private val checkCurrencies: Boolean
+        get() {
+            for (e in currencyIds) if (e == -1)
+                return false
+            return true
+        }
 
     private fun setLoading(loading: Boolean) {
         binding.apply {
@@ -254,23 +281,155 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         }
     }
 
-    private fun setupObserver() {
-        viewModel.categories.observe(viewLifecycleOwner) {
+    private fun setUpObservers() {
+        measureUnitLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                // pcs
+                1 -> {
+                    binding.etProductQuantity.setBlockFilter("-.,")
+                    val oldText = binding.etProductQuantity.text.toString()
+                    binding.etProductQuantity.setText(oldText.substringBefore('.'))
+                    binding.etProductQuantity.setSelection(binding.etProductQuantity.length())
+                }
+                // tonne, kg, gr, meter, sm, litre
+                else -> binding.etProductQuantity.filterForDouble
+            }
+        }
+
+        liveCostPrice.observe(viewLifecycleOwner) {
+            val price = it
+            binding.apply {
+                val wholesalePrice = ((wholesalePercent / 100.0 + 1) * price)
+                val minPrice = ((minPercent / 100.0 + 1) * price * settings.usdToUzs)
+                val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.usdToUzs)
+
+                etWholesalePrice.setText(wholesalePrice format 2)
+                etMinPrice.setText(minPrice format 2)
+                etMaxPrice.setText(maxPrice format 2)
+
+                if (price == 0.0) {
+                    etWholesalePrice.text!!.clear()
+                    etMinPrice.text!!.clear()
+                    etMaxPrice.text!!.clear()
+                }
+            }
+        }
+
+        currencyLiveData.observe(viewLifecycleOwner) {
+            binding.apply {
+                val price = it.first
+
+                val rateForWholesale = if (it.second[0] != it.second[1]) {
+                    currencyRate.getValue(
+                        "${mapOfCurrency.getValue(it.second[0])}to${
+                            mapOfCurrency.getValue(it.second[1])
+                        }"
+                    )
+                } else 1.0
+                val rateForMin = if (it.second[0] != it.second[2]) {
+                    currencyRate.getValue(
+                        "${mapOfCurrency.getValue(it.second[0])}to${
+                            mapOfCurrency.getValue(it.second[2])
+                        }"
+                    )
+                } else 1.0
+                val rateForMax = if (it.second[0] != it.second[3]) {
+                    currencyRate.getValue(
+                        "${mapOfCurrency.getValue(it.second[0])}to${
+                            mapOfCurrency.getValue(it.second[3])
+                        }"
+                    )
+                } else 1.0
+
+
+                val wholesalePrice = ((wholesalePercent / 100.0 + 1) * price * rateForWholesale)
+                val minPrice = ((minPercent / 100.0 + 1) * price * rateForMin)
+                val maxPrice = ((maxPercent / 100.0 + 1) * price * rateForMax)
+
+                etWholesalePrice.setText(wholesalePrice format 2)
+                etMinPrice.setText(minPrice format 2)
+                etMaxPrice.setText(maxPrice format 2)
+
+                if (price == 0.0) {
+                    etWholesalePrice.text!!.clear()
+                    etMinPrice.text!!.clear()
+                    etMaxPrice.text!!.clear()
+                }
+            }
+        }
+
+        categoryNameLiveData.observe(viewLifecycleOwner) {
+            binding.apply {
+                tilCostPrice.isEnabled = it.isNotEmpty()
+                tilCostCurrency.isEnabled = it.isNotEmpty()
+                tilWholesalePrice.isEnabled = it.isNotEmpty()
+                tilWholesaleCurrency.isEnabled = it.isNotEmpty()
+                tilMinPrice.isEnabled = it.isNotEmpty()
+                tilMinCurrency.isEnabled = it.isNotEmpty()
+                tilMaxPrice.isEnabled = it.isNotEmpty()
+                tilMaxCurrency.isEnabled = it.isNotEmpty()
+            }
+        }
+
+        currencyViewModel.currency.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    binding.apply {
+                        setLoading(false)
+                        mapOfCurrency.clear()
+                        it.data!!.forEach { currency ->
+                            mapOfCurrency[currency.id] = currency.code
+                            if (currency.code == "USD") {
+                                currencyIds[0] = currency.id
+                                currencyIds[1] = currency.id
+                            } else if (currency.code == "UZS") {
+                                currencyIds[2] = currency.id
+                                currencyIds[3] = currency.id
+                            }
+
+                            currency.rate.forEach { toCurrency ->
+                                currencyRate["${currency.code}to${toCurrency.code}"] =
+                                    toCurrency.rate.toDouble()
+                            }
+                        }
+
+                        val currencyList = mapOfCurrency.values.toList()
+                        val currencyAdapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.item_spinner,
+                            currencyList
+                        )
+                        actCostCurrency.setAdapter(currencyAdapter)
+                        actWholesaleCurrency.setAdapter(currencyAdapter)
+                        actMinCurrency.setAdapter(currencyAdapter)
+                        actMaxCurrency.setAdapter(currencyAdapter)
+
+                        actCostCurrency.setText(currencyList[currencyIds[0] - 1])
+                        actWholesaleCurrency.setText(currencyList[currencyIds[1] - 1])
+                        actMinCurrency.setText(currencyList[currencyIds[2] - 1])
+                        actMaxCurrency.setText(currencyList[currencyIds[3] - 1])
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showError(it.message)
+                }
+            }
+        }
+
+        categoryViewModel.categories.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        mutableList = it.data.payload.toMutableList()
-                        mutableList.forEach { data ->
-                            if (!categoryName.contains(data.name)) categoryName.add(data.name)
-                        }
-                        groupAdapter =
-                            ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
-                        binding.actSpinner.setAdapter(groupAdapter)
-                    } else {
-                        showError(it.data.message)
+                    mutableList = it.data!!.toMutableList()
+                    mutableList.forEach { category ->
+                        if (!categoryName.contains(category.name)) categoryName.add(category.name)
                     }
+                    categoriesAdapter =
+                        ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
+                    binding.actCategory.setAdapter(categoriesAdapter)
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -290,23 +449,26 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             warehouseItem
                     }
                     binding.apply {
-                        if (etSearchProduct.text.isEmpty()) {
+                        if (etProductName.text.isEmpty()) {
                             list.clear()
                             val arrayAdapter = ArrayAdapter(
                                 requireContext(),
                                 R.layout.item_spinner,
                                 list.toMutableList()
                             )
-                            etSearchProduct.setAdapter(arrayAdapter)
-                            etSearchProduct.dismissDropDown()
+                            etProductName.setAdapter(arrayAdapter)
+                            etProductName.dismissDropDown()
                         } else {
                             val arrayAdapter = ArrayAdapter(
                                 requireContext(),
                                 R.layout.item_spinner,
                                 list.toMutableList()
                             )
-                            etSearchProduct.setAdapter(arrayAdapter)
-                            etSearchProduct.showDropDown()
+                            etProductName.setAdapter(arrayAdapter)
+                            etProductName.showDropDown()
+                            if (list.size == 1 && etProductName.text.toString() == list.firstOrNull()) {
+                                etProductName.dismissDropDown()
+                            }
                         }
                     }
                 }
@@ -316,28 +478,34 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 }
             }
         }
-    }
 
-    private fun setupObserverCreatedProduct() {
-        viewModel.createProduct.observe(viewLifecycleOwner) {
+        viewModel.product.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
+                    // TODO: Print qrcode
                     showSuccess(getString(R.string.product_added_successfully))
                         .setOnPositiveButtonClickListener {
                             navController.popBackStack()
                         }
                     binding.apply {
-                        actSpinner.text.clear()
-                        etSearchProduct.text!!.clear()
-                        etMinPrice.text!!.clear()
-                        etMaxPrice.text!!.clear()
-                        etCostPrice.text!!.clear()
-                        etWholesalePrice.text!!.clear()
-                        etBranchName.text!!.clear()
+                        actCategory.text.clear()
+                        categoryId = -1
+                        etProductName.text!!.clear()
+                        etBrand.text!!.clear()
                         etProductQuantity.text!!.clear()
-                        categoryId = 0
+                        actMeasureUnit.setText(measureUnitsList[0])
+                        unitId = 1
+                        etCostPrice.text!!.clear()
+                        actCostCurrency.text.clear()
+                        etWholesalePrice.text!!.clear()
+                        actWholesaleCurrency.text.clear()
+                        etMinPrice.text!!.clear()
+                        actMinCurrency.text.clear()
+                        etMaxPrice.text!!.clear()
+                        actMaxCurrency.text.clear()
+                        currencyIds = mutableListOf(-1, -1, -1, -1)
                     }
                 }
                 ResourceState.ERROR -> {

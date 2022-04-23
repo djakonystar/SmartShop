@@ -3,6 +3,7 @@ package uz.texnopos.elektrolife.ui.main
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -15,18 +16,19 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.main.dialog.LangDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private lateinit var navController: NavController
-    private val viewModel: MainViewModel by viewModel()
+    private val currencyViewModel: CurrencyViewModel by viewModel()
     private val settings: Settings by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Basket.mutableProducts.clear()
+        Basket.clear()
         binding = FragmentMainBinding.bind(view)
         navController = findNavController()
 
@@ -63,8 +65,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 "seller" -> {
                     newProduct.isEnabled = false
                     ivOther.isVisible = false
-                    iconNewProduct.setBackgroundColor(resources.getColor(R.color.is_enabled_color))
-                    titleNewProduct.setBackgroundColor(resources.getColor(R.color.is_enabled_color))
+                    iconNewProduct.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.is_enabled_color
+                        )
+                    )
+                    titleNewProduct.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.is_enabled_color
+                        )
+                    )
                     titleFinance.text = context?.getString(R.string.sales)
                     iconFinance.setImageResource(R.drawable.sales)
                     finance.onClick {
@@ -82,7 +94,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
-        viewModel.getCurrency()
+        currencyViewModel.getCurrency()
         setUpObservers()
     }
 
@@ -93,23 +105,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun setUpObservers() {
-        viewModel.dollarRate.observe(viewLifecycleOwner) {
+        currencyViewModel.currency.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        it.data.payload.forEach { currency ->
-                            when (currency.code) {
-                                "UZS" -> currency.rate.forEach { rate ->
-                                    when (rate.code) {
-                                        "USD" -> settings.usdToUzs = rate.rate
-                                    }
+                    it.data!!.forEach { currency ->
+                        when (currency.code) {
+                            "UZS" -> currency.rate.forEach { rate ->
+                                when (rate.code) {
+                                    "USD" -> settings.usdToUzs = rate.rate
                                 }
                             }
                         }
-                    } else {
-                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
@@ -118,40 +126,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-    }
-
-    private fun optionsMenu(view: View) {
-        val optionsMenu = PopupMenu(requireContext(), view)
-        val menuInflater = optionsMenu.menuInflater
-        menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
-        optionsMenu.setOnMenuItemClickListener {
-            when (settings.role) {
-                "seller" -> {
-                    when (it.itemId) {
-                        R.id.menuNewPinCode -> {
-                            // todo go to setting
-                        }
-                        R.id.menuNewCategory -> {
-                            //todo add category
-                        }
-                    }
-                }
-                "admin" -> {
-                    R.id.menuNewCategory
-                    when (it.itemId) {
-                        R.id.menuNewCategory -> {
-                            navController.navigate(R.id.action_mainFragment_to_newCategoryFragment)
-                        }
-                        R.id.menuNewPinCode -> {
-                            // todo go to setting
-                        }
-                    }
-                }
-
-
-            }
-            return@setOnMenuItemClickListener true
-        }
-        optionsMenu.show()
     }
 }

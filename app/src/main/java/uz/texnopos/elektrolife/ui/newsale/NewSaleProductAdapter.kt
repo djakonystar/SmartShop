@@ -34,7 +34,7 @@ class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSale
                     product.costPrice.price.toSumFormat,
                     product.costPrice.code
                 )
-                val remained = product.warehouse.count
+                val remained = product.warehouse?.count ?: 0.0
                 tvRemained.text = itemView.context?.getString(
                     R.string.count_text,
                     if (remained % 1 == 0.0) remained.toInt().toSumFormat

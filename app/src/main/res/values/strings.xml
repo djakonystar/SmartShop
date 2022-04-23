@@ -182,4 +182,6 @@
     <string name="warning">Ishonchingiz komilmi?</string>
     <string name="reports">Hisobotlar</string>
     <string name="price_icon" translatable="false">Price icon</string>
+    <string name="currency_text">Currency</string>
+    <string name="measure_text">Measure</string>
 </resources>

@@ -9,7 +9,6 @@ import uz.texnopos.elektrolife.core.extensions.inflate
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.core.extensions.unitConverter
 import uz.texnopos.elektrolife.data.model.sales.Order
-import uz.texnopos.elektrolife.data.model.sales.Product
 import uz.texnopos.elektrolife.databinding.ItemSalesDetailBinding
 import uz.texnopos.elektrolife.settings.Settings
 

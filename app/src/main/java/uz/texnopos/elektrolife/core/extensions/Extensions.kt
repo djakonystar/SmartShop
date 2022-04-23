@@ -12,6 +12,7 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.core.text.HtmlCompat
+import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
@@ -31,6 +34,10 @@ import uz.texnopos.elektrolife.ui.dialog.WarningDialog
 
 fun Fragment.showMessage(msg: String?) {
     Toast.makeText(this.requireContext(), msg, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.showSnackbar(message: String) {
+    Snackbar.make(this.requireView(), message, Snackbar.LENGTH_LONG).show()
 }
 
 fun Fragment.showError(message: String?): ErrorDialog {
@@ -234,10 +241,21 @@ fun animateTotalPrice(start: Double, end: Double, textView: TextView, settings: 
     animator.start()
 }
 
-val EditText.setDoubleFilter: Unit
+val EditText.filterForDouble: Unit
     get() {
-        val filter = InputFilter { source, _, _, _, _, _ ->
-            if (source != null && "-,.".contains("" + source)) "" else null
+        val filter = InputFilter { source, _, _, spanned, _, _ ->
+            val afterPoint = if (spanned.contains('.')) {
+                spanned.toString().substringAfter('.').length
+            } else {
+                0
+            }
+
+            if (source != null && source.equals(".") && spanned.contains(".")) ""
+            else if (source != null && afterPoint == 2) ""
+            else if (source != null && source.equals(".") && spanned.isEmpty()) "0."
+            else if (source != null && source.equals(".") && spanned.isNotEmpty()) "."
+            else if (source != null && "-,.".contains("" + source)) ""
+            else null
         }
         this.filters = arrayOf(filter)
     }
@@ -258,3 +276,16 @@ val Double.checkModule: Number
 fun Int.unitConverter(context: Context): String {
     return Constants.getUnitName(context, this)
 }
+
+infix fun Double.format(afterPoint: Int): String {
+    val formatted = "%.${afterPoint}f".format(this)
+
+    return if (formatted.contains(',')) {
+        formatted.replace(',', '.')
+    } else {
+        formatted.replace('.', ',')
+    }
+}
+
+val String.toDouble: Double
+    get() = this.ifEmpty { "0.0" }.toDouble()

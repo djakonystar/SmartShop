@@ -16,17 +16,18 @@ import uz.texnopos.elektrolife.ui.client.ClientViewModel
 import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentAdapter
 import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentViewModel
 import uz.texnopos.elektrolife.ui.client.detail.sale.ClientSalesViewModel
+import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionViewModel
 import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
 import uz.texnopos.elektrolife.ui.finance.reports.ReportsViewModel
-import uz.texnopos.elektrolife.ui.main.MainViewModel
 import uz.texnopos.elektrolife.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
 import uz.texnopos.elektrolife.ui.newproduct.NewProductViewModel
-import uz.texnopos.elektrolife.ui.newsale.CategoriesViewModel
+import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.newsale.NewSaleProductAdapter
+import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
 import uz.texnopos.elektrolife.ui.newsale.order.OrderAdapter
 import uz.texnopos.elektrolife.ui.newsale.order.OrderViewModel
 import uz.texnopos.elektrolife.ui.sales.SalesAdapter
@@ -83,7 +84,7 @@ val helperModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { CategoriesViewModel(get(), get()) }
+    viewModel { CategoryViewModel(get(), get()) }
     viewModel { NewPaymentViewModel(get(), get()) }
     viewModel { SalesViewModel(get(), get())}
     viewModel { NewCategoryViewModel(get(), get()) }
@@ -93,13 +94,14 @@ val viewModelModule = module {
     viewModel { SignInViewModel(get(), get()) }
     viewModel { NewClientViewModel(get(), get()) }
     viewModel { OrderViewModel(get(),get()) }
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { CurrencyViewModel(get(), get()) }
     viewModel { FinanceViewModel(get(), get()) }
     viewModel { ReportsViewModel(get(), get()) }
     viewModel { ClientPaymentViewModel(get(), get()) }
     viewModel { ClientSalesViewModel(get(), get()) }
     viewModel { TransactionViewModel(get(), get()) }
     viewModel { SalesDetailViewModel(get(), get()) }
+    viewModel { NewSaleViewModel(get(), get()) }
 }
 
 val adapterModule = module {

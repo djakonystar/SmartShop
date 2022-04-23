@@ -88,7 +88,7 @@
                 app:startIconDrawable="@drawable/ic_baseline_person_search"
                 app:startIconTint="@color/app_main_color">
 
-                <AutoCompleteTextView
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/etSearchClient"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -124,9 +124,7 @@
                 android:layout_marginTop="@dimen/margin_middle"
                 android:layout_marginEnd="@dimen/margin_middle"
                 android:hint="@string/cash_cost"
-                app:endIconMode="clear_text"
                 app:helperText="@string/cash_pay_helper"
-                app:suffixText="UZS"
                 app:layout_constraintEnd_toStartOf="@id/btnCashMagnet"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilClient">
@@ -135,7 +133,6 @@
                     android:id="@+id/etCash"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
                     android:inputType="number"
                     android:maxLength="19"
                     android:singleLine="true"
@@ -170,7 +167,6 @@
                 android:layout_marginTop="@dimen/margin_middle"
                 android:layout_marginEnd="@dimen/margin_middle"
                 android:hint="@string/card_cost"
-                app:endIconMode="clear_text"
                 app:helperText="@string/card_pay_helper"
                 app:layout_constraintEnd_toStartOf="@id/btnCardMagnet"
                 app:layout_constraintStart_toStartOf="parent"
@@ -180,10 +176,10 @@
                     android:id="@+id/etCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
                     android:inputType="number"
                     android:maxLength="19"
                     android:singleLine="true"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/black"
                     android:textSize="@dimen/item_text_size_standard_mobile"
                     tools:ignore="SpUsage" />

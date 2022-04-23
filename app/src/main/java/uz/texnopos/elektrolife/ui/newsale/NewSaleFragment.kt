@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import uz.texnopos.elektrolife.core.extensions.onClick
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -19,8 +18,9 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
+import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarSearchBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
@@ -30,7 +30,8 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var binding: FragmentNewSaleBinding
     private lateinit var abBinding: ActionBarSearchBinding
     private lateinit var navController: NavController
-    private val categoryViewModel: CategoriesViewModel by viewModel()
+    private val viewModel: NewSaleViewModel by viewModel()
+    private val categoryViewModel: CategoryViewModel by viewModel()
     private val productNewSaleAdapter: NewSaleProductAdapter by inject()
     private var productsList = mutableListOf<Product>()
     private var allProductsList = mutableListOf<Product>()
@@ -46,7 +47,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         navController = findNavController()
 
         categoryViewModel.getCategories()
-        categoryViewModel.getProductByName(searchValue)
+        viewModel.getProducts()
         setUpObservers()
 
 
@@ -58,12 +59,12 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                categoryViewModel.getProductByName(searchValue)
+                viewModel.getProducts(searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    categoryViewModel.getProductByName(searchValue)
+                    viewModel.getProducts(searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -78,16 +79,16 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 setLoading(false)
                 chipGroup.removeAllViews()
                 categoryViewModel.getCategories()
-                categoryViewModel.getProductByName(searchValue)
+                viewModel.getProducts(searchValue)
             }
 
             productNewSaleAdapter.onItemClickListener { product ->
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                dialog.onItemClickListener { quantity, totalPrice ->
-                    Basket.setProduct(product, quantity, totalPrice.toDouble())
+                dialog.setOnItemAddedListener { quantity, salePrice ->
+                    Basket.setProduct(product, quantity, salePrice.toDouble())
                 }
-                dialog.onDismissListener {
+                dialog.setOnDismissListener {
                     hideSoftKeyboard(btnFab)
                 }
             }
@@ -106,8 +107,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     )
                 } else {
                     context?.getString(R.string.basket_empty_warning)?.let { text ->
-                        Snackbar.make(btnFab, text, Snackbar.LENGTH_SHORT)
-                            .show()
+                        Snackbar.make(btnFab, text, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -146,7 +146,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
         }
 
-        categoryViewModel.products.observe(viewLifecycleOwner) {
+        viewModel.products.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -170,7 +170,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
     }
 
-    private fun addNewChip(category: CatalogCategory) {
+    private fun addNewChip(category: CategoryResponse) {
         try {
             binding.apply {
                 val inflater = LayoutInflater.from(requireContext())
@@ -190,7 +190,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     }
 
                     if (selectedCategoryId != -1) {
-                        categoryViewModel.getProductByName(searchValue)
+                        viewModel.getProducts(searchValue)
                     } else {
                         productNewSaleAdapter.models = allProductsList
                         showLottieAnimation(allProductsList.isEmpty())

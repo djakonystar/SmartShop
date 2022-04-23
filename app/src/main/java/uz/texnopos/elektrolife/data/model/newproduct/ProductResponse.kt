@@ -2,18 +2,20 @@ package uz.texnopos.elektrolife.data.model.newproduct
 
 import com.google.gson.annotations.SerializedName
 
-data class Product(
+data class ProductResponse(
+    val id: Int,
     @SerializedName("category_id")
     val categoryId: Int,
+    val image: String?,
     val name: String,
     val brand: String,
     @SerializedName("cost_price")
     val costPrice: Price,
-    @SerializedName("price_wholesale")
+    @SerializedName("whole_price")
     val wholesalePrice: Price,
-    @SerializedName("price_min")
+    @SerializedName("min_price")
     val minPrice: Price,
-    @SerializedName("price_max")
+    @SerializedName("max_price")
     val maxPrice: Price,
-    val warehouse: Warehouse
+
 )

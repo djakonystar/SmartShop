@@ -19,7 +19,7 @@ import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
 import uz.texnopos.elektrolife.settings.Settings
 
-class AddToBasketDialog(private val product: Product) : DialogFragment() {
+class EditBasketProductDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
     private val settings: Settings by inject()
     private var visibilityLiveData = MutableLiveData<Boolean>()
@@ -67,7 +67,10 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                 )
 
             tilQuantity.suffixText = "/$remained"
+            val count = product.count.checkModule
+            etQuantity.setText(count.toString())
             tilSumma.suffixText = settings.currency
+            etSumma.setText(product.salePrice.toString())
 
             etSumma.setText(product.maxPrice.price.toSumFormat)
 

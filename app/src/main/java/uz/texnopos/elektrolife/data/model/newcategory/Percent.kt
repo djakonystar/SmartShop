@@ -1,7 +1,7 @@
 package uz.texnopos.elektrolife.data.model.newcategory
 
 data class Percent (
-    val wholesale: Int,
-    val min: Int,
-    val max: Int,
+    val wholesale: Double,
+    val min: Double,
+    val max: Double
 )

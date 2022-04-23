@@ -17,9 +17,9 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.clients.Client
-import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.ActionBarClientBinding
 import uz.texnopos.elektrolife.databinding.FragmentClientBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddClientDialog
 
@@ -31,6 +31,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
     private val viewModel: ClientViewModel by viewModel()
     private val newClientViewModel: NewClientViewModel by viewModel()
     private val adapter: ClientAdapter by inject()
+    private val settings: Settings by inject()
     private var isLoading = false
     private var page = 1
     private var limit = 50
@@ -53,7 +54,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 addClientDialog.show(requireActivity().supportFragmentManager, "")
                 addClientDialog.setData { name, inn, phone, type, comment ->
                     newClientViewModel.registerNewClient(
-                        RegisterClient(
+                        uz.texnopos.elektrolife.data.model.newclient.Client(
                             name = name,
                             phone = phone,
                             inn = inn,
@@ -193,7 +194,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                             val debts = mutableClient.filter { c -> c.balance!! < 0 }
                                 .sumOf { c -> c.balance!! }.toLong()
                             binding.tvDebtPrice.text =
-                                context?.getString(R.string.total_debt_text, debts.toSumFormat)
+                                context?.getString(R.string.total_debt_text, debts.toSumFormat, settings.currency)
                             page++
                         } else {
                             showError(it.data!!.message)

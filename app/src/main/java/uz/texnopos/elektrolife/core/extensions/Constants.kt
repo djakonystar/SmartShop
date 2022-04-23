@@ -16,4 +16,16 @@ object Constants {
         }
         return unitName
     }
+
+    fun getUnits(): List<String> {
+        return listOf(
+            "dona",
+            "tonna",
+            "kg",
+            "gr",
+            "metr",
+            "sm",
+            "litr"
+        )
+    }
 }

@@ -17,18 +17,18 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
+import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
-import uz.texnopos.elektrolife.ui.newsale.CategoriesViewModel
+import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var binding: FragmentWarehouseBinding
     private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
     private val viewModel: WarehouseViewModel by viewModel()
-    private val categoriesViewModel: CategoriesViewModel by viewModel()
+    private val categoryViewModel: CategoryViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
     private var sortType = "byFewRemain"
     private var productsList = mutableListOf<WarehouseItem>()
@@ -61,7 +61,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
                 chipGroup.removeAllViews()
-                categoriesViewModel.getCategories()
+                categoryViewModel.getCategories()
                 viewModel.warehouseProducts(searchValue)
             }
 
@@ -79,7 +79,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
         }
 
-        categoriesViewModel.getCategories()
+        categoryViewModel.getCategories()
         viewModel.warehouseProducts(searchValue)
         setUpObservers()
     }
@@ -123,7 +123,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             }
         }
 
-        categoriesViewModel.categories.observe(viewLifecycleOwner) {
+        categoryViewModel.categories.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
@@ -175,7 +175,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         optionsMenu.show()
     }
 
-    private fun addNewChip(category: CatalogCategory) {
+    private fun addNewChip(category: CategoryResponse) {
         try {
             binding.apply {
                 val inflater = LayoutInflater.from(requireContext())

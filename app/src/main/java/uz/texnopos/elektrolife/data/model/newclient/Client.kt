@@ -2,7 +2,7 @@ package uz.texnopos.elektrolife.data.model.newclient
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterClient(
+data class Client(
     @SerializedName("full_name")
     val name: String,
     val phone: String,

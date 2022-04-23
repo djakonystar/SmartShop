@@ -4,5 +4,5 @@ import uz.texnopos.elektrolife.data.model.warehouse.Unit
 
 data class Warehouse(
     val unit: Unit,
-    val count: Double
+    val count: Double?
 )

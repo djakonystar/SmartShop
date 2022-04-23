@@ -15,7 +15,7 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.showSuccess
-import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
+import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newcategory.Percent
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentCategoryNewBinding
@@ -75,12 +75,12 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
                     && maxPercent.isNotEmpty() && minQuantity.isNotEmpty()
                 ) {
                     viewModel.createdNewCategory(
-                        NewCategory(
-                            category, minQuantity.toInt(),
+                        CategoryPost(
+                            category,
                             Percent(
-                                wholesalePercent.toInt(),
-                                minPercent.toInt(),
-                                maxPercent.toInt()
+                                wholesalePercent.toDouble(),
+                                minPercent.toDouble(),
+                                maxPercent.toDouble()
                             )
                         )
                     )
@@ -117,9 +117,7 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
     private fun setupObserver() {
         viewModel.newCategory.observe(viewLifecycleOwner) {
             when (it.status) {
-                ResourceState.LOADING -> {
-                    setLoading(true)
-                }
+                ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     if (it.data!!.successful) {

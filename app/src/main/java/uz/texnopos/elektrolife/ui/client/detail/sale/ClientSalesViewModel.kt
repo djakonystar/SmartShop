@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.sales.Basket
+import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
@@ -16,9 +17,9 @@ class ClientSalesViewModel(private val api: ApiInterface, private val settings: 
     ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableBaskets: MutableLiveData<Resource<PagingResponse<List<Basket>>>> =
+    private var mutableBaskets: MutableLiveData<Resource<PagingResponse<BasketResponse>>> =
         MutableLiveData()
-    val baskets: LiveData<Resource<PagingResponse<List<Basket>>>> = mutableBaskets
+    val baskets: LiveData<Resource<PagingResponse<BasketResponse>>> = mutableBaskets
 
     fun basketsOfUser(userId: Int) {
         mutableBaskets.value = Resource.loading()

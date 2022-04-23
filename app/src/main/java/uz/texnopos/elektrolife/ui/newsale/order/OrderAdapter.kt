@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.extensions.checkModule
 import uz.texnopos.elektrolife.core.extensions.inflate
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
@@ -25,8 +26,12 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         fun populateModel(model: Product, position: Int) {
             binding.apply {
                 tvName.text = model.name
+                val count = if (model.warehouse?.unit?.id == 1) model.count.toInt() else model.count
                 tvQuantity.text =
-                    itemView.context?.getString(R.string.count_text, model.count.toSumFormat)
+                    itemView.context?.getString(
+                        R.string.count_text,
+                        (if (count is Int) count.toInt() else count.toDouble()).toSumFormat
+                    )
                 tvCost.text =
                     itemView.context?.getString(R.string.sum_text, model.salePrice.toSumFormat)
 
@@ -36,6 +41,10 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
                 minusQuantity.onClick {
                     onMinusCount.invoke(model)
+                }
+
+                btnEdit.onClick {
+                    onEditClick(model, position)
                 }
 
                 btnDelete.onClick {
@@ -64,6 +73,11 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         this.onDeleteItem = onDeleteItem
     }
 
+    private var onEditClick: (product: Product, position: Int) -> Unit = { _, _ -> }
+    fun setOnEditClickListener(onEditClick: (product: Product, position: Int) -> Unit) {
+        this.onEditClick = onEditClick
+    }
+
     private var onPlusCount: (product: Product) -> Unit = {}
     fun onPlusCounterClickListener(onPlusCount: (product: Product) -> Unit) {
         this.onPlusCount = onPlusCount
@@ -77,7 +91,6 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
     fun plusCount(model: Product) {
         val position = models.indexOf(model)
 //        models[position].count++
-        Log.d("basketcount", "In adapter: ${models[position].count}")
         notifyItemChanged(position)
     }
 

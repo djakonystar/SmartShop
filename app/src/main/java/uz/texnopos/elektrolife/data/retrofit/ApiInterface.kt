@@ -3,29 +3,24 @@ package uz.texnopos.elektrolife.data.retrofit
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.Response
 import retrofit2.http.*
-import uz.texnopos.elektrolife.core.extensions.newSaleProduct
-import uz.texnopos.elektrolife.core.extensions.orderBasket
-import uz.texnopos.elektrolife.core.extensions.warehouseProduct
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
+import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.clients.ClientPayment
 import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.model.finance.Cashier
 import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
-import uz.texnopos.elektrolife.data.model.newcategory.CategoryId
-import uz.texnopos.elektrolife.data.model.newcategory.NewCategory
+import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
-import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
-import uz.texnopos.elektrolife.data.model.newproduct.Categories
-import uz.texnopos.elektrolife.data.model.newproduct.Product
-import uz.texnopos.elektrolife.data.model.newproduct.ProductId
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
-import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.newsale.Order
+import uz.texnopos.elektrolife.data.model.qrcode.ProductResponse
 import uz.texnopos.elektrolife.data.model.sales.Basket
+import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.signin.SignInResponse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
@@ -33,9 +28,9 @@ import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 interface ApiInterface {
 
     @POST("api/register/client")
-    fun registerNewClient(
+    fun addNewClient(
         @Header("Authorization") token: String,
-        @Body registerClient: RegisterClient
+        @Body client: newClient
     ): Observable<GenericResponse<ClientId>>
 
     @GET("api/clients")
@@ -68,7 +63,7 @@ interface ApiInterface {
     fun getBaskets(
         @Header("Authorization") token: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun getBaskets(
@@ -76,14 +71,14 @@ interface ApiInterface {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun searchForBaskets(
         @Header("Authorization") token: String,
         @Query("search") searchValue: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun searchForBaskets(
@@ -92,14 +87,14 @@ interface ApiInterface {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun filterBaskets(
         @Header("Authorization") token: String,
         @Query("filter") typeOfPayment: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun filterBaskets(
@@ -108,14 +103,14 @@ interface ApiInterface {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun basketsOfUser(
         @Header("Authorization") token: String,
         @Query("user_id") userId: Int,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/baskets")
     fun basketsOfUser(
@@ -124,7 +119,7 @@ interface ApiInterface {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("page") page: Int
-    ): Observable<GenericResponse<PagingResponse<List<Basket>>>>
+    ): Observable<GenericResponse<PagingResponse<BasketResponse>>>
 
     @GET("api/orders")
     fun getOrders(
@@ -149,15 +144,15 @@ interface ApiInterface {
     ): Observable<GenericResponse<SignInResponse>>
 
     @POST("api/categories")
-    fun createdCategory(
+    fun createCategory(
         @Header("Authorization") token: String,
-        @Body newCategory: NewCategory
-    ): Observable<GenericResponse<CategoryId>>
+        @Body categoryPost: CategoryPost
+    ): Observable<GenericResponse<newCategory>>
 
     @GET("api/categories")
-    fun getCatalogCategories(
+    fun getCategories(
         @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<CatalogCategory>>>
+    ): Observable<GenericResponse<List<CategoryResponse>>>
 
     @GET("api/products")
     fun getProductsByCategoryId(
@@ -166,22 +161,21 @@ interface ApiInterface {
     ): Observable<GenericResponse<List<newSaleProduct>>>
 
     @GET("api/products")
-    fun getProduct(
-        @Header("Authorization") token: String,
-        @Query("search") name: String,
-        @Query("limit") limit: Int
+    fun getProducts(
+        @Header("Authorization") token: String
     ): Observable<GenericResponse<List<newSaleProduct>>>
 
-    @POST("api/products")
-    fun createdProduct(
+    @GET("api/products")
+    fun getProducts(
         @Header("Authorization") token: String,
-        @Body product: Product
-    ): Observable<GenericResponse<ProductId>>
+        @Query("search") name: String
+    ): Observable<GenericResponse<List<newSaleProduct>>>
 
-    @GET("api/categories")
-    fun getCategories(
-        @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<Categories>>>
+    @POST("api/product")
+    fun createProduct(
+        @Header("Authorization") token: String,
+        @Body product: creatingProduct
+    ): Observable<GenericResponse<createdProduct>>
 
     @POST("api/order")
     fun order(
@@ -193,6 +187,13 @@ interface ApiInterface {
     fun getCurrency(
         @Header("Authorization") token: String
     ): Observable<Response<GenericResponse<List<Currency>>>>
+
+    @GET("api/qrcode/read")
+    fun scanCode(
+        @Header("Authorization") token: String,
+        @Query("type") type: String,
+        @Query("uuid") code: String
+    ): Observable<GenericResponse<ProductResponse>>
 
     /**
      * Finance: Get cashbox balance and profit in date range [from] - [to]

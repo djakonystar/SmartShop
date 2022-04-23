@@ -64,7 +64,7 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    adapter.models = it.data!!.data
+                    adapter.models = it.data!!.data.baskets
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

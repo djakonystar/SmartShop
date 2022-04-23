@@ -2,6 +2,7 @@ package uz.texnopos.elektrolife.ui.sales
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,10 +51,9 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSalesBinding.bind(view)
-        abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
 
-        abBinding.apply {
+        binding.apply {
             tvTitle.text = context?.getString(R.string.sales)
             btnHome.onClick {
                 navController.popBackStack()
@@ -72,64 +72,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
-                viewModel.getBaskets(dateFromForBackend, dateToForBackend)
-            }
-
-            etDateFrom.setText(dateFrom)
-            etDateTo.setText(dateTo)
-
-            etDateFrom.onClick {
-                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText(context?.getString(R.string.start_date))
-                    .setSelection(dateFromInLong)
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setEnd(System.currentTimeMillis())
-                            .setValidator(DateValidatorPointBackward.now())
-                            .build()
-                    )
-                    .build()
-
-                datePickerDialog.addOnPositiveButtonClickListener {
-                    dateFromInLong = it
-                    dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
-                    dateFromForBackend = dateFrom.changeDateFormat
-                    etDateFrom.setText(dateFrom)
-                }
-
-                datePickerDialog.show(
-                    requireActivity().supportFragmentManager,
-                    datePickerDialog.tag
-                )
-            }
-
-            etDateTo.onClick {
-                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText(context?.getString(R.string.end_date))
-                    .setSelection(dateToInLong)
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setEnd(System.currentTimeMillis())
-                            .setValidator(DateValidatorPointBackward.now())
-                            .build()
-                    )
-                    .build()
-
-                datePickerDialog.addOnPositiveButtonClickListener {
-                    dateToInLong = it
-                    dateTo = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateToInLong)
-                    dateToForBackend =
-                        SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(dateToInLong)
-                    etDateTo.setText(dateTo)
-                }
-
-                datePickerDialog.show(
-                    requireActivity().supportFragmentManager,
-                    datePickerDialog.tag
-                )
-            }
-
-            btnCalculate.onClick {
                 viewModel.getBaskets(dateFromForBackend, dateToForBackend)
             }
 
@@ -154,9 +96,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
-            tilDateFrom.isEnabled = !loading
-            tilDateTo.isEnabled = !loading
-            btnCalculate.isEnabled = !loading
             swipeRefresh.isEnabled = !loading
         }
     }
@@ -167,7 +106,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    allSales = it.data!!.data
+                    allSales = it.data!!.data.baskets
                     filterSales()
                 }
                 ResourceState.ERROR -> {
