@@ -30,7 +30,6 @@ import java.util.*
 
 class SalesFragment : Fragment(R.layout.fragment_sales) {
     private lateinit var binding: FragmentSalesBinding
-    private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val adapter: SalesAdapter by inject()
     private val viewModel: SalesViewModel by viewModel()

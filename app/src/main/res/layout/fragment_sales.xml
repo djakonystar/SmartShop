@@ -6,102 +6,144 @@
     android:layout_height="match_parent"
     tools:context=".ui.sales.SalesFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="32dp">
 
-        <LinearLayout
-            android:id="@+id/action_bar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/btnHome"
-                android:layout_width="@dimen/img_standard_height_mobile"
-                android:layout_height="@dimen/img_standard_height_mobile"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_middle"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/home_button"
-                android:padding="@dimen/padding_small"
-                android:src="@drawable/ic_back"
-                app:tint="@color/black" />
+            <LinearLayout
+                android:id="@+id/action_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tvTitle"
+                <ImageView
+                    android:id="@+id/btnHome"
+                    android:layout_width="@dimen/img_standard_height_mobile"
+                    android:layout_height="@dimen/img_standard_height_mobile"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/margin_middle"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/home_button"
+                    android:padding="@dimen/padding_small"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/margin_middle"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/action_bar_title_size_mobile"
+                    tools:ignore="SpUsage" />
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_middle"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="@dimen/action_bar_title_size_mobile"
-                tools:ignore="SpUsage" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/action_bar"
+                app:singleLine="true"
+                app:singleSelection="false" />
 
-        </LinearLayout>
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/action_bar"
-            app:singleLine="true"
-            app:singleSelection="false" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginVertical="@dimen/margin_middle"
-            app:layout_constraintBottom_toTopOf="@id/bottomContainer"
-            app:layout_constraintTop_toBottomOf="@id/chipGroup">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/margin_standard"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@id/bottomContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chipGroup"
+                tools:listitem="@layout/item_sales" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottomContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:elevation="@dimen/elevation_standard">
+                android:background="@drawable/bottom_sheet_bg"
+                android:elevation="@dimen/elevation_standard"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                <TextView
+                    android:id="@+id/tvTotalPriceOld"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_standard"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvDebtPriceOld"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
+                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                    android:textColor="@color/error_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/item_sales" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:hideOnScroll="true"
+        app:fabAlignmentMode="end"
+        app:fabAnimationMode="scale"
+        app:fabCradleVerticalOffset="16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bottomContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bottom_sheet_bg"
-            android:elevation="@dimen/elevation_standard"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_standard">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="0dp"
+                android:layout_marginVertical="2dp"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:background="@color/black"
+                app:layout_constraintTop_toTopOf="@id/tvTotalPrice"
+                app:layout_constraintBottom_toBottomOf="@id/tvTotalPrice"
+                app:layout_constraintEnd_toStartOf="@id/tvTotalPrice" />
 
             <TextView
                 android:id="@+id/tvTotalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_standard"
                 android:layout_marginStart="@dimen/margin_standard"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvDebtPrice"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,37 +151,31 @@
                 android:id="@+id/tvDebtPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_standard"
-                android:layout_marginEnd="@dimen/margin_standard"
+                android:layout_marginBottom="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_standard"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                 android:textColor="@color/error_color"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.bottomappbar.BottomAppBar>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/margin_middle"
-        android:text="@string/choose_date_uz"
-        android:textColor="@color/white"
-        app:icon="@drawable/ic_calendar"
-        app:iconTint="@color/white" />
+        android:src="@drawable/ic_calendar"
+        app:layout_anchor="@id/bottom_app_bar"
+        app:tint="@color/white" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
