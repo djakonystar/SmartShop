@@ -1,16 +1,25 @@
 package uz.texnopos.elektrolife.ui.newsale
 
-import android.content.Context
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
@@ -22,39 +31,41 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newsale.Product
-import uz.texnopos.elektrolife.databinding.ActionBarSearchBinding
+import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddToBasketDialog
 
+
 class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var binding: FragmentNewSaleBinding
-    private lateinit var abBinding: ActionBarSearchBinding
+    private lateinit var abBinding: ActionBarNewSaleBinding
     private lateinit var navController: NavController
     private val viewModel: NewSaleViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val productNewSaleAdapter: NewSaleProductAdapter by inject()
+    private val navArgs: NewSaleFragmentArgs by navArgs()
     private var productsList = mutableListOf<Product>()
     private var allProductsList = mutableListOf<Product>()
     private var searchValue = ""
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
+    private lateinit var productCode: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentNewSaleBinding.bind(view)
-        abBinding = ActionBarSearchBinding.bind(view)
+        abBinding = ActionBarNewSaleBinding.bind(view)
         navController = findNavController()
 
         categoryViewModel.getCategories()
         viewModel.getProducts()
         setUpObservers()
 
-
         abBinding.apply {
             btnHome.onClick {
                 navController.popBackStack()
-                hideSoftKeyboard(btnHome)
+                hideSoftKeyboard()
             }
 
             etSearch.addTextChangedListener {
@@ -69,9 +80,23 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
                 return@setOnEditorActionListener false
             }
+
+            btnScanner.onClick {
+                checkForPermissions()
+            }
         }
 
         binding.apply {
+            productCode = navArgs.productCode
+            if (productCode.startsWith("product")) {
+                val arguments = productCode.split("\n")
+                val type = arguments[0]
+                val uuid = arguments[1]
+                viewModel.getProduct(type, uuid)
+            } else if (productCode != "null") {
+                showError("It is not product code")
+            }
+
             recyclerView.adapter = productNewSaleAdapter
 
             swipeRefresh.setOnRefreshListener {
@@ -89,7 +114,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     Basket.setProduct(product, quantity, salePrice.toDouble())
                 }
                 dialog.setOnDismissListener {
-                    hideSoftKeyboard(btnFab)
+                    hideSoftKeyboard()
                 }
             }
 
@@ -168,6 +193,30 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
         }
+
+        viewModel.product.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    productCode = ""
+                    val product = it.data!!
+                    val dialog = AddToBasketDialog(product)
+                    dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                    dialog.setOnItemAddedListener { quantity, salePrice ->
+                        Basket.setProduct(product, quantity, salePrice.toDouble())
+                    }
+                    dialog.setOnDismissListener {
+                        hideSoftKeyboard()
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    productCode = ""
+                    showError(it.message)
+                }
+            }
+        }
     }
 
     private fun addNewChip(category: CategoryResponse) {
@@ -202,9 +251,60 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
     }
 
-    private fun hideSoftKeyboard(view: View) {
-        val imm =
-            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    private fun hideSoftKeyboard() {
+        val imm = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        var v = requireActivity().currentFocus
+        if (v == null) {
+            v = View(activity)
+        }
+        imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
+
+    private fun checkForPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestMultiplePermissions.launch(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                )
+            )
+        } else {
+            findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
+        }
+    }
+
+    private val requestMultiplePermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            var isGranted = true
+            permissions.entries.forEach {
+                if (!it.value) isGranted =
+                    false
+            }
+            if (!isGranted) {
+                showDialog()
+            } else {
+                findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
+            }
+        }
+
+    private fun showDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.apply {
+            setMessage("Permission required")
+            setTitle("Title perm")
+            setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton("Go") { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", activity?.packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }.create().show()
+    }
+
 }

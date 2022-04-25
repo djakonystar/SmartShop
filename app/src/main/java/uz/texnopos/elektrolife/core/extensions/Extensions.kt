@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.text.InputFilter
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -25,8 +27,13 @@ import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.gkemon.XMLtoPDF.PdfGenerator
+import com.gkemon.XMLtoPDF.PdfGeneratorListener
+import com.gkemon.XMLtoPDF.model.FailureResponse
+import com.gkemon.XMLtoPDF.model.SuccessResponse
 import com.google.android.material.snackbar.Snackbar
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.utils.MyPrintDocumentAdapter
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
 import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
@@ -215,7 +222,7 @@ fun String.getOnlyDigits(): String {
 fun animateDebtPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
     animator.addUpdateListener {
-        val newValue = (it.animatedValue as Float).toDouble()
+        val newValue = (it.animatedValue as Float).toDouble().format(2).toDouble
         textView.text = textView.context.getString(
             R.string.total_debt_text,
             newValue.checkModule.toSumFormat,
@@ -230,7 +237,7 @@ fun animateDebtPrice(start: Double, end: Double, textView: TextView, settings: S
 fun animateTotalPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
     animator.addUpdateListener {
-        val newValue = (it.animatedValue as Float).toDouble()
+        val newValue = (it.animatedValue as Float).toDouble().format(2).toDouble
         textView.text = textView.context.getString(
             R.string.total_sum_text,
             newValue.checkModule.toSumFormat,
@@ -289,3 +296,54 @@ infix fun Double.format(afterPoint: Int): String {
 
 val String.toDouble: Double
     get() = this.ifEmpty { "0.0" }.toDouble()
+
+fun Fragment.doPrint(filePath: String) {
+    try {
+        val printManager =
+            this.requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val jobName = "${getString(R.string.app_name)} Document"
+        printManager.print(
+            jobName,
+            MyPrintDocumentAdapter(this.requireContext(), filePath),
+            PrintAttributes.Builder().build()
+        )
+    } catch (e: Exception) {
+        showMessage(e.message)
+    }
+}
+
+fun Fragment.pdfGenerator(
+    view: View,
+    fileName: String,
+    onSuccess: (response: SuccessResponse?) -> Unit,
+    onFailure: (failureResponse: FailureResponse?) -> Unit
+) {
+    this.context?.let { context ->
+        PdfGenerator.Builder()
+            .setContext(context)
+            .fromViewSource()
+            .fromView(view)
+            .setFileName(fileName)
+            .setFolderNameOrPath(this.requireActivity().packageName)
+            .openPDAfterGeneration(false)
+            .build(object : PdfGeneratorListener() {
+                override fun onStartPDFGeneration() {
+
+                }
+
+                override fun onFinishPDFGeneration() {
+
+                }
+
+                override fun onSuccess(response: SuccessResponse?) {
+                    super.onSuccess(response)
+                    onSuccess.invoke(response)
+                }
+
+                override fun onFailure(failureResponse: FailureResponse?) {
+                    super.onFailure(failureResponse)
+                    onFailure.invoke(failureResponse)
+                }
+            })
+    }
+}

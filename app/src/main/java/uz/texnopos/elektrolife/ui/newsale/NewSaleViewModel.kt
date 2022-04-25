@@ -22,6 +22,9 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     private var mutableProducts: MutableLiveData<Resource<List<newSaleProduct>>> = MutableLiveData()
     val products: LiveData<Resource<List<newSaleProduct>>> = mutableProducts
 
+    private var mutableProduct: MutableLiveData<Resource<newSaleProduct>> = MutableLiveData()
+    val product: LiveData<Resource<newSaleProduct>> = mutableProduct
+
     init {
         searchSubject
             .debounce(700, TimeUnit.MILLISECONDS)
@@ -68,6 +71,27 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     fun getProducts(searchValue: String) {
         mutableProducts.value = Resource.loading()
         searchSubject.onNext(searchValue)
+    }
+
+    fun getProduct(type: String, uuid: String) {
+        mutableProduct.value = Resource.loading()
+        compositeDisposable.add(
+            api.getProduct("Bearer ${settings.token}", type, uuid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        if (response.successful) {
+                            mutableProduct.value = Resource.success(response.payload)
+                        } else {
+                            mutableProduct.value = Resource.error(response.message)
+                        }
+                    },
+                    { error ->
+                        mutableProduct.value = Resource.error(error.message)
+                    }
+                )
+        )
     }
 
     override fun onCleared() {

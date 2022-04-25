@@ -9,3 +9,5 @@ typealias newCategory = uz.texnopos.elektrolife.data.model.newcategory.Category
 typealias creatingProduct = uz.texnopos.elektrolife.data.model.newproduct.Product
 typealias createdProduct = uz.texnopos.elektrolife.data.model.newproduct.ProductResponse
 typealias newClient = uz.texnopos.elektrolife.data.model.newclient.Client
+typealias salesBasket = uz.texnopos.elektrolife.data.model.sales.Basket
+typealias orderBasketResponse = uz.texnopos.elektrolife.data.model.newsale.BasketResponse

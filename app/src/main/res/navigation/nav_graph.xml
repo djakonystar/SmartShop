@@ -61,6 +61,12 @@
         <action
             android:id="@+id/action_newSaleFragment_to_orderFragment"
             app:destination="@id/orderFragment" />
+        <action
+            android:id="@+id/action_newSaleFragment_to_qrScannerFragment"
+            app:destination="@id/qrScannerFragment" />
+        <argument
+            android:name="product_code"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/newPayment"
@@ -206,4 +212,15 @@
         android:name="uz.texnopos.elektrolife.ui.finance.reports.ReportsFragment"
         android:label="fragment_reports"
         tools:layout="@layout/fragment_reports" />
+    <fragment
+        android:id="@+id/qrScannerFragment"
+        android:name="uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment"
+        android:label="fragment_qr_scanner"
+        tools:layout="@layout/fragment_qr_scanner" >
+        <action
+            android:id="@+id/action_qrScannerFragment_to_newSaleFragment"
+            app:destination="@id/newSaleFragment"
+            app:popUpTo="@id/newSaleFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

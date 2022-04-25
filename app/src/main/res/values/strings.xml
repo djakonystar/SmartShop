@@ -184,4 +184,6 @@
     <string name="price_icon" translatable="false">Price icon</string>
     <string name="currency_text">Currency</string>
     <string name="measure_text">Measure</string>
+    <string name="receipt_count_text" translatable="false">%dx%s %s</string>
+    <string name="print_receipt">Print Receipt</string>
 </resources>

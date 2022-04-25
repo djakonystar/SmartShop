@@ -19,6 +19,7 @@ import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.sales.Basket
@@ -37,7 +38,8 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private var typeOfPayment: Int = -1
     private val typesOfPayment = mutableSetOf<Int>()
     private var allSales = listOf<Basket>()
-    private var dateFromInLong = System.currentTimeMillis()
+    private val calendarHelper = CalendarHelper()
+    private var dateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
     private var dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
     private var dateFromForBackend = dateFrom.changeDateFormat
     private var dateToInLong = System.currentTimeMillis()

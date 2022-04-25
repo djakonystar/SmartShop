@@ -55,7 +55,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 dialog.show(requireActivity().supportFragmentManager, "LangDialog")
             }
             newSale.onClick {
-                navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
+                navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment("null"))
             }
             newProduct.onClick {
                 navController.navigate(R.id.action_mainFragment_to_newProductFragment)

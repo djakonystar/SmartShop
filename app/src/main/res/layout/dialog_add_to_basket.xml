@@ -26,10 +26,25 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpUsage" />
 
+    <TextView
+        android:id="@+id/tv_product_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_text_size_standard_mobile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        tools:ignore="SpUsage" />
+
     <ImageView
         android:id="@+id/ivVisible"
-        android:layout_width="@dimen/action_bar_icon_size_mobile"
-        android:layout_height="@dimen/action_bar_icon_size_mobile"
+        android:layout_width="@dimen/img_standard_height_mobile"
+        android:layout_height="@dimen/img_standard_height_mobile"
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -51,7 +66,7 @@
         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tv_product_name" />
 
     <TextView
         android:id="@+id/tvMin"

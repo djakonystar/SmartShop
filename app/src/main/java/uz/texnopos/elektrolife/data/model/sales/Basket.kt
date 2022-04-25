@@ -14,6 +14,8 @@ data class Basket(
     @SerializedName("user")
     val customer: saleCostumer,
     val employee: saleEmployee,
+    @SerializedName("qr_link")
+    val qrLink: String,
     @SerializedName("created_at")
     val createdAt: String
 )

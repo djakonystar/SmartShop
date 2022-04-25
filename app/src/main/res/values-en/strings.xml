@@ -148,4 +148,6 @@
     <string name="reports">Reports</string>
     <string name="err_valid_sum">Enter the valid sum</string>
     <string name="measure_text">Measure</string>
+    <string name="currency_text">Currency</string>
+    <string name="print_receipt">Print Receipt</string>
 </resources>

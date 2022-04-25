@@ -147,4 +147,6 @@
     <string name="err_valid_sum">Введите корректную сумму</string>
     <string name="warning">Вы уверены?</string>
     <string name="reports">Отчеты</string>
+    <string name="currency_text">Валюта</string>
+    <string name="measure_text">Мера</string>
 </resources>

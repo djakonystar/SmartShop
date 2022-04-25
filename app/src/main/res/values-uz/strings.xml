@@ -147,4 +147,6 @@
     <string name="err_valid_sum">Haqiqiy summa kiriting</string>
     <string name="warning">Ishonchingiz komilmi?</string>
     <string name="reports">Hisobotlar</string>
+    <string name="currency_text">Valyuta</string>
+    <string name="measure_text">O\'lcham</string>
 </resources>
