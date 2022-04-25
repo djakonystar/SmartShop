@@ -48,6 +48,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             var isVisible = false
             visibilityLiveData.postValue(isVisible)
 
+            tvProductName.text = product.name
             tvWholesale.text = getString(
                 R.string.wholesale_price_text,
                 product.wholesalePrice.price.toSumFormat,

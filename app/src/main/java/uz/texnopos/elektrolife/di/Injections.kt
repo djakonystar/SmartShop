@@ -30,8 +30,10 @@ import uz.texnopos.elektrolife.ui.newsale.NewSaleProductAdapter
 import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
 import uz.texnopos.elektrolife.ui.newsale.order.OrderAdapter
 import uz.texnopos.elektrolife.ui.newsale.order.OrderViewModel
+import uz.texnopos.elektrolife.ui.newsale.order.ReceiptAdapter
 import uz.texnopos.elektrolife.ui.sales.SalesAdapter
 import uz.texnopos.elektrolife.ui.sales.SalesViewModel
+import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailAdapter
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailViewModel
 import uz.texnopos.elektrolife.ui.signin.SignInViewModel
@@ -113,4 +115,6 @@ val adapterModule = module {
     single { OrderAdapter() }
     single { FinanceDetailAdapter() }
     single { ClientPaymentAdapter() }
+    single { ReceiptAdapter(get()) }
+    single { OrderReceiptAdapter(get()) }
 }

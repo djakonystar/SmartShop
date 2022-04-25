@@ -9,5 +9,5 @@ data class Amount(
     @SerializedName("paid_debt")
     val paidDebt: Double,
     val remaining: Double,
-    val sum: Double
+    val sum: Double = 0.0
 )

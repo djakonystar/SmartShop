@@ -147,4 +147,6 @@
     <string name="err_valid_sum">Haqıyqıy summa kiritiń</string>
     <string name="warning">Isenimińiz kámil me?</string>
     <string name="reports">Esabatlar</string>
+    <string name="currency_text">Valyuta</string>
+    <string name="measure_text">Ólshem</string>
 </resources>

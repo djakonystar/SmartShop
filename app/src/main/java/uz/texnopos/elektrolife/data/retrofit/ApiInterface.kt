@@ -21,6 +21,7 @@ import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.qrcode.ProductResponse
 import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.model.sales.BasketResponse
+import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.signin.SignInResponse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
@@ -125,7 +126,7 @@ interface ApiInterface {
     fun getOrders(
         @Header("Authorization") token: String,
         @Query("basket_id") basketId: Int
-    ): Observable<GenericResponse<List<orderBasket>>>
+    ): Observable<GenericResponse<OrderResponse>>
 
     @GET("api/warehouse")
     fun warehouseProducts(
@@ -171,6 +172,13 @@ interface ApiInterface {
         @Query("search") name: String
     ): Observable<GenericResponse<List<newSaleProduct>>>
 
+    @GET("api/qrcode/read")
+    fun getProduct(
+        @Header("Authorization") token: String,
+        @Query("type") type: String,
+        @Query("uuid") uuid: String
+    ): Observable<GenericResponse<newSaleProduct>>
+
     @POST("api/product")
     fun createProduct(
         @Header("Authorization") token: String,
@@ -181,7 +189,7 @@ interface ApiInterface {
     fun order(
         @Header("Authorization") token: String,
         @Body order: Order
-    ): Observable<GenericResponse<Any>>
+    ): Observable<GenericResponse<orderBasketResponse>>
 
     @GET("api/currency")
     fun getCurrency(

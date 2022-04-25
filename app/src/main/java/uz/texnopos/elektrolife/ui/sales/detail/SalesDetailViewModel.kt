@@ -8,6 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.data.model.sales.Order
+import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
@@ -15,8 +16,8 @@ class SalesDetailViewModel(private val api: ApiInterface, private val settings: 
     ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableOrders: MutableLiveData<Resource<List<Order>>> = MutableLiveData()
-    val orders: LiveData<Resource<List<Order>>> = mutableOrders
+    private var mutableOrders: MutableLiveData<Resource<OrderResponse>> = MutableLiveData()
+    val orders: LiveData<Resource<OrderResponse>> = mutableOrders
 
     fun getOrders(basketId: Int) {
         mutableOrders.value = Resource.loading()
