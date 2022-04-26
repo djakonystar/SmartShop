@@ -50,7 +50,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private var listProducts: MutableMap<String, WarehouseItem> = mutableMapOf()
     private var mapOfCurrency: MutableMap<Int, String> = mutableMapOf()
     private var productName = ""
-    private val measureUnitsList = Constants.getUnits()
+    private lateinit var measureUnitsList: List<String>
     private var unitId: Int = 1
     private var measureUnitLiveData: MutableLiveData<Int> = MutableLiveData(1)
     private var currencyIds = mutableListOf(-1, -1, -1, -1)
@@ -63,6 +63,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         binding = FragmentProductNewBinding.bind(view)
         abBinding = ActionBarProductNewBinding.bind(view)
         navController = findNavController()
+        measureUnitsList = Constants.getUnits(requireContext())
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)

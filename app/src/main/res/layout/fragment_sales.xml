@@ -10,7 +10,7 @@
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="32dp">
+        android:layout_marginBottom="150dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,48 +64,25 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:orientation="vertical"
                 android:layout_marginTop="@dimen/margin_standard"
+                android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@id/bottomContainer"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/chipGroup"
                 tools:listitem="@layout/item_sales" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomContainer"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bottom_sheet_bg"
-                android:elevation="@dimen/elevation_standard"
+                android:layout_marginTop="150dp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:id="@+id/tvTotalPriceOld"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/margin_standard"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvDebtPriceOld"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/error_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -116,48 +93,122 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:hideOnScroll="true"
         app:fabAlignmentMode="end"
         app:fabAnimationMode="scale"
-        app:fabCradleVerticalOffset="16dp">
+        app:fabCradleVerticalOffset="16dp"
+        app:hideOnScroll="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/margin_standard">
 
-            <View
-                android:layout_width="4dp"
-                android:layout_height="0dp"
-                android:layout_marginVertical="2dp"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:background="@color/black"
-                app:layout_constraintTop_toTopOf="@id/tvTotalPrice"
-                app:layout_constraintBottom_toBottomOf="@id/tvTotalPrice"
-                app:layout_constraintEnd_toStartOf="@id/tvTotalPrice" />
+            <ImageView
+                android:id="@+id/iv_total_price"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="@string/cash_icon"
+                android:src="@drawable/ic_total_money"
+                app:layout_constraintBottom_toBottomOf="@id/tv_total_price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_total_price"
+                app:tint="@color/app_main_color" />
 
             <TextView
-                android:id="@+id/tvTotalPrice"
+                android:id="@+id/tv_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginTop="@dimen/margin_standard"
-                android:layout_marginStart="@dimen/margin_standard"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                app:layout_constraintBottom_toTopOf="@id/tvDebtPrice"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/app_main_color"
+                app:layout_constraintStart_toEndOf="@id/iv_total_price"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/iv_cash_price"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="@string/cash_icon"
+                android:src="@drawable/ic_cash"
+                app:layout_constraintBottom_toBottomOf="@id/tv_cash_price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_cash_price"
+                app:tint="@color/app_main_color" />
+
             <TextView
-                android:id="@+id/tvDebtPrice"
+                android:id="@+id/tv_cash_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_standard"
-                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginStart="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                android:textColor="@color/app_main_color"
+                app:layout_constraintStart_toEndOf="@id/iv_cash_price"
+                app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
+
+            <ImageView
+                android:id="@+id/iv_card_price"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="@string/cash_icon"
+                android:src="@drawable/ic_card"
+                app:layout_constraintBottom_toBottomOf="@id/tv_card_price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_card_price"
+                app:tint="@color/app_main_color" />
+
+            <TextView
+                android:id="@+id/tv_card_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                android:textColor="@color/app_main_color"
+                app:layout_constraintStart_toEndOf="@id/iv_card_price"
+                app:layout_constraintTop_toBottomOf="@id/tv_cash_price" />
+
+            <ImageView
+                android:id="@+id/iv_debt_price"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="@string/cash_icon"
+                android:src="@drawable/ic_debt"
+                app:layout_constraintBottom_toBottomOf="@id/tv_debt_price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_debt_price"
+                app:tint="@color/error_color" />
+
+            <TextView
+                android:id="@+id/tv_debt_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                android:textColor="@color/error_color"
+                app:layout_constraintStart_toEndOf="@id/iv_debt_price"
+                app:layout_constraintTop_toBottomOf="@id/tv_card_price" />
+
+            <TextView
+                android:id="@+id/tv_debt_paid_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                android:textColor="@color/error_color"
+                app:layout_constraintStart_toEndOf="@id/iv_debt_price"
+                app:layout_constraintTop_toBottomOf="@id/tv_debt_price" />
+
+            <TextView
+                android:id="@+id/tv_debt_remained_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_middle"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                 android:textColor="@color/error_color"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
+                app:layout_constraintStart_toEndOf="@id/iv_debt_price"
+                app:layout_constraintTop_toBottomOf="@id/tv_debt_paid_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -172,10 +223,4 @@
         app:layout_anchor="@id/bottom_app_bar"
         app:tint="@color/white" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

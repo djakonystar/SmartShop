@@ -149,4 +149,26 @@
     <string name="reports">Hisobotlar</string>
     <string name="currency_text">Valyuta</string>
     <string name="measure_text">O\'lcham</string>
+    <string name="print_receipt">Chekni chiqarish</string>
+    <string name="salaries">Oyliklar</string>
+    <string name="month_first">Yanvar</string>
+    <string name="month_second">Fevral</string>
+    <string name="month_third">Mart</string>
+    <string name="month_fourth">Aprel</string>
+    <string name="month_fifth">May</string>
+    <string name="month_sixth">Iyun</string>
+    <string name="month_seventh">Iyul</string>
+    <string name="month_eighth">Avgust</string>
+    <string name="month_ninth">Sentabr</string>
+    <string name="month_tenth">Oktabr</string>
+    <string name="month_eleventh">Noyabr</string>
+    <string name="month_twelfth">Dekabr</string>
+    <string name="measure_pcs">dona</string>
+    <string name="measure_kg">kg</string>
+    <string name="measure_gr">gr</string>
+    <string name="measure_meter">m</string>
+    <string name="measure_cm">sm</string>
+    <string name="measure_liter">l</string>
+    <string name="measure_tonne">t</string>
+    <string name="employees">Xodimlar</string>
 </resources>

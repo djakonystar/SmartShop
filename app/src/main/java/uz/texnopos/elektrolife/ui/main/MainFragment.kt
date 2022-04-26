@@ -33,13 +33,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
+            ivLogo.setImageResource(R.drawable.logo)
+
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
             newPayment.onClick {
-                navController.navigate(
-                    MainFragmentDirections.actionMainFragmentToNewPayment(client = "null")
-                )
+                navController.navigate(MainFragmentDirections.actionMainFragmentToSalaryFragment())
             }
             warehouse.onClick {
                 navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
@@ -62,7 +62,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             when (settings.role) {
-                "seller" -> {
+                "saller" -> {
                     newProduct.isEnabled = false
                     ivOther.isVisible = false
                     iconNewProduct.setBackgroundColor(
@@ -72,6 +72,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         )
                     )
                     titleNewProduct.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.is_enabled_color
+                        )
+                    )
+                    newPayment.isEnabled = false
+                    iconNewPayment.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.is_enabled_color
+                        )
+                    )
+                    titleNewPayment.setBackgroundColor(
                         ContextCompat.getColor(
                             requireContext(),
                             R.color.is_enabled_color

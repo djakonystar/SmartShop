@@ -145,6 +145,7 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                 orders.sumOf { p -> p.count * p.price }.toSumFormat,
                 settings.currency
             )
+
             tvCash.text = getString(
                 R.string.price_text,
                 orderResponse.amount.cash.toSumFormat,

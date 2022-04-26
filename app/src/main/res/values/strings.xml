@@ -150,14 +150,14 @@
     <string name="cashbox_title">Kassa</string>
     <string name="natural_person_short">J</string>
     <string name="legal_person_short">Yu</string>
-    <string name="expense_any_back" translatable="false">Boshqalar</string>
-    <string name="expense_administrative_back" translatable="false">Ma\'muriy xarajatlar</string>
-    <string name="expense_rent_back" translatable="false">Ijara to\'lovlari</string>
-    <string name="expense_salary_back" translatable="false">Oylik</string>
+    <string name="expense_any_back" translatable="false">Boshqa</string>
+    <string name="expense_administrative_back" translatable="false">Ma\'muriy</string>
+    <string name="expense_rent_back" translatable="false">Ijara</string>
+    <string name="expense_salary_back" translatable="false">Ish haqi</string>
     <string name="expense_investments_back" translatable="false">Investitsiyalar</string>
-    <string name="expense_office_back" translatable="false">Idora</string>
+    <string name="expense_office_back" translatable="false">Ofis   </string>
     <string name="expense_taxes_back" translatable="false">Soliqlar</string>
-    <string name="expense_household_back" translatable="false">Uy xarajatlari</string>
+    <string name="expense_household_back" translatable="false">Maishiy</string>
     <string name="category_added_successfully">Kategoriya muvaffaqiyatli qo\'shildi!</string>
     <string name="choose_payment_type">To\'lov turini tanlang</string>
     <string name="choose_client_and_fill_payment">Iltimos mijozni tanlang va to\'lovni to\'liq kiriting</string>
@@ -186,4 +186,25 @@
     <string name="measure_text">Measure</string>
     <string name="receipt_count_text" translatable="false">%dx%s %s</string>
     <string name="print_receipt">Print Receipt</string>
+    <string name="salaries">Salaries</string>
+    <string name="month_first">January</string>
+    <string name="month_second">February</string>
+    <string name="month_third">March</string>
+    <string name="month_fourth">April</string>
+    <string name="month_fifth">May</string>
+    <string name="month_sixth">June</string>
+    <string name="month_seventh">July</string>
+    <string name="month_eighth">August</string>
+    <string name="month_ninth">September</string>
+    <string name="month_tenth">October</string>
+    <string name="month_eleventh">November</string>
+    <string name="month_twelfth">December</string>
+    <string name="measure_pcs">pcs</string>
+    <string name="measure_tonne">t</string>
+    <string name="measure_kg">kg</string>
+    <string name="measure_gr">gr</string>
+    <string name="measure_meter">m</string>
+    <string name="measure_cm">cm</string>
+    <string name="measure_liter">l</string>
+    <string name="employees">Xodimlar</string>
 </resources>
