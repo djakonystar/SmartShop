@@ -129,6 +129,9 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
             cardReports.onClick {
                 navController.navigate(R.id.action_financeFragment_to_reportsFragment)
             }
+            cardSalary.onClick {
+                navController.navigate(R.id.action_financeFragment_to_salaryFragment)
+            }
 
             tvRangeCashbox.text =
                 context?.getString(R.string.date_range_text, cashboxDateFrom, cashboxDateTo)

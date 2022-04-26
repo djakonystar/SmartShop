@@ -62,6 +62,33 @@ class SalesViewModel(private val api: ApiInterface, private val settings: Settin
         )
     }
 
+    fun filterBaskets(typesOfPayment: String, from: String, to: String) {
+        mutableBaskets.value = Resource.loading()
+        compositeDisposable.add(
+            api.filterBaskets(
+                token = "Bearer ${settings.token}",
+                typeOfPayment = typesOfPayment,
+                from = from,
+                to = to,
+                page = 1
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        if (response.successful) {
+                            mutableBaskets.value = Resource.success(response.payload)
+                        } else {
+                            mutableBaskets.value = Resource.error(response.message)
+                        }
+                    },
+                    { error ->
+                        mutableBaskets.value = Resource.error(error.message)
+                    }
+                )
+        )
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()

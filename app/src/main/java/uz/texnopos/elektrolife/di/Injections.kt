@@ -21,6 +21,10 @@ import uz.texnopos.elektrolife.ui.dialog.TransactionViewModel
 import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
 import uz.texnopos.elektrolife.ui.finance.reports.ReportsViewModel
+import uz.texnopos.elektrolife.ui.finance.salary.SalaryAdapter
+import uz.texnopos.elektrolife.ui.finance.salary.SalaryViewModel
+import uz.texnopos.elektrolife.ui.finance.salary.detail.SalaryDetailAdapter
+import uz.texnopos.elektrolife.ui.finance.salary.detail.SalaryDetailViewModel
 import uz.texnopos.elektrolife.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
@@ -104,6 +108,8 @@ val viewModelModule = module {
     viewModel { TransactionViewModel(get(), get()) }
     viewModel { SalesDetailViewModel(get(), get()) }
     viewModel { NewSaleViewModel(get(), get()) }
+    viewModel { SalaryViewModel(get(), get()) }
+    viewModel { SalaryDetailViewModel(get(), get()) }
 }
 
 val adapterModule = module {
@@ -117,4 +123,6 @@ val adapterModule = module {
     single { ClientPaymentAdapter() }
     single { ReceiptAdapter(get()) }
     single { OrderReceiptAdapter(get()) }
+    single { SalaryAdapter(get()) }
+    single { SalaryDetailAdapter(get()) }
 }

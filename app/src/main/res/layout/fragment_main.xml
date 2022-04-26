@@ -7,9 +7,10 @@
     tools:context=".ui.main.MainFragment">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="-30dp"
+        android:id="@+id/iv_logo"
+        android:layout_width="230dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="-10dp"
         android:layout_marginStart="@dimen/margin_standard"
         android:src="@drawable/smartshop"
         app:layout_constraintBottom_toTopOf="@id/finance"

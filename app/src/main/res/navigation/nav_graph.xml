@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_mainFragment_to_financeFragment"
             app:destination="@id/financeFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_salaryFragment"
+            app:destination="@id/salaryFragment" />
     </fragment>
     <fragment
         android:id="@+id/newSaleFragment"
@@ -155,6 +158,9 @@
         <action
             android:id="@+id/action_financeFragment_to_reportsFragment"
             app:destination="@id/reportsFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_salaryFragment"
+            app:destination="@id/salaryFragment" />
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
@@ -222,5 +228,23 @@
             app:destination="@id/newSaleFragment"
             app:popUpTo="@id/newSaleFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/salaryFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.salary.SalaryFragment"
+        android:label="fragment_salary"
+        tools:layout="@layout/fragment_salary" >
+        <action
+            android:id="@+id/action_salaryFragment_to_salaryDetailFragment"
+            app:destination="@id/salaryDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/salaryDetailFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.salary.detail.SalaryDetailFragment"
+        android:label="fragment_salary_detail"
+        tools:layout="@layout/fragment_salary_detail" >
+        <argument
+            android:name="salary"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -20,7 +20,7 @@ class FinanceDetailAdapter : BaseAdapter<Finance, FinanceDetailAdapter.FinanceDe
                 tvDate.text = model.date.changeDateFormat
                 tvPayee.text = model.payee
 
-                tvCategoryName.text = when (model.category) {
+                tvCategoryName.text = when (model.category.uz) {
                     itemView.context?.getString(R.string.expense_administrative_back) ->
                         itemView.context?.getString(R.string.expense_administrative_short)
                     itemView.context?.getString(R.string.expense_rent_back) ->

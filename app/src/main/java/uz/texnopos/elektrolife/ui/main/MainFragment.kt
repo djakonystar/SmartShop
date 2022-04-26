@@ -33,18 +33,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
+            ivLogo.setImageResource(R.drawable.logo)
+
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
             newPayment.onClick {
-                navController.navigate(
-                    MainFragmentDirections.actionMainFragmentToNewPayment(client = "null")
-                )
+                navController.navigate(MainFragmentDirections.actionMainFragmentToNewPayment(client = "null"))
             }
             warehouse.onClick {
                 navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
             }
-
 
             ivOther.onClick {
 //                optionsMenu(it)
@@ -62,28 +61,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             when (settings.role) {
-                "seller" -> {
-                    newProduct.isEnabled = false
+                "saller" -> {
                     ivOther.isVisible = false
-                    iconNewProduct.setBackgroundColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.is_enabled_color
-                        )
-                    )
-                    titleNewProduct.setBackgroundColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.is_enabled_color
-                        )
-                    )
-                    titleFinance.text = context?.getString(R.string.sales)
+                    iconNewProduct.setImageResource(R.drawable.salary)
+                    titleNewProduct.text = getString(R.string.salaries)
+                    finance.onClick {
+                        // TODO: Go to my salaries
+                    }
                     iconFinance.setImageResource(R.drawable.sales)
+                    titleFinance.text = context?.getString(R.string.sales)
                     finance.onClick {
                         navController.navigate(R.id.action_mainFragment_to_salesFragment)
                     }
                 }
-                "admin", "CEO", "ceo" -> {
+                "admin", "ceo" -> {
                     newProduct.isEnabled = true
                     ivOther.isVisible = false
                     finance.onClick {

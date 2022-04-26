@@ -150,4 +150,25 @@
     <string name="measure_text">Measure</string>
     <string name="currency_text">Currency</string>
     <string name="print_receipt">Print Receipt</string>
+    <string name="salaries">Salaries</string>
+    <string name="month_first">January</string>
+    <string name="month_second">February</string>
+    <string name="month_third">March</string>
+    <string name="month_fourth">April</string>
+    <string name="month_fifth">May</string>
+    <string name="month_sixth">June</string>
+    <string name="month_seventh">July</string>
+    <string name="month_eighth">August</string>
+    <string name="month_ninth">September</string>
+    <string name="month_tenth">October</string>
+    <string name="month_eleventh">November</string>
+    <string name="month_twelfth">December</string>
+    <string name="measure_pcs">pcs</string>
+    <string name="measure_kg">kg</string>
+    <string name="measure_gr">gr</string>
+    <string name="measure_meter">m</string>
+    <string name="measure_cm">cm</string>
+    <string name="measure_liter">l</string>
+    <string name="measure_tonne">t</string>
+    <string name="employees">Employees</string>
 </resources>

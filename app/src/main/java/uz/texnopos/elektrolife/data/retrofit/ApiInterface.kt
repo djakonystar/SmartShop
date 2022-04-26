@@ -10,9 +10,12 @@ import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.clients.ClientPayment
 import uz.texnopos.elektrolife.data.model.currency.Currency
+import uz.texnopos.elektrolife.data.model.employee.Employee
 import uz.texnopos.elektrolife.data.model.finance.Cashier
 import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
+import uz.texnopos.elektrolife.data.model.finance.salary.Salary
+import uz.texnopos.elektrolife.data.model.finance.salary.SalaryMonthly
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
@@ -144,7 +147,7 @@ interface ApiInterface {
         @Body signIn: SignIn
     ): Observable<GenericResponse<SignInResponse>>
 
-    @POST("api/categories")
+    @POST("api/category")
     fun createCategory(
         @Header("Authorization") token: String,
         @Body categoryPost: CategoryPost
@@ -206,7 +209,7 @@ interface ApiInterface {
     /**
      * Finance: Get cashbox balance and profit in date range [from] - [to]
      */
-    @GET("api/casheir")
+    @GET("api/cashier")
     fun getCashier(
         @Header("Authorization") token: String,
         @Query("to") from: String,
@@ -216,7 +219,7 @@ interface ApiInterface {
     /**
      * Finance: Add new finance detail
      */
-    @POST("api/consumption/new")
+    @POST("api/consumption")
     fun addFinanceDetail(
         @Header("Authorization") token: String,
         @Body finance: FinancePost
@@ -228,11 +231,11 @@ interface ApiInterface {
      * [to] - end date;
      * [type] - type of finance detail
      */
-    @GET("api/consumption")
+    @GET("api/consumptions")
     fun getFinanceDetails(
         @Header("Authorization") token: String,
-        @Query("to") from: String,
-        @Query("do") to: String,
+        @Query("from") from: String,
+        @Query("to") to: String,
         @Query("type") type: String
     ): Observable<GenericResponse<List<Finance>>>
 
@@ -253,4 +256,24 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Body transaction: Transaction
     ): Observable<GenericResponse<List<Any>>>
+
+    @GET("api/employees")
+    fun getEmployees(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<List<Employee>>>
+
+    @GET("api/salary/employee")
+    fun getSalaries(
+        @Header("Authorization") token: String,
+        @Query("from") from: String,
+        @Query("to") to: String
+    ): Observable<GenericResponse<List<Salary>>>
+
+    @GET("api/salary/monthly/employee")
+    fun getMonthlySalary(
+        @Header("Authorization") token: String,
+        @Query("employee_id") employeeId: Int,
+        @Query("from") from: String,
+        @Query("to") to: String
+    ): Observable<GenericResponse<List<SalaryMonthly>>>
 }

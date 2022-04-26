@@ -1,31 +1,50 @@
 package uz.texnopos.elektrolife.core.extensions
 
 import android.content.Context
+import org.koin.experimental.property.inject
+import uz.texnopos.elektrolife.R
 
 object Constants {
     fun getUnitName(context: Context, unitId: Int): String {
-        var unitName = ""
-        when (unitId) {
-            1 -> unitName = "dona"
-            2 -> unitName = "tonna"
-            3 -> unitName = "kg"
-            4 -> unitName = "gr"
-            5 -> unitName = "metr"
-            6 -> unitName = "sm"
-            7 -> unitName = "litr"
+        return when (unitId) {
+            1 -> context.getString(R.string.measure_pcs)
+            2 -> context.getString(R.string.measure_tonne)
+            3 -> context.getString(R.string.measure_kg)
+            4 -> context.getString(R.string.measure_gr)
+            5 -> context.getString(R.string.measure_meter)
+            6 -> context.getString(R.string.measure_cm)
+            7 -> context.getString(R.string.measure_liter)
+            else -> "Error"
         }
-        return unitName
     }
 
-    fun getUnits(): List<String> {
+    fun getUnits(context: Context): List<String> {
         return listOf(
-            "dona",
-            "tonna",
-            "kg",
-            "gr",
-            "metr",
-            "sm",
-            "litr"
+            context.getString(R.string.measure_pcs),
+            context.getString(R.string.measure_tonne),
+            context.getString(R.string.measure_kg),
+            context.getString(R.string.measure_gr),
+            context.getString(R.string.measure_meter),
+            context.getString(R.string.measure_cm),
+            context.getString(R.string.measure_liter)
         )
+    }
+
+    fun getMonthName(context: Context, id: Int): String {
+        return when (id) {
+             1 -> context.getString(R.string.month_first)
+             2 -> context.getString(R.string.month_second)
+             3 -> context.getString(R.string.month_third)
+             4 -> context.getString(R.string.month_fourth)
+             5 -> context.getString(R.string.month_fifth)
+             6 -> context.getString(R.string.month_sixth)
+             7 -> context.getString(R.string.month_seventh)
+             8 -> context.getString(R.string.month_eighth)
+             9 -> context.getString(R.string.month_ninth)
+             10 -> context.getString(R.string.month_tenth)
+             11 -> context.getString(R.string.month_eleventh)
+             12 -> context.getString(R.string.month_twelfth)
+             else -> "Error"
+        }
     }
 }

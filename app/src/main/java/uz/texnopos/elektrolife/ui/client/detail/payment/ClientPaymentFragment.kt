@@ -35,12 +35,12 @@ class ClientPaymentFragment(private val client: Client) :
 
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
-                viewModel.getClientPayments(clientId = client.id)
+//                viewModel.getClientPayments(clientId = client.id)
             }
         }
 
         animateTotalSum(lastSum, lastSum)
-        viewModel.getClientPayments(clientId = client.id)
+//        viewModel.getClientPayments(clientId = client.id)
         setUpObservers()
     }
 

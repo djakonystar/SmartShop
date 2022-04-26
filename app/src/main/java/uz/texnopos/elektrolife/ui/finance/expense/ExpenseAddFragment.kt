@@ -128,7 +128,8 @@ class ExpenseAddFragment : Fragment(R.layout.fragment_expense_add) {
                         categoryId = selectedCategory,
                         payee = payee,
                         price = sum.toDouble(),
-                        type = FINANCE_EXPENSE
+                        type = FINANCE_EXPENSE,
+                        paymentType = "cash"
                     )
                     viewModel.addFinanceDetail(expense)
                 } else {

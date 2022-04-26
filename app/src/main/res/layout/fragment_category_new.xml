@@ -48,18 +48,18 @@
                 android:layout_marginHorizontal="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_middle"
                 android:hint="@string/wholesale_percent"
-                app:endIconMode="clear_text"
+                app:suffixText="%"
                 app:layout_constraintTop_toBottomOf="@id/tilCategoryName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etWholesalePercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
                     android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textAlignment="textEnd"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -70,18 +70,18 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/min_percent"
-                app:endIconMode="clear_text"
+                app:suffixText="%"
                 app:layout_constraintTop_toBottomOf="@id/tilWholesalePercent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMinPercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
                     android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textAlignment="textEnd"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -92,18 +92,18 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/max_percent"
-                app:endIconMode="clear_text"
+                app:suffixText="%"
                 app:layout_constraintTop_toBottomOf="@id/tilMinPercent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMaxPercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
                     android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textAlignment="textEnd"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -114,20 +114,19 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/min_quantity"
-                app:helperTextEnabled="true"
                 app:helperText="@string/min_quantity_hint"
-                app:endIconMode="clear_text"
+                app:helperTextEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/tilMaxPercent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMinQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
                     android:inputType="number"
                     android:maxLength="19"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textAlignment="textEnd"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -136,16 +135,16 @@
                 android:id="@+id/btnAddCategory"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/button_height"
-                android:layout_marginVertical="@dimen/margin_standard"
                 android:layout_marginHorizontal="@dimen/margin_standard"
+                android:layout_marginVertical="@dimen/margin_standard"
                 android:backgroundTint="@color/app_main_color"
                 android:paddingHorizontal="@dimen/button_padding_horizontal"
                 android:text="@string/add_new_category"
                 android:textSize="@dimen/text_size_larger"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilMinQuantity"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

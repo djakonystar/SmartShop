@@ -149,4 +149,26 @@
     <string name="reports">Отчеты</string>
     <string name="currency_text">Валюта</string>
     <string name="measure_text">Мера</string>
+    <string name="salaries">Зарплаты</string>
+    <string name="print_receipt">Печатать чек</string>
+    <string name="month_first">Январь</string>
+    <string name="month_second">Февраль</string>
+    <string name="month_third">Март</string>
+    <string name="month_fourth">Апрель</string>
+    <string name="month_fifth">Май</string>
+    <string name="month_sixth">Июнь</string>
+    <string name="month_seventh">Июль</string>
+    <string name="month_eighth">Август</string>
+    <string name="month_ninth">Сентябрь</string>
+    <string name="month_tenth">Октябрь</string>
+    <string name="month_eleventh">Ноябрь</string>
+    <string name="month_twelfth">Декабрь</string>
+    <string name="measure_pcs">шт</string>
+    <string name="measure_kg">кг</string>
+    <string name="measure_gr">гр</string>
+    <string name="measure_meter">м</string>
+    <string name="measure_cm">см</string>
+    <string name="measure_liter">л</string>
+    <string name="measure_tonne">т</string>
+    <string name="employees">Сотрудники</string>
 </resources>
