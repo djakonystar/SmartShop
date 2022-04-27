@@ -1,10 +1,11 @@
 package uz.texnopos.elektrolife.data.model.newsale
 
 import com.google.gson.annotations.SerializedName
+import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 
 data class Product(
     val id: Int,
-    val category: CatalogCategory,
+    val category: CategoryResponse,
     val name: String,
     val brand: String,
     val image: String?,
@@ -20,5 +21,5 @@ data class Product(
     @SerializedName("qr_code_link")
     val qrCode: String,
     var count: Double = 0.0,
-    var salePrice: Double
+    var salePrice: Double = 0.0
 )

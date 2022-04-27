@@ -1,25 +1,19 @@
 package uz.texnopos.elektrolife.ui.newsale
 
-import android.Manifest
 import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
@@ -27,7 +21,6 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.checkForPermissions
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
@@ -35,8 +28,6 @@ import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddToBasketDialog
-import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
-
 
 class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var binding: FragmentNewSaleBinding
@@ -52,6 +43,8 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
     private lateinit var productCode: String
+    private var isLoading = false
+    private var page = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,9 +53,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         abBinding = ActionBarNewSaleBinding.bind(view)
         navController = findNavController()
 
-        categoryViewModel.getCategories()
-        viewModel.getProducts()
-        setUpObservers()
+
 
         abBinding.apply {
             btnHome.onClick {
@@ -72,12 +63,14 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                viewModel.getProducts(searchValue)
+                searchValue.ifEmpty { page = 1 }
+                productNewSaleAdapter.models = listOf()
+                viewModel.getProducts(page, searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.getProducts(searchValue)
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    viewModel.getProducts(page, searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -99,14 +92,33 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 showError("It is not product code")
             }
 
+            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = productNewSaleAdapter
+            recyclerView.layoutManager = layoutManager
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0 && btnFab.isVisible) btnFab.hide()
+                    else if (dy < 0 && !btnFab.isVisible) btnFab.show()
+
+                    if (!isLoading && productNewSaleAdapter.models.isNotEmpty()) {
+                        if (layoutManager.findLastCompletelyVisibleItemPosition() == productNewSaleAdapter.itemCount - 1) {
+                            page++
+                            viewModel.getProducts(page, selectedCategoryId, searchValue)
+                        }
+                    }
+                }
+            })
 
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
                 chipGroup.removeAllViews()
+                productsList = mutableListOf()
                 categoryViewModel.getCategories()
-                viewModel.getProducts(searchValue)
+                page = 1
+                productNewSaleAdapter.models = listOf()
+                viewModel.getProducts(page, searchValue)
             }
 
             productNewSaleAdapter.onItemClickListener { product ->
@@ -139,6 +151,10 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
         }
+
+        categoryViewModel.getCategories()
+        viewModel.getProducts(page, searchValue)
+        setUpObservers()
     }
 
     private fun setLoading(loading: Boolean) {
@@ -178,15 +194,19 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
+                    binding.btnFab.show()
                     allProductsList = it.data!! as MutableList<Product>
-                    productsList = if (selectedCategoryId == -1) {
-                        it.data as MutableList<Product>
+                    if (productNewSaleAdapter.models.isEmpty()) {
+                        productNewSaleAdapter.models = allProductsList
+                        productsList = allProductsList
                     } else {
-                        it.data.filter { product ->
-                            product.category.id == selectedCategoryId
-                        } as MutableList<Product>
+                        allProductsList.forEach { product ->
+                            if (!productsList.contains(product)) {
+                                productsList.add(product)
+                            }
+                        }
+                        productNewSaleAdapter.models = productsList
                     }
-                    productNewSaleAdapter.models = productsList
                     showLottieAnimation(productsList.isEmpty())
                 }
                 ResourceState.ERROR -> {
@@ -240,12 +260,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                         -1
                     }
 
-                    if (selectedCategoryId != -1) {
-                        viewModel.getProducts(searchValue)
-                    } else {
-                        productNewSaleAdapter.models = allProductsList
-                        showLottieAnimation(allProductsList.isEmpty())
-                    }
+                    page = 1
+                    productNewSaleAdapter.models = listOf()
+                    viewModel.getProducts(page, selectedCategoryId, searchValue)
                 }
             }
         } catch (e: Exception) {
@@ -262,52 +279,4 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
         imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
-
-//    private fun checkForPermissions() {
-//        if (ContextCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.CAMERA
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            requestMultiplePermissions.launch(
-//                arrayOf(
-//                    Manifest.permission.CAMERA
-//                )
-//            )
-//        } else {
-//            findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
-//        }
-//    }
-
-    private val requestMultiplePermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            var isGranted = true
-            permissions.entries.forEach {
-                if (!it.value) isGranted =
-                    false
-            }
-            if (!isGranted) {
-                showDialog()
-            } else {
-                findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
-            }
-        }
-
-    private fun showDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.apply {
-            setMessage("Permission required")
-            setTitle("Title perm")
-            setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton("Go") { _, _ ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri: Uri = Uri.fromParts("package", activity?.packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }
-        }.create().show()
-    }
-
 }

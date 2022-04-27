@@ -159,21 +159,32 @@ interface ApiInterface {
     ): Observable<GenericResponse<List<CategoryResponse>>>
 
     @GET("api/products")
-    fun getProductsByCategoryId(
+    fun getProducts(
         @Header("Authorization") token: String,
+        @Query("page") page: Int,
         @Query("category") categoryId: Int
-    ): Observable<GenericResponse<List<newSaleProduct>>>
-
-    @GET("api/products")
-    fun getProducts(
-        @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<newSaleProduct>>>
+    ): Observable<GenericResponse<PagingResponse<List<newSaleProduct>>>>
 
     @GET("api/products")
     fun getProducts(
         @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("category_id") categoryId: Int,
         @Query("search") name: String
-    ): Observable<GenericResponse<List<newSaleProduct>>>
+    ): Observable<GenericResponse<PagingResponse<List<newSaleProduct>>>>
+
+    @GET("api/products")
+    fun getProducts(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+    ): Observable<GenericResponse<PagingResponse<List<newSaleProduct>>>>
+
+    @GET("api/products")
+    fun getProducts(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("search") name: String
+    ): Observable<GenericResponse<PagingResponse<List<newSaleProduct>>>>
 
     @GET("api/qrcode/read")
     fun getProduct(

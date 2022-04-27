@@ -3,7 +3,6 @@ package uz.texnopos.elektrolife.ui.newsale.dialog
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -72,7 +71,6 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
             etSumma.setText(product.maxPrice.price.toSumFormat)
 
-            Log.d("unitId", "${product.warehouse?.unit?.id}")
             if (product.warehouse?.unit?.id == 1) etQuantity.setBlockFilter("-.,")
             else etQuantity.filterForDouble
 
@@ -80,7 +78,6 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
             etQuantity.addTextChangedListener {
                 val count = it.toString().toDouble
-                val c = if (product.warehouse?.unit?.id == 1) count.toInt() else count
                 tilQuantity.isErrorEnabled = false
                 if (count > remained.toDouble() || count <= 0.0) {
                     tilQuantity.error = context?.getString(R.string.not_enough_error)

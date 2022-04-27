@@ -366,7 +366,7 @@ val Fragment.checkForPermissions: Unit
                 )
             )
         } else {
-            showMessage("Permission already granted!")
+//            showMessage("Permission already granted!")
         }
     }
 
@@ -392,6 +392,6 @@ private fun Fragment.requestMultiplePermissions() =
                 requireActivity().supportFragmentManager.beginTransaction().show(dialog)
             }
         } else {
-            showMessage("Permission granted!")
+//            showMessage("Permission granted!")
         }
     }

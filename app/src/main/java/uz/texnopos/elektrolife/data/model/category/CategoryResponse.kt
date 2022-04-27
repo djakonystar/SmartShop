@@ -10,5 +10,7 @@ data class CategoryResponse(
     @SerializedName("min_percent")
     val minPercent: Double,
     @SerializedName("max_percent")
-    val maxPercent: Double
+    val maxPercent: Double,
+    @SerializedName("min_product")
+    val minProduct: Double? = 0.0
 )

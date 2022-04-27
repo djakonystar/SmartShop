@@ -1,5 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale
 
+import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +18,8 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val searchSubject = BehaviorSubject.create<String>()
+    private val searchSubject = BehaviorSubject.create<Pair<Int, String>>()
+    private var page = 0
 
     private var mutableProducts: MutableLiveData<Resource<List<newSaleProduct>>> = MutableLiveData()
     val products: LiveData<Resource<List<newSaleProduct>>> = mutableProducts
@@ -28,15 +30,27 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     init {
         searchSubject
             .debounce(700, TimeUnit.MILLISECONDS)
-            .switchMap { searchValue ->
-                api.getProducts("Bearer ${settings.token}", searchValue)
-                    .subscribeOn(Schedulers.io())
+            .switchMap { pair ->
+                if (pair.first == -1) {
+                    api.getProducts(
+                        token = "Bearer ${settings.token}",
+                        page = page,
+                        name = pair.second
+                    ).subscribeOn(Schedulers.io())
+                } else {
+                    api.getProducts(
+                        token = "Bearer ${settings.token}",
+                        page = page,
+                        categoryId = pair.first,
+                        name = pair.second
+                    ).subscribeOn(Schedulers.io())
+                }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { response ->
                     if (response.successful) {
-                        mutableProducts.value = Resource.success(response.payload)
+                        mutableProducts.value = Resource.success(response.payload.data)
                     } else {
                         mutableProducts.value = Resource.error(response.message)
                     }
@@ -47,16 +61,17 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
             )
     }
 
-    fun getProducts() {
+    fun getProducts(page: Int) {
+        this.page = page
         mutableProducts.value = Resource.loading()
         compositeDisposable.add(
-            api.getProducts("Bearer ${settings.token}")
+            api.getProducts(token = "Bearer ${settings.token}", page = this.page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
                         if (response.successful) {
-                            mutableProducts.value = Resource.success(response.payload)
+                            mutableProducts.value = Resource.success(response.payload.data)
                         } else {
                             mutableProducts.value = Resource.error(response.message)
                         }
@@ -68,9 +83,16 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
         )
     }
 
-    fun getProducts(searchValue: String) {
+    fun getProducts(page: Int, searchValue: String) {
+        this.page = page
         mutableProducts.value = Resource.loading()
-        searchSubject.onNext(searchValue)
+        searchSubject.onNext(Pair(-1, searchValue))
+    }
+
+    fun getProducts(page: Int, categoryId: Int, searchValue: String) {
+        this.page = page
+        mutableProducts.value = Resource.loading()
+        searchSubject.onNext(Pair(categoryId, searchValue))
     }
 
     fun getProduct(type: String, uuid: String) {
