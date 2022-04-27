@@ -173,4 +173,11 @@
     <string name="employees">Jumısshılar</string>
     <string name="date_from_text">Baslap: %s</string>
     <string name="date_to_text">Shekem: %s</string>
+    <string name="payment_type">Tólem túri</string>
+    <string name="total_price_text">Ulıwma: %s %s</string>
+    <string name="cash_price_text">Naq: %s %s</string>
+    <string name="card_price_text">Karta: %s %s</string>
+    <string name="debt_price_text">Qarız: %s %s</string>
+    <string name="debt_paid_price_text">Tólendi: %s %s</string>
+    <string name="debt_remained_price_text">Qaldı: %s %s</string>
 </resources>

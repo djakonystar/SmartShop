@@ -174,4 +174,10 @@
     <string name="date_from_text">Dan: %s</string>
     <string name="date_to_text">Gacha: %s</string>
     <string name="payment_type">To\'lov turi</string>
+    <string name="total_price_text">Umumiy: %s %s</string>
+    <string name="cash_price_text">Naqd: %s %s</string>
+    <string name="card_price_text">Karta: %s %s</string>
+    <string name="debt_price_text">Qarz: %s %s</string>
+    <string name="debt_paid_price_text">To\'langani: %s %s</string>
+    <string name="debt_remained_price_text">Qoldiq: %s %s</string>
 </resources>

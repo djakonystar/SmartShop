@@ -303,14 +303,13 @@ infix fun Double.format(afterPoint: Int): String {
 val String.toDouble: Double
     get() = this.ifEmpty { "0.0" }.toDouble()
 
-fun Fragment.doPrint(filePath: String) {
+fun Fragment.doPrint(filePath: String, fileName: String) {
     try {
-        val printManager =
-            this.requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val printManager = requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
         val jobName = "${getString(R.string.app_name)} Document"
         printManager.print(
             jobName,
-            MyPrintDocumentAdapter(this.requireContext(), filePath),
+            MyPrintDocumentAdapter(requireContext(), filePath, fileName),
             PrintAttributes.Builder().build()
         )
     } catch (e: Exception) {

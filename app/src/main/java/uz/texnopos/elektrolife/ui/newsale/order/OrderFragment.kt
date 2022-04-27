@@ -237,11 +237,11 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
         val createdTime = basket.createdAt.replace('.', '_')
             .replace(' ', '_')
             .replace(':', '_')
-        pdfGenerator(view, "${basket.id}_$createdTime",
+        val fileName = "${createdTime}_${basket.id}"
+        pdfGenerator(view, fileName,
             { response ->
                 response?.let {
-//                    showMessage(it.path)
-                    doPrint(it.path)
+                    doPrint(it.path, fileName)
                     binding.apply {
                         tvTotalPrice.text = ""
                         adapter.models = mutableListOf()

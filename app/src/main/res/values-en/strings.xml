@@ -173,4 +173,11 @@
     <string name="employees">Employees</string>
     <string name="date_from_text">From: %s</string>
     <string name="date_to_text">To: %s</string>
+    <string name="payment_type">Payment type</string>
+    <string name="total_price_text">Total: %s %s</string>
+    <string name="cash_price_text">Cash: %s %s</string>
+    <string name="card_price_text">Card: %s %s</string>
+    <string name="debt_price_text">Debt: %s %s</string>
+    <string name="debt_paid_price_text">Paid: %s %s</string>
+    <string name="debt_remained_price_text">Remained: %s %s</string>
 </resources>

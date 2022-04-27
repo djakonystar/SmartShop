@@ -173,4 +173,11 @@
     <string name="employees">Сотрудники</string>
     <string name="date_from_text">От: %s</string>
     <string name="date_to_text">До: %s</string>
+    <string name="payment_type">Тип оплаты</string>
+    <string name="total_price_text">Общий: %s %s</string>
+    <string name="cash_price_text">Наличный: %s %s</string>
+    <string name="card_price_text">Карта: %s %s</string>
+    <string name="debt_price_text">Долг: %s %s</string>
+    <string name="debt_paid_price_text">Оплачено: %s %s</string>
+    <string name="debt_remained_price_text">Остались: %s %s</string>
 </resources>
