@@ -1,10 +1,12 @@
 package uz.texnopos.elektrolife.core.extensions
 
+import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
 import android.print.PrintAttributes
@@ -14,17 +16,20 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
-import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.gkemon.XMLtoPDF.PdfGenerator
@@ -249,6 +254,7 @@ fun animateTotalPrice(start: Double, end: Double, textView: TextView, settings: 
 }
 
 val EditText.filterForDouble: Unit
+    @SuppressLint("SetTextI18n")
     get() {
         val filter = InputFilter { source, _, _, spanned, _, _ ->
             val afterPoint = if (spanned.contains('.')) {
@@ -347,3 +353,46 @@ fun Fragment.pdfGenerator(
             })
     }
 }
+
+val Fragment.checkForPermissions: Unit
+    get() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestMultiplePermissions().launch(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                )
+            )
+        } else {
+            showMessage("Permission already granted!")
+        }
+    }
+
+private fun Fragment.requestMultiplePermissions() =
+    registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        var isGranted = true
+        permissions.entries.forEach {
+            if (!it.value) isGranted =
+                false
+        }
+        if (!isGranted) {
+            val dialog = showWarning("Permission required")
+            dialog.setOnPositiveButtonClickListener {
+                val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                requireActivity().startActivity(intent)
+            }
+            dialog.setOnDismissListener {
+                findNavController().popBackStack()
+            }
+            if (dialog.isAdded) {
+                requireActivity().supportFragmentManager.beginTransaction().show(dialog)
+            }
+        } else {
+            showMessage("Permission granted!")
+        }
+    }

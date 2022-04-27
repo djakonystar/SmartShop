@@ -27,6 +27,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.checkForPermissions
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
@@ -34,6 +35,7 @@ import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddToBasketDialog
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
 
 class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
@@ -82,7 +84,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
 
             btnScanner.onClick {
-                checkForPermissions()
+                navController.navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
             }
         }
 
@@ -252,7 +254,8 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     }
 
     private fun hideSoftKeyboard() {
-        val imm = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         var v = requireActivity().currentFocus
         if (v == null) {
             v = View(activity)
@@ -260,21 +263,21 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
-    private fun checkForPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestMultiplePermissions.launch(
-                arrayOf(
-                    Manifest.permission.CAMERA
-                )
-            )
-        } else {
-            findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
-        }
-    }
+//    private fun checkForPermissions() {
+//        if (ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.CAMERA
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            requestMultiplePermissions.launch(
+//                arrayOf(
+//                    Manifest.permission.CAMERA
+//                )
+//            )
+//        } else {
+//            findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
+//        }
+//    }
 
     private val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->

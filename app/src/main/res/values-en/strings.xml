@@ -39,7 +39,7 @@
     <string name="by_descend">By descending</string>
     <string name="by_few_remain">By few remaining</string>
     <string name="payment_cash">Cash</string>
-    <string name="payment_card">Card</string>
+    <string name="payment_card">Bank Card</string>
     <string name="choose_category">Select category</string>
     <string name="product_name">Product name</string>
     <string name="brand_name">Manufacturer</string>
@@ -102,21 +102,21 @@
     <string name="finance">Finance</string>
     <string name="expenses">Expenses</string>
     <string name="expense_any">Other</string>
-    <string name="expense_administrative">Administrative expenses</string>
-    <string name="expense_rent">Rent expense</string>
+    <string name="expense_administrative">Administrative</string>
+    <string name="expense_rent">Rent</string>
     <string name="expense_salary">Salary</string>
     <string name="expense_investments">Investments</string>
     <string name="expense_office">Office</string>
     <string name="expense_taxes">Taxes</string>
-    <string name="expense_household">Household expense</string>
-    <string name="expense_any_short">Oth\ner</string>
-    <string name="expense_administrative_short">Adm\nexp</string>
+    <string name="expense_household">Household</string>
+    <string name="expense_any_short">Other</string>
+    <string name="expense_administrative_short">Admin</string>
     <string name="expense_rent_short">Rent</string>
     <string name="expense_salary_short">Sal\nary</string>
-    <string name="expense_investments_short">Inv\nest</string>
+    <string name="expense_investments_short">Invest</string>
     <string name="expense_office_short">Off\nice</string>
     <string name="expense_taxes_short">Tax</string>
-    <string name="expense_household_short">Hou\nexp</string>
+    <string name="expense_household_short">House\nhold</string>
     <string name="new_expense">New expense</string>
     <string name="description">Name</string>
     <string name="category">Category</string>
@@ -171,4 +171,6 @@
     <string name="measure_liter">l</string>
     <string name="measure_tonne">t</string>
     <string name="employees">Employees</string>
+    <string name="date_from_text">From: %s</string>
+    <string name="date_to_text">To: %s</string>
 </resources>

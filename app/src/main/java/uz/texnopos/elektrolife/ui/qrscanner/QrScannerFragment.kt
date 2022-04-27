@@ -7,13 +7,18 @@ import androidx.navigation.fragment.findNavController
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.extensions.checkForPermissions
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.databinding.FragmentQrScannerBinding
 
 class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
     private lateinit var binding: FragmentQrScannerBinding
     private lateinit var codeScanner: CodeScanner
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkForPermissions
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -39,7 +39,7 @@
     <string name="by_descend">По убыванию</string>
     <string name="by_few_remain">По минимум</string>
     <string name="payment_cash">Наличные</string>
-    <string name="payment_card">Карта</string>
+    <string name="payment_card">Банковская карта</string>
     <string name="choose_category">Выберите категорию</string>
     <string name="product_name">Название товара</string>
     <string name="brand_name">Производитель</string>
@@ -100,22 +100,22 @@
     <string name="confirm_remove_uz">Вы действительно хотите удалить этот товар из корзины?</string>
     <string name="finance">Финанс</string>
     <string name="expenses">Расходы</string>
-    <string name="expense_any">Другие</string>
-    <string name="expense_administrative">Административные расходы</string>
+    <string name="expense_any">Другой</string>
+    <string name="expense_administrative">Административные</string>
     <string name="expense_rent">Аренда</string>
     <string name="expense_salary">Зарплата</string>
     <string name="expense_investments">Инвестиции</string>
-    <string name="expense_office">Канцтовар</string>
+    <string name="expense_office">Офис</string>
     <string name="expense_taxes">Налоги</string>
-    <string name="expense_household">Хозяйственные расходы</string>
-    <string name="expense_any_short">Др</string>
-    <string name="expense_administrative_short">Адм\nрас</string>
+    <string name="expense_household">Домашнее хозяйство</string>
+    <string name="expense_any_short">Дру\nгой</string>
+    <string name="expense_administrative_short">Админ</string>
     <string name="expense_rent_short">Арен\nда</string>
     <string name="expense_salary_short">Зар\nпл</string>
-    <string name="expense_investments_short">Инв\nест</string>
+    <string name="expense_investments_short">Инвес\nтиция</string>
     <string name="expense_office_short">Офис</string>
-    <string name="expense_taxes_short">На\nлог</string>
-    <string name="expense_household_short">Хоз\nрас</string>
+    <string name="expense_taxes_short">Налог</string>
+    <string name="expense_household_short">Хозяй\nство</string>
     <string name="new_expense">Новый расход</string>
     <string name="description">Название</string>
     <string name="category">Категория</string>
@@ -171,4 +171,6 @@
     <string name="measure_liter">л</string>
     <string name="measure_tonne">т</string>
     <string name="employees">Сотрудники</string>
+    <string name="date_from_text">От: %s</string>
+    <string name="date_to_text">До: %s</string>
 </resources>

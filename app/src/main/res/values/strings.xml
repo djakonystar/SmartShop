@@ -47,7 +47,7 @@
     <string name="by_few_remain">Kam qolganlar bo\'yicha</string>
     <string name="status_indicator" translatable="false">Status Indicator</string>
     <string name="payment_cash">Naqd</string>
-    <string name="payment_card">Karta</string>
+    <string name="payment_card">Bank kartasi</string>
     <string name="choose_category">Kategoriyani tanlang</string>
     <string name="product_name">Mahsulot nomi</string>
     <string name="brand_name">Ishlab chiqaruvchi</string>
@@ -207,4 +207,7 @@
     <string name="measure_cm">cm</string>
     <string name="measure_liter">l</string>
     <string name="employees">Xodimlar</string>
+    <string name="date_from_text">Dan: %s</string>
+    <string name="date_to_text">Gacha: %s</string>
+    <string name="payment_type">To\'lov turi</string>
 </resources>
