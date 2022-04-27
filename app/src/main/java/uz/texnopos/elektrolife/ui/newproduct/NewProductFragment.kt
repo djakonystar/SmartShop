@@ -34,7 +34,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var navController: NavController
     private lateinit var categoriesAdapter: ArrayAdapter<String>
     private val viewModel: NewProductViewModel by viewModel()
-    private val warehouseViewModel: WarehouseViewModel by viewModel()
     private val currencyViewModel: CurrencyViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val settings: Settings by inject()
@@ -86,7 +85,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 tilProductName.isErrorEnabled = false
                 if (it.toString().isNotEmpty()) {
                     list.clear()
-                    warehouseViewModel.warehouseProducts(it.toString())
+                    viewModel.getWarehouseProducts(it.toString())
                 }
             }
 
@@ -439,7 +438,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             }
         }
 
-        warehouseViewModel.warehouseProducts.observe(viewLifecycleOwner) {
+        viewModel.warehouseProducts.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {

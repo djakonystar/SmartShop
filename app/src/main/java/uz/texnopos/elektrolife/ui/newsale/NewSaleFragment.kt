@@ -35,7 +35,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var navController: NavController
     private val viewModel: NewSaleViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
-    private val productNewSaleAdapter: NewSaleProductAdapter by inject()
+    private val adapter: NewSaleProductAdapter by inject()
     private val navArgs: NewSaleFragmentArgs by navArgs()
     private var productsList = mutableListOf<Product>()
     private var allProductsList = mutableListOf<Product>()
@@ -45,6 +45,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var productCode: String
     private var isLoading = false
     private var page = 1
+    private var lastPage = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,8 +53,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         binding = FragmentNewSaleBinding.bind(view)
         abBinding = ActionBarNewSaleBinding.bind(view)
         navController = findNavController()
-
-
 
         abBinding.apply {
             btnHome.onClick {
@@ -64,13 +63,13 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
                 searchValue.ifEmpty { page = 1 }
-                productNewSaleAdapter.models = listOf()
-                viewModel.getProducts(page, searchValue)
+                adapter.models = listOf()
+                viewModel.getProducts(page, selectedCategoryId, searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    viewModel.getProducts(page, searchValue)
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    viewModel.getProducts(page, selectedCategoryId, searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -93,7 +92,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
 
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            recyclerView.adapter = productNewSaleAdapter
+            recyclerView.adapter = adapter
             recyclerView.layoutManager = layoutManager
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -101,11 +100,11 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     if (dy > 0 && btnFab.isVisible) btnFab.hide()
                     else if (dy < 0 && !btnFab.isVisible) btnFab.show()
 
-                    if (!isLoading && productNewSaleAdapter.models.isNotEmpty()) {
-                        if (layoutManager.findLastCompletelyVisibleItemPosition() == productNewSaleAdapter.itemCount - 1) {
-                            page++
-                            viewModel.getProducts(page, selectedCategoryId, searchValue)
-                        }
+                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+                    ) {
+                        page++
+                        viewModel.getProducts(page, selectedCategoryId, searchValue)
                     }
                 }
             })
@@ -117,11 +116,11 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 productsList = mutableListOf()
                 categoryViewModel.getCategories()
                 page = 1
-                productNewSaleAdapter.models = listOf()
+                adapter.models = listOf()
                 viewModel.getProducts(page, searchValue)
             }
 
-            productNewSaleAdapter.onItemClickListener { product ->
+            adapter.onItemClickListener { product ->
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnItemAddedListener { quantity, salePrice ->
@@ -195,9 +194,10 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     binding.btnFab.show()
-                    allProductsList = it.data!! as MutableList<Product>
-                    if (productNewSaleAdapter.models.isEmpty()) {
-                        productNewSaleAdapter.models = allProductsList
+                    lastPage = it.data!!.lastPage
+                    allProductsList = it.data.data as MutableList<Product>
+                    if (adapter.models.isEmpty()) {
+                        adapter.models = allProductsList
                         productsList = allProductsList
                     } else {
                         allProductsList.forEach { product ->
@@ -205,7 +205,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                                 productsList.add(product)
                             }
                         }
-                        productNewSaleAdapter.models = productsList
+                        adapter.models = productsList
                     }
                     showLottieAnimation(productsList.isEmpty())
                 }
@@ -261,7 +261,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     }
 
                     page = 1
-                    productNewSaleAdapter.models = listOf()
+                    adapter.models = listOf()
                     viewModel.getProducts(page, selectedCategoryId, searchValue)
                 }
             }

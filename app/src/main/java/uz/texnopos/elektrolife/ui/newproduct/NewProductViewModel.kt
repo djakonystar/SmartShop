@@ -6,18 +6,53 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.core.extensions.createdProduct
 import uz.texnopos.elektrolife.data.model.newproduct.Product
+import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
+import java.util.concurrent.TimeUnit
 
 class NewProductViewModel(private val api: ApiInterface, private val settings: Settings) :
     ViewModel() {
     private var compositeDisposable = CompositeDisposable()
+    private var searchSubject = BehaviorSubject.create<String>()
 
     private var mutableProduct: MutableLiveData<Resource<createdProduct>> = MutableLiveData()
     val product: LiveData<Resource<createdProduct>> = mutableProduct
+
+    private var mutableWarehouseProducts: MutableLiveData<Resource<List<WarehouseItem>>> =
+        MutableLiveData()
+    val warehouseProducts: LiveData<Resource<List<WarehouseItem>>> = mutableWarehouseProducts
+
+    init {
+        searchSubject
+            .debounce(700, TimeUnit.MILLISECONDS)
+            .switchMap { value ->
+                api.warehouseProducts(token = "Bearer ${settings.token}", searchValue = value)
+                    .subscribeOn(Schedulers.io())
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { response ->
+                    if (response.successful) {
+                        mutableWarehouseProducts.value = Resource.success(response.payload.data)
+                    } else {
+                        mutableWarehouseProducts.value = Resource.error(response.message)
+                    }
+                },
+                { error ->
+                    mutableWarehouseProducts.value = Resource.error(error.message)
+                }
+            )
+    }
+
+    fun getWarehouseProducts(name: String) {
+        mutableWarehouseProducts.value = Resource.loading()
+        searchSubject.onNext(name)
+    }
 
     fun createProduct(product: Product) {
         mutableProduct.value = Resource.loading()
@@ -38,5 +73,10 @@ class NewProductViewModel(private val api: ApiInterface, private val settings: S
                     }
                 )
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

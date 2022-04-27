@@ -10,6 +10,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -36,6 +38,9 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private var searchValue = ""
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
+    private var isLoading = false
+    private var page = 1
+    private var lastPage = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,30 +54,49 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             btnHome.onClick {
                 navController.popBackStack()
             }
+            btnSort.isVisible = false
             btnSort.onClick {
                 optionsMenu(btnSort)
             }
         }
 
         binding.apply {
+            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
+            recyclerView.layoutManager = layoutManager
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+                    ) {
+                        page++
+                        viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
+                    }
+                }
+            })
 
             swipeRefresh.setOnRefreshListener {
-                setLoading(false)
                 swipeRefresh.isRefreshing = false
+                setLoading(false)
                 chipGroup.removeAllViews()
+                productsList = mutableListOf()
                 categoryViewModel.getCategories()
-                viewModel.warehouseProducts(searchValue)
+                page = 1
+                adapter.models = listOf()
+                viewModel.warehouseProducts(page, searchValue)
             }
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                viewModel.warehouseProducts(searchValue)
+                searchValue.ifEmpty { page = 1 }
+                adapter.models = listOf()
+                viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.warehouseProducts(searchValue)
+                    viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -80,7 +104,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         }
 
         categoryViewModel.getCategories()
-        viewModel.warehouseProducts(searchValue)
+        viewModel.warehouseProducts(page, searchValue)
         setUpObservers()
     }
 
@@ -90,15 +114,19 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    allProductsList = it.data!! as MutableList<WarehouseItem>
-                    productsList = if (selectedCategoryId == -1) {
-                        it.data as MutableList<WarehouseItem>
+                    lastPage = it.data!!.lastPage
+                    allProductsList = it.data.data as MutableList<WarehouseItem>
+                    if (adapter.models.isEmpty()) {
+                        adapter.models = allProductsList
+                        productsList = allProductsList
                     } else {
-                        it.data.filter { product ->
-                            product.category.id == selectedCategoryId
-                        } as MutableList<WarehouseItem>
+                        allProductsList.forEach { product ->
+                            if (!productsList.contains(product)) {
+                                productsList.add(product)
+                            }
+                        }
+                        adapter.models = productsList
                     }
-                    adapter.models = productsList
 //                        adapter.models = it.data.payload
 //                        adapter.models = when (sortType) {
 //                            "byFewRemain" -> productsList
@@ -169,7 +197,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     sortType = "byFewRemain"
                 }
             }
-            viewModel.warehouseProducts(searchValue)
+//            viewModel.warehouseProducts(searchValue)
             return@setOnMenuItemClickListener true
         }
         optionsMenu.show()
@@ -194,28 +222,32 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         -1
                     }
 
-                    if (selectedCategoryId != -1) {
-                        viewModel.warehouseProducts(searchValue)
-                    } else {
-                        adapter.models = allProductsList
-//                        adapter.models = when (sortType) {
-//                            "byFewRemain" -> allProductsList
-//                                .sortedBy { t ->
-//                                    t.remained / (t.category?.minCount?.toDouble() ?: 0.0)
-//                                }
-//                            "byProduct" -> allProductsList
-//                                .sortedBy { t -> t.name.lowercase() }
-//                            "byCategory" -> allProductsList
-//                                .sortedBy { t -> t.name.lowercase() }
-//                                .sortedBy { t -> t.category?.name?.lowercase() }
-//                            "byRemainAscend" -> allProductsList
-//                                .sortedBy { t -> t.remained }
-//                            "byRemainDescend" -> allProductsList
-//                                .sortedByDescending { t -> t.remained }
-//                            else -> allProductsList
-//                        }
-                        showLottieAnimation(allProductsList.isEmpty())
-                    }
+                    page = 1
+                    adapter.models = listOf()
+                    viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
+
+//                    if (selectedCategoryId != -1) {
+//                        viewModel.warehouseProducts(searchValue)
+//                    } else {
+//                        adapter.models = allProductsList
+////                        adapter.models = when (sortType) {
+////                            "byFewRemain" -> allProductsList
+////                                .sortedBy { t ->
+////                                    t.remained / (t.category?.minCount?.toDouble() ?: 0.0)
+////                                }
+////                            "byProduct" -> allProductsList
+////                                .sortedBy { t -> t.name.lowercase() }
+////                            "byCategory" -> allProductsList
+////                                .sortedBy { t -> t.name.lowercase() }
+////                                .sortedBy { t -> t.category?.name?.lowercase() }
+////                            "byRemainAscend" -> allProductsList
+////                                .sortedBy { t -> t.remained }
+////                            "byRemainDescend" -> allProductsList
+////                                .sortedByDescending { t -> t.remained }
+////                            else -> allProductsList
+////                        }
+//                        showLottieAnimation(allProductsList.isEmpty())
+//                    }
                 }
             }
         } catch (e: Exception) {

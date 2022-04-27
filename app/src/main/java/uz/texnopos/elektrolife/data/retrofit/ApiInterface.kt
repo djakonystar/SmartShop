@@ -133,14 +133,30 @@ interface ApiInterface {
 
     @GET("api/warehouse")
     fun warehouseProducts(
-        @Header("Authorization") token: String
-    ): Observable<GenericResponse<List<WarehouseItem>>>
+        @Header("Authorization") token: String,
+        @Query("search") searchValue: String
+    ): Observable<GenericResponse<PagingResponse<List<WarehouseItem>>>>
 
     @GET("api/warehouse")
     fun warehouseProducts(
         @Header("Authorization") token: String,
+        @Query("page") page: Int,
+    ): Observable<GenericResponse<PagingResponse<List<WarehouseItem>>>>
+
+    @GET("api/warehouse")
+    fun warehouseProducts(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<WarehouseItem>>>
+    ): Observable<GenericResponse<PagingResponse<List<WarehouseItem>>>>
+
+    @GET("api/warehouse")
+    fun warehouseProducts(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("category_id") categoryId: Int,
+        @Query("search") search: String
+    ): Observable<GenericResponse<PagingResponse<List<WarehouseItem>>>>
 
     @POST("api/login")
     fun signIn(

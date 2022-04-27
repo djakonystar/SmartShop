@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.core.extensions.newSaleProduct
+import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.concurrent.TimeUnit
@@ -21,8 +22,9 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     private val searchSubject = BehaviorSubject.create<Pair<Int, String>>()
     private var page = 0
 
-    private var mutableProducts: MutableLiveData<Resource<List<newSaleProduct>>> = MutableLiveData()
-    val products: LiveData<Resource<List<newSaleProduct>>> = mutableProducts
+    private var mutableProducts: MutableLiveData<Resource<PagingResponse<List<newSaleProduct>>>> =
+        MutableLiveData()
+    val products: LiveData<Resource<PagingResponse<List<newSaleProduct>>>> = mutableProducts
 
     private var mutableProduct: MutableLiveData<Resource<newSaleProduct>> = MutableLiveData()
     val product: LiveData<Resource<newSaleProduct>> = mutableProduct
@@ -50,7 +52,7 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
             .subscribe(
                 { response ->
                     if (response.successful) {
-                        mutableProducts.value = Resource.success(response.payload.data)
+                        mutableProducts.value = Resource.success(response.payload)
                     } else {
                         mutableProducts.value = Resource.error(response.message)
                     }
@@ -71,7 +73,7 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
                 .subscribe(
                     { response ->
                         if (response.successful) {
-                            mutableProducts.value = Resource.success(response.payload.data)
+                            mutableProducts.value = Resource.success(response.payload)
                         } else {
                             mutableProducts.value = Resource.error(response.message)
                         }
