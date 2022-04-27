@@ -41,21 +41,14 @@ interface ApiInterface {
     fun getClients(
         @Header("Authorization") token: String,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<Client>>>
+    ): Observable<GenericResponse<PagingResponse<List<Client>>>>
 
     @GET("api/clients")
     fun getClients(
         @Header("Authorization") token: String,
-        @Query("limit") limit: Int,
         @Query("page") page: Int,
         @Query("search") search: String
-    ): Observable<GenericResponse<List<Client>>>
-
-    @GET("api/clients")
-    fun getClientsByName(
-        @Header("Authorization") token: String,
-        @Query("search") search: String
-    ): Observable<GenericResponse<List<Client>>>
+    ): Observable<GenericResponse<PagingResponse<List<Client>>>>
 
     @POST("api/client/payment")
     fun payment(

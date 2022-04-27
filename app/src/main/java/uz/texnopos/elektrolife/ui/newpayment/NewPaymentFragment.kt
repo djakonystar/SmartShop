@@ -149,26 +149,22 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
             }
         }
 
-        viewModel.searchClient.observe(viewLifecycleOwner) {
+        viewModel.clients.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        it.data.payload.forEach { client1 ->
-                            list.add("${client1.name}, ${client1.phone}")
-                            if (!listClients.contains("${client1.name}, ${client1.phone}"))
-                                listClients["${client1.name}, ${client1.phone}"] = client1
-                            adapter = ArrayAdapter(
-                                requireContext(),
-                                R.layout.item_spinner,
-                                list.toMutableList()
-                            )
-                            binding.etSearchClient.setAdapter(adapter)
-                            binding.etSearchClient.showDropDown()
-                        }
-                    } else {
-                        showError(it.data.message)
+                    it.data!!.data.forEach { client1 ->
+                        list.add("${client1.name}, ${client1.phone}")
+                        if (!listClients.contains("${client1.name}, ${client1.phone}"))
+                            listClients["${client1.name}, ${client1.phone}"] = client1
+                        adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.item_spinner,
+                            list.toMutableList()
+                        )
+                        binding.etSearchClient.setAdapter(adapter)
+                        binding.etSearchClient.showDropDown()
                     }
                 }
                 ResourceState.ERROR -> {
