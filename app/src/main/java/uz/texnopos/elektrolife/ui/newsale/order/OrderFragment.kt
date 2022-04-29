@@ -27,7 +27,7 @@ import uz.texnopos.elektrolife.databinding.LayoutPrintingBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.dialog.SuccessOrderDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
-import uz.texnopos.elektrolife.ui.newsale.dialog.AddPaymentDialog
+import uz.texnopos.elektrolife.ui.newsale.dialog.OrderCheckoutDialog
 import uz.texnopos.elektrolife.ui.newsale.dialog.EditBasketProductDialog
 import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
 
@@ -35,7 +35,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private lateinit var binding: FragmentOrderBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
-    private lateinit var addPaymentDialog: AddPaymentDialog
+    private lateinit var orderCheckoutDialog: OrderCheckoutDialog
     private lateinit var editBasketProduct: EditBasketProductDialog
     private lateinit var printingView: View
     private val viewModelOrder: OrderViewModel by viewModel()
@@ -112,8 +112,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             btnOrder.onClick {
                 val finalPrice =
                     tvTotalPrice.text.filter { c -> c.isDigit() || c == '.' }.toString().toDouble()
-                addPaymentDialog = AddPaymentDialog(finalPrice)
-                addPaymentDialog.show(requireActivity().supportFragmentManager, "")
+                orderCheckoutDialog = OrderCheckoutDialog(finalPrice)
+                orderCheckoutDialog.show(requireActivity().supportFragmentManager, "")
                 val orders: MutableList<OrderItem> = mutableListOf()
                 Basket.products.forEachIndexed { index, product ->
                     orders.add(
@@ -121,7 +121,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         OrderItem(product.id, product.count, 1, product.salePrice)
                     )
                 }
-                addPaymentDialog.sendData { clientId, cash, card, debt, date, comment ->
+                orderCheckoutDialog.sendData { clientId, cash, card, debt, date, comment ->
                     viewModelOrder.setOrder(
                         Order(
                             id = clientId,
@@ -167,7 +167,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                             tvTotalPrice.text = ""
                             adapter.models = mutableListOf()
                         }
-                        addPaymentDialog.dismiss()
+                        orderCheckoutDialog.dismiss()
                         Basket.clear()
                         navController.popBackStack(R.id.mainFragment, false)
                     }
@@ -246,7 +246,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         tvTotalPrice.text = ""
                         adapter.models = mutableListOf()
                     }
-                    addPaymentDialog.dismiss()
+                    orderCheckoutDialog.dismiss()
                     Basket.clear()
                     navController.popBackStack(R.id.mainFragment, false)
                 }

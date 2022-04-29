@@ -69,12 +69,12 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             tilQuantity.suffixText = "/$remained"
             tilSumma.suffixText = settings.currency
 
+            etSumma.filterForDouble
             etSumma.setText(product.maxPrice.price.toSumFormat)
 
             if (product.warehouse?.unit?.id == 1) etQuantity.setBlockFilter("-.,")
             else etQuantity.filterForDouble
 
-            etSumma.filterForDouble
 
             etQuantity.addTextChangedListener {
                 val count = it.toString().toDouble

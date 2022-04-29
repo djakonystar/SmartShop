@@ -14,7 +14,6 @@ import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientAdapter
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
 import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentAdapter
-import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentViewModel
 import uz.texnopos.elektrolife.ui.client.detail.sale.ClientSalesViewModel
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionViewModel
@@ -35,6 +34,7 @@ import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
 import uz.texnopos.elektrolife.ui.newsale.order.OrderAdapter
 import uz.texnopos.elektrolife.ui.newsale.order.OrderViewModel
 import uz.texnopos.elektrolife.ui.newsale.order.ReceiptAdapter
+import uz.texnopos.elektrolife.ui.payment.PaymentViewModel
 import uz.texnopos.elektrolife.ui.sales.SalesAdapter
 import uz.texnopos.elektrolife.ui.sales.SalesViewModel
 import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
@@ -103,13 +103,13 @@ val viewModelModule = module {
     viewModel { CurrencyViewModel(get(), get()) }
     viewModel { FinanceViewModel(get(), get()) }
     viewModel { ReportsViewModel(get(), get()) }
-    viewModel { ClientPaymentViewModel(get(), get()) }
     viewModel { ClientSalesViewModel(get(), get()) }
     viewModel { TransactionViewModel(get(), get()) }
     viewModel { SalesDetailViewModel(get(), get()) }
     viewModel { NewSaleViewModel(get(), get()) }
     viewModel { SalaryViewModel(get(), get()) }
     viewModel { SalaryDetailViewModel(get(), get()) }
+    viewModel { PaymentViewModel(get(), get()) }
 }
 
 val adapterModule = module {
@@ -120,7 +120,7 @@ val adapterModule = module {
     single { NewSaleProductAdapter() }
     single { OrderAdapter() }
     single { FinanceDetailAdapter() }
-    single { ClientPaymentAdapter() }
+    single { ClientPaymentAdapter(get()) }
     single { ReceiptAdapter(get()) }
     single { OrderReceiptAdapter(get()) }
     single { SalaryAdapter(get()) }

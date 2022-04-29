@@ -1,29 +1,51 @@
 package uz.texnopos.elektrolife.ui.client.detail.payment
 
-import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.checkModule
+import uz.texnopos.elektrolife.core.extensions.changeDateFormat
+import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.payment.Amount
+import uz.texnopos.elektrolife.data.model.payment.Payment
 import uz.texnopos.elektrolife.databinding.FragmentClientPaymentBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.payment.PaymentViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ClientPaymentFragment(private val client: Client) :
     Fragment(R.layout.fragment_client_payment) {
     private lateinit var binding: FragmentClientPaymentBinding
-    private val viewModel: ClientPaymentViewModel by viewModel()
+    private val viewModel: PaymentViewModel by viewModel()
     private val adapter: ClientPaymentAdapter by inject()
     private val settings: Settings by inject()
-    private var lastSum = 0.0
+    private var paymentsList = mutableListOf<Payment>()
+    private lateinit var amount: Amount
+    private var isLoading = false
+    private var page = 1
+    private var lastPage = 0
+
+    // Working with date picker
+    private val calendarHelper = CalendarHelper()
+    private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
+    private var dateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
+    private var dateFrom = calendarHelper.firstDayOfCurrentMonth
+    private var dateToInLong = calendarHelper.currentDateMillis
+    private var dateTo = calendarHelper.currentDate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,16 +53,82 @@ class ClientPaymentFragment(private val client: Client) :
         binding = FragmentClientPaymentBinding.bind(view)
 
         binding.apply {
-            recyclerView.adapter = adapter
-
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
-//                viewModel.getClientPayments(clientId = client.id)
+                setLoading(false)
+                paymentsList = mutableListOf()
+                page = 1
+                adapter.models = listOf()
+                viewModel.getPayments(
+                    page = page,
+                    from = dateFrom.changeDateFormat,
+                    to = dateTo.changeDateFormat,
+                    clientId = client.id
+                )
+            }
+
+            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = layoutManager
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0 && fabDatePicker.isVisible) fabDatePicker.hide()
+                    else if (dy < 0 && !fabDatePicker.isVisible) fabDatePicker.show()
+
+                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+                    ) {
+                        page++
+                        viewModel.getPayments(
+                            page = page,
+                            from = dateFrom.changeDateFormat,
+                            to = dateTo.changeDateFormat,
+                            clientId = client.id
+                        )
+                    }
+                }
+            })
+
+            fabDatePicker.onClick {
+                val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                    .setSelection(
+                        androidx.core.util.Pair(dateFromInLong, dateToInLong)
+                    )
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setValidator(DateValidatorPointBackward.before(calendarHelper.currentDateMillis))
+                            .build()
+                    )
+                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
+                    .setTitleText(R.string.choose_range)
+                    .build()
+
+                dateRangePicker.addOnPositiveButtonClickListener { dates ->
+                    dateFromInLong = dates.first
+                    dateFrom = simpleDateFormat.format(dateFromInLong)
+                    dateToInLong = dates.second
+                    dateTo = simpleDateFormat.format(dateToInLong)
+
+                    page = 1
+                    viewModel.getPayments(
+                        page = page,
+                        from = dateFrom.changeDateFormat,
+                        to = dateTo.changeDateFormat,
+                        clientId = client.id
+                    )
+                }
+
+                dateRangePicker.addOnDismissListener {
+                    fabDatePicker.isEnabled = true
+                }
+
+                dateRangePicker.show(requireActivity().supportFragmentManager, dateRangePicker.tag)
+                fabDatePicker.isEnabled = false
             }
         }
 
-        animateTotalSum(lastSum, lastSum)
-//        viewModel.getClientPayments(clientId = client.id)
+        viewModel.getPayments(page, dateFrom.changeDateFormat, dateTo.changeDateFormat, client.id)
         setUpObservers()
     }
 
@@ -52,19 +140,25 @@ class ClientPaymentFragment(private val client: Client) :
     }
 
     private fun setUpObservers() {
-        viewModel.clientPayments.observe(viewLifecycleOwner) {
+        viewModel.payments.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        adapter.models = it.data.payload
-                        var newSum = it.data.payload.sumOf { p -> p.cash }
-                        newSum += it.data.payload.sumOf { p -> p.card }
-                        animateTotalSum(lastSum, newSum.toDouble())
-                        lastSum = newSum.toDouble()
+                    lastPage = it.data!!.lastPage
+                    if (it.data.currentPage == 1) amount = it.data.data.amount
+                    setAmount()
+                    val allPaymentsList = it.data.data.histories
+                    if (adapter.models.isEmpty()) {
+                        adapter.models = allPaymentsList
+                        paymentsList = allPaymentsList as MutableList<Payment>
                     } else {
-                        showError(it.data.message)
+                        it.data.data.histories.forEach { payment ->
+                            if (!paymentsList.contains(payment)) {
+                                paymentsList.add(payment)
+                            }
+                        }
+                        adapter.models = paymentsList
                     }
                 }
                 ResourceState.ERROR -> {
@@ -75,19 +169,23 @@ class ClientPaymentFragment(private val client: Client) :
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun animateTotalSum(start: Double, end: Double) {
-        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
-        animator.addUpdateListener {
-            val newValue = "%.2f".format((it.animatedValue as Float).toDouble())
-                .replace(',', '.').toDouble().checkModule.toSumFormat
-            binding.tvTotalPrice.text = context?.getString(
-                R.string.total_sum_text,
-                newValue,
+    private fun setAmount() {
+        binding.apply {
+            tvTotalPrice.text = getString(
+                R.string.total_price_text,
+                (amount.cash + amount.card).toSumFormat,
+                settings.currency
+            )
+            tvCashPrice.text = getString(
+                R.string.cash_price_text,
+                amount.cash.toSumFormat,
+                settings.currency
+            )
+            tvCardPrice.text = getString(
+                R.string.card_price_text,
+                amount.card.toSumFormat,
                 settings.currency
             )
         }
-        animator.duration = 300
-        animator.start()
     }
 }

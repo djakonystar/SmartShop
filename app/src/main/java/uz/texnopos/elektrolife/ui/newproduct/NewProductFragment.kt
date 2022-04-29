@@ -104,6 +104,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             }
 
             etCostPrice.filterForDouble
+            etWholesalePrice.filterForDouble
+            etMinPrice.filterForDouble
+            etMaxPrice.filterForDouble
+
             etCostPrice.addTextChangedListener {
                 tilCostPrice.isErrorEnabled = false
             }
@@ -122,13 +126,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             categoriesAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner, categoryName)
             actCategory.setAdapter(categoriesAdapter)
-            actCategory.setOnFocusChangeListener { _, b ->
-                if (b) {
-                    actCategory.showDropDown()
-                    tilCategory.isErrorEnabled = false
-                }
-            }
-
             actCategory.setOnItemClickListener { _, _, i, _ ->
                 tilCategory.isErrorEnabled = false
                 categoryId = mutableList[i].id
@@ -259,18 +256,19 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         setUpObservers()
     }
 
-    private fun rounding(price: Long): Long {
-        val costText = binding.etCostPrice.text.toString()
-        val cost = if (costText == "." || costText.isEmpty()) 0.0 else costText.toDouble()
+    private fun Double.rounding(): Double {
+        val price = this
+        val cost = binding.etCostPrice.text.toString().toDouble
         val sum = if (cost < 1) 100 else 500
         val divider = if (cost < 1) 100 else 1000
-        return ((price + sum) / divider) * divider
+        return ((price + sum) / divider).format(0).toDouble() * divider
     }
 
     private val checkCurrencies: Boolean
         get() {
-            for (e in currencyIds) if (e == -1)
-                return false
+            for (e in currencyIds)
+                if (e == -1)
+                    return false
             return true
         }
 
@@ -304,8 +302,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.usdToUzs)
 
                 etWholesalePrice.setText(wholesalePrice format 2)
-                etMinPrice.setText(minPrice format 2)
-                etMaxPrice.setText(maxPrice format 2)
+                etMinPrice.setText(minPrice.rounding() format 2)
+                etMaxPrice.setText(maxPrice.rounding() format 2)
 
                 if (price == 0.0) {
                     etWholesalePrice.text!!.clear()

@@ -180,4 +180,5 @@
     <string name="debt_price_text">Debt: %s %s</string>
     <string name="debt_paid_price_text">Paid: %s %s</string>
     <string name="debt_remained_price_text">Remained: %s %s</string>
+    <string name="amortization">Amortization</string>
 </resources>

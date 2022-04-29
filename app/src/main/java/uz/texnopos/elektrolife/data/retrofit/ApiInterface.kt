@@ -8,7 +8,7 @@ import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
-import uz.texnopos.elektrolife.data.model.clients.ClientPayment
+import uz.texnopos.elektrolife.data.model.clients.ClientResponse
 import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.model.employee.Employee
 import uz.texnopos.elektrolife.data.model.finance.Cashier
@@ -21,8 +21,9 @@ import uz.texnopos.elektrolife.data.model.newclient.ClientId
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newsale.Order
+import uz.texnopos.elektrolife.data.model.payment.AddPayment
+import uz.texnopos.elektrolife.data.model.payment.PaymentHistory
 import uz.texnopos.elektrolife.data.model.qrcode.ProductResponse
-import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.data.model.signin.SignIn
@@ -48,7 +49,7 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Query("page") page: Int,
         @Query("search") search: String
-    ): Observable<GenericResponse<PagingResponse<List<Client>>>>
+    ): Observable<GenericResponse<PagingResponse<ClientResponse>>>
 
     @POST("api/client/payment")
     fun payment(
@@ -259,14 +260,28 @@ interface ApiInterface {
         @Query("type") type: String
     ): Observable<GenericResponse<List<Finance>>>
 
-    /**
-     * Get payment history of client
-     */
-    @GET("api/client/payment/history")
-    fun getClientPayments(
+    @POST("api/payment/basket")
+    fun addPayment(
         @Header("Authorization") token: String,
-        @Query("client_id") clientId: Int
-    ): Observable<GenericResponse<List<ClientPayment>>>
+        @Body addPayment: AddPayment
+    ): Observable<GenericResponse<Any>>
+
+    @POST("api/payment/history")
+    fun getPayments(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("from") from: String,
+        @Query("to") to: String,
+        @Query("user_id") clientId: Int
+    ): Observable<GenericResponse<PagingResponse<PaymentHistory>>>
+
+    @POST("api/payment/history")
+    fun getPayments(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("from") from: String,
+        @Query("to") to: String
+    ): Observable<GenericResponse<PagingResponse<PaymentHistory>>>
 
     /**
      * Add-on new quantity to existing product (Transaction)

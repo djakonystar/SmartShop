@@ -216,4 +216,5 @@
     <string name="debt_price_text">Qarz: %s %s</string>
     <string name="debt_paid_price_text">To\'langani: %s %s</string>
     <string name="debt_remained_price_text">Qoldiq: %s %s</string>
+    <string name="amortization">Qarz to\'lash</string>
 </resources>
