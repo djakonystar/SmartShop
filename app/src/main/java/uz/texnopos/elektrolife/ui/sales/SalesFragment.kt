@@ -131,6 +131,11 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         setUpObservers()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        adapter.models = listOf()
+    }
+
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
