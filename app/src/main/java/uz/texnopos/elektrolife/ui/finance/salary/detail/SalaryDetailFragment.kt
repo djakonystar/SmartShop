@@ -30,7 +30,6 @@ import java.util.*
 class SalaryDetailFragment : Fragment(R.layout.fragment_salary_detail) {
     private lateinit var binding: FragmentSalaryDetailBinding
     private lateinit var navController: NavController
-    private lateinit var salary: Salary
     private val viewModel: SalaryDetailViewModel by viewModel()
     private val adapter: SalaryDetailAdapter by inject()
     private val args: SalaryDetailFragmentArgs by navArgs()
@@ -41,17 +40,18 @@ class SalaryDetailFragment : Fragment(R.layout.fragment_salary_detail) {
     private var salaryDateToInLong = calendarHelper.currentDateMillis
     private var salaryDateTo = calendarHelper.currentDate
     private var employeeId: Int = -1
+    private var employeeName = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSalaryDetailBinding.bind(view)
         navController = findNavController()
-        salary = Gson().fromJson(args.salary, Salary::class.java)
-        employeeId = salary.employee.id
+        employeeId = args.employeeId
+        employeeName = args.employeeName
 
         binding.apply {
-            tvTitle.text = salary.employee.name
+            tvTitle.text = employeeName
             btnHome.onClick {
                 navController.popBackStack()
             }
