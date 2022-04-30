@@ -6,5 +6,6 @@ data class WarehouseItem(
     val product: warehouseProduct,
     val category: Category,
     val count: Double,
+    val unit: Unit,
     val date: String
 )

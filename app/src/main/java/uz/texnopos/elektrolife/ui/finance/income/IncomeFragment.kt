@@ -8,19 +8,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.changeDateFormat
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
-import uz.texnopos.elektrolife.databinding.FragmentExpenseBinding
+import uz.texnopos.elektrolife.databinding.FragmentIncomeBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.settings.Settings.Companion.FINANCE_INCOME
 import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
@@ -28,21 +28,24 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class IncomeFragment : Fragment(R.layout.fragment_income) {
-    private lateinit var binding: FragmentExpenseBinding
+    private lateinit var binding: FragmentIncomeBinding
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val viewModel: FinanceViewModel by viewModel()
     private val adapter: FinanceDetailAdapter by inject()
-    private var dateFromInLong = System.currentTimeMillis()
-    private var dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
-    private var dateToInLong = System.currentTimeMillis()
-    private var dateTo = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateToInLong)
+    private val settings: Settings by inject()
+    private val calendarHelper = CalendarHelper()
+    private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
+    private var dateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
+    private var dateFrom = simpleDateFormat.format(dateFromInLong)
+    private var dateToInLong = calendarHelper.currentDateMillis
+    private var dateTo = simpleDateFormat.format(dateToInLong)
     private var lastSum = 0.0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentExpenseBinding.bind(view)
+        binding = FragmentIncomeBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
 
@@ -54,64 +57,59 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         binding.apply {
+            cardDate.onClick {
+                val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                    .setSelection(
+                        androidx.core.util.Pair(dateFromInLong, dateToInLong)
+                    )
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setValidator(DateValidatorPointBackward.before(calendarHelper.currentDateMillis))
+                            .build()
+                    )
+                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
+                    .setTitleText(R.string.choose_range)
+                    .build()
+
+                dateRangePicker.addOnPositiveButtonClickListener { dates ->
+                    dateFromInLong = dates.first
+                    dateFrom = simpleDateFormat.format(dateFromInLong)
+                    dateToInLong = dates.second
+                    dateTo = simpleDateFormat.format(dateToInLong)
+
+                    tvDateFrom.text = getString(R.string.date_from_text, dateFrom)
+                    tvDateTo.text = getString(R.string.date_to_text, dateTo)
+
+                    viewModel.getFinanceDetails(
+                        from = dateFrom.changeDateFormat,
+                        to = dateTo.changeDateFormat,
+                        type = FINANCE_INCOME
+                    )
+                }
+
+                dateRangePicker.addOnDismissListener {
+                    cardDate.isEnabled = true
+                }
+
+                dateRangePicker.show(requireActivity().supportFragmentManager, dateRangePicker.tag)
+                cardDate.isEnabled = false
+            }
+
+            tvDateFrom.text = getString(R.string.date_from_text, dateFrom)
+            tvDateTo.text = getString(R.string.date_to_text, dateTo)
+
             recyclerView.adapter = adapter
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0 && btnFab.isVisible) btnFab.hide()
+                    else if (dy < 0 && !btnFab.isVisible) btnFab.show()
+                }
+            })
 
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
-                viewModel.getFinanceDetails(
-                    from = dateFrom.changeDateFormat,
-                    to = dateTo.changeDateFormat,
-                    type = FINANCE_INCOME
-                )
-            }
-
-            etDateFrom.setText(dateFrom)
-            etDateTo.setText(dateTo)
-
-            etDateFrom.onClick {
-                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText(context?.getString(R.string.start_date))
-                    .setSelection(dateFromInLong)
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setEnd(System.currentTimeMillis())
-                            .setValidator(DateValidatorPointBackward.now())
-                            .build()
-                    )
-                    .build()
-
-                datePickerDialog.addOnPositiveButtonClickListener {
-                    dateFromInLong = it
-                    dateFrom = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateFromInLong)
-                    etDateFrom.setText(dateFrom)
-                }
-
-                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
-            }
-
-            etDateTo.onClick {
-                val datePickerDialog = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText(context?.getString(R.string.end_date))
-                    .setSelection(dateToInLong)
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setEnd(System.currentTimeMillis())
-                            .setValidator(DateValidatorPointBackward.now())
-                            .build()
-                    )
-                    .build()
-
-                datePickerDialog.addOnPositiveButtonClickListener {
-                    dateToInLong = it
-                    dateTo = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateToInLong)
-                    etDateTo.setText(dateTo)
-                }
-
-                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
-            }
-
-            btnCalculate.onClick {
                 viewModel.getFinanceDetails(
                     from = dateFrom.changeDateFormat,
                     to = dateTo.changeDateFormat,
@@ -147,14 +145,10 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        adapter.models = it.data.payload
-                        val newSum = it.data.payload.sumOf { f -> f.price }
+                        adapter.models = it.data!!
+                        val newSum = it.data.sumOf { f -> f.price }
                         startAnimationCounter(lastSum, newSum)
                         lastSum = newSum
-                    } else {
-                        showError(it.data.message)
-                    }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -168,11 +162,12 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun startAnimationCounter(start: Double, end: Double) {
         val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
         animator.addUpdateListener {
-            val newValue = "%.2f".format((it.animatedValue as Float).toDouble())
-                .replace(',', '.').toDouble().toSumFormat
+            val newValue = (it.animatedValue as Float).toDouble()
+                .format(2).toDouble().toSumFormat
             binding.tvTotalSum.text = context?.getString(
-                R.string.sum_text,
-                newValue
+                R.string.price_text,
+                newValue,
+                settings.currency
             )
         }
         animator.duration = 500

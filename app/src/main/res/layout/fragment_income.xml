@@ -7,148 +7,159 @@
     tools:context=".ui.finance.income.IncomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/top_sheet_bg"
-        android:elevation="@dimen/elevation_standard"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <include
-            android:id="@+id/actionBar"
-            layout="@layout/action_bar"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilDateFrom"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_middle"
-            android:layout_marginTop="@dimen/margin_middle"
-            android:hint="@string/start_date"
-            app:layout_constraintEnd_toStartOf="@id/tilDateTo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/actionBar">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDateFrom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_calendar"
-                android:drawableTint="@color/app_main_color"
-                android:focusable="false"
-                android:inputType="text"
-                android:maxLines="1"
-                tools:ignore="SpUsage" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilDateTo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_middle"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginTop="@dimen/margin_middle"
-            android:hint="@string/end_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tilDateFrom"
-            app:layout_constraintTop_toBottomOf="@id/actionBar">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDateTo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_calendar"
-                android:drawableTint="@color/app_main_color"
-                android:focusable="false"
-                android:inputType="text"
-                android:maxLines="1"
-                tools:ignore="SpUsage" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btnCalculate"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:paddingHorizontal="32dp"
-            android:text="@string/calculate"
-            android:textSize="@dimen/text_size_larger"
-            app:layout_constraintBottom_toTopOf="@id/tvTotalSum"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilDateFrom"
-            tools:ignore="SpUsage" />
-
-        <TextView
-            android:id="@+id/tvTotalSum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginBottom="@dimen/margin_standard"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/finance_item_title_size_mobile"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnCalculate"
-            tools:ignore="SpUsage" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topContainer">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/top_sheet_bg"
+            android:elevation="@dimen/elevation_standard"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            <include
+                android:id="@+id/actionBar"
+                layout="@layout/action_bar"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_middle"
+                android:layout_marginVertical="@dimen/margin_middle"
+                android:background="@color/white"
+                android:elevation="@dimen/elevation_standard"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="@dimen/radius_card_view"
+                app:layout_constraintTop_toBottomOf="@id/actionBar">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_date_icon"
+                        android:layout_width="@dimen/img_standard_height_mobile"
+                        android:layout_height="@dimen/img_standard_height_mobile"
+                        android:layout_marginStart="@dimen/margin_standard"
+                        android:padding="@dimen/padding_middle"
+                        android:src="@drawable/ic_calendar"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/app_main_color" />
+
+                    <TextView
+                        android:id="@+id/tv_date_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_middle"
+                        android:layout_marginVertical="@dimen/margin_standard"
+                        android:text="@string/choose_date_uz"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_date_icon" />
+
+                    <TextView
+                        android:id="@+id/tv_date_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:layout_marginTop="@dimen/margin_middle"
+                        android:text="@string/date_from_text"
+                        android:textColor="@color/app_main_color"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_date_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_standard"
+                        android:layout_marginBottom="@dimen/margin_middle"
+                        android:text="@string/date_to_text"
+                        android:textColor="@color/app_main_color"
+                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                        app:layout_constraintTop_toBottomOf="@id/tv_date_from"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvTotalSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_standard"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/finance_item_title_size_mobile"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_finance_detail" />
+                app:layout_constraintTop_toBottomOf="@id/card_date"
+                tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topContainer">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_standard"
-        android:contentDescription="@string/expense_en"
-        app:fabCustomSize="@dimen/fab_custom_size_mobile"
-        android:src="@drawable/ic_add_48"
-        app:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/item_finance_detail" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_standard"
+            android:contentDescription="@string/expense_en"
+            app:fabCustomSize="@dimen/fab_custom_size_mobile"
+            android:src="@drawable/ic_add_48"
+            app:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,22 +12,25 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newclient.Client
-import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
-import uz.texnopos.elektrolife.ui.client.ClientViewModel
+import uz.texnopos.elektrolife.databinding.DialogCheckoutOrderBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
+import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
-    private lateinit var binding: DialogAddPaymentBinding
+class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
+    private lateinit var binding: DialogCheckoutOrderBinding
     private lateinit var addClientDialog: AddClientDialog
-    private val clientViewModel: ClientViewModel by viewModel()
     private val newClientsViewModel: NewClientViewModel by viewModel()
+    private val newPaymentViewModel: NewPaymentViewModel by viewModel()
+    private val settings: Settings by inject()
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
     private var clientName = ""
@@ -42,13 +45,13 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         dialog!!.window?.setBackgroundDrawableResource(R.drawable.shape_dialog)
-        return inflater.inflate(R.layout.dialog_add_payment, container, false)
+        return inflater.inflate(R.layout.dialog_checkout_order, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = DialogAddPaymentBinding.bind(view)
+        binding = DialogCheckoutOrderBinding.bind(view)
 
         binding.apply {
             tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
@@ -56,7 +59,7 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
 
             etSearchClient.addTextChangedListener {
                 list.clear()
-                clientViewModel.searchClient(it.toString())
+                newPaymentViewModel.searchClient(it.toString())
             }
             etSearchClient.setOnItemClickListener { adapterView, _, i, _ ->
                 clientName = adapterView.getItemAtPosition(i).toString()
@@ -77,6 +80,9 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
                     )
                 }
             }
+            tilCash.suffixText = settings.currency
+            tilCard.suffixText = settings.currency
+
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
                 calculateDebt()
@@ -147,28 +153,24 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
     }
 
     private fun setUpObservers() {
-        clientViewModel.searchClient.observe(viewLifecycleOwner) {
+        newPaymentViewModel.clients.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        it.data.payload.forEach { client ->
-                            list.add("${client.name}, ${client.phone}")
-                            if (!listIds.contains("${client.name}, ${client.phone}"))
-                                listIds["${client.name}, ${client.phone}"] = client.id
-                            val arrayAdapter = ArrayAdapter(
-                                requireContext(),
-                                R.layout.item_spinner,
-                                list.toMutableList()
-                            )
-                            binding.apply {
-                                etSearchClient.setAdapter(arrayAdapter)
-                                etSearchClient.showDropDown()
-                            }
+                    it.data!!.data.clients.forEach { client ->
+                        list.add("${client.name}, ${client.phone}")
+                        if (!listIds.contains("${client.name}, ${client.phone}"))
+                            listIds["${client.name}, ${client.phone}"] = client.id
+                        val arrayAdapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.item_spinner,
+                            list.toMutableList()
+                        )
+                        binding.apply {
+                            etSearchClient.setAdapter(arrayAdapter)
+                            etSearchClient.showDropDown()
                         }
-                    } else {
-                        showError(it.data.message)
                     }
                 }
                 ResourceState.ERROR -> {
@@ -226,8 +228,12 @@ class AddPaymentDialog(private val totalPrice: Double) : DialogFragment() {
         binding.apply {
             val selectedClient = etSearchClient.text.toString()
             if (selectedClient.isEmpty()) clientId = -1
-            val cash = etCash.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
-            val card = etCard.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }.toDouble()
+            val cash =
+                etCash.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }
+                    .toDouble()
+            val card =
+                etCard.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }
+                    .toDouble()
             val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0.0
             var dateRequired = false
             val comment = etComment.text.toString()

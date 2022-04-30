@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.finance
 
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
@@ -16,6 +17,11 @@ class FinanceDetailAdapter : BaseAdapter<Finance, FinanceDetailAdapter.FinanceDe
         fun populateModel(model: Finance) {
             binding.apply {
                 tvDescription.text = model.description
+                when (model.paymentType) {
+                    "cash" -> ivPaymentType.setImageResource(R.drawable.ic_cash)
+                    "card" -> ivPaymentType.setImageResource(R.drawable.ic_card)
+                    else -> ivPaymentType.setImageResource(R.drawable.ic_total_money)
+                }
                 tvSum.text = itemView.context?.getString(R.string.sum_text, model.price.toSumFormat)
                 tvDate.text = model.date.changeDateFormat
                 tvPayee.text = model.payee

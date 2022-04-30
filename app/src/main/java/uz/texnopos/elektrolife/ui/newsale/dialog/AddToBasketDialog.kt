@@ -3,7 +3,6 @@ package uz.texnopos.elektrolife.ui.newsale.dialog
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -44,7 +43,13 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
         binding.apply {
             val r = product.warehouse?.count ?: 0.0
-            val remained = if (product.warehouse?.unit?.id == 1) r.toInt() else r
+            val unitId = product.warehouse?.unit?.id ?: -1
+            val remained = getString(
+                R.string.price_text,
+                if (unitId == 1) r.toLong() else r,
+                Constants.getUnitName(requireContext(), unitId)
+            )
+
             var isVisible = false
             visibilityLiveData.postValue(isVisible)
 
@@ -70,19 +75,17 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             tilQuantity.suffixText = "/$remained"
             tilSumma.suffixText = settings.currency
 
+            etSumma.filterForDouble
             etSumma.setText(product.maxPrice.price.toSumFormat)
 
-            Log.d("unitId", "${product.warehouse?.unit?.id}")
-            if (product.warehouse?.unit?.id == 1) etQuantity.setBlockFilter("-.,")
-            else etQuantity.filterForDouble
+            if (product.warehouse?.unit?.id != 1) etQuantity.filterForDouble
+            else etQuantity.setBlockFilter("-.,")
 
-            etSumma.filterForDouble
 
             etQuantity.addTextChangedListener {
                 val count = it.toString().toDouble
-                val c = if (product.warehouse?.unit?.id == 1) count.toInt() else count
                 tilQuantity.isErrorEnabled = false
-                if (count > remained.toDouble() || count <= 0.0) {
+                if (count > remained.substringBefore(' ').toDouble() || count <= 0.0) {
                     tilQuantity.error = context?.getString(R.string.not_enough_error)
                 }
             }

@@ -1,7 +1,5 @@
 package uz.texnopos.elektrolife.ui.sales
 
-import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +18,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.core.extensions.changeDateFormat
+import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.databinding.FragmentSalesBinding
@@ -31,21 +32,21 @@ import java.util.*
 class SalesFragment : Fragment(R.layout.fragment_sales) {
     private lateinit var binding: FragmentSalesBinding
     private lateinit var navController: NavController
-    private val adapter: SalesAdapter by inject()
+
     private val viewModel: SalesViewModel by viewModel()
+    private val adapter: SalesAdapter by inject()
     private val settings: Settings by inject()
-    private var typeOfPayment: Int = -1
+
     private val typesOfPayment = mutableSetOf<Int>()
     private var allSales = listOf<Basket>()
+    private lateinit var baskets: BasketResponse
+
     private val calendarHelper = CalendarHelper()
     private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
     private var dateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
     private var dateFrom = calendarHelper.firstDayOfCurrentMonth
     private var dateToInLong = calendarHelper.currentDateMillis
     private var dateTo = calendarHelper.currentDate
-    private var lastTotalPrice = 0.0
-    private var lastDebtPrice = 0.0
-    private lateinit var baskets: BasketResponse
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,7 +63,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
 
         binding.apply {
             recyclerView.adapter = adapter
-
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -87,15 +87,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     filterSales()
                 }
             }
-
-//            chipGroup.setOnCheckedChangeListener { group, checkedId ->
-//                typeOfPayment = checkedId % 3
-//                Log.d("selectedIds", "CheckedChipIds: ${chipGroup.checkedChipIds.joinToString()}")
-//                typesOfPayment.clear()
-//                filterSales(group.checkedChipIds.map { it % 3 }.sorted())
-//                Log.d("selectedIds", "CheckedChipId: $checkedId")
-//                Log.d("selectedIds", "TypeOfPayment: $typeOfPayment")
-//            }
 
             listOf(1, 2, 0).forEach {
                 addNewChip(it)
@@ -140,6 +131,11 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         setUpObservers()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        adapter.models = listOf()
+    }
+
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
@@ -166,26 +162,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 }
             }
         }
-    }
-
-    /**
-     * Filtering sales by [id] only for single selection type
-     */
-    private fun filterSales(id: Int) {
-        adapter.models = when (id) {
-            1 -> allSales.filter { s -> s.cash > 0 }
-            2 -> allSales.filter { s -> s.card > 0 }
-            0 -> allSales.filter { s -> s.debt.debt > 0 }
-            else -> allSales
-        }
-        val total = adapter.models.sumOf { sale -> sale.cash } +
-                adapter.models.sumOf { sale -> sale.card } +
-                adapter.models.sumOf { sale -> sale.debt.debt }
-        val debts = adapter.models.sumOf { sale -> sale.debt.debt }
-        animateTotalPrice(lastTotalPrice, total)
-        animateDebtPrice(lastDebtPrice, debts)
-        lastTotalPrice = total
-        lastDebtPrice = debts
     }
 
     /**
@@ -218,47 +194,38 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             else -> ""
         }
         viewModel.filterBaskets(typesOfPayment, dateFrom.changeDateFormat, dateTo.changeDateFormat)
-        val total = adapter.models.sumOf { sale -> sale.cash } +
-                adapter.models.sumOf { sale -> sale.card } +
-                adapter.models.sumOf { sale -> sale.debt.debt }
-        val debts = adapter.models.sumOf { sale -> sale.debt.debt }
-//        animateTotalPrice(lastTotalPrice, total)
-//        animateDebtPrice(lastDebtPrice, debts)
-//        setAmount()
-        lastTotalPrice = total
-        lastDebtPrice = debts
     }
 
     private fun setAmount() {
         val amount = baskets.amount
         binding.apply {
             tvTotalPrice.text = getString(
-                R.string.price_text,
+                R.string.total_price_text,
                 amount.sum.toSumFormat,
                 settings.currency
             )
             tvCashPrice.text = getString(
-                R.string.price_text,
+                R.string.cash_price_text,
                 amount.cash.toSumFormat,
                 settings.currency
             )
             tvCardPrice.text = getString(
-                R.string.price_text,
+                R.string.card_price_text,
                 amount.card.toSumFormat,
                 settings.currency
             )
             tvDebtPrice.text = getString(
-                R.string.price_text,
+                R.string.debt_price_text,
                 amount.debt.toSumFormat,
                 settings.currency
             )
             tvDebtPaidPrice.text = getString(
-                R.string.price_text,
+                R.string.debt_paid_price_text,
                 amount.paidDebt.toSumFormat,
                 settings.currency
             )
             tvDebtRemainedPrice.text = getString(
-                R.string.price_text,
+                R.string.debt_remained_price_text,
                 amount.remaining.toSumFormat,
                 settings.currency
             )
@@ -292,35 +259,5 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         } catch (e: Exception) {
             showError(e.localizedMessage)
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun animateTotalPrice(start: Double, end: Double) {
-        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
-        animator.addUpdateListener {
-            val newValue = (it.animatedValue as Float).toDouble()
-            binding.tvTotalPrice.text = context?.getString(
-                R.string.total_sum_text,
-                newValue.checkModule.toSumFormat,
-                settings.currency
-            )
-        }
-        animator.duration = 500
-        animator.start()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun animateDebtPrice(start: Double, end: Double) {
-        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
-        animator.addUpdateListener {
-            val newValue = (it.animatedValue as Float).toDouble()
-            binding.tvDebtPrice.text = context?.getString(
-                R.string.total_debt_text,
-                newValue.checkModule.toSumFormat,
-                settings.currency
-            )
-        }
-        animator.duration = 500
-        animator.start()
     }
 }

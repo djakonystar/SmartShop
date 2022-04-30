@@ -4,14 +4,17 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -20,20 +23,18 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.model.sales.Order
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
-import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentSalesDetailBinding
 import uz.texnopos.elektrolife.databinding.LayoutPrintingBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.payment.AddPaymentDialog
 
 class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
     private lateinit var binding: FragmentSalesDetailBinding
-    private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
     private lateinit var printingView: View
     private val viewModel: SalesDetailViewModel by viewModel()
     private val settings: Settings by inject()
     private val orderReceiptAdapter: OrderReceiptAdapter by inject()
-
     private val adapter: SalesDetailAdapter by inject()
     private val safeArgs: SalesDetailFragmentArgs by navArgs()
     private var basketId: Int = -1
@@ -45,51 +46,53 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSalesDetailBinding.bind(view)
-        abBinding = ActionBarSortBinding.bind(view)
         navController = findNavController()
-
         basket = Gson().fromJson(safeArgs.basket, Basket::class.java)
-        basketId = basket.id
 
-        abBinding.apply {
-            tvTitle.text = context?.getString(R.string.sales)
-            btnHome.onClick {
-                navController.popBackStack()
-            }
-            btnSort.setImageResource(R.drawable.ic_print)
-            btnSort.onClick {
-                printReceipt(printingView)
-            }
-        }
+        basketId = basket.id
 
         binding.apply {
             printingView = binding.root.inflate(R.layout.layout_printing)
 
-            recyclerView.adapter = adapter
-            val totalPrice = basket.cash + basket.card + basket.debt.debt
-
-            animateTotalPrice(0.0, totalPrice, tvTotalPrice, settings)
-            animateDebtPrice(0.0, basket.debt.debt, tvDebtPrice, settings)
-            tvCashPrice.text = getString(
-                R.string.price_text,
-                basket.cash.checkModule.toSumFormat,
-                settings.currency
-            )
-            tvCardPrice.text = getString(
-                R.string.price_text,
-                basket.card.checkModule.toSumFormat,
-                settings.currency
-            )
-
-            tvCashPrice.isSelected = true
-            tvCardPrice.isSelected = true
-            tvDebtPrice.isSelected = true
-            tvTotalPrice.isSelected = true
+            btnHome.onClick {
+                navController.popBackStack()
+            }
 
             etSearch.addTextChangedListener {
                 adapter.models = orders.filter { product ->
                     product.productName.contains(it.toString(), true)
                 }
+            }
+
+            swipeRefresh.setOnRefreshListener {
+                swipeRefresh.isRefreshing = false
+                setLoading(false)
+                etSearch.text!!.clear()
+                viewModel.getOrders(basketId)
+            }
+
+            recyclerView.adapter = adapter
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0 && expandableFab.isVisible) expandableFab.hide()
+                    else if (dy < 0 && !expandableFab.isVisible) expandableFab.show()
+                }
+            })
+
+            fabPrintReceipt.onClick {
+                printReceipt(printingView)
+            }
+
+            fabRefundDebt.onClick {
+                val addPaymentDialog = AddPaymentDialog(orderResponse)
+                addPaymentDialog.setOnDismissListener {
+                    viewModel.getOrders(basket.id)
+                }
+                addPaymentDialog.show(
+                    requireActivity().supportFragmentManager,
+                    addPaymentDialog.tag
+                )
             }
         }
 
@@ -115,17 +118,57 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    adapter.models = it.data!!.orders
-                    orders = it.data.orders
-                    orderResponse = it.data
-                    orderReceiptAdapter.models = it.data.orders
-                    prepareReceipt(printingView)
+                    it.data?.let { order ->
+                        adapter.models = order.orders
+                        binding.etSearch.text?.clear()
+                        orders = order.orders
+                        orderResponse = order
+                        setAmount()
+                        orderReceiptAdapter.models = order.orders
+                        prepareReceipt(printingView)
+                    }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
                     showError(it.message)
                 }
             }
+        }
+    }
+
+    private fun setAmount() {
+        val amount = orderResponse.amount
+        binding.apply {
+            tvTotalPrice.text = getString(
+                R.string.total_price_text,
+                amount.sum.toSumFormat,
+                settings.currency
+            )
+            tvCashPrice.text = getString(
+                R.string.cash_price_text,
+                amount.cash.toSumFormat,
+                settings.currency
+            )
+            tvCardPrice.text = getString(
+                R.string.card_price_text,
+                amount.card.toSumFormat,
+                settings.currency
+            )
+            tvDebtPrice.text = getString(
+                R.string.debt_price_text,
+                amount.debt.toSumFormat,
+                settings.currency
+            )
+            tvDebtPaidPrice.text = getString(
+                R.string.debt_paid_price_text,
+                amount.paidDebt.toSumFormat,
+                settings.currency
+            )
+            tvDebtRemainedPrice.text = getString(
+                R.string.debt_remained_price_text,
+                amount.remaining.toSumFormat,
+                settings.currency
+            )
         }
     }
 
@@ -142,26 +185,60 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
             recyclerView.adapter = orderReceiptAdapter
             tvTotal.text = getString(
                 R.string.price_text,
-                orders.sumOf { p -> p.count * p.price }.toSumFormat,
+                orderResponse.amount.sum.toSumFormat,
                 settings.currency
             )
-
+            if (orderResponse.amount.cash <= 0) {
+                tvCashTitle.isVisible = false
+                tvDotsCash.isVisible = false
+                tvCash.isVisible = false
+            }
             tvCash.text = getString(
                 R.string.price_text,
                 orderResponse.amount.cash.toSumFormat,
                 settings.currency
             )
+            if (orderResponse.amount.card <= 0) {
+                tvCardTitle.isVisible = false
+                tvDotsCard.isVisible = false
+                tvCard.isVisible = false
+            }
             tvCard.text = getString(
                 R.string.price_text,
                 orderResponse.amount.card.toSumFormat,
                 settings.currency
             )
+            if (orderResponse.amount.debt <= 0) {
+                tvDebtTitle.isVisible = false
+                tvDotsDebt.isVisible = false
+                tvDebt.isVisible = false
+            }
             tvDebtTitle.text = "Долг (до ${basket.term?.changeDateFormat})"
             tvDebt.text = getString(
                 R.string.price_text,
                 orderResponse.amount.debt.toSumFormat,
                 settings.currency
             )
+            if (orderResponse.amount.paidDebt != 0.0) {
+                tvDebtPaidTitle.isVisible = true
+                tvDotsDebtPaid.isVisible = true
+                tvDebtPaid.isVisible = true
+                tvDebtPaid.text = getString(
+                    R.string.price_text,
+                    orderResponse.amount.paidDebt.toSumFormat,
+                    settings.currency
+                )
+            }
+            if (orderResponse.amount.remaining != 0.0) {
+                tvDebtRemainedTitle.isVisible = true
+                tvDotsDebtRemained.isVisible = true
+                tvDebtRemained.isVisible = true
+                tvDebtRemained.text = getString(
+                    R.string.price_text,
+                    orderResponse.amount.remaining.toSumFormat,
+                    settings.currency
+                )
+            }
             GlideToVectorYou.justLoadImage(requireActivity(), Uri.parse(basket.qrLink), ivQrCode)
         }
     }
@@ -170,11 +247,12 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
         val createdTime = basket.createdAt.replace('.', '_')
             .replace(' ', '_')
             .replace(':', '_')
-        pdfGenerator(view, "${basket.id}_$createdTime",
+        val fileName = "${createdTime}_${basket.id}"
+        pdfGenerator(view, fileName,
             { response ->
                 response?.let {
 //                    showMessage(it.path)
-                    doPrint(it.path)
+                    doPrint(it.path, fileName)
                 }
             },
             { failureResponse ->

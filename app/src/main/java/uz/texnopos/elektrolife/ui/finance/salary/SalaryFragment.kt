@@ -49,7 +49,6 @@ class SalaryFragment : Fragment(R.layout.fragment_salary) {
             }
 
             recyclerView.adapter = adapter
-
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

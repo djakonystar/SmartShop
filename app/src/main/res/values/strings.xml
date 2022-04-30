@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">SmartShop Test</string>
-<!--    <string name="app_name" translatable="false">SmartShop</string>-->
+    <!--    <string name="app_name" translatable="false">SmartShop</string>-->
     <string name="warehouse">Omborxona</string>
     <string name="clients">Mijozlar</string>
     <string name="new_client">Yangi mijoz</string>
@@ -47,7 +47,7 @@
     <string name="by_few_remain">Kam qolganlar bo\'yicha</string>
     <string name="status_indicator" translatable="false">Status Indicator</string>
     <string name="payment_cash">Naqd</string>
-    <string name="payment_card">Karta</string>
+    <string name="payment_card">Bank kartasi</string>
     <string name="choose_category">Kategoriyani tanlang</string>
     <string name="product_name">Mahsulot nomi</string>
     <string name="brand_name">Ishlab chiqaruvchi</string>
@@ -207,4 +207,14 @@
     <string name="measure_cm">cm</string>
     <string name="measure_liter">l</string>
     <string name="employees">Xodimlar</string>
+    <string name="date_from_text">Dan: %s</string>
+    <string name="date_to_text">Gacha: %s</string>
+    <string name="payment_type">To\'lov turi</string>
+    <string name="total_price_text">Umumiy: %s %s</string>
+    <string name="cash_price_text">Naqd: %s %s</string>
+    <string name="card_price_text">Karta: %s %s</string>
+    <string name="debt_price_text">Qarz: %s %s</string>
+    <string name="debt_paid_price_text">To\'langani: %s %s</string>
+    <string name="debt_remained_price_text">Qoldiq: %s %s</string>
+    <string name="amortization">Qarz to\'lash</string>
 </resources>

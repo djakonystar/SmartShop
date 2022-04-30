@@ -1,25 +1,19 @@
 package uz.texnopos.elektrolife.ui.newsale
 
-import android.Manifest
 import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
@@ -35,14 +29,13 @@ import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddToBasketDialog
 
-
 class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var binding: FragmentNewSaleBinding
     private lateinit var abBinding: ActionBarNewSaleBinding
     private lateinit var navController: NavController
     private val viewModel: NewSaleViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
-    private val productNewSaleAdapter: NewSaleProductAdapter by inject()
+    private val adapter: NewSaleProductAdapter by inject()
     private val navArgs: NewSaleFragmentArgs by navArgs()
     private var productsList = mutableListOf<Product>()
     private var allProductsList = mutableListOf<Product>()
@@ -50,6 +43,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
     private lateinit var productCode: String
+    private var isLoading = false
+    private var page = 1
+    private var lastPage = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,10 +53,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         binding = FragmentNewSaleBinding.bind(view)
         abBinding = ActionBarNewSaleBinding.bind(view)
         navController = findNavController()
-
-        categoryViewModel.getCategories()
-        viewModel.getProducts()
-        setUpObservers()
 
         abBinding.apply {
             btnHome.onClick {
@@ -70,19 +62,21 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                viewModel.getProducts(searchValue)
+                searchValue.ifEmpty { page = 1 }
+                adapter.models = listOf()
+                viewModel.getProducts(page, selectedCategoryId, searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.getProducts(searchValue)
+                    viewModel.getProducts(page, selectedCategoryId, searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
 
             btnScanner.onClick {
-                checkForPermissions()
+                navController.navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
             }
         }
 
@@ -97,17 +91,36 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 showError("It is not product code")
             }
 
-            recyclerView.adapter = productNewSaleAdapter
+            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = layoutManager
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0 && btnFab.isVisible) btnFab.hide()
+                    else if (dy < 0 && !btnFab.isVisible) btnFab.show()
+
+                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+                    ) {
+                        page++
+                        viewModel.getProducts(page, selectedCategoryId, searchValue)
+                    }
+                }
+            })
 
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
                 chipGroup.removeAllViews()
+                productsList = mutableListOf()
                 categoryViewModel.getCategories()
-                viewModel.getProducts(searchValue)
+                page = 1
+                adapter.models = listOf()
+                viewModel.getProducts(page, searchValue)
             }
 
-            productNewSaleAdapter.onItemClickListener { product ->
+            adapter.onItemClickListener { product ->
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnItemAddedListener { quantity, salePrice ->
@@ -137,6 +150,10 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
         }
+
+        categoryViewModel.getCategories()
+        viewModel.getProducts(page, searchValue)
+        setUpObservers()
     }
 
     private fun setLoading(loading: Boolean) {
@@ -176,15 +193,20 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    allProductsList = it.data!! as MutableList<Product>
-                    productsList = if (selectedCategoryId == -1) {
-                        it.data as MutableList<Product>
+                    binding.btnFab.show()
+                    lastPage = it.data!!.lastPage
+                    allProductsList = it.data.data as MutableList<Product>
+                    if (adapter.models.isEmpty()) {
+                        adapter.models = allProductsList
+                        productsList = allProductsList
                     } else {
-                        it.data.filter { product ->
-                            product.category.id == selectedCategoryId
-                        } as MutableList<Product>
+                        allProductsList.forEach { product ->
+                            if (!productsList.contains(product)) {
+                                productsList.add(product)
+                            }
+                        }
+                        adapter.models = productsList
                     }
-                    productNewSaleAdapter.models = productsList
                     showLottieAnimation(productsList.isEmpty())
                 }
                 ResourceState.ERROR -> {
@@ -238,12 +260,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                         -1
                     }
 
-                    if (selectedCategoryId != -1) {
-                        viewModel.getProducts(searchValue)
-                    } else {
-                        productNewSaleAdapter.models = allProductsList
-                        showLottieAnimation(allProductsList.isEmpty())
-                    }
+                    page = 1
+                    adapter.models = listOf()
+                    viewModel.getProducts(page, selectedCategoryId, searchValue)
                 }
             }
         } catch (e: Exception) {
@@ -252,59 +271,12 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     }
 
     private fun hideSoftKeyboard() {
-        val imm = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         var v = requireActivity().currentFocus
         if (v == null) {
             v = View(activity)
         }
         imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
-
-    private fun checkForPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestMultiplePermissions.launch(
-                arrayOf(
-                    Manifest.permission.CAMERA
-                )
-            )
-        } else {
-            findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
-        }
-    }
-
-    private val requestMultiplePermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            var isGranted = true
-            permissions.entries.forEach {
-                if (!it.value) isGranted =
-                    false
-            }
-            if (!isGranted) {
-                showDialog()
-            } else {
-                findNavController().navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
-            }
-        }
-
-    private fun showDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.apply {
-            setMessage("Permission required")
-            setTitle("Title perm")
-            setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton("Go") { _, _ ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri: Uri = Uri.fromParts("package", activity?.packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }
-        }.create().show()
-    }
-
 }

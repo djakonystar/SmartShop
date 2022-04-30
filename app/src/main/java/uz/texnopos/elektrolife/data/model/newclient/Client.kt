@@ -7,7 +7,7 @@ data class Client(
     val name: String,
     val phone: String,
     @SerializedName("tin")
-    val inn: String?,
+    val inn: Int?,
     val about: String,
     @SerializedName("type")
     val clientType: String

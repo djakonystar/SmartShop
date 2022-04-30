@@ -9,5 +9,7 @@ data class Finance(
     val category: Category,
     @SerializedName("whom")
     val payee: String,
-    val price: Double
+    val price: Double,
+    @SerializedName("paymet_type")
+    val paymentType: String
 )

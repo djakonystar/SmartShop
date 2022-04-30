@@ -103,9 +103,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     setLoading(false)
                     it.data!!.forEach { currency ->
                         when (currency.code) {
-                            "UZS" -> currency.rate.forEach { rate ->
+                            "USD" -> currency.rate.forEach { rate ->
                                 when (rate.code) {
-                                    "USD" -> settings.usdToUzs = rate.rate
+                                    "UZS" -> settings.usdToUzs = rate.rate
                                 }
                             }
                         }

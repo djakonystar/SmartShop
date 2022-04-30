@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.core.extensions
 
 import android.content.Context
-import org.koin.experimental.property.inject
 import uz.texnopos.elektrolife.R
 
 object Constants {
@@ -46,5 +45,18 @@ object Constants {
              12 -> context.getString(R.string.month_twelfth)
              else -> "Error"
         }
+    }
+
+    fun getFinanceCategories(context: Context): List<String> {
+        return listOf(
+            context.getString(R.string.expense_any),
+            context.getString(R.string.expense_administrative),
+            context.getString(R.string.expense_rent),
+            context.getString(R.string.expense_salary),
+            context.getString(R.string.expense_investments),
+            context.getString(R.string.expense_office),
+            context.getString(R.string.expense_taxes),
+            context.getString(R.string.expense_household),
+        )
     }
 }

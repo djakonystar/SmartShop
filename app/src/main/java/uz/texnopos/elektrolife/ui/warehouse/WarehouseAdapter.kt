@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
+import uz.texnopos.elektrolife.core.extensions.Constants
 import uz.texnopos.elektrolife.core.extensions.checkModule
 import uz.texnopos.elektrolife.core.extensions.inflate
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
@@ -22,12 +23,19 @@ class WarehouseAdapter : BaseAdapter<WarehouseItem, WarehouseAdapter.WarehouseVi
                 tvName.isSelected = true
                 tvFirm.text = model.product.brand
                 tvCategory.text = model.category.name
-                // TODO: set unit name
-                tvCount.text = itemView.context?.getString(
-                    R.string.price_text,
-                    model.count.checkModule.toSumFormat,
-                    "pcs"
-                )
+                if (model.unit.id == 1) {
+                    tvCount.text = itemView.context?.getString(
+                        R.string.price_text,
+                        model.count.toLong().toSumFormat,
+                        Constants.getUnitName(itemView.context, model.unit.id)
+                    )
+                } else {
+                    tvCount.text = itemView.context?.getString(
+                        R.string.price_text,
+                        model.count.toSumFormat,
+                        Constants.getUnitName(itemView.context, model.unit.id)
+                    )
+                }
             }
         }
     }

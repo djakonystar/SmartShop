@@ -103,7 +103,7 @@
                         android:id="@+id/et_product_quantity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLength="15"
                         android:singleLine="true"
                         android:textAlignment="textEnd"

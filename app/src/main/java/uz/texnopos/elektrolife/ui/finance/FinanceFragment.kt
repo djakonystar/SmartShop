@@ -120,6 +120,9 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
             cardSales.onClick {
                 navController.navigate(R.id.action_financeFragment_to_salesFragment)
             }
+            cardPayments.onClick {
+                navController.navigate(R.id.action_financeFragment_to_paymentFragment)
+            }
             cardIncomes.onClick {
                 navController.navigate(R.id.action_financeFragment_to_incomeFragment)
             }

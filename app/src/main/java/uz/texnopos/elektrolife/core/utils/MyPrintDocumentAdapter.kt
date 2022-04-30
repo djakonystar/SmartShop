@@ -11,7 +11,11 @@ import android.print.PrintDocumentInfo
 import java.io.*
 import java.util.logging.Logger
 
-class MyPrintDocumentAdapter(private val context: Context, private val pathName: String) :
+class MyPrintDocumentAdapter(
+    private val context: Context,
+    private val pathName: String,
+    private val fileName: String
+) :
     PrintDocumentAdapter() {
 
     companion object {
@@ -30,7 +34,7 @@ class MyPrintDocumentAdapter(private val context: Context, private val pathName:
             return
         }
 
-        val builder = PrintDocumentInfo.Builder("my_file.pdf")
+        val builder = PrintDocumentInfo.Builder(fileName)
             .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
             .setPageCount(PrintDocumentInfo.PAGE_COUNT_UNKNOWN)
             .build()
