@@ -154,7 +154,7 @@ class NewPaymentFragment : Fragment(R.layout.fragment_payment_new) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    it.data!!.data.forEach { client1 ->
+                    it.data!!.data.clients.forEach { client1 ->
                         list.add("${client1.name}, ${client1.phone}")
                         if (!listClients.contains("${client1.name}, ${client1.phone}"))
                             listClients["${client1.name}, ${client1.phone}"] = client1

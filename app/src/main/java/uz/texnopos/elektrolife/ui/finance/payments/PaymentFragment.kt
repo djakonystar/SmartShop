@@ -1,9 +1,11 @@
-package uz.texnopos.elektrolife.ui.client.detail.payment
+package uz.texnopos.elektrolife.ui.finance.payments
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
@@ -18,21 +20,22 @@ import uz.texnopos.elektrolife.core.extensions.changeDateFormat
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
-import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.payment.Amount
 import uz.texnopos.elektrolife.data.model.payment.Payment
-import uz.texnopos.elektrolife.databinding.FragmentClientPaymentBinding
+import uz.texnopos.elektrolife.databinding.FragmentPaymentBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentAdapter
 import uz.texnopos.elektrolife.ui.payment.PaymentViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ClientPaymentFragment(private val client: Client) :
-    Fragment(R.layout.fragment_client_payment) {
-    private lateinit var binding: FragmentClientPaymentBinding
+class PaymentFragment : Fragment(R.layout.fragment_payment) {
+    private lateinit var binding: FragmentPaymentBinding
+    private lateinit var navController: NavController
     private val viewModel: PaymentViewModel by viewModel()
     private val adapter: ClientPaymentAdapter by inject()
     private val settings: Settings by inject()
+
     private var paymentsList = mutableListOf<Payment>()
     private lateinit var amount: Amount
     private var isLoading = false
@@ -50,9 +53,14 @@ class ClientPaymentFragment(private val client: Client) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentClientPaymentBinding.bind(view)
+        binding = FragmentPaymentBinding.bind(view)
+        navController = findNavController()
 
         binding.apply {
+            btnHome.onClick {
+                navController.popBackStack()
+            }
+
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
@@ -62,8 +70,7 @@ class ClientPaymentFragment(private val client: Client) :
                 viewModel.getPayments(
                     page = page,
                     from = dateFrom.changeDateFormat,
-                    to = dateTo.changeDateFormat,
-                    clientId = client.id
+                    to = dateTo.changeDateFormat
                 )
             }
 
@@ -83,8 +90,7 @@ class ClientPaymentFragment(private val client: Client) :
                         viewModel.getPayments(
                             page = page,
                             from = dateFrom.changeDateFormat,
-                            to = dateTo.changeDateFormat,
-                            clientId = client.id
+                            to = dateTo.changeDateFormat
                         )
                     }
                 }
@@ -114,8 +120,7 @@ class ClientPaymentFragment(private val client: Client) :
                     viewModel.getPayments(
                         page = page,
                         from = dateFrom.changeDateFormat,
-                        to = dateTo.changeDateFormat,
-                        clientId = client.id
+                        to = dateTo.changeDateFormat
                     )
                 }
 
@@ -128,7 +133,7 @@ class ClientPaymentFragment(private val client: Client) :
             }
         }
 
-        viewModel.getPayments(page, dateFrom.changeDateFormat, dateTo.changeDateFormat, client.id)
+        viewModel.getPayments(page, dateFrom.changeDateFormat, dateTo.changeDateFormat)
         setUpObservers()
     }
 

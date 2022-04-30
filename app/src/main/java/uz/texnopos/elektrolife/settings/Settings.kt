@@ -16,6 +16,7 @@ class Settings(context: Context) {
         const val FIRST_RUN = "firstRun"
         const val LANGUAGE = "language"
         const val CURRENCY = "currency"
+        const val USER_ID = "userId"
 
         /**
          * Finance type on creating new **Expense**
@@ -54,6 +55,10 @@ class Settings(context: Context) {
     var role: String
         set(value) = preferences.edit().putString(USER_ROLE,value).apply()
         get() = preferences.getString(USER_ROLE,"")?: ""
+
+    var userId: Int
+        set(value) = preferences.edit().putInt(USER_ID, value).apply()
+        get() = preferences.getInt(USER_ID, 0)
 
     var usdToUzs: Float
         set(value) {

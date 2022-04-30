@@ -132,7 +132,7 @@
     <string name="category_added_successfully">Категория добавлено успешно!</string>
     <string name="choose_payment_type">Выберите способ оплаты</string>
     <string name="choose_client_and_fill_payment">Пожалуйста выберите клиента и введите оплату полностью</string>
-    <string name="payment_successfully">Оплачено!</string>
+    <string name="payment_successfully">Оплата выполнено успешно!</string>
     <string name="count">штук</string>
     <string name="lang_name">Русский</string>
     <string name="sum_of_sale">Сумма продажи:</string>
@@ -180,4 +180,5 @@
     <string name="debt_price_text">Долг: %s %s</string>
     <string name="debt_paid_price_text">Оплачено: %s %s</string>
     <string name="debt_remained_price_text">Остались: %s %s</string>
+    <string name="amortization">Погашение долга</string>
 </resources>

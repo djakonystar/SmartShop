@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
-import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.clients.ClientResponse
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
@@ -47,9 +47,9 @@ class NewPaymentViewModel(private val api: ApiInterface, private val settings: S
         MutableLiveData()
     val newPayment: LiveData<Resource<GenericResponse<List<String>>>> get() = mutableNewPayment
 
-    private var mutableClients: MutableLiveData<Resource<PagingResponse<List<Client>>>> =
+    private var mutableClients: MutableLiveData<Resource<PagingResponse<ClientResponse>>> =
         MutableLiveData()
-    val clients: LiveData<Resource<PagingResponse<List<Client>>>> = mutableClients
+    val clients: LiveData<Resource<PagingResponse<ClientResponse>>> = mutableClients
 
     fun newPayment(newPayment: NewPayment) {
         mutableNewPayment.value = Resource.loading()

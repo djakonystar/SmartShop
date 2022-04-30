@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -24,6 +26,7 @@ import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.databinding.FragmentSalesDetailBinding
 import uz.texnopos.elektrolife.databinding.LayoutPrintingBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.payment.AddPaymentDialog
 
 class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
     private lateinit var binding: FragmentSalesDetailBinding
@@ -72,13 +75,24 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 0 && fabPrintReceipt.isVisible) fabPrintReceipt.hide()
-                    else if (dy < 0 && !fabPrintReceipt.isVisible) fabPrintReceipt.show()
+                    if (dy > 0 && expandableFab.isVisible) expandableFab.hide()
+                    else if (dy < 0 && !expandableFab.isVisible) expandableFab.show()
                 }
             })
 
             fabPrintReceipt.onClick {
                 printReceipt(printingView)
+            }
+
+            fabRefundDebt.onClick {
+                val addPaymentDialog = AddPaymentDialog(orderResponse)
+                addPaymentDialog.setOnDismissListener {
+                    viewModel.getOrders(basket.id)
+                }
+                addPaymentDialog.show(
+                    requireActivity().supportFragmentManager,
+                    addPaymentDialog.tag
+                )
             }
         }
 
@@ -105,7 +119,7 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     it.data?.let { order ->
-                        adapter.models =order.orders
+                        adapter.models = order.orders
                         binding.etSearch.text?.clear()
                         orders = order.orders
                         orderResponse = order
@@ -205,6 +219,26 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                 orderResponse.amount.debt.toSumFormat,
                 settings.currency
             )
+            if (orderResponse.amount.paidDebt != 0.0) {
+                tvDebtPaidTitle.isVisible = true
+                tvDotsDebtPaid.isVisible = true
+                tvDebtPaid.isVisible = true
+                tvDebtPaid.text = getString(
+                    R.string.price_text,
+                    orderResponse.amount.paidDebt.toSumFormat,
+                    settings.currency
+                )
+            }
+            if (orderResponse.amount.remaining != 0.0) {
+                tvDebtRemainedTitle.isVisible = true
+                tvDotsDebtRemained.isVisible = true
+                tvDebtRemained.isVisible = true
+                tvDebtRemained.text = getString(
+                    R.string.price_text,
+                    orderResponse.amount.remaining.toSumFormat,
+                    settings.currency
+                )
+            }
             GlideToVectorYou.justLoadImage(requireActivity(), Uri.parse(basket.qrLink), ivQrCode)
         }
     }

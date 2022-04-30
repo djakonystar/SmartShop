@@ -115,4 +115,7 @@ dependencies {
 
     // QR Code Scanner
     implementation 'com.github.yuriy-budiyev:code-scanner:2.1.2'
+
+    // Expandable FAB
+    implementation 'com.nambimobile.widgets:expandable-fab:1.2.1'
 }

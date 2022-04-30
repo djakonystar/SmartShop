@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.sales.SalesFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.finance.payments.PaymentFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="150dp">
+        android:layout_marginBottom="100dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/btnHome"
+                    android:id="@+id/btn_home"
                     android:layout_width="@dimen/img_standard_height_mobile"
                     android:layout_height="@dimen/img_standard_height_mobile"
                     android:layout_gravity="center_vertical"
@@ -37,47 +37,34 @@
                     app:tint="@color/black" />
 
                 <TextView
-                    android:id="@+id/tvTitle"
+                    android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/margin_middle"
                     android:ellipsize="end"
                     android:singleLine="true"
+                    android:text="@string/payments"
                     android:textColor="@color/black"
                     android:textSize="@dimen/action_bar_title_size_mobile"
                     tools:ignore="SpUsage" />
 
             </LinearLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/action_bar"
-                app:singleLine="true"
-                app:singleSelection="false" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/margin_standard"
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chipGroup"
-                tools:listitem="@layout/item_sales" />
+                app:layout_constraintTop_toBottomOf="@id/action_bar"
+                tools:listitem="@layout/item_payment" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="100dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -162,53 +149,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_standard"
                 android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                 android:textColor="@color/app_main_color"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_card_price"
                 app:layout_constraintTop_toBottomOf="@id/tv_cash_price" />
-
-            <ImageView
-                android:id="@+id/iv_debt_price"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:contentDescription="@string/cash_icon"
-                android:src="@drawable/ic_debt"
-                app:layout_constraintBottom_toBottomOf="@id/tv_debt_price"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_debt_price"
-                app:tint="@color/error_color" />
-
-            <TextView
-                android:id="@+id/tv_debt_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textColor="@color/error_color"
-                app:layout_constraintStart_toEndOf="@id/iv_debt_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_card_price" />
-
-            <TextView
-                android:id="@+id/tv_debt_paid_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textColor="@color/error_color"
-                app:layout_constraintStart_toEndOf="@id/iv_debt_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_debt_price" />
-
-            <TextView
-                android:id="@+id/tv_debt_remained_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_middle"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textColor="@color/error_color"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_debt_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_debt_paid_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

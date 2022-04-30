@@ -11,6 +11,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.setBlockFilter
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.showSuccess
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
@@ -39,6 +40,7 @@ class TransactionDialog(private val product: Product) :
 
         binding.apply {
             tvProductName.text = product.name
+            etProductQuantity.setBlockFilter(",.-")
 
             etProductQuantity.addTextChangedListener {
                 tilProductQuantity.isErrorEnabled = false

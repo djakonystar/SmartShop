@@ -14,10 +14,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.dialPhone
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.showSuccess
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.databinding.ActionBarClientBinding
 import uz.texnopos.elektrolife.databinding.FragmentClientBinding
@@ -57,7 +54,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 addClientDialog.show(requireActivity().supportFragmentManager, "")
                 addClientDialog.setData { name, inn, phone, type, comment ->
                     newClientViewModel.registerNewClient(
-                        uz.texnopos.elektrolife.data.model.newclient.Client(
+                        newClient(
                             name = name,
                             phone = phone,
                             inn = inn,
@@ -66,6 +63,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                         )
                     )
                 }
+                observeRegisteringClient()
             }
         }
 
@@ -170,12 +168,19 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     lastPage = it.data!!.lastPage
-                    val allClientsList = it.data.data as MutableList<Client>
+                    if (it.data.currentPage == 1) {
+                        binding.tvDebtPrice.text = getString(
+                            R.string.debt_price_text,
+                            (-it.data.data.debt).toSumFormat,
+                            settings.currency
+                        )
+                    }
+                    val allClientsList = it.data.data.clients as MutableList<Client>
                     if (adapter.models.isEmpty()) {
                         adapter.models = allClientsList
                         clientsList = allClientsList
                     } else {
-                        it.data.data.forEach { client ->
+                        it.data.data.clients.forEach { client ->
                             if (!clientsList.contains(client)) {
                                 clientsList.add(client)
                             }
@@ -197,7 +202,9 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 }
             }
         }
+    }
 
+    private fun observeRegisteringClient() {
         newClientViewModel.registerNewClient.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)

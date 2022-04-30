@@ -180,4 +180,5 @@
     <string name="debt_price_text">Qarız: %s %s</string>
     <string name="debt_paid_price_text">Tólendi: %s %s</string>
     <string name="debt_remained_price_text">Qaldı: %s %s</string>
+    <string name="amortization">Qarız tólew</string>
 </resources>

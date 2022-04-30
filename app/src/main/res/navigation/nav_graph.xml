@@ -161,6 +161,9 @@
         <action
             android:id="@+id/action_financeFragment_to_salaryFragment"
             app:destination="@id/salaryFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
@@ -247,4 +250,9 @@
             android:name="salary"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.payments.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
 </navigation>

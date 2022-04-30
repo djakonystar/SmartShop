@@ -258,6 +258,98 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_debt_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_debt_paid_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/overpass"
+        android:text="Погашено"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_debt_title" />
+
+    <TextView
+        android:id="@+id/tv_dots_debt_paid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/overpass"
+        android:singleLine="true"
+        android:text="....................................................................."
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_debt_paid_title"
+        app:layout_constraintEnd_toStartOf="@id/tv_debt_paid"
+        app:layout_constraintStart_toEndOf="@id/tv_debt_paid_title" />
+
+    <TextView
+        android:id="@+id/tv_debt_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/overpass"
+        android:text="10 000 000 UZS"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_debt_paid_title"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_debt_remained_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/overpass"
+        android:text="Остаток"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_debt_paid_title" />
+
+    <TextView
+        android:id="@+id/tv_dots_debt_remained"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/overpass"
+        android:singleLine="true"
+        android:text="....................................................................."
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_debt_remained_title"
+        app:layout_constraintEnd_toStartOf="@id/tv_debt_remained"
+        app:layout_constraintStart_toEndOf="@id/tv_debt_remained_title" />
+
+    <TextView
+        android:id="@+id/tv_debt_remained"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/overpass"
+        android:text="10 000 000 UZS"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_debt_remained_title"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageView
         android:id="@+id/iv_qr_code"
         android:layout_width="40mm"
@@ -265,7 +357,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_debt_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_debt_remained_title" />
 
     <TextView
         android:id="@+id/tv_thanks"

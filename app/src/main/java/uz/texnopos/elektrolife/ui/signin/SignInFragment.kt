@@ -72,23 +72,24 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                     setLoading(false)
                     if (it.data!!.successful) {
                         val user = it.data.payload
-                        login(true, user.token, "")
+                        login(true, user.id, user.token, "")
                     } else {
-                        login(false, "", requireContext().getString(R.string.wrong_pincode))
+                        login(false, 0, "", requireContext().getString(R.string.wrong_pincode))
                     }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    login(false, "", it.message!!)
+                    login(false, 0,"", it.message!!)
                 }
             }
         }
     }
 
-    private fun login(login: Boolean, token: String, error: String) {
+    private fun login(login: Boolean, id: Int, token: String, error: String) {
         if (login) {
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
+            settings.userId = id
             settings.token = token
             navController.navigate(R.id.action_signInFragment_to_mainFragment)
         } else {

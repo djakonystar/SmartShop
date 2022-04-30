@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.clients.ClientResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.concurrent.TimeUnit
@@ -20,9 +19,9 @@ class ClientViewModel(private val api: ApiInterface, private val settings: Setti
     private val searchSubject = BehaviorSubject.create<String>()
     private var page = 0
 
-    private var mutableClients: MutableLiveData<Resource<PagingResponse<List<Client>>>> =
+    private var mutableClients: MutableLiveData<Resource<PagingResponse<ClientResponse>>> =
         MutableLiveData()
-    val clients: LiveData<Resource<PagingResponse<List<Client>>>> = mutableClients
+    val clients: LiveData<Resource<PagingResponse<ClientResponse>>> = mutableClients
 
     init {
         searchSubject

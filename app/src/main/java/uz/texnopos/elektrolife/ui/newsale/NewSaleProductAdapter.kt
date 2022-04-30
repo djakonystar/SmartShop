@@ -3,6 +3,7 @@ package uz.texnopos.elektrolife.ui.newsale
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.extensions.Constants
 import uz.texnopos.elektrolife.core.extensions.inflate
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.toSumFormat
@@ -35,10 +36,12 @@ class NewSaleProductAdapter : RecyclerView.Adapter<NewSaleProductAdapter.NewSale
                     product.costPrice.code
                 )
                 val remained = product.warehouse?.count ?: 0.0
+                val unitId = product.warehouse?.unit?.id ?: -1
                 tvRemained.text = itemView.context?.getString(
-                    R.string.count_text,
-                    if (remained % 1 == 0.0) remained.toInt().toSumFormat
-                    else remained.toSumFormat
+                    R.string.price_text,
+                    if (unitId == 1) remained.toLong().toSumFormat
+                    else remained.toSumFormat,
+                    Constants.getUnitName(itemView.context, product.warehouse?.unit?.id ?: -1)
                 )
 
                 itemView.onClick {
