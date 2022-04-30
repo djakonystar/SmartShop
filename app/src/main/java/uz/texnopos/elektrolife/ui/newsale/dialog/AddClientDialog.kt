@@ -44,6 +44,7 @@ class AddClientDialog : DialogFragment() {
             actSpinner.threshold = 100
             actSpinner.setText(list[1])
             type.postValue(list[1])
+            userType = list[1]
             actSpinner.setOnItemClickListener { _, _, i, _ ->
                 tilSpinner.isErrorEnabled = false
                 type.postValue(list[i])

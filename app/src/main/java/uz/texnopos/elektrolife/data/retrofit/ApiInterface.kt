@@ -42,7 +42,7 @@ interface ApiInterface {
     fun getClients(
         @Header("Authorization") token: String,
         @Query("search") search: String
-    ): Observable<GenericResponse<PagingResponse<List<Client>>>>
+    ): Observable<GenericResponse<PagingResponse<ClientResponse>>>
 
     @GET("api/clients")
     fun getClients(

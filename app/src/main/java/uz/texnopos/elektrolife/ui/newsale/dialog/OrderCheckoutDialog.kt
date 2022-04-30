@@ -158,7 +158,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    it.data!!.data.forEach { client ->
+                    it.data!!.data.clients.forEach { client ->
                         list.add("${client.name}, ${client.phone}")
                         if (!listIds.contains("${client.name}, ${client.phone}"))
                             listIds["${client.name}, ${client.phone}"] = client.id
