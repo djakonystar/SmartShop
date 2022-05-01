@@ -2,8 +2,6 @@ package uz.texnopos.elektrolife.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.PopupMenu
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -62,16 +60,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
             when (settings.role) {
                 "saller" -> {
-                    ivOther.isVisible = false
-                    iconNewProduct.setImageResource(R.drawable.salary)
-                    titleNewProduct.text = getString(R.string.salaries)
-                    finance.onClick {
-                        // TODO: Go to my salaries
-                    }
                     iconFinance.setImageResource(R.drawable.sales)
                     titleFinance.text = context?.getString(R.string.sales)
                     finance.onClick {
                         navController.navigate(R.id.action_mainFragment_to_salesFragment)
+                    }
+                    iconNewProduct.setImageResource(R.drawable.salary)
+                    titleNewProduct.text = getString(R.string.salaries)
+                    newProduct.onClick {
+                        navController.navigate(
+                            MainFragmentDirections.actionMainFragmentToSalaryDetailFragment(
+                                employeeId = settings.userId,
+                                employeeName = "null"
+                            )
+                        )
                     }
                 }
                 "admin", "ceo" -> {

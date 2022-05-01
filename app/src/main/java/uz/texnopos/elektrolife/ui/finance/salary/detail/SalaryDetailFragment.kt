@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -22,7 +21,6 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.changeDateFormat
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.data.model.finance.salary.Salary
 import uz.texnopos.elektrolife.databinding.FragmentSalaryDetailBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,7 +28,6 @@ import java.util.*
 class SalaryDetailFragment : Fragment(R.layout.fragment_salary_detail) {
     private lateinit var binding: FragmentSalaryDetailBinding
     private lateinit var navController: NavController
-    private lateinit var salary: Salary
     private val viewModel: SalaryDetailViewModel by viewModel()
     private val adapter: SalaryDetailAdapter by inject()
     private val args: SalaryDetailFragmentArgs by navArgs()
@@ -41,17 +38,23 @@ class SalaryDetailFragment : Fragment(R.layout.fragment_salary_detail) {
     private var salaryDateToInLong = calendarHelper.currentDateMillis
     private var salaryDateTo = calendarHelper.currentDate
     private var employeeId: Int = -1
+    private var employeeName = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSalaryDetailBinding.bind(view)
         navController = findNavController()
-        salary = Gson().fromJson(args.salary, Salary::class.java)
-        employeeId = salary.employee.id
+        employeeId = args.employeeId
+        employeeName = args.employeeName
 
         binding.apply {
-            tvTitle.text = salary.employee.name
+            if (employeeName == "null") {
+                tvTitle.text = getString(R.string.salaries)
+            } else {
+                tvTitle.text = employeeName
+            }
+
             btnHome.onClick {
                 navController.popBackStack()
             }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -105,9 +104,11 @@ class SalaryFragment : Fragment(R.layout.fragment_salary) {
             }
 
             adapter.setOnItemClickListener {
-                val json = GsonBuilder().setPrettyPrinting().create().toJson(it)
                 navController.navigate(
-                    SalaryFragmentDirections.actionSalaryFragmentToSalaryDetailFragment(json)
+                    SalaryFragmentDirections.actionSalaryFragmentToSalaryDetailFragment(
+                        employeeId = it.employee.id,
+                        employeeName = it.employee.name
+                    )
                 )
             }
         }
