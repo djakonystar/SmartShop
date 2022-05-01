@@ -53,8 +53,8 @@
             android:id="@+id/action_mainFragment_to_financeFragment"
             app:destination="@id/financeFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_salaryFragment"
-            app:destination="@id/salaryFragment" />
+            android:id="@+id/action_mainFragment_to_salaryDetailFragment"
+            app:destination="@id/salaryDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/newSaleFragment"

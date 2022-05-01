@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -22,7 +21,6 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.changeDateFormat
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.data.model.finance.salary.Salary
 import uz.texnopos.elektrolife.databinding.FragmentSalaryDetailBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,7 +49,12 @@ class SalaryDetailFragment : Fragment(R.layout.fragment_salary_detail) {
         employeeName = args.employeeName
 
         binding.apply {
-            tvTitle.text = employeeName
+            if (employeeName == "null") {
+                tvTitle.text = getString(R.string.salaries)
+            } else {
+                tvTitle.text = employeeName
+            }
+
             btnHome.onClick {
                 navController.popBackStack()
             }
