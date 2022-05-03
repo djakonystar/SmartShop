@@ -181,4 +181,7 @@
     <string name="debt_paid_price_text">Оплачено: %s %s</string>
     <string name="debt_remained_price_text">Остались: %s %s</string>
     <string name="amortization">Погашение долга</string>
+    <string name="return_order">Возврат товара</string>
+    <string name="payment_debt_paid">Оплаченный долг</string>
+    <string name="order_successfully_returned">Товар возвращено успешно!</string>
 </resources>

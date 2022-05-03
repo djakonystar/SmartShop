@@ -7,8 +7,9 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.model.finance.Finance
+import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
+import uz.texnopos.elektrolife.data.model.finance.FinanceResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
@@ -20,8 +21,9 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
     private var mutableFinancePost: MutableLiveData<Resource<List<String>>> = MutableLiveData()
     val financePost: LiveData<Resource<List<String>>> = mutableFinancePost
 
-    private var mutableFinanceDetails: MutableLiveData<Resource<List<Finance>>> = MutableLiveData()
-    val financeDetails: LiveData<Resource<List<Finance>>> = mutableFinanceDetails
+    private var mutableFinanceDetails: MutableLiveData<Resource<PagingResponse<FinanceResponse>>> =
+        MutableLiveData()
+    val financeDetails: LiveData<Resource<PagingResponse<FinanceResponse>>> = mutableFinanceDetails
 
     fun addFinanceDetail(finance: FinancePost) {
         mutableFinancePost.value = Resource.loading()
@@ -44,10 +46,16 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
         )
     }
 
-    fun getFinanceDetails(from: String, to: String, type: String) {
+    fun getFinanceDetails(page: Int, from: String, to: String, type: String) {
         mutableFinanceDetails.value = Resource.loading()
         compositeDisposable.add(
-            api.getFinanceDetails("Bearer ${settings.token}", from, to, type)
+            api.getFinanceDetails(
+                token = "Bearer ${settings.token}",
+                page = page,
+                from = from,
+                to = to,
+                type = type
+            )
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
@@ -18,6 +19,7 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentIncomeBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -41,6 +43,12 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private var dateToInLong = calendarHelper.currentDateMillis
     private var dateTo = simpleDateFormat.format(dateToInLong)
     private var lastSum = 0.0
+    private var lastCashSum = 0.0
+    private var lastCardSum = 0.0
+    private var isLoading = false
+    private var page = 1
+    private var lastPage = 0
+    private var incomesList = mutableListOf<Finance>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,7 +88,11 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                     tvDateFrom.text = getString(R.string.date_from_text, dateFrom)
                     tvDateTo.text = getString(R.string.date_to_text, dateTo)
 
+                    page = 1
+                    incomesList.clear()
+                    adapter.models = listOf()
                     viewModel.getFinanceDetails(
+                        page = page,
                         from = dateFrom.changeDateFormat,
                         to = dateTo.changeDateFormat,
                         type = FINANCE_INCOME
@@ -98,19 +110,38 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             tvDateFrom.text = getString(R.string.date_from_text, dateFrom)
             tvDateTo.text = getString(R.string.date_to_text, dateTo)
 
+            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            recyclerView.layoutManager = layoutManager
             recyclerView.adapter = adapter
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (dy > 0 && btnFab.isVisible) btnFab.hide()
                     else if (dy < 0 && !btnFab.isVisible) btnFab.show()
+
+                    if (!isLoading && page < lastPage && adapter.models.isNotEmpty() &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+                    ) {
+                        page++
+                        viewModel.getFinanceDetails(
+                            page = page,
+                            from = dateFrom.changeDateFormat,
+                            to = dateTo.changeDateFormat,
+                            type = FINANCE_INCOME
+                        )
+                    }
                 }
             })
 
             swipeRefresh.setOnRefreshListener {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
+                page = 1
+                lastPage = 0
+                incomesList = mutableListOf()
+                adapter.models = listOf()
                 viewModel.getFinanceDetails(
+                    page = page,
                     from = dateFrom.changeDateFormat,
                     to = dateTo.changeDateFormat,
                     type = FINANCE_INCOME
@@ -123,6 +154,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         viewModel.getFinanceDetails(
+            page = page,
             from = dateFrom.changeDateFormat,
             to = dateTo.changeDateFormat,
             type = FINANCE_INCOME
@@ -145,10 +177,31 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                        adapter.models = it.data!!
-                        val newSum = it.data.sumOf { f -> f.price }
+                    val pageData = it.data!!
+                    lastPage = pageData.lastPage
+                    val pageIncomes = pageData.data.items
+
+                    if (pageData.currentPage == 1) {
+                        val newCash = pageData.data.amount.cash
+                        val newCard = pageData.data.amount.card
+                        val newSum = newCash + newCard
                         startAnimationCounter(lastSum, newSum)
+                        animateCashSum(lastCashSum, newCash)
+                        animateCardSum(lastCardSum, newCard)
                         lastSum = newSum
+                        lastCashSum = newCash
+                        lastCardSum = newCard
+                    }
+
+                    if (adapter.models.isEmpty()) {
+                        adapter.models = pageIncomes
+                        incomesList = pageIncomes as MutableList<Finance>
+                    } else {
+                        pageIncomes.forEach { income ->
+                            if (!incomesList.contains(income)) incomesList.add(income)
+                        }
+                        adapter.models = incomesList
+                    }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -165,6 +218,38 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             val newValue = (it.animatedValue as Float).toDouble()
                 .format(2).toDouble().toSumFormat
             binding.tvTotalSum.text = context?.getString(
+                R.string.price_text,
+                newValue,
+                settings.currency
+            )
+        }
+        animator.duration = 500
+        animator.start()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun animateCashSum(start: Double, end: Double) {
+        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+        animator.addUpdateListener {
+            val newValue = (it.animatedValue as Float).toDouble()
+                .format(2).toDouble().toSumFormat
+            binding.tvCashPrice.text = context?.getString(
+                R.string.price_text,
+                newValue,
+                settings.currency
+            )
+        }
+        animator.duration = 500
+        animator.start()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun animateCardSum(start: Double, end: Double) {
+        val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
+        animator.addUpdateListener {
+            val newValue = (it.animatedValue as Float).toDouble()
+                .format(2).toDouble().toSumFormat
+            binding.tvCardPrice.text = context?.getString(
                 R.string.price_text,
                 newValue,
                 settings.currency

@@ -14,6 +14,7 @@ import uz.texnopos.elektrolife.data.model.employee.Employee
 import uz.texnopos.elektrolife.data.model.finance.Cashier
 import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
+import uz.texnopos.elektrolife.data.model.finance.FinanceResponse
 import uz.texnopos.elektrolife.data.model.finance.salary.Salary
 import uz.texnopos.elektrolife.data.model.finance.salary.SalaryMonthly
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
@@ -268,10 +269,11 @@ interface ApiInterface {
     @GET("api/consumptions")
     fun getFinanceDetails(
         @Header("Authorization") token: String,
+        @Query("page") page: Int,
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("type") type: String
-    ): Observable<GenericResponse<List<Finance>>>
+    ): Observable<GenericResponse<PagingResponse<FinanceResponse>>>
 
     @POST("api/payment/basket")
     fun addPayment(

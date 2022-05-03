@@ -181,4 +181,7 @@
     <string name="debt_paid_price_text">Tólendi: %s %s</string>
     <string name="debt_remained_price_text">Qaldı: %s %s</string>
     <string name="amortization">Qarız tólew</string>
+    <string name="return_order">Ónimdi qaytarıw</string>
+    <string name="payment_debt_paid">Tólengen qarız</string>
+    <string name="order_successfully_returned">Ónim tabıslı qaytarıldı!</string>
 </resources>
