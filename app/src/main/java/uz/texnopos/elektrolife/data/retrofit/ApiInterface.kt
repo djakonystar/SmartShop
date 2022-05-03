@@ -26,6 +26,7 @@ import uz.texnopos.elektrolife.data.model.payment.PaymentHistory
 import uz.texnopos.elektrolife.data.model.qrcode.ProductResponse
 import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
+import uz.texnopos.elektrolife.data.model.sales.returnorder.ReturnOrder
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.signin.SignInResponse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
@@ -124,6 +125,18 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Query("basket_id") basketId: Int
     ): Observable<GenericResponse<OrderResponse>>
+
+    @GET("api/orders")
+    fun getOrders(
+        @Header("Authorization") token: String,
+        @Query("uuid") uuid: String
+    ): Observable<GenericResponse<OrderResponse>>
+
+    @POST("api/return/orders")
+    fun returnOrders(
+        @Header("Authorization") token: String,
+        @Body returnOrder: ReturnOrder
+    ): Observable<GenericResponse<List<Any>>>
 
     @GET("api/warehouse")
     fun warehouseProducts(
@@ -286,6 +299,7 @@ interface ApiInterface {
     /**
      * Add-on new quantity to existing product (Transaction)
      */
+    // TODO: Transaction API
     @POST("api/warehouse")
     fun newTransaction(
         @Header("Authorization") token: String,

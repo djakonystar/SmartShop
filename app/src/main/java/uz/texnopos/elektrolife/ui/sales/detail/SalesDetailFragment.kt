@@ -26,6 +26,7 @@ import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.databinding.FragmentSalesDetailBinding
 import uz.texnopos.elektrolife.databinding.LayoutPrintingBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.dialog.ReturnOrderDialog
 import uz.texnopos.elektrolife.ui.payment.AddPaymentDialog
 
 class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
@@ -41,6 +42,7 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
     private lateinit var orders: List<Order>
     private lateinit var basket: Basket
     private lateinit var orderResponse: OrderResponse
+    private lateinit var returnOrderDialog: ReturnOrderDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +81,15 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                     else if (dy < 0 && !expandableFab.isVisible) expandableFab.show()
                 }
             })
+
+            adapter.setOnItemClickListener { position ->
+                returnOrderDialog = ReturnOrderDialog(orderResponse, position)
+                returnOrderDialog.setOnAddClickListener { viewModel.returnOrder(it) }
+                returnOrderDialog.show(
+                    requireActivity().supportFragmentManager,
+                    returnOrderDialog.tag
+                )
+            }
 
             fabPrintReceipt.onClick {
                 printReceipt(printingView)
@@ -127,6 +138,24 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                         orderReceiptAdapter.models = order.orders
                         prepareReceipt(printingView)
                     }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showError(it.message)
+                }
+            }
+        }
+
+        viewModel.returningOrder.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    showSuccess(getString(R.string.order_successfully_returned))
+                        .setOnDismissListener {
+                            returnOrderDialog.dismiss()
+                            viewModel.getOrders(basketId)
+                        }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

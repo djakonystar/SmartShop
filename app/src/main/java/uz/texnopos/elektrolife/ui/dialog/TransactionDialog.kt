@@ -14,6 +14,7 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.setBlockFilter
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.core.extensions.showSuccess
+import uz.texnopos.elektrolife.core.extensions.toDouble
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
 import uz.texnopos.elektrolife.data.model.warehouse.Product
@@ -47,18 +48,15 @@ class TransactionDialog(private val product: Product) :
             }
 
             btnAdd.onClick {
-                val quantity = etProductQuantity.text.toString().filter { q -> q.isDigit() }
-                when {
-                    quantity.isEmpty() ->
-                        tilProductQuantity.error = context?.getString(R.string.required_field)
-                    quantity.toInt() == 0 ->
+                when (val quantity = etProductQuantity.text.toString().toDouble) {
+                    0.0 ->
                         tilProductQuantity.error = context?.getString(R.string.required_field)
                     else -> {
                         val transaction = Transaction(
                             transactions = listOf(
                                 TransactionItem(
                                     productId = product.id,
-                                    quantity = quantity.toInt()
+                                    count = quantity
                                 )
                             )
                         )

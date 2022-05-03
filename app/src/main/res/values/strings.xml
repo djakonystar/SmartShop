@@ -217,4 +217,7 @@
     <string name="debt_paid_price_text">To\'langani: %s %s</string>
     <string name="debt_remained_price_text">Qoldiq: %s %s</string>
     <string name="amortization">Qarz to\'lash</string>
+    <string name="return_order">Mahsulotni qaytarish</string>
+    <string name="payment_debt_paid">To\'langan qarz</string>
+    <string name="order_successfully_returned">Mahsulot muvaffaqiyatli qaytarildi!</string>
 </resources>

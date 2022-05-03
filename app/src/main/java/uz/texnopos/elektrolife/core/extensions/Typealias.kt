@@ -11,3 +11,4 @@ typealias createdProduct = uz.texnopos.elektrolife.data.model.newproduct.Product
 typealias newClient = uz.texnopos.elektrolife.data.model.newclient.Client
 typealias salesBasket = uz.texnopos.elektrolife.data.model.sales.Basket
 typealias orderBasketResponse = uz.texnopos.elektrolife.data.model.newsale.BasketResponse
+typealias returningOrder = uz.texnopos.elektrolife.data.model.sales.returnorder.Order
