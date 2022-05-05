@@ -26,7 +26,6 @@ import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
-import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
@@ -92,7 +91,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
                 val warehouseItem = listProducts.getValue(productName)
-                val dialog = TransactionDialog(warehouseItem.product)
+                val dialog = TransactionDialog(warehouseItem)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
                     etProductName.text.clear()

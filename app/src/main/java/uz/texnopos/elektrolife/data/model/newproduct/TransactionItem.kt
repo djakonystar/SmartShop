@@ -5,5 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class TransactionItem(
     @SerializedName("product_id")
     val productId: Int,
-    val count: Double
+    val count: Double,
+    @SerializedName("unit_id")
+    val unitId: Int,
+    val price: Price
 )

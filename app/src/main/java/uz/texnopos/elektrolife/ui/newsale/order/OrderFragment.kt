@@ -140,6 +140,11 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
         setUpObservers()
     }
 
+    override fun onDetach() {
+        adapter.models = mutableListOf()
+        super.onDetach()
+    }
+
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading

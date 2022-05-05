@@ -108,6 +108,11 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         setUpObservers()
     }
 
+    override fun onDetach() {
+        adapter.models = listOf()
+        super.onDetach()
+    }
+
     private fun setUpObservers() {
         viewModel.warehouseProducts.observe(viewLifecycleOwner) {
             when (it.status) {

@@ -21,6 +21,7 @@ import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
+import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.payment.AddPayment
 import uz.texnopos.elektrolife.data.model.payment.PaymentHistory
@@ -305,7 +306,7 @@ interface ApiInterface {
     @POST("api/warehouse")
     fun newTransaction(
         @Header("Authorization") token: String,
-        @Body transaction: Transaction
+        @Body transactions: List<TransactionItem>
     ): Observable<GenericResponse<List<Any>>>
 
     @GET("api/employees")

@@ -34,7 +34,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
     private var list: MutableSet<String> = mutableSetOf()
     private var listIds: MutableMap<String, Int> = mutableMapOf()
     private var clientName = ""
-    private var clientId = -1
+    private var clientId = 1
     private var date = ""
     private var dateForBackend = ""
     private var dateInLong = System.currentTimeMillis()
@@ -226,20 +226,15 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
 
     private fun checkAndSend() {
         binding.apply {
-            val selectedClient = etSearchClient.text.toString()
-            if (selectedClient.isEmpty()) clientId = -1
-            val cash =
-                etCash.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }
-                    .toDouble()
-            val card =
-                etCard.text.toString().ifEmpty { "0" }.filter { s -> s.isDigit() || s == '.' }
-                    .toDouble()
+            val cash = etCash.text.toString().toDouble
+            val card = etCard.text.toString().toDouble
             val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0.0
             var dateRequired = false
             val comment = etComment.text.toString()
 
             if (debt > 0) {
                 dateRequired = true
+                if (clientId == 1) clientId = -1
             }
             if (dateRequired) {
                 if (date.isEmpty() || clientId == -1) {

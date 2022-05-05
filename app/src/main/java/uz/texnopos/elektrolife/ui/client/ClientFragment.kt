@@ -153,6 +153,11 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
         setUpObservers()
     }
 
+    override fun onDetach() {
+        adapter.models = listOf()
+        super.onDetach()
+    }
+
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading

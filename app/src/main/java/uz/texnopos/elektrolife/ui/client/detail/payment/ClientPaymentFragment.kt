@@ -188,4 +188,9 @@ class ClientPaymentFragment(private val client: Client) :
             )
         }
     }
+
+    override fun onDetach() {
+        adapter.models = listOf()
+        super.onDetach()
+    }
 }
