@@ -89,7 +89,7 @@ class ReturnOrderDialog(private val basket: OrderResponse, private val position:
                 }
             }
 
-            btnAdd.onClick {
+            btnReturn.onClick {
                 val count = etCount.text.toString().toDouble
                 val checked = paymentType.isNotEmpty()
                 if (count != 0.0 && count <= order.count && checked) {

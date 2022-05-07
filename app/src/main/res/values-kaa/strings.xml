@@ -184,4 +184,5 @@
     <string name="return_order">Ónimdi qaytarıw</string>
     <string name="payment_debt_paid">Tólengen qarız</string>
     <string name="order_successfully_returned">Ónim tabıslı qaytarıldı!</string>
+    <string name="return_text">Qaytarıw</string>
 </resources>

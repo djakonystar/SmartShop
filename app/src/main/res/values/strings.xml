@@ -220,4 +220,5 @@
     <string name="return_order">Mahsulotni qaytarish</string>
     <string name="payment_debt_paid">To\'langan qarz</string>
     <string name="order_successfully_returned">Mahsulot muvaffaqiyatli qaytarildi!</string>
+    <string name="return_text">Qaytarish</string>
 </resources>

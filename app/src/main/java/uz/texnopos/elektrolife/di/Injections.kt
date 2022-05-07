@@ -110,7 +110,7 @@ val viewModelModule = module {
     viewModel { NewSaleViewModel(get(), get()) }
     viewModel { SalaryViewModel(get(), get()) }
     viewModel { SalaryDetailViewModel(get(), get()) }
-    viewModel { PaymentViewModel(get(), get()) }
+    viewModel { PaymentViewModel(get(), get(), get()) }
     viewModel { QrScannerViewModel(get(), get()) }
 }
 

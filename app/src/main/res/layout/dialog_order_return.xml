@@ -151,14 +151,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_add"
+        android:id="@+id/btn_return"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
         android:layout_marginVertical="@dimen/margin_standard"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:paddingHorizontal="32dp"
-        android:text="@string/add"
+        android:text="@string/return_text"
         android:textSize="@dimen/text_size_larger"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -180,7 +180,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_add"
+        app:layout_constraintTop_toBottomOf="@id/btn_return"
         tools:ignore="SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

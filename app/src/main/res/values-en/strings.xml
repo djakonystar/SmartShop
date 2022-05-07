@@ -184,4 +184,5 @@
     <string name="return_order">Return order</string>
     <string name="payment_debt_paid">Paid debt</string>
     <string name="order_successfully_returned">Order returned successfully!</string>
+    <string name="return_text">Return</string>
 </resources>

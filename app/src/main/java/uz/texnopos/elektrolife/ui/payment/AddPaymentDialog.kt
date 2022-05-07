@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -14,7 +15,6 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.payment.AddPayment
-import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -53,21 +53,25 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
                 tilCard.isErrorEnabled = false
+                calculateDebt()
             }
 
             btnCashMagnet.onClick {
                 etCard.text?.clear()
                 etCash.setText(order.amount.remaining.toString())
+                calculateDebt()
             }
 
             etCard.addTextChangedListener {
                 tilCash.isErrorEnabled = false
                 tilCard.isErrorEnabled = false
+                calculateDebt()
             }
 
             btnCardMagnet.onClick {
                 etCash.text?.clear()
                 etCard.setText(order.amount.remaining.toString())
+                calculateDebt()
             }
 
             btnPay.onClick {
@@ -88,6 +92,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
             }
         }
 
+        calculateDebt()
         setUpObservers()
     }
 
@@ -114,6 +119,41 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
                     showError(it.message)
                 }
             }
+        }
+    }
+
+    private fun calculateDebt() {
+        val totalPrice = order.amount.remaining
+        binding.apply {
+            val cashPrice = etCash.text.toString().toDouble
+            val cardPrice = etCard.text.toString().toDouble
+            val remind = totalPrice - cashPrice - cardPrice
+            if (remind > 0) {
+                tvDebtPrice.text = getString(
+                    R.string.debt_remained_price_text,
+                    "-${remind.toSumFormat}",
+                    settings.currency
+                )
+            } else {
+                tvDebtPrice.text = getString(
+                    R.string.debt_remained_price_text,
+                    (-remind).toSumFormat,
+                    settings.currency
+                )
+            }
+
+            btnPay.isEnabled = remind >= 0
+
+            tvDebtPrice.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    when {
+                        remind > 0 -> R.color.error_color
+                        remind == 0.0 -> R.color.black
+                        else -> R.color.app_main_color
+                    }
+                )
+            )
         }
     }
 
