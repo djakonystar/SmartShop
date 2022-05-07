@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="230dp"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="-10dp"
         android:src="@drawable/logotype"
         app:layout_constraintBottom_toBottomOf="@id/ivLang"
@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/ivOther"
-        android:layout_width="@dimen/action_bar_icon_size_mobile"
-        android:layout_height="@dimen/action_bar_icon_size_mobile"
+        android:layout_width="@dimen/img_standard_height_mobile"
+        android:layout_height="@dimen/img_standard_height_mobile"
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -41,8 +41,7 @@
         android:clickable="true"
         android:contentDescription="@string/lang_title"
         android:focusable="true"
-        android:padding="@dimen/padding_small"
-        android:src="@drawable/language"
+        android:src="@drawable/ic_lang"
         app:layout_constraintBottom_toTopOf="@id/new_sale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -62,6 +61,7 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_middle"
         android:layout_marginBottom="@dimen/margin_middle"
+        android:backgroundTint="@color/app_main_color"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -82,9 +82,9 @@
                 android:id="@+id/icon_clients"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_clients"
+                android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/group"
+                android:src="@drawable/ic_clients_3d"
                 app:layout_constraintBottom_toTopOf="@id/title_clients"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,17 +99,17 @@
                 android:id="@+id/title_clients"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:gravity="center"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
                 android:text="@string/clients"
-                android:gravity="center"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_main_mobile"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="@id/guideline_clients"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_clients"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,6 +124,7 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
+        android:backgroundTint="@color/app_main_color"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -144,25 +145,34 @@
                 android:id="@+id/icon_new_product"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_new_product"
+                android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/add_product"
+                android:src="@drawable/ic_new_product_3d"
                 app:layout_constraintBottom_toTopOf="@id/title_new_product"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_new_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.69" />
 
             <TextView
                 android:id="@+id/title_new_product"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
                 android:text="@string/new_product"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_main_mobile"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_new_product"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -176,6 +186,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_middle"
         android:layout_marginBottom="@dimen/margin_middle"
+        android:backgroundTint="@color/app_main_color"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -196,25 +207,34 @@
                 android:id="@+id/icon_finance"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_sales"
+                android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/icon_finance"
+                android:src="@drawable/ic_finance_3d"
                 app:layout_constraintBottom_toTopOf="@id/title_finance"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_finance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.69" />
 
             <TextView
                 android:id="@+id/title_finance"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
                 android:text="@string/finance"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_main_mobile"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_finance"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -228,6 +248,7 @@
         android:layout_marginStart="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_middle"
+        android:backgroundTint="@color/app_main_color"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -248,25 +269,34 @@
                 android:id="@+id/icon_new_sale"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_new_sale"
+                android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/add_cart"
+                android:src="@drawable/ic_new_sale_3d"
                 app:layout_constraintBottom_toTopOf="@id/title_new_sale"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_new_sale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.69" />
 
             <TextView
                 android:id="@+id/title_new_sale"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
                 android:text="@string/new_sale"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_main_mobile"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_new_sale"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -281,6 +311,7 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_middle"
         android:layout_marginBottom="@dimen/margin_standard"
+        android:backgroundTint="@color/app_main_color"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -301,25 +332,34 @@
                 android:id="@+id/icon_warehouse"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_warehouse"
+                android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/warehouse"
+                android:src="@drawable/ic_warehouse_3d"
                 app:layout_constraintBottom_toTopOf="@id/title_warehouse"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_warehouse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.69" />
 
             <TextView
                 android:id="@+id/title_warehouse"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
                 android:text="@string/warehouse"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_main_mobile"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_warehouse"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -334,6 +374,7 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_middle"
+        android:backgroundTint="@color/app_main_color"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -354,26 +395,34 @@
                 android:id="@+id/icon_return_order"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/color_add_payment"
+                android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/ic_qr_code_scanner"
+                android:src="@drawable/ic_return_order_3d"
                 app:layout_constraintBottom_toTopOf="@id/title_return_order"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_return_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.69" />
 
             <TextView
                 android:id="@+id/title_return_order"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:letterSpacing="0.1"
                 android:padding="16dp"
                 android:text="@string/return_order"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_size_main_mobile"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_return_order"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
