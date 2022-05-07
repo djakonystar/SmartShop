@@ -18,6 +18,7 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.Product
+import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
 import uz.texnopos.elektrolife.data.model.newproduct.Warehouse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
@@ -26,6 +27,7 @@ import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
@@ -91,11 +93,29 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
                 val warehouseItem = listProducts.getValue(productName)
-                val dialog = TransactionDialog(warehouseItem)
+                val transaction = TransactionTransfer(
+                    warehouseItem.product.id,
+                    warehouseItem.product.name,
+                    warehouseItem.count,
+                    warehouseItem.unit.id,
+                    Price(
+                        warehouseItem.product.costPrice.currencyId,
+                        warehouseItem.product.costPrice.price
+                    )
+                )
+                val dialog = TransactionDialog(transaction)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
                     etProductName.text.clear()
                 }
+            }
+
+            ivQrScanner.onClick {
+                navController.navigate(
+                    NewProductFragmentDirections.actionNewProductFragmentToQrScannerFragment(
+                        QrScannerFragment.POST_TRANSACTION
+                    )
+                )
             }
 
             etProductQuantity.addTextChangedListener {

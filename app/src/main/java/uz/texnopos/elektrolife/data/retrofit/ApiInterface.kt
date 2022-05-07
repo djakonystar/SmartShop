@@ -7,12 +7,10 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
-import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.clients.ClientResponse
 import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.model.employee.Employee
 import uz.texnopos.elektrolife.data.model.finance.Cashier
-import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.data.model.finance.FinanceResponse
 import uz.texnopos.elektrolife.data.model.finance.salary.Salary
@@ -20,7 +18,6 @@ import uz.texnopos.elektrolife.data.model.finance.salary.SalaryMonthly
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
-import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.payment.AddPayment
@@ -235,21 +232,14 @@ interface ApiInterface {
         @Header("Authorization") token: String
     ): Observable<Response<GenericResponse<List<Currency>>>>
 
-    @GET("api/qrcode/read")
-    fun scanCode(
-        @Header("Authorization") token: String,
-        @Query("type") type: String,
-        @Query("uuid") code: String
-    ): Observable<GenericResponse<ProductResponse>>
-
     /**
      * Finance: Get cashbox balance and profit in date range [from] - [to]
      */
     @GET("api/cashier")
     fun getCashier(
         @Header("Authorization") token: String,
-        @Query("to") from: String,
-        @Query("do") to: String
+        @Query("from") from: String,
+        @Query("to") to: String
     ): Observable<GenericResponse<Cashier>>
 
     /**

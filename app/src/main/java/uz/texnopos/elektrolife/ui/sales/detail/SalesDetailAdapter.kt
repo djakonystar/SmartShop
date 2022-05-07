@@ -36,6 +36,7 @@ class SalesDetailAdapter(private val settings: Settings) :
                     settings.currency
                 )
 
+                itemView.isEnabled = order.count != 0.0
                 root.onClick {
                     onItemClick(position)
                 }

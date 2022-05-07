@@ -24,12 +24,24 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_lock"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            app:lottie_rawRes="@raw/lock_main"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:layout_constraintBottom_toTopOf="@id/tvDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ImageView
             android:id="@+id/ivLock"
             android:layout_width="@dimen/login_lock_icon_size"
             android:layout_height="@dimen/login_lock_icon_size"
             android:layout_marginBottom="@dimen/margin_middle"
             android:src="@drawable/ic_pin_code"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/tvDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

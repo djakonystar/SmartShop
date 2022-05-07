@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_mainFragment_to_salaryDetailFragment"
             app:destination="@id/salaryDetailFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_qrScannerFragment"
+            app:destination="@id/qrScannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/newSaleFragment"
@@ -68,7 +71,7 @@
             android:id="@+id/action_newSaleFragment_to_qrScannerFragment"
             app:destination="@id/qrScannerFragment" />
         <argument
-            android:name="product_code"
+            android:name="product"
             app:argType="string" />
     </fragment>
     <fragment
@@ -88,6 +91,9 @@
         <action
             android:id="@+id/action_newProductFragment_to_newCategoryFragment"
             app:destination="@id/newCategoryFragment" />
+        <action
+            android:id="@+id/action_newProductFragment_to_qrScannerFragment"
+            app:destination="@id/qrScannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/clientsFragment"
@@ -231,6 +237,13 @@
             app:destination="@id/newSaleFragment"
             app:popUpTo="@id/newSaleFragment"
             app:popUpToInclusive="true" />
+        <argument android:name="type"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_qrScannerFragment_to_returnOrderFragment"
+            app:destination="@id/returnOrderFragment"
+            app:popUpTo="@id/qrScannerFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/salaryFragment"
@@ -258,4 +271,13 @@
         android:name="uz.texnopos.elektrolife.ui.finance.payments.PaymentFragment"
         android:label="fragment_payment"
         tools:layout="@layout/fragment_payment" />
+    <fragment
+        android:id="@+id/returnOrderFragment"
+        android:name="uz.texnopos.elektrolife.ui.sales.returnorder.ReturnOrderFragment"
+        android:label="fragment_order_return"
+        tools:layout="@layout/fragment_order_return" >
+        <argument
+            android:name="orderResponse"
+            app:argType="string" />
+    </fragment>
 </navigation>

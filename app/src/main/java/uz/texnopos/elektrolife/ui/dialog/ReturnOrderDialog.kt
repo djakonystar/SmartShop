@@ -2,7 +2,6 @@ package uz.texnopos.elektrolife.ui.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,28 +49,24 @@ class ReturnOrderDialog(private val basket: OrderResponse, private val position:
                 if (b) paymentType.add("cash")
                 else paymentType.remove("cash")
                 tvPaymentTypeError.isVisible = false
-                Log.d("returnOrder", paymentType.joinToString())
             }
 
             chbCard.setOnCheckedChangeListener { _, b ->
                 if (b) paymentType.add("card")
                 else paymentType.remove("card")
                 tvPaymentTypeError.isVisible = false
-                Log.d("returnOrder", paymentType.joinToString())
             }
 
             chbDebt.setOnCheckedChangeListener { _, b ->
                 if (b) paymentType.add("debt")
                 else paymentType.remove("debt")
                 tvPaymentTypeError.isVisible = false
-                Log.d("returnOrder", paymentType.joinToString())
             }
 
             chbDebtPaid.setOnCheckedChangeListener { _, b ->
                 if (b) paymentType.add("paid_debt")
                 else paymentType.remove("paid_debt")
                 tvPaymentTypeError.isVisible = false
-                Log.d("returnOrder", paymentType.joinToString())
             }
 
             val orderedCount = order.count
@@ -87,8 +82,6 @@ class ReturnOrderDialog(private val basket: OrderResponse, private val position:
             else etCount.filterForDouble
 
             etCount.addTextChangedListener {
-                Log.d("returnOrder", it.toString())
-                Log.d("returnOrder", it.toString().toDouble.toString())
                 tilCount.isErrorEnabled = false
                 val count = it.toString().toDouble
                 if (count > suffix.substringBefore(' ').toDouble() || count <= 0.0) {
@@ -99,9 +92,9 @@ class ReturnOrderDialog(private val basket: OrderResponse, private val position:
             btnAdd.onClick {
                 val count = etCount.text.toString().toDouble
                 val checked = paymentType.isNotEmpty()
-                if (count != 0.0 && checked) {
+                if (count != 0.0 && count <= order.count && checked) {
                     returnOrder = ReturnOrder(
-                        id = order.id,
+                        id = basket.id,
                         paymentType = paymentType,
                         orders = listOf(returningOrder(id = order.id, count = count))
                     )
@@ -109,6 +102,7 @@ class ReturnOrderDialog(private val basket: OrderResponse, private val position:
                     onAddClick(returnOrder)
                 } else {
                     if (count == 0.0) tilCount.error = getString(R.string.required_field)
+                    if (count > order.count) tilCount.error = getString(R.string.not_enough_error)
                     if (!checked) tvPaymentTypeError.isVisible = true
                 }
             }

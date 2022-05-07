@@ -5,14 +5,13 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.extensions.checkModule
-import uz.texnopos.elektrolife.core.extensions.inflate
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ItemOrderDialogBinding
+import uz.texnopos.elektrolife.settings.Settings
 
-class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
+class OrderAdapter(private val settings: Settings) :
+    RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     var models: MutableList<Product> = mutableListOf()
         set(value) {
@@ -26,14 +25,17 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
         fun populateModel(model: Product, position: Int) {
             binding.apply {
                 tvName.text = model.name
-                val count = if (model.warehouse?.unit?.id == 1) model.count.toInt() else model.count
-                tvQuantity.text =
-                    itemView.context?.getString(
-                        R.string.count_text,
-                        (if (count is Int) count.toInt() else count.toDouble()).toSumFormat
-                    )
-                tvCost.text =
-                    itemView.context?.getString(R.string.sum_text, model.salePrice.toSumFormat)
+                val unitId = model.warehouse?.unit?.id ?: 1
+                tvQuantity.text = itemView.context?.getString(
+                    R.string.price_text,
+                    if (unitId == 1) model.count.toLong().toSumFormat else model.count.toSumFormat,
+                    Constants.getUnitName(root.context, unitId)
+                )
+                tvCost.text = itemView.context?.getString(
+                    R.string.price_text,
+                    model.salePrice.toSumFormat,
+                    settings.currency
+                )
 
                 plusQuantity.onClick {
                     onPlusCount.invoke(model)

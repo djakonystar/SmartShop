@@ -69,12 +69,14 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_product_name"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_standard"
                     android:hint="@string/product_name"
                     app:endIconMode="dropdown_menu"
                     app:endIconTint="@color/app_main_color"
+                    app:layout_constraintEnd_toStartOf="@id/iv_qr_scanner"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/til_category">
 
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -87,6 +89,22 @@
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/iv_qr_scanner"
+                    android:layout_width="@dimen/action_bar_icon_size_mobile"
+                    android:layout_height="@dimen/action_bar_icon_size_mobile"
+                    android:layout_marginEnd="@dimen/margin_standard"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/add_new_category_desc"
+                    android:foregroundGravity="center_vertical"
+                    android:padding="@dimen/padding_middle"
+                    android:src="@drawable/ic_qr_code_scanner"
+                    app:layout_constraintBottom_toBottomOf="@id/til_product_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_product_name"
+                    app:layout_constraintTop_toTopOf="@id/til_product_name"
+                    app:tint="@color/app_main_color" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_product_quantity"

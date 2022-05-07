@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -206,7 +204,7 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
         val viewBinding = LayoutPrintingBinding.bind(view)
 
         viewBinding.apply {
-            ivLogo.setImageResource(R.drawable.logo)
+            ivLogo.setImageResource(R.drawable.logotype)
             tvSeller.text = "Продавец: ${basket.employee.name}"
             val createdDate = basket.createdAt.substring(0..9).changeDateFormat
             val createdTime = basket.createdAt.substring(11..18)

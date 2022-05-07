@@ -13,10 +13,10 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
-import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
+import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
 import uz.texnopos.elektrolife.databinding.DialogTransactionBinding
 
-class TransactionDialog(private val warehouseItem: WarehouseItem) :
+class TransactionDialog(private val transaction: TransactionTransfer) :
     DialogFragment(R.layout.dialog_transaction) {
     private lateinit var binding: DialogTransactionBinding
     private lateinit var product: warehouseProduct
@@ -35,12 +35,11 @@ class TransactionDialog(private val warehouseItem: WarehouseItem) :
         super.onViewCreated(view, savedInstanceState)
 
         binding = DialogTransactionBinding.bind(view)
-        product = warehouseItem.product
 
         binding.apply {
-            tvProductName.text = product.name
+            tvProductName.text = transaction.productName
 
-            val unitId = warehouseItem.unit.id
+            val unitId = transaction.unitId
             if (unitId == 1) {
                 etProductQuantity.setBlockFilter("-,.")
             } else {
@@ -58,18 +57,18 @@ class TransactionDialog(private val warehouseItem: WarehouseItem) :
                 when (val quantity = etProductQuantity.text.toString().toDouble) {
                     0.0 -> tilProductQuantity.error = context?.getString(R.string.required_field)
                     else -> {
-                        val transaction = Transaction(
+                        val postTransaction = Transaction(
                             transactions = listOf(
                                 TransactionItem(
-                                    productId = product.id,
+                                    productId = transaction.productId,
                                     count = quantity,
                                     unitId = unitId,
-                                    price = product.costPrice
+                                    price = transaction.price
                                 )
                             )
                         )
 
-                        transactionViewModel.newTransaction(transaction)
+                        transactionViewModel.newTransaction(postTransaction)
                     }
                 }
             }
