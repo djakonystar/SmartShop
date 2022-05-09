@@ -182,15 +182,15 @@
                         android:id="@+id/til_cost_price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_standard"
                         android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/cost_price"
                         app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toBottomOf="@id/til_cost_currency"
                         app:layout_constraintEnd_toStartOf="@id/til_cost_currency"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/til_cost_currency">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_cost_price"
@@ -210,14 +210,15 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
                         android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/currency_text"
+                        android:visibility="gone"
                         app:endIconMode="dropdown_menu"
                         app:endIconTint="@color/app_main_color"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintBottom_toBottomOf="@id/til_cost_price"
+                        app:layout_constraintTop_toTopOf="@id/til_cost_price">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/act_cost_currency"
@@ -243,15 +244,15 @@
                         android:id="@+id/til_wholesale_price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_standard"
                         android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/wholesale_price"
                         app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toBottomOf="@id/til_wholesale_currency"
                         app:layout_constraintEnd_toStartOf="@id/til_wholesale_currency"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/til_wholesale_currency">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_wholesale_price"
@@ -275,6 +276,7 @@
                         android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/currency_text"
+                        android:visibility="gone"
                         app:endIconMode="dropdown_menu"
                         app:endIconTint="@color/app_main_color"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -304,15 +306,15 @@
                         android:id="@+id/til_min_price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_standard"
                         android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/min_price"
                         app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toBottomOf="@id/til_min_currency"
                         app:layout_constraintEnd_toStartOf="@id/til_min_currency"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/til_min_currency">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_min_price"
@@ -336,6 +338,7 @@
                         android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/currency_text"
+                        android:visibility="gone"
                         app:endIconMode="dropdown_menu"
                         app:endIconTint="@color/app_main_color"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -365,15 +368,15 @@
                         android:id="@+id/til_max_price"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_standard"
                         android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_middle"
+                        android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/max_price"
                         app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toBottomOf="@id/til_max_currency"
                         app:layout_constraintEnd_toStartOf="@id/til_max_currency"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/til_max_currency">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_max_price"
@@ -397,6 +400,7 @@
                         android:layout_marginEnd="@dimen/margin_standard"
                         android:enabled="false"
                         android:hint="@string/currency_text"
+                        android:visibility="gone"
                         app:endIconMode="dropdown_menu"
                         app:endIconTint="@color/app_main_color"
                         app:layout_constraintEnd_toEndOf="parent"

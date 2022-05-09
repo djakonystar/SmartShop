@@ -426,6 +426,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                         actWholesaleCurrency.setText(currencyList[currencyIds[1] - 1])
                         actMinCurrency.setText(currencyList[currencyIds[2] - 1])
                         actMaxCurrency.setText(currencyList[currencyIds[3] - 1])
+
+                        tilCostPrice.suffixText = currencyList[currencyIds[0] - 1]
+                        tilWholesalePrice.suffixText = currencyList[currencyIds[1] - 1]
+                        tilMinPrice.suffixText = currencyList[currencyIds[2] - 1]
+                        tilMaxPrice.suffixText = currencyList[currencyIds[3] - 1]
                     }
                 }
                 ResourceState.ERROR -> {
