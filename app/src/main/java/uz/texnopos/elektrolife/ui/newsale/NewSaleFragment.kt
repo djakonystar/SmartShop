@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.newsale
 
 import android.app.Activity
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -155,6 +156,17 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     context?.getString(R.string.basket_empty_warning)?.let { text ->
                         Snackbar.make(btnFab, text, Snackbar.LENGTH_SHORT).show()
                     }
+                }
+            }
+
+            root.viewTreeObserver.addOnGlobalLayoutListener {
+                val r = Rect()
+                root.getWindowVisibleDisplayFrame(r)
+                val screenHeight = root.rootView.height
+                val keypadHeight = screenHeight - r.bottom
+
+                if (keypadHeight <= screenHeight * 0.15) {
+                    btnFab.show()
                 }
             }
         }

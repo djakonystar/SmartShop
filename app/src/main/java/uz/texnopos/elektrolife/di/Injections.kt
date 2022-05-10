@@ -98,7 +98,7 @@ val viewModelModule = module {
     viewModel { NewProductViewModel(get(),get()) }
     viewModel { ClientViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
-    viewModel { SignInViewModel(get(), get()) }
+    viewModel { SignInViewModel(get(), get(), get()) }
     viewModel { NewClientViewModel(get(), get()) }
     viewModel { OrderViewModel(get(),get()) }
     viewModel { CurrencyViewModel(get(), get()) }

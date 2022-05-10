@@ -147,7 +147,7 @@
                 android:layout_height="0dp"
                 android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/ic_new_product_3d"
+                android:src="@drawable/ic_new_product_3d_new"
                 app:layout_constraintBottom_toTopOf="@id/title_new_product"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -209,7 +209,7 @@
                 android:layout_height="0dp"
                 android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/ic_finance_3d"
+                android:src="@drawable/ic_finance_3d_new"
                 app:layout_constraintBottom_toTopOf="@id/title_finance"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -334,7 +334,7 @@
                 android:layout_height="0dp"
                 android:background="@color/white"
                 android:padding="@dimen/padding_image"
-                android:src="@drawable/ic_warehouse_3d"
+                android:src="@drawable/ic_warehouse_3d_new"
                 app:layout_constraintBottom_toTopOf="@id/title_warehouse"
                 app:layout_constraintTop_toTopOf="parent" />
 

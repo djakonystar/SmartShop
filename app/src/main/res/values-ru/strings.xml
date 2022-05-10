@@ -185,4 +185,7 @@
     <string name="payment_debt_paid">Оплаченный долг</string>
     <string name="order_successfully_returned">Товар возвращено успешно!</string>
     <string name="return_text">Вернуть</string>
+    <string name="product_code_error">Это не код продукта!</string>
+    <string name="basket_code_error">Это не код продажи!</string>
+    <string name="internet_error">У вас проблемы с интернетом!</string>
 </resources>

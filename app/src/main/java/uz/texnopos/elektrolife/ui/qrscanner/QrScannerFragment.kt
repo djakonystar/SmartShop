@@ -20,7 +20,6 @@ import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
 import uz.texnopos.elektrolife.databinding.FragmentQrScannerBinding
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
-import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
 class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
     private lateinit var binding: FragmentQrScannerBinding
@@ -63,7 +62,7 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                                 val uuid = arguments[1]
                                 viewModel.getBasket(type, uuid)
                             } else {
-                                showError("This is not a order code")
+                                showError(getString(R.string.basket_code_error))
                                     .setOnDismissListener {
                                         codeScanner.startPreview()
                                     }
@@ -76,7 +75,7 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                                 val uuid = arguments[1]
                                 viewModel.getProduct(type, uuid)
                             } else {
-                                showError("This is not a product code")
+                                showError(getString(R.string.product_code_error))
                                     .setOnDismissListener {
                                         codeScanner.startPreview()
                                     }
@@ -89,7 +88,7 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                                 val uuid = arguments[1]
                                 viewModel.getProduct(type, uuid)
                             } else {
-                                showError("This is not a product code")
+                                showError(getString(R.string.product_code_error))
                                     .setOnDismissListener {
                                         codeScanner.startPreview()
                                     }

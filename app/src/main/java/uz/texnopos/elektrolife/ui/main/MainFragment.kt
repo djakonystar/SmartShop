@@ -70,12 +70,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
             when (settings.role) {
                 "saller" -> {
-                    iconFinance.setImageResource(R.drawable.sales)
+                    iconFinance.setImageResource(R.drawable.ic_sales_3d_seller)
                     titleFinance.text = context?.getString(R.string.sales)
                     finance.onClick {
                         navController.navigate(R.id.action_mainFragment_to_salesFragment)
                     }
-                    iconNewProduct.setImageResource(R.drawable.salary)
+                    iconNewProduct.setImageResource(R.drawable.ic_salary_3d_new)
                     titleNewProduct.text = getString(R.string.salaries)
                     newProduct.onClick {
                         navController.navigate(

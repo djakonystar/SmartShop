@@ -185,4 +185,7 @@
     <string name="payment_debt_paid">Tólengen qarız</string>
     <string name="order_successfully_returned">Ónim tabıslı qaytarıldı!</string>
     <string name="return_text">Qaytarıw</string>
+    <string name="product_code_error">Bul ónim kodı emes!</string>
+    <string name="basket_code_error">Bul satıw kodı emes!</string>
+    <string name="internet_error">Sizde internet mashqalası bar!</string>
 </resources>

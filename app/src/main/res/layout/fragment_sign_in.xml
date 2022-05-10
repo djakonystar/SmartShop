@@ -28,7 +28,7 @@
             android:id="@+id/lottie_lock"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            app:lottie_rawRes="@raw/lock_main"
+            app:lottie_rawRes="@raw/lock_new"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
             app:layout_constraintBottom_toTopOf="@id/tvDescription"
