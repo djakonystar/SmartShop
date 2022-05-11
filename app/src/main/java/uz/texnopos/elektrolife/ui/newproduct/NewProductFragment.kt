@@ -1,10 +1,14 @@
 package uz.texnopos.elektrolife.ui.newproduct
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +19,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.Product
@@ -127,6 +132,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etMinPrice.filterForDouble
             etMaxPrice.filterForDouble
 
+            etCostPrice.addTextChangedListener(SumMaskWatcher(etCostPrice))
+            etWholesalePrice.addTextChangedListener(SumMaskWatcher(etWholesalePrice))
+            etMinPrice.addTextChangedListener(SumMaskWatcher(etMinPrice))
+            etMaxPrice.addTextChangedListener(SumMaskWatcher(etMaxPrice))
+
             etCostPrice.addTextChangedListener {
                 tilCostPrice.isErrorEnabled = false
             }
@@ -172,7 +182,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             }
 
             etCostPrice.doOnTextChanged { it, _, _, _ ->
-                liveCostPrice.postValue(it.toString().toDouble)
+                liveCostPrice.postValue(it.toString().filter { it != ' ' }.toDouble)
             }
 
             actCostCurrency.threshold = 100
@@ -202,10 +212,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
-                val costPrice = etCostPrice.text.toString().toDouble
+                val costPrice =
+                    etCostPrice.text.toString().filter { it != ' ' }.toDouble
                 val productQuantity = etProductQuantity.text.toString().toDouble
                 val brand = etBrand.text.toString()
-                val wholesalePrice = etWholesalePrice.text.toString().toDouble
+                val wholesalePrice = etWholesalePrice.text.toString().filter { it != ' ' }.toDouble
                 val minPrice = etMinPrice.text.toString().toDouble
                 val maxPrice = etMaxPrice.text.toString().toDouble
 
@@ -277,7 +288,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
     private fun Double.rounding(): Double {
         val price = this
-        val cost = binding.etCostPrice.text.toString().toDouble
+        val cost = binding.etCostPrice.text.toString().filter { it.isDigit() || it == '.' }.toDouble
         val sum = if (cost < 1) 100 else 500
         val divider = if (cost < 1) 100 else 1000
         return ((price + sum) / divider).format(0).toDouble() * divider
@@ -320,9 +331,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 val minPrice = ((minPercent / 100.0 + 1) * price * settings.usdToUzs)
                 val maxPrice = ((maxPercent / 100.0 + 1) * price * settings.usdToUzs)
 
-                etWholesalePrice.setText(wholesalePrice format 2)
-                etMinPrice.setText(minPrice.rounding() format 2)
-                etMaxPrice.setText(maxPrice.rounding() format 2)
+                etWholesalePrice.setText((wholesalePrice format 2).toString().sumFormat)
+                etMinPrice.setText((minPrice.rounding() format 2).toString().sumFormat)
+                etMaxPrice.setText((maxPrice.rounding() format 2).toString().sumFormat)
 
                 if (price == 0.0) {
                     etWholesalePrice.text!!.clear()
@@ -363,9 +374,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 val minPrice = ((minPercent / 100.0 + 1) * price * rateForMin)
                 val maxPrice = ((maxPercent / 100.0 + 1) * price * rateForMax)
 
-                etWholesalePrice.setText(wholesalePrice format 2)
-                etMinPrice.setText(minPrice format 2)
-                etMaxPrice.setText(maxPrice format 2)
+                etWholesalePrice.setText((wholesalePrice format 2).toString().sumFormat)
+                etMinPrice.setText((minPrice format 2).toString().sumFormat)
+                etMaxPrice.setText((maxPrice format 2).toString().sumFormat)
 
                 if (price == 0.0) {
                     etWholesalePrice.text!!.clear()

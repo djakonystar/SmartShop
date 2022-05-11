@@ -142,6 +142,17 @@ val String.toSumFormat: String
         return text.reversed()
     }
 
+val String.sumFormat: String
+    get() {
+        val beforePoint = this.substringBefore('.')
+        var text = beforePoint.reversed()
+        text = text.chunked(3).joinToString(" ")
+        if (this.contains('.')) {
+            val afterPoint = this.substringAfter('.')
+            return "${text.reversed()}.$afterPoint"
+        }
+        return text.reversed()
+    }
 
 val Int.toSumFormat: String
     get() {

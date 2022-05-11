@@ -202,6 +202,7 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
     @SuppressLint("SetTextI18n")
     private fun prepareReceipt(view: View) {
         val viewBinding = LayoutPrintingBinding.bind(view)
+        val order = orderResponse
 
         viewBinding.apply {
             ivLogo.setImageResource(R.drawable.logotype)
@@ -212,30 +213,30 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
             recyclerView.adapter = orderReceiptAdapter
             tvTotal.text = getString(
                 R.string.price_text,
-                orderResponse.amount.sum.toSumFormat,
+                order.amount.sum.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.cash <= 0) {
+            if (order.amount.cash <= 0) {
                 tvCashTitle.isVisible = false
                 tvDotsCash.isVisible = false
                 tvCash.isVisible = false
             }
             tvCash.text = getString(
                 R.string.price_text,
-                orderResponse.amount.cash.toSumFormat,
+                order.amount.cash.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.card <= 0) {
+            if (order.amount.card <= 0) {
                 tvCardTitle.isVisible = false
                 tvDotsCard.isVisible = false
                 tvCard.isVisible = false
             }
             tvCard.text = getString(
                 R.string.price_text,
-                orderResponse.amount.card.toSumFormat,
+                order.amount.card.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.debt <= 0) {
+            if (order.amount.debt <= 0) {
                 tvDebtTitle.isVisible = false
                 tvDotsDebt.isVisible = false
                 tvDebt.isVisible = false
@@ -243,26 +244,26 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
             tvDebtTitle.text = "Долг (до ${basket.term?.changeDateFormat})"
             tvDebt.text = getString(
                 R.string.price_text,
-                orderResponse.amount.debt.toSumFormat,
+                order.amount.debt.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.paidDebt != 0.0) {
+            if (order.amount.paidDebt > 0.0) {
                 tvDebtPaidTitle.isVisible = true
                 tvDotsDebtPaid.isVisible = true
                 tvDebtPaid.isVisible = true
                 tvDebtPaid.text = getString(
                     R.string.price_text,
-                    orderResponse.amount.paidDebt.toSumFormat,
+                    order.amount.paidDebt.toSumFormat,
                     settings.currency
                 )
             }
-            if (orderResponse.amount.remaining != 0.0) {
+            if (order.amount.remaining > 0.0) {
                 tvDebtRemainedTitle.isVisible = true
                 tvDotsDebtRemained.isVisible = true
                 tvDebtRemained.isVisible = true
                 tvDebtRemained.text = getString(
                     R.string.price_text,
-                    orderResponse.amount.remaining.toSumFormat,
+                    order.amount.remaining.toSumFormat,
                     settings.currency
                 )
             }

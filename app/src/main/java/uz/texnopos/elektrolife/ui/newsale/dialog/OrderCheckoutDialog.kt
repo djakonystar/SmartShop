@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.delay
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -85,19 +86,23 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
 
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
+                tilCard.isErrorEnabled = false
                 calculateDebt()
             }
             btnCashMagnet.onClick {
                 etCard.text?.clear()
-                etCash.setText(totalPrice.toString())
+                etCash.setText(totalPrice format 2)
+                etCash.setSelection(etCash.length())
             }
             etCard.addTextChangedListener {
+                tilCash.isErrorEnabled = false
                 tilCard.isErrorEnabled = false
                 calculateDebt()
             }
             btnCardMagnet.onClick {
                 etCash.text?.clear()
-                etCard.setText(totalPrice.toString())
+                etCard.setText(totalPrice format 2)
+                etCard.setSelection(etCard.length())
             }
             etDate.addTextChangedListener {
                 tilDate.isErrorEnabled = false

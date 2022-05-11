@@ -58,7 +58,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
 
             btnCashMagnet.onClick {
                 etCard.text?.clear()
-                etCash.setText(order.amount.remaining.toString())
+                etCash.setText(order.amount.remaining format 2)
                 calculateDebt()
             }
 
@@ -70,7 +70,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
 
             btnCardMagnet.onClick {
                 etCash.text?.clear()
-                etCard.setText(order.amount.remaining.toString())
+                etCard.setText(order.amount.remaining format 2)
                 calculateDebt()
             }
 
