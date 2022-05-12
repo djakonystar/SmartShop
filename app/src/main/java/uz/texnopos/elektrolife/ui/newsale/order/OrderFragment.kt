@@ -99,7 +99,9 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             adapter.onDeleteItemClickListener { product, position ->
                 showWarning(getString(R.string.confirm_remove_uz))
                     .setOnPositiveButtonClickListener {
-                        adapter.removeItem(product, position)
+                        adapter.removeItem(product, position) {
+                            adapter.models = it
+                        }
                         Basket.deleteProduct(product)
                         val newPrice = Basket.products.sumOf { product ->
                             product.salePrice * product.count
