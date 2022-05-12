@@ -4,18 +4,52 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
-import uz.texnopos.elektrolife.core.extensions.sumFormat
 
 class SumMaskWatcher(private val editText: EditText) : TextWatcher {
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+    private lateinit var before: String
+    private var cursorBefore = 0
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        before = p0.toString()
+        cursorBefore = editText.selectionStart
+        Log.d("cursorPosition", "Before: ${p0}")
+    }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
     override fun afterTextChanged(p0: Editable?) {
         editText.removeTextChangedListener(this)
-        val price = editText.text.toString().filter { it.isDigit() || it == '.' }
+        val text = editText.text.toString()
+        val price = text.filter { it.isDigit() || it == '.' }
+        var cursorPosition = editText.selectionStart
+
+//        cursorPosition += editText.text.toString().substring(0, cursorPosition).count { it == ' ' }
+        Log.d("cursorPosition", "Cursor: $cursorPosition")
+        Log.d("cursorPosition", "CursorBefore: $cursorBefore")
+        val cursorAtTheEnd = cursorPosition == editText.length()
         editText.setText(price.sumFormat)
-        editText.setSelection(editText.length())
+        Log.d("cursorPosition", "After: ${editText.text}")
+        if (cursorAtTheEnd) cursorPosition = editText.length()
+        else {
+            if (cursorPosition > 0) {
+                if (editText.length() < before.length) {
+                    val space = before[cursorPosition - 1] == ' '
+                    Log.d("cursorPosition", "Was Space: $space")
+                    if (!space) {
+                        val ss = before.substring(0, cursorBefore)
+                        cursorPosition = if (ss.length > 3 && ss.length % 3 == 1) cursorBefore - 2
+                        else cursorBefore - 1
+                    } else {
+                        val ss = text.substringBefore(' ')
+                        if (ss.filter { it != ' ' }.length % 3 == 1) cursorPosition--
+                    }
+                } else if (editText.length() > before.length) {
+                    val l = before.length - cursorPosition
+                    cursorPosition = editText.length() - l - 1
+                }
+            }
+        }
+        Log.d("cursorPosition", "CursorFinal: $cursorPosition")
+        editText.setSelection(cursorPosition)
         editText.addTextChangedListener(this)
     }
 

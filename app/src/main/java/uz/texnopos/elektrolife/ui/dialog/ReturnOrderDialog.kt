@@ -42,7 +42,7 @@ class ReturnOrderDialog(private val basket: OrderResponse, private val position:
 
             chbCash.isVisible = basket.amount.cash > 0
             chbCard.isVisible = basket.amount.card > 0
-            chbDebt.isVisible = basket.amount.debt > 0
+            chbDebt.isVisible = basket.amount.remaining > 0
             chbDebtPaid.isVisible = basket.amount.paidDebt > 0
 
             chbCash.setOnCheckedChangeListener { _, b ->

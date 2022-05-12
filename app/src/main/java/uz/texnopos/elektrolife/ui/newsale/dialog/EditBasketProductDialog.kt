@@ -148,12 +148,22 @@ class EditBasketProductDialog(private val product: Product) : DialogFragment() {
         sumLiveData.observe(viewLifecycleOwner) { s ->
             val sum = s.ifEmpty { "0" }.toDouble()
             binding.apply {
-                if (sum < product.wholesalePrice.price * settings.usdToUzs || sum > product.maxPrice.price) {
-                    if (!tilSumma.isErrorEnabled) {
-                        tilSumma.error = context?.getString(R.string.err_valid_sum)
+                if (product.wholesalePrice.code == "USD") {
+                    if (sum < product.wholesalePrice.price * settings.usdToUzs || sum > product.maxPrice.price) {
+                        if (!tilSumma.isErrorEnabled) {
+                            tilSumma.error = context?.getString(R.string.err_valid_sum)
+                        }
+                    } else {
+                        tilSumma.isErrorEnabled = false
                     }
                 } else {
-                    tilSumma.isErrorEnabled = false
+                    if (sum < product.wholesalePrice.price || sum > product.maxPrice.price) {
+                        if (!tilSumma.isErrorEnabled) {
+                            tilSumma.error = context?.getString(R.string.err_valid_sum)
+                        }
+                    } else {
+                        tilSumma.isErrorEnabled = false
+                    }
                 }
             }
         }
