@@ -11,8 +11,10 @@ android {
     defaultConfig {
         applicationId "uz.texnopos.smartshoptest" // Test
 //        applicationId "uz.texnopos.smartshopteststore" // Test PlayStore
-//        applicationId "uz.texnopos.smartshopel" // ElektroLife
-//        applicationId "uz.texnopos.smartshopluxgg" // LuxGadget
+//        applicationId "uz.texnopos.smartshopsinyor" // Sinyor
+//        applicationId "uz.texnopos.smartshopmobishop" // MobiShop
+//        applicationId "uz.texnopos.smartshopelnew" // ElektroLife
+//        applicationId "uz.texnopos.smartshopluxggnew" // LuxGadget
 //        applicationId "uz.texnopos.smartshopcs" // Computer Service
 //        applicationId "uz.texnopos.smartshopks" // Qońırat Shop
 //        applicationId "uz.texnopos.smartshoptexas" // Taxiatas

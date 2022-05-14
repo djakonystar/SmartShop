@@ -307,7 +307,7 @@ infix fun Double.format(afterPoint: Int): String {
     return if (formatted.contains(',')) {
         formatted.replace(',', '.')
     } else {
-        formatted.replace('.', ',')
+        formatted
     }
 }
 
