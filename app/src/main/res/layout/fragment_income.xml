@@ -102,9 +102,62 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/finance_item_title_size_mobile"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_date"
                 tools:ignore="SpUsage" />
+
+            <ImageView
+                android:id="@+id/iv_cash_price"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:contentDescription="@string/cash_icon"
+                android:src="@drawable/ic_cash"
+                app:layout_constraintBottom_toBottomOf="@id/tv_cash_price"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_cash_price"
+                app:tint="@color/app_main_color" />
+
+            <TextView
+                android:id="@+id/tv_cash_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:layout_marginBottom="@dimen/margin_standard"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                android:textColor="@color/app_main_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_cash_price"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalSum" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.52" />
+
+            <ImageView
+                android:id="@+id/iv_card_price"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="@string/cash_icon"
+                android:src="@drawable/ic_card"
+                app:layout_constraintBottom_toBottomOf="@id/tv_card_price"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/tv_card_price"
+                app:tint="@color/app_main_color" />
+
+            <TextView
+                android:id="@+id/tv_card_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+                android:textColor="@color/app_main_color"
+                app:layout_constraintStart_toEndOf="@id/iv_card_price"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalSum" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

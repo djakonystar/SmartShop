@@ -35,6 +35,7 @@ import uz.texnopos.elektrolife.ui.newsale.order.OrderAdapter
 import uz.texnopos.elektrolife.ui.newsale.order.OrderViewModel
 import uz.texnopos.elektrolife.ui.newsale.order.ReceiptAdapter
 import uz.texnopos.elektrolife.ui.payment.PaymentViewModel
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerViewModel
 import uz.texnopos.elektrolife.ui.sales.SalesAdapter
 import uz.texnopos.elektrolife.ui.sales.SalesViewModel
 import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
@@ -47,11 +48,15 @@ import java.util.concurrent.TimeUnit
 
 //private const val baseUrl = "https://electro-life.my-project.site" // Test
 private const val baseUrl = "https://smart-shop.my-project.site" // Test-new
-//private const val baseUrl = "https://electro-life.texnopos.site" // ElectroLife
-//private const val baseUrl = "http://lux-gadget.texnopos.site" // LuxGadget
+//private const val baseUrl = "https://sinyor.texnopos.site" // Sinyor
+//private const val baseUrl = "https://mobishop.texnopos.site" // MobiShop
+//private const val baseUrl = "https://raya-bijuteriya.texnopos.site" // Raya-Bujiteriya
+//private const val baseUrl = "https://new-electro-life.texnopos.site" // ElectroLife
+//private const val baseUrl = "https://new-lux-gadget.texnopos.site" // LuxGadget
+//private const val baseUrl = "https://verita.texnopos.site" // Verita
 //private const val baseUrl = "https://computer-service.texnopos.site" // Computer Service
-//private const val baseUrl = "https://qonirat-shop.texnopos.site" // Qońirat Shop
-//private const val baseUrl = "http://taxiatas.texnopos.uz" // Taxiatas
+//private const val baseUrl = "https:/new-qoniratshop.texnopos.site" // Qońirat Shop
+//private const val baseUrl = "https://taxiatas.texnopos.uz" // Taxiatas
 private const val timeOut = 50L
 
 val networkModule = module {
@@ -97,7 +102,7 @@ val viewModelModule = module {
     viewModel { NewProductViewModel(get(),get()) }
     viewModel { ClientViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
-    viewModel { SignInViewModel(get(), get()) }
+    viewModel { SignInViewModel(get(), get(), get()) }
     viewModel { NewClientViewModel(get(), get()) }
     viewModel { OrderViewModel(get(),get()) }
     viewModel { CurrencyViewModel(get(), get()) }
@@ -109,7 +114,8 @@ val viewModelModule = module {
     viewModel { NewSaleViewModel(get(), get()) }
     viewModel { SalaryViewModel(get(), get()) }
     viewModel { SalaryDetailViewModel(get(), get()) }
-    viewModel { PaymentViewModel(get(), get()) }
+    viewModel { PaymentViewModel(get(), get(), get()) }
+    viewModel { QrScannerViewModel(get(), get()) }
 }
 
 val adapterModule = module {
@@ -118,7 +124,7 @@ val adapterModule = module {
     single { SalesDetailAdapter(get()) }
     single { WarehouseAdapter() }
     single { NewSaleProductAdapter() }
-    single { OrderAdapter() }
+    single { OrderAdapter(get()) }
     single { FinanceDetailAdapter() }
     single { ClientPaymentAdapter(get()) }
     single { ReceiptAdapter(get()) }

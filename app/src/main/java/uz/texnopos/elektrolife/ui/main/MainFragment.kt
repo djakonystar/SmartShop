@@ -17,6 +17,7 @@ import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.main.dialog.LangDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
@@ -31,13 +32,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         navController = findNavController()
 
         binding.apply {
-            ivLogo.setImageResource(R.drawable.logo)
+            val logoResId = resources.getIdentifier(
+                "logo",
+                "drawable",
+                requireActivity().packageName
+            )
+            if (logoResId != 0) {
+                ivLogo.setImageResource(logoResId)
+            }
 
             clients.onClick {
                 navController.navigate(R.id.action_mainFragment_to_clientsFragment)
             }
-            newPayment.onClick {
-                navController.navigate(MainFragmentDirections.actionMainFragmentToNewPayment(client = "null"))
+            returnOrder.onClick {
+                navController.navigate(
+                    MainFragmentDirections.actionMainFragmentToQrScannerFragment(QrScannerFragment.GET_BASKET)
+                )
             }
             warehouse.onClick {
                 navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
@@ -60,12 +70,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
             when (settings.role) {
                 "saller" -> {
-                    iconFinance.setImageResource(R.drawable.sales)
+                    iconFinance.setImageResource(R.drawable.ic_sales_3d_seller)
                     titleFinance.text = context?.getString(R.string.sales)
                     finance.onClick {
                         navController.navigate(R.id.action_mainFragment_to_salesFragment)
                     }
-                    iconNewProduct.setImageResource(R.drawable.salary)
+                    iconNewProduct.setImageResource(R.drawable.ic_salary_3d_new)
                     titleNewProduct.text = getString(R.string.salaries)
                     newProduct.onClick {
                         navController.navigate(

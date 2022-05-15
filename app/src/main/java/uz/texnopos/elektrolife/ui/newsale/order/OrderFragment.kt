@@ -99,7 +99,9 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             adapter.onDeleteItemClickListener { product, position ->
                 showWarning(getString(R.string.confirm_remove_uz))
                     .setOnPositiveButtonClickListener {
-                        adapter.removeItem(product, position)
+                        adapter.removeItem(product, position) {
+                            adapter.models = it
+                        }
                         Basket.deleteProduct(product)
                         val newPrice = Basket.products.sumOf { product ->
                             product.salePrice * product.count
@@ -138,6 +140,11 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
         }
 
         setUpObservers()
+    }
+
+    override fun onDetach() {
+        adapter.models = mutableListOf()
+        super.onDetach()
     }
 
     private fun setLoading(loading: Boolean) {
@@ -187,7 +194,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
         val orders = basket.orders
 
         viewBinding.apply {
-            ivLogo.setImageResource(R.drawable.logo)
+            ivLogo.setImageResource(R.drawable.logotype)
             tvSeller.text = "Продавец: ${basket.employee.name}"
             val createdDate = basket.createdAt.substring(0..9).changeDateFormat
             val createdTime = basket.createdAt.substring(11..18)

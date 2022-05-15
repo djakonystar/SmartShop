@@ -21,27 +21,6 @@ open class Resource<out T> constructor(
     }
 }
 
-open class ResourceDelete constructor(
-    val status: ResourceState,
-    val message: String?
-) {
-
-    companion object {
-        fun success(): ResourceDelete {
-            return ResourceDelete(ResourceState.SUCCESS, null)
-        }
-
-        fun error(message: String?): ResourceDelete {
-            return ResourceDelete(ResourceState.ERROR, message)
-        }
-
-        fun loading(): ResourceDelete{
-            return ResourceDelete(ResourceState.LOADING, null)
-        }
-    }
-}
-
-
 enum class ResourceState {
     LOADING, SUCCESS, ERROR
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -26,6 +24,7 @@ import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.databinding.FragmentSalesDetailBinding
 import uz.texnopos.elektrolife.databinding.LayoutPrintingBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.dialog.ReturnOrderDialog
 import uz.texnopos.elektrolife.ui.payment.AddPaymentDialog
 
 class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
@@ -41,6 +40,7 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
     private lateinit var orders: List<Order>
     private lateinit var basket: Basket
     private lateinit var orderResponse: OrderResponse
+    private lateinit var returnOrderDialog: ReturnOrderDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +79,15 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                     else if (dy < 0 && !expandableFab.isVisible) expandableFab.show()
                 }
             })
+
+            adapter.setOnItemClickListener { position ->
+                returnOrderDialog = ReturnOrderDialog(orderResponse, position)
+                returnOrderDialog.setOnAddClickListener { viewModel.returnOrder(it) }
+                returnOrderDialog.show(
+                    requireActivity().supportFragmentManager,
+                    returnOrderDialog.tag
+                )
+            }
 
             fabPrintReceipt.onClick {
                 printReceipt(printingView)
@@ -134,6 +143,24 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                 }
             }
         }
+
+        viewModel.returningOrder.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    showSuccess(getString(R.string.order_successfully_returned))
+                        .setOnDismissListener {
+                            returnOrderDialog.dismiss()
+                            viewModel.getOrders(basketId)
+                        }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showError(it.message)
+                }
+            }
+        }
     }
 
     private fun setAmount() {
@@ -175,9 +202,10 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
     @SuppressLint("SetTextI18n")
     private fun prepareReceipt(view: View) {
         val viewBinding = LayoutPrintingBinding.bind(view)
+        val order = orderResponse
 
         viewBinding.apply {
-            ivLogo.setImageResource(R.drawable.logo)
+            ivLogo.setImageResource(R.drawable.logotype)
             tvSeller.text = "Продавец: ${basket.employee.name}"
             val createdDate = basket.createdAt.substring(0..9).changeDateFormat
             val createdTime = basket.createdAt.substring(11..18)
@@ -185,30 +213,30 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
             recyclerView.adapter = orderReceiptAdapter
             tvTotal.text = getString(
                 R.string.price_text,
-                orderResponse.amount.sum.toSumFormat,
+                order.amount.sum.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.cash <= 0) {
+            if (order.amount.cash <= 0) {
                 tvCashTitle.isVisible = false
                 tvDotsCash.isVisible = false
                 tvCash.isVisible = false
             }
             tvCash.text = getString(
                 R.string.price_text,
-                orderResponse.amount.cash.toSumFormat,
+                order.amount.cash.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.card <= 0) {
+            if (order.amount.card <= 0) {
                 tvCardTitle.isVisible = false
                 tvDotsCard.isVisible = false
                 tvCard.isVisible = false
             }
             tvCard.text = getString(
                 R.string.price_text,
-                orderResponse.amount.card.toSumFormat,
+                order.amount.card.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.debt <= 0) {
+            if (order.amount.debt <= 0) {
                 tvDebtTitle.isVisible = false
                 tvDotsDebt.isVisible = false
                 tvDebt.isVisible = false
@@ -216,26 +244,26 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
             tvDebtTitle.text = "Долг (до ${basket.term?.changeDateFormat})"
             tvDebt.text = getString(
                 R.string.price_text,
-                orderResponse.amount.debt.toSumFormat,
+                order.amount.debt.toSumFormat,
                 settings.currency
             )
-            if (orderResponse.amount.paidDebt != 0.0) {
+            if (order.amount.paidDebt > 0.0) {
                 tvDebtPaidTitle.isVisible = true
                 tvDotsDebtPaid.isVisible = true
                 tvDebtPaid.isVisible = true
                 tvDebtPaid.text = getString(
                     R.string.price_text,
-                    orderResponse.amount.paidDebt.toSumFormat,
+                    order.amount.paidDebt.toSumFormat,
                     settings.currency
                 )
             }
-            if (orderResponse.amount.remaining != 0.0) {
+            if (order.amount.remaining > 0.0) {
                 tvDebtRemainedTitle.isVisible = true
                 tvDotsDebtRemained.isVisible = true
                 tvDebtRemained.isVisible = true
                 tvDebtRemained.text = getString(
                     R.string.price_text,
-                    orderResponse.amount.remaining.toSumFormat,
+                    order.amount.remaining.toSumFormat,
                     settings.currency
                 )
             }

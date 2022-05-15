@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.newsale
 
 import android.app.Activity
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.newSaleProduct
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
@@ -28,6 +31,7 @@ import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddToBasketDialog
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
 class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var binding: FragmentNewSaleBinding
@@ -76,19 +80,24 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
 
             btnScanner.onClick {
-                navController.navigate(R.id.action_newSaleFragment_to_qrScannerFragment)
+                navController.navigate(
+                    NewSaleFragmentDirections.actionNewSaleFragmentToQrScannerFragment(QrScannerFragment.GET_PRODUCT)
+                )
             }
         }
 
         binding.apply {
-            productCode = navArgs.productCode
-            if (productCode.startsWith("product")) {
-                val arguments = productCode.split("\n")
-                val type = arguments[0]
-                val uuid = arguments[1]
-                viewModel.getProduct(type, uuid)
-            } else if (productCode != "null") {
-                showError("It is not product code")
+            val productString = navArgs.product
+            if (productString != "null") {
+                val product = Gson().fromJson(productString, newSaleProduct::class.java)
+                val dialog = AddToBasketDialog(product)
+                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                dialog.setOnItemAddedListener { quantity, salePrice ->
+                    Basket.setProduct(product, quantity, salePrice.toDouble())
+                }
+                dialog.setOnDismissListener {
+                    hideSoftKeyboard()
+                }
             }
 
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -149,11 +158,27 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     }
                 }
             }
+
+            root.viewTreeObserver.addOnGlobalLayoutListener {
+                val r = Rect()
+                root.getWindowVisibleDisplayFrame(r)
+                val screenHeight = root.rootView.height
+                val keypadHeight = screenHeight - r.bottom
+
+                if (keypadHeight <= screenHeight * 0.15) {
+                    btnFab.show()
+                }
+            }
         }
 
         categoryViewModel.getCategories()
         viewModel.getProducts(page, searchValue)
         setUpObservers()
+    }
+
+    override fun onDetach() {
+        adapter.models = listOf()
+        super.onDetach()
     }
 
     private fun setLoading(loading: Boolean) {

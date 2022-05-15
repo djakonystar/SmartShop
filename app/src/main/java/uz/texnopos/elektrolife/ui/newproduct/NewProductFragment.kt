@@ -1,10 +1,14 @@
 package uz.texnopos.elektrolife.ui.newproduct
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -13,11 +17,14 @@ import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.MaskWatcherPayment
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.Product
+import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
 import uz.texnopos.elektrolife.data.model.newproduct.Warehouse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
@@ -26,7 +33,7 @@ import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
-import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
@@ -92,11 +99,29 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
                 val warehouseItem = listProducts.getValue(productName)
-                val dialog = TransactionDialog(warehouseItem.product)
+                val transaction = TransactionTransfer(
+                    warehouseItem.product.id,
+                    warehouseItem.product.name,
+                    warehouseItem.count,
+                    warehouseItem.unit.id,
+                    Price(
+                        warehouseItem.product.costPrice.currencyId,
+                        warehouseItem.product.costPrice.price
+                    )
+                )
+                val dialog = TransactionDialog(transaction)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
                     etProductName.text.clear()
                 }
+            }
+
+            ivQrScanner.onClick {
+                navController.navigate(
+                    NewProductFragmentDirections.actionNewProductFragmentToQrScannerFragment(
+                        QrScannerFragment.POST_TRANSACTION
+                    )
+                )
             }
 
             etProductQuantity.addTextChangedListener {
@@ -107,6 +132,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etWholesalePrice.filterForDouble
             etMinPrice.filterForDouble
             etMaxPrice.filterForDouble
+
+//            etCostPrice.addTextChangedListener(SumMaskWatcher(etCostPrice))
+//            etWholesalePrice.addTextChangedListener(SumMaskWatcher(etWholesalePrice))
+//            etMinPrice.addTextChangedListener(SumMaskWatcher(etMinPrice))
+//            etMaxPrice.addTextChangedListener(SumMaskWatcher(etMaxPrice))
 
             etCostPrice.addTextChangedListener {
                 tilCostPrice.isErrorEnabled = false
@@ -153,7 +183,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             }
 
             etCostPrice.doOnTextChanged { it, _, _, _ ->
-                liveCostPrice.postValue(it.toString().toDouble)
+                liveCostPrice.postValue(it.toString().filter { it.isDigit() || it == '.' }.toDouble)
             }
 
             actCostCurrency.threshold = 100
@@ -183,10 +213,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
-                val costPrice = etCostPrice.text.toString().toDouble
+                val costPrice =
+                    etCostPrice.text.toString().filter { it != ' ' }.toDouble
                 val productQuantity = etProductQuantity.text.toString().toDouble
                 val brand = etBrand.text.toString()
-                val wholesalePrice = etWholesalePrice.text.toString().toDouble
+                val wholesalePrice = etWholesalePrice.text.toString().filter { it != ' ' }.toDouble
                 val minPrice = etMinPrice.text.toString().toDouble
                 val maxPrice = etMaxPrice.text.toString().toDouble
 
@@ -258,7 +289,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
     private fun Double.rounding(): Double {
         val price = this
-        val cost = binding.etCostPrice.text.toString().toDouble
+        val cost = binding.etCostPrice.text.toString().filter { it.isDigit() || it == '.' }.toDouble
         val sum = if (cost < 1) 100 else 500
         val divider = if (cost < 1) 100 else 1000
         return ((price + sum) / divider).format(0).toDouble() * divider
@@ -407,6 +438,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                         actWholesaleCurrency.setText(currencyList[currencyIds[1] - 1])
                         actMinCurrency.setText(currencyList[currencyIds[2] - 1])
                         actMaxCurrency.setText(currencyList[currencyIds[3] - 1])
+
+                        tilCostPrice.suffixText = currencyList[currencyIds[0] - 1]
+                        tilWholesalePrice.suffixText = currencyList[currencyIds[1] - 1]
+                        tilMinPrice.suffixText = currencyList[currencyIds[2] - 1]
+                        tilMaxPrice.suffixText = currencyList[currencyIds[3] - 1]
                     }
                 }
                 ResourceState.ERROR -> {

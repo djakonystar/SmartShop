@@ -117,22 +117,22 @@
                 app:tint="@color/app_main_color" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCash"
+                android:id="@+id/til_cash"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_standard"
-                android:layout_marginTop="@dimen/margin_middle"
+                android:layout_marginTop="@dimen/margin_standard"
                 android:layout_marginEnd="@dimen/margin_middle"
                 android:hint="@string/cash_cost"
                 app:helperText="@string/cash_pay_helper"
-                app:layout_constraintEnd_toStartOf="@id/btnCashMagnet"
+                app:layout_constraintEnd_toStartOf="@id/btn_cash_magnet"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilClient">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etCash"
+                    android:id="@+id/et_cash"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="19"
                     android:singleLine="true"
@@ -144,7 +144,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
-                android:id="@+id/btnCashMagnet"
+                android:id="@+id/btn_cash_magnet"
                 android:layout_width="@dimen/img_standard_height_mobile"
                 android:layout_height="@dimen/img_standard_height_mobile"
                 android:layout_marginTop="@dimen/margin_standard"
@@ -156,11 +156,11 @@
                 android:padding="2dp"
                 android:src="@drawable/magnet"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tilCash"
+                app:layout_constraintTop_toTopOf="@id/til_cash"
                 app:tint="@color/app_main_color" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCard"
+                android:id="@+id/til_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_standard"
@@ -168,14 +168,14 @@
                 android:layout_marginEnd="@dimen/margin_middle"
                 android:hint="@string/card_cost"
                 app:helperText="@string/card_pay_helper"
-                app:layout_constraintEnd_toStartOf="@id/btnCardMagnet"
+                app:layout_constraintEnd_toStartOf="@id/btn_card_magnet"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilCash">
+                app:layout_constraintTop_toBottomOf="@id/til_cash">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etCard"
+                    android:id="@+id/et_card"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:inputType="numberDecimal"
                     android:maxLength="19"
                     android:singleLine="true"
@@ -187,7 +187,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
-                android:id="@+id/btnCardMagnet"
+                android:id="@+id/btn_card_magnet"
                 android:layout_width="@dimen/img_standard_height_mobile"
                 android:layout_height="@dimen/img_standard_height_mobile"
                 android:layout_marginTop="@dimen/margin_standard"
@@ -199,7 +199,7 @@
                 android:padding="2dp"
                 android:src="@drawable/magnet"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tilCard"
+                app:layout_constraintTop_toTopOf="@id/til_card"
                 app:tint="@color/app_main_color" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -212,7 +212,7 @@
                 app:helperText="@string/debt_pay_date_helper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilCard">
+                app:layout_constraintTop_toBottomOf="@id/til_card">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDate"
