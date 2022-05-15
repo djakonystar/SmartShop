@@ -4,10 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
-import uz.texnopos.elektrolife.core.extensions.checkModule
-import uz.texnopos.elektrolife.core.extensions.inflate
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
-import uz.texnopos.elektrolife.core.extensions.unitConverter
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.sales.Order
 import uz.texnopos.elektrolife.databinding.ItemSalesDetailBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -17,7 +14,7 @@ class SalesDetailAdapter(private val settings: Settings) :
 
     inner class DetailViewHolder(private val binding: ItemSalesDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun populateModel(order: Order) {
+        fun populateModel(order: Order, position: Int) {
             binding.apply {
                 tvProductName.text = order.productName
                 tvBrand.text = order.brand
@@ -38,6 +35,11 @@ class SalesDetailAdapter(private val settings: Settings) :
                     total.checkModule.toSumFormat,
                     settings.currency
                 )
+
+                itemView.isEnabled = order.count != 0.0
+                root.onClick {
+                    onItemClick(position)
+                }
             }
         }
     }
@@ -49,6 +51,11 @@ class SalesDetailAdapter(private val settings: Settings) :
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        holder.populateModel(models[position])
+        holder.populateModel(models[position], position)
+    }
+
+    private var onItemClick: (position: Int) -> Unit = {}
+    fun setOnItemClickListener(onItemClick: (position: Int) -> Unit) {
+        this.onItemClick = onItemClick
     }
 }

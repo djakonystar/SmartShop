@@ -73,4 +73,9 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
             }
         }
     }
+
+    override fun onDetach() {
+        adapter.models = listOf()
+        super.onDetach()
+    }
 }

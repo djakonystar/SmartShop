@@ -10,18 +10,16 @@ import androidx.fragment.app.DialogFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.setBlockFilter
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.showSuccess
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
-import uz.texnopos.elektrolife.data.model.warehouse.Product
+import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
 import uz.texnopos.elektrolife.databinding.DialogTransactionBinding
 
-class TransactionDialog(private val product: Product) :
+class TransactionDialog(private val transaction: TransactionTransfer) :
     DialogFragment(R.layout.dialog_transaction) {
     private lateinit var binding: DialogTransactionBinding
+    private lateinit var product: warehouseProduct
     private val transactionViewModel: TransactionViewModel by viewModel()
 
     override fun onCreateView(
@@ -39,31 +37,38 @@ class TransactionDialog(private val product: Product) :
         binding = DialogTransactionBinding.bind(view)
 
         binding.apply {
-            tvProductName.text = product.name
-            etProductQuantity.setBlockFilter(",.-")
+            tvProductName.text = transaction.productName
+
+            val unitId = transaction.unitId
+            if (unitId == 1) {
+                etProductQuantity.setBlockFilter("-,.")
+            } else {
+                etProductQuantity.filterForDouble
+            }
+
+            val unitName = Constants.getUnitName(requireContext(), unitId)
+            tilProductQuantity.suffixText = unitName
 
             etProductQuantity.addTextChangedListener {
                 tilProductQuantity.isErrorEnabled = false
             }
 
             btnAdd.onClick {
-                val quantity = etProductQuantity.text.toString().filter { q -> q.isDigit() }
-                when {
-                    quantity.isEmpty() ->
-                        tilProductQuantity.error = context?.getString(R.string.required_field)
-                    quantity.toInt() == 0 ->
-                        tilProductQuantity.error = context?.getString(R.string.required_field)
+                when (val quantity = etProductQuantity.text.toString().toDouble) {
+                    0.0 -> tilProductQuantity.error = context?.getString(R.string.required_field)
                     else -> {
-                        val transaction = Transaction(
+                        val postTransaction = Transaction(
                             transactions = listOf(
                                 TransactionItem(
-                                    productId = product.id,
-                                    quantity = quantity.toInt()
+                                    productId = transaction.productId,
+                                    count = quantity,
+                                    unitId = unitId,
+                                    price = transaction.price
                                 )
                             )
                         )
 
-                        transactionViewModel.newTransaction(transaction)
+                        transactionViewModel.newTransaction(postTransaction)
                     }
                 }
             }
@@ -89,13 +94,9 @@ class TransactionDialog(private val product: Product) :
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        showSuccess(context?.getString(R.string.transaction_successful))
-                        onDismiss.invoke()
-                        dismiss()
-                    } else {
-                        showError(it.data.message)
-                    }
+                    showSuccess(context?.getString(R.string.transaction_successful))
+                    onDismiss.invoke()
+                    dismiss()
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="9"
+            android:textAlignment="textEnd"
             android:singleLine="true"
             tools:ignore="SpUsage" />
 

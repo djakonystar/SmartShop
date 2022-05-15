@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">SmartShop Test</string>
-    <!--    <string name="app_name" translatable="false">SmartShop</string>-->
+<!--    <string name="app_name" translatable="false">SmartShop</string>-->
     <string name="warehouse">Omborxona</string>
     <string name="clients">Mijozlar</string>
     <string name="new_client">Yangi mijoz</string>
@@ -217,4 +217,11 @@
     <string name="debt_paid_price_text">To\'langani: %s %s</string>
     <string name="debt_remained_price_text">Qoldiq: %s %s</string>
     <string name="amortization">Qarz to\'lash</string>
+    <string name="return_order">Mahsulotni qaytarish</string>
+    <string name="payment_debt_paid">To\'langan qarz</string>
+    <string name="order_successfully_returned">Mahsulot muvaffaqiyatli qaytarildi!</string>
+    <string name="return_text">Qaytarish</string>
+    <string name="product_code_error">Bu mahsulot kodi emas!</string>
+    <string name="basket_code_error">Bu sotuv kodi emas!</string>
+    <string name="internet_error">You have problems with internet!</string>
 </resources>

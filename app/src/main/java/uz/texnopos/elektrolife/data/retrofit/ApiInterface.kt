@@ -7,25 +7,25 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
-import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.clients.ClientResponse
 import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.model.employee.Employee
 import uz.texnopos.elektrolife.data.model.finance.Cashier
-import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
+import uz.texnopos.elektrolife.data.model.finance.FinanceResponse
 import uz.texnopos.elektrolife.data.model.finance.salary.Salary
 import uz.texnopos.elektrolife.data.model.finance.salary.SalaryMonthly
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
-import uz.texnopos.elektrolife.data.model.newproduct.Transaction
+import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.payment.AddPayment
 import uz.texnopos.elektrolife.data.model.payment.PaymentHistory
 import uz.texnopos.elektrolife.data.model.qrcode.ProductResponse
 import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
+import uz.texnopos.elektrolife.data.model.sales.returnorder.ReturnOrder
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.signin.SignInResponse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
@@ -125,6 +125,18 @@ interface ApiInterface {
         @Query("basket_id") basketId: Int
     ): Observable<GenericResponse<OrderResponse>>
 
+    @GET("api/orders")
+    fun getOrders(
+        @Header("Authorization") token: String,
+        @Query("uuid") uuid: String
+    ): Observable<GenericResponse<OrderResponse>>
+
+    @POST("api/return/orders")
+    fun returnOrders(
+        @Header("Authorization") token: String,
+        @Body returnOrder: ReturnOrder
+    ): Observable<GenericResponse<List<Any>>>
+
     @GET("api/warehouse")
     fun warehouseProducts(
         @Header("Authorization") token: String,
@@ -220,21 +232,14 @@ interface ApiInterface {
         @Header("Authorization") token: String
     ): Observable<Response<GenericResponse<List<Currency>>>>
 
-    @GET("api/qrcode/read")
-    fun scanCode(
-        @Header("Authorization") token: String,
-        @Query("type") type: String,
-        @Query("uuid") code: String
-    ): Observable<GenericResponse<ProductResponse>>
-
     /**
      * Finance: Get cashbox balance and profit in date range [from] - [to]
      */
     @GET("api/cashier")
     fun getCashier(
         @Header("Authorization") token: String,
-        @Query("to") from: String,
-        @Query("do") to: String
+        @Query("from") from: String,
+        @Query("to") to: String
     ): Observable<GenericResponse<Cashier>>
 
     /**
@@ -255,10 +260,11 @@ interface ApiInterface {
     @GET("api/consumptions")
     fun getFinanceDetails(
         @Header("Authorization") token: String,
+        @Query("page") page: Int,
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("type") type: String
-    ): Observable<GenericResponse<List<Finance>>>
+    ): Observable<GenericResponse<PagingResponse<FinanceResponse>>>
 
     @POST("api/payment/basket")
     fun addPayment(
@@ -286,10 +292,11 @@ interface ApiInterface {
     /**
      * Add-on new quantity to existing product (Transaction)
      */
+    // TODO: Transaction API
     @POST("api/warehouse")
     fun newTransaction(
         @Header("Authorization") token: String,
-        @Body transaction: Transaction
+        @Body transactions: List<TransactionItem>
     ): Observable<GenericResponse<List<Any>>>
 
     @GET("api/employees")

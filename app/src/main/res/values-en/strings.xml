@@ -181,4 +181,11 @@
     <string name="debt_paid_price_text">Paid: %s %s</string>
     <string name="debt_remained_price_text">Remained: %s %s</string>
     <string name="amortization">Amortization</string>
+    <string name="return_order">Return order</string>
+    <string name="payment_debt_paid">Paid debt</string>
+    <string name="order_successfully_returned">Order returned successfully!</string>
+    <string name="return_text">Return</string>
+    <string name="product_code_error">This is not a product code!</string>
+    <string name="basket_code_error">This is not a sale code!</string>
+    <string name="internet_error">You have problems with internet!</string>
 </resources>

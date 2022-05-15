@@ -1,10 +1,9 @@
 package uz.texnopos.elektrolife.ui.signin
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Context
-import android.os.Build
-import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -39,6 +38,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.apply {
             tvPincode.isVisible = requireActivity().packageName == "uz.texnopos.smartshoptest" ||
                     requireActivity().packageName == "uz.texnopos.smartshopteststore"
+
+            beforeUnlock()
 
             etPassword.addTextChangedListener {
                 if (it.toString().length == 4) {
@@ -79,7 +80,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
-                    login(false, 0,"", it.message!!)
+                    login(false, 0, "", it.message!!)
                 }
             }
         }
@@ -91,7 +92,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             binding.etPassword.clearFocus()
             settings.userId = id
             settings.token = token
-            navController.navigate(R.id.action_signInFragment_to_mainFragment)
+            afterUnlock()
         } else {
             val snackbar = Snackbar.make(binding.etPassword, error, Snackbar.LENGTH_SHORT)
 //            val params = snackbar.view.layoutParams as FrameLayout.LayoutParams
@@ -103,8 +104,10 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             val shake = AnimationUtils.loadAnimation(requireContext(), R.anim.shake)
             binding.etPassword.startAnimation(shake)
             binding.tvDescription.startAnimation(shake)
+            binding.lottieLock.startAnimation(shake)
             binding.etPassword.setText("")
             binding.etPassword.clearFocus()
+
 
             val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -116,6 +119,40 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
             } else {
                 vibrator.vibrate(200)
             }
+        }
+    }
+
+    private fun beforeUnlock() {
+        binding.apply {
+            lottieLock.setMinAndMaxFrame(0, 60)
+            lottieLock.repeatCount = ValueAnimator.INFINITE
+            lottieLock.playAnimation()
+        }
+    }
+
+    private fun afterUnlock() {
+        binding.apply {
+            lottieLock.setMinAndMaxFrame(60, 95)
+            lottieLock.repeatCount = 0
+//            lottieLock.speed = 3.0f
+            lottieLock.playAnimation()
+            lottieLock.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    navController.navigate(R.id.action_signInFragment_to_mainFragment)
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+            })
         }
     }
 }
