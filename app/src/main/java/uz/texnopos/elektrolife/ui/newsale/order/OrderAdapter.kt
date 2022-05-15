@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale.order
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
@@ -102,8 +101,9 @@ class OrderAdapter(private val settings: Settings) :
         notifyItemChanged(position)
     }
 
-    fun removeItem(model: Product, position: Int) {
-        models.remove(model)
-        notifyItemRemoved(position)
+    fun removeItem(model: Product, position: Int, action: (models: MutableList<Product>) -> Unit) {
+        val products = models
+        products.removeAt(position)
+        action(products)
     }
 }
