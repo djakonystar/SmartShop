@@ -13,8 +13,10 @@ android {
 //        applicationId "uz.texnopos.smartshopteststore" // Test PlayStore
 //        applicationId "uz.texnopos.smartshopsinyor" // Sinyor
 //        applicationId "uz.texnopos.smartshopmobishop" // MobiShop
+//        applicationId "uz.texnopos.smartshoprayabujiteriya" // Raya-Bujiteriya
 //        applicationId "uz.texnopos.smartshopelnew" // ElektroLife
 //        applicationId "uz.texnopos.smartshopluxggnew" // LuxGadget
+//        applicationId "uz.texnopos.smartshopverita" // Verita
 //        applicationId "uz.texnopos.smartshopcs" // Computer Service
 //        applicationId "uz.texnopos.smartshopks" // Qońırat Shop
 //        applicationId "uz.texnopos.smartshoptexas" // Taxiatas

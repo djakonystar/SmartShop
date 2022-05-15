@@ -48,13 +48,15 @@ import java.util.concurrent.TimeUnit
 
 //private const val baseUrl = "https://electro-life.my-project.site" // Test
 private const val baseUrl = "https://smart-shop.my-project.site" // Test-new
-//private const val baseUrl = "http://sinyor.texnopos.site" // Sinyor
-//private const val baseUrl = "http://mobishop.texnopos.site" // MobiShop
-//private const val baseUrl = "http://new-electro-life.texnopos.site" // ElectroLife
-//private const val baseUrl = "http://new-lux-gadget.texnopos.site" // LuxGadget
+//private const val baseUrl = "https://sinyor.texnopos.site" // Sinyor
+//private const val baseUrl = "https://mobishop.texnopos.site" // MobiShop
+//private const val baseUrl = "https://raya-bijuteriya.texnopos.site" // Raya-Bujiteriya
+//private const val baseUrl = "https://new-electro-life.texnopos.site" // ElectroLife
+//private const val baseUrl = "https://new-lux-gadget.texnopos.site" // LuxGadget
+//private const val baseUrl = "https://verita.texnopos.site" // Verita
 //private const val baseUrl = "https://computer-service.texnopos.site" // Computer Service
-//private const val baseUrl = "https://qonirat-shop.texnopos.site" // Qońirat Shop
-//private const val baseUrl = "http://taxiatas.texnopos.uz" // Taxiatas
+//private const val baseUrl = "https:/new-qoniratshop.texnopos.site" // Qońirat Shop
+//private const val baseUrl = "https://taxiatas.texnopos.uz" // Taxiatas
 private const val timeOut = 50L
 
 val networkModule = module {
