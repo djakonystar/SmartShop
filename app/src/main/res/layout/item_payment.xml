@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.51" />
 
         <ImageView
             android:id="@+id/ivCash"
@@ -62,13 +62,20 @@
 
         <TextView
             android:id="@+id/tvCash"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginHorizontal="@dimen/margin_middle"
             android:layout_marginTop="@dimen/margin_middle"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
             android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toEndOf="@id/ivCash"
             app:layout_constraintTop_toBottomOf="@id/tv_client"
             tools:ignore="SpUsage" />
@@ -87,12 +94,20 @@
 
         <TextView
             android:id="@+id/tvCard"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
             android:textSize="@dimen/text_size_item_small"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivCard"
             app:layout_constraintTop_toTopOf="@id/tvCash"
             tools:ignore="SpUsage" />
@@ -113,10 +128,15 @@
             android:id="@+id/tvVendor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginHorizontal="@dimen/margin_middle"
             android:layout_marginTop="@dimen/margin_middle"
-            android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_middle"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ivDate"
@@ -137,11 +157,19 @@
 
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="@id/tvVendor"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivDate"
             app:layout_constraintTop_toTopOf="@id/tvVendor"
             tools:ignore="SpUsage" />

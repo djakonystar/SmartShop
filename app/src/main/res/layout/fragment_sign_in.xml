@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_middle"
             android:layout_marginEnd="@dimen/margin_middle"
-            android:text="CEO: 1111\nAdmin: 2222\nSeller: 3333"
+            android:text="CEO: 7117\nAdmin: 2222\nSeller: 3333"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_standard"

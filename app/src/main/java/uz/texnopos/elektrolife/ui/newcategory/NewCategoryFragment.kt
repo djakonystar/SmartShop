@@ -11,6 +11,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newcategory.Percent
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
@@ -41,6 +42,11 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
             etMinPercent.filterForDouble
             etMaxPercent.filterForDouble
             etMinQuantity.filterForDouble
+
+            etWholesalePercent.addTextChangedListener(SumMaskWatcher(etWholesalePercent))
+            etMinPercent.addTextChangedListener(SumMaskWatcher(etMinPercent))
+            etMaxPercent.addTextChangedListener(SumMaskWatcher(etMaxPercent))
+            etMinQuantity.addTextChangedListener(SumMaskWatcher(etMinQuantity))
 
             etCategoryName.addTextChangedListener {
                 tilCategoryName.isErrorEnabled = false

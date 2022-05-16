@@ -8,7 +8,7 @@ data class Client(
     val name: String,
     val phone: String,
     var tin: String? = null,
-    val balance: Int?,
+    val balance: Double,
     @SerializedName("about")
     val comment: String? = "",
     @SerializedName("user_type")

@@ -149,6 +149,7 @@ val String.sumFormat: String
         text = text.chunked(3).joinToString(" ")
         if (this.contains('.')) {
             val afterPoint = this.substringAfter('.')
+            if (afterPoint.length == 1) return "${text.reversed()}.${afterPoint}0"
             return "${text.reversed()}.$afterPoint"
         }
         return text.reversed()
@@ -274,8 +275,10 @@ val EditText.filterForDouble: Unit
                 0
             }
 
+            val range = this.length() - 2..this.length()
+
             if (source != null && source.equals(".") && spanned.contains(".")) ""
-            else if (source != null && afterPoint == 2) ""
+            else if (source != null && afterPoint == 2 && this.selectionEnd in range) ""
             else if (source != null && source.equals(".") && spanned.isEmpty()) "0."
             else if (source != null && source.equals(".") && spanned.isNotEmpty()) "."
             else if (source != null && "-,.".contains("" + source)) ""

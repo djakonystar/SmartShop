@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.finance.expense.ExpenseFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,25 +51,25 @@
                     android:id="@+id/tv_date_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_middle"
                     android:layout_marginVertical="@dimen/margin_standard"
+                    android:layout_marginStart="@dimen/margin_middle"
                     android:text="@string/choose_date_uz"
                     android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_date_icon" />
+                    app:layout_constraintStart_toEndOf="@id/iv_date_icon"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_date_from"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_middle"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     android:text="@string/date_from_text"
-                    android:textColor="@color/app_main_color"
                     android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:textColor="@color/app_main_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_date_to"
@@ -78,11 +78,11 @@
                     android:layout_marginEnd="@dimen/margin_standard"
                     android:layout_marginBottom="@dimen/margin_middle"
                     android:text="@string/date_to_text"
-                    android:textColor="@color/app_main_color"
                     android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    app:layout_constraintTop_toBottomOf="@id/tv_date_from"
+                    android:textColor="@color/app_main_color"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_date_from" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -115,14 +115,21 @@
 
         <TextView
             android:id="@+id/tv_cash_price"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_middle"
             android:layout_marginBottom="@dimen/margin_standard"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toEndOf="@id/iv_cash_price"
             app:layout_constraintTop_toBottomOf="@id/tvTotalSum" />
 
@@ -146,12 +153,19 @@
 
         <TextView
             android:id="@+id/tv_card_price"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:clickable="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_card_price"
             app:layout_constraintTop_toBottomOf="@id/tvTotalSum" />
 
@@ -190,12 +204,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_standard"
         android:contentDescription="@string/expense_en"
-        app:fabCustomSize="@dimen/fab_custom_size_mobile"
         android:src="@drawable/ic_add_48"
-        app:tint="@color/white"
+        app:fabCustomSize="@dimen/fab_custom_size_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/white" />
 
     <ProgressBar
         android:id="@+id/progressBar"

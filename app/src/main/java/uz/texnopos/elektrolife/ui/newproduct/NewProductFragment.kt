@@ -3,7 +3,6 @@ package uz.texnopos.elektrolife.ui.newproduct
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
@@ -48,8 +47,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private var wholesalePercent: Double = 0.0
     private var minPercent: Double = 0.0
     private var maxPercent: Double = 0.0
-    private var list: MutableSet<String> = mutableSetOf()
-    private var listProducts: MutableMap<String, WarehouseItem> = mutableMapOf()
+    private var productsList: MutableSet<String> = mutableSetOf()
+    private var productsMap: MutableMap<String, WarehouseItem> = mutableMapOf()
     private var mapOfCurrency: MutableMap<Int, String> = mutableMapOf()
     private var currencyIds = mutableListOf(-1, -1, -1, -1)
     private var mapOfRates = mutableMapOf<String, Double>()
@@ -86,14 +85,14 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             etProductName.addTextChangedListener {
                 tilProductName.isErrorEnabled = false
                 if (it.toString().isNotEmpty()) {
-                    list.clear()
+                    productsList.clear()
                     viewModel.getWarehouseProducts(it.toString())
                 }
             }
 
             etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
-                val warehouseItem = listProducts.getValue(productName)
+                val warehouseItem = productsMap.getValue(productName)
                 val transaction = TransactionTransfer(
                     warehouseItem.product.id,
                     warehouseItem.product.name,
@@ -303,11 +302,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             val price = etCostPrice.text.toString().toDouble
 
             val wholesale =
-                mapOfRates.getValue("${actCostCurrency.text}${actWholesaleCurrency.text}") * price
+                (mapOfRates["${actCostCurrency.text}${actWholesaleCurrency.text}"] ?: 0.0) * price
             val min =
-                mapOfRates.getValue("${actCostCurrency.text}${actMinCurrency.text}") * price
+                (mapOfRates["${actCostCurrency.text}${actMinCurrency.text}"] ?: 0.0) * price
             val max =
-                mapOfRates.getValue("${actCostCurrency.text}${actMaxCurrency.text}") * price
+                (mapOfRates["${actCostCurrency.text}${actMaxCurrency.text}"] ?: 0.0) * price
 
             val wholesalePrice = ((wholesalePercent / 100.0 + 1) * wholesale)
             val minPrice = ((minPercent / 100.0 + 1) * min)
@@ -457,17 +456,17 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     it.data!!.forEach { warehouseItem ->
-                        list.add(warehouseItem.product.name)
-                        if (!listProducts.contains(warehouseItem.product.name)) listProducts[warehouseItem.product.name] =
+                        productsList.add(warehouseItem.product.name)
+                        if (!productsMap.contains(warehouseItem.product.name)) productsMap[warehouseItem.product.name] =
                             warehouseItem
                     }
                     binding.apply {
                         if (etProductName.text.isEmpty()) {
-                            list.clear()
+                            productsList.clear()
                             val arrayAdapter = ArrayAdapter(
                                 requireContext(),
                                 R.layout.item_spinner,
-                                list.toMutableList()
+                                productsList.toMutableList()
                             )
                             etProductName.setAdapter(arrayAdapter)
                             etProductName.dismissDropDown()
@@ -475,11 +474,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             val arrayAdapter = ArrayAdapter(
                                 requireContext(),
                                 R.layout.item_spinner,
-                                list.toMutableList()
+                                productsList.toMutableList()
                             )
                             etProductName.setAdapter(arrayAdapter)
                             etProductName.showDropDown()
-                            if (list.size == 1 && etProductName.text.toString() == list.firstOrNull()) {
+                            if (productsList.size == 1 && etProductName.text.toString() == productsList.firstOrNull()) {
                                 etProductName.dismissDropDown()
                             }
                         }

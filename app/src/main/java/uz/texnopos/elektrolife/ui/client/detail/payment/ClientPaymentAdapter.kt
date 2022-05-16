@@ -20,6 +20,9 @@ class ClientPaymentAdapter(private val settings: Settings) :
         fun populateModel(payment: Payment) {
             binding.apply {
                 tvClient.text = payment.client.name
+                tvCash.isSelected = true
+                tvCard.isSelected = true
+                tvVendor.isSelected = true
                 tvCash.text = itemView.context?.getString(
                     R.string.price_text,
                     payment.amount.cash.toSumFormat,

@@ -18,9 +18,12 @@ class SalesAdapter(private val settings: Settings) :
         fun populateModel(basket: Basket) {
             binding.apply {
                 val totalPrice = basket.cash + basket.card + basket.debt.debt
+                tvClientName.isSelected = true
+                tvTotalPrice.isSelected = true
                 tvCardPrice.isSelected = true
                 tvCashPrice.isSelected = true
                 tvDebtPrice.isSelected = true
+                tvSellerName.isSelected = true
                 tvClientName.text = basket.customer.name
                 tvPhone.text = basket.customer.phone.toPhoneFormat
                 tvTotalPrice.text = itemView.context?.getString(
