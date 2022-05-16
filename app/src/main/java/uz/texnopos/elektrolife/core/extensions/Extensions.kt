@@ -312,7 +312,12 @@ infix fun Double.format(afterPoint: Int): String {
 }
 
 val String.toDouble: Double
-    get() = this.ifEmpty { "0.0" }.toDouble()
+    get() {
+        if (this.isEmpty()) {
+            return 0.0
+        }
+        return this.filter { it.isDigit() || it == '.' }.ifEmpty { "0.0" }.toDouble()
+    }
 
 fun Fragment.doPrint(filePath: String, fileName: String) {
     try {
