@@ -52,7 +52,6 @@ class SumMaskWatcher(private val editText: EditText) : TextWatcher {
             text = text.chunked(3).joinToString(" ")
             if (this.contains('.')) {
                 val afterPoint = this.substringAfter('.')
-                if (afterPoint.length == 1) return "${text.reversed()}.${afterPoint}0"
                 return "${text.reversed()}.$afterPoint"
             }
             return text.reversed()

@@ -197,6 +197,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     binding.etSearchClient.setText(newClient)
+                    clientId = it.data!!.id
                     showSuccess(getString(R.string.client_successfully_added))
                         .setOnPositiveButtonClickListener {
                             addClientDialog.dismiss()
@@ -221,7 +222,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 tvDebtPrice.text = context?.getString(R.string.sum_text, (-remind).toSumFormat)
             }
 
-            btnAdd.isEnabled = remind >= 0
+            btnAdd.isEnabled = remind in -500.0..0.0 || remind > 0
 
             tvDebtPrice.setTextColor(
                 ContextCompat.getColor(

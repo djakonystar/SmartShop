@@ -147,7 +147,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
                 )
             }
 
-            btnPay.isEnabled = remind >= 0
+            btnPay.isEnabled = remind > 0 || remind in -500.0..0.0
 
             tvDebtPrice.setTextColor(
                 ContextCompat.getColor(
