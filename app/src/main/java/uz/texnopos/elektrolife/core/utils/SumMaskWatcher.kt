@@ -2,6 +2,7 @@ package uz.texnopos.elektrolife.core.utils
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 
 class SumMaskWatcher(private val editText: EditText) : TextWatcher {
@@ -22,6 +23,8 @@ class SumMaskWatcher(private val editText: EditText) : TextWatcher {
 
         val cursorAtTheEnd = cursorPosition == editText.length()
         editText.setText(price.sumFormat)
+        val afterPoint = if (before.contains('.')) before.substringAfter('.') else ""
+        val range = if (afterPoint.length == 2) before.length - 2..before.length else 0..0
         if (cursorAtTheEnd) cursorPosition = editText.length()
         else {
             if (cursorPosition > 0) {
@@ -29,15 +32,45 @@ class SumMaskWatcher(private val editText: EditText) : TextWatcher {
                     val space = before[cursorPosition - 1] == ' '
                     if (!space) {
                         val ss = before.substring(0, cursorBefore)
-                        cursorPosition = if (ss.length > 3 && ss.length % 3 == 1) cursorBefore - 2
-                        else cursorBefore - 1
+                        if (ss.length > 3 && ss.length % 3 == 1) {
+                            Log.d("cursorPosition", "I'm in if! :)")
+                            if (cursorBefore < before.length) {
+                                cursorPosition = cursorBefore - 2
+                                if (ss.filter { it != ' ' }.length % 3 != 1 || cursorBefore in range ||
+                                    before.substringBefore(' ').length == 2
+                                )
+                                    if (!before.contains('.') && before.substringBefore(' ').length == 2 || cursorBefore in range) {
+                                        cursorPosition++
+                                    } else if (before.contains('.')) cursorPosition++
+                                if ((!text.contains(' ') || before.substringBefore(' ').length == 3) && cursorBefore !in range) cursorPosition++
+//                                if (before.substringBefore(' ').length == 1 && !before.contains('.')) cursorPosition--
+                            }
+                        } else {
+                            Log.d("cursorPosition", "I'm in else! :)")
+                            if (cursorBefore < before.length) {
+                                cursorPosition = cursorBefore - 2
+                                if (ss.filter { it != ' ' }.length % 3 != 1 || cursorBefore in range ||
+                                    before.substringBefore(' ').length == 2
+                                ) if (!before.contains('.') && before.substringBefore(' ').length == 2 || cursorBefore in range) cursorPosition++
+                                if ((!text.contains(' ') || before.substringBefore(' ').length == 3) && cursorBefore !in range)
+                                    cursorPosition++
+                                if (before.substringBefore(' ').length == 1 && !before.contains('.')) {
+//                                    cursorPosition--
+                                }
+                            }
+                        }
                     } else {
+                        Log.d("cursorPosition", "I'm in space! :)")
                         val ss = text.substringBefore(' ')
                         if (ss.filter { it != ' ' }.length % 3 == 1) cursorPosition--
                     }
                 } else if (editText.length() > before.length) {
                     val l = before.length - cursorPosition
                     cursorPosition = editText.length() - l - 1
+                } else {
+                    Log.d("cursorPosition", "I'm in equals! :)")
+                    cursorPosition = cursorBefore
+                    if (before[cursorBefore - 1] == ' ') cursorPosition--
                 }
             }
         }
