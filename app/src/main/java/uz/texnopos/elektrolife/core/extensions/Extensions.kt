@@ -235,6 +235,18 @@ fun String.getOnlyDigits(): String {
     return s.ifEmpty { "0" }
 }
 
+fun CharSequence.notContains(char: Char, ignoreCase: Boolean = false): Boolean {
+    return !this.contains(char, ignoreCase)
+}
+
+fun CharSequence.notContains(other: CharSequence, ignoreCase: Boolean = false): Boolean {
+    return !this.contains(other, ignoreCase)
+}
+
+fun CharSequence.notContains(regex: Regex): Boolean {
+    return !this.contains(regex)
+}
+
 @SuppressLint("SetTextI18n")
 fun animateDebtPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
