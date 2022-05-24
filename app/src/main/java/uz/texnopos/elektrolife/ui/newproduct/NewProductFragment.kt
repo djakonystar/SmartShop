@@ -15,7 +15,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.Product
@@ -29,6 +28,7 @@ import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
@@ -122,15 +122,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 tilProductQuantity.isErrorEnabled = false
             }
 
-            etCostPrice.filterForDouble
-            etWholesalePrice.filterForDouble
-            etMinPrice.filterForDouble
-            etMaxPrice.filterForDouble
-
-            etCostPrice.addTextChangedListener(SumMaskWatcher(etCostPrice))
-            etWholesalePrice.addTextChangedListener(SumMaskWatcher(etWholesalePrice))
-            etMinPrice.addTextChangedListener(SumMaskWatcher(etMinPrice))
-            etMaxPrice.addTextChangedListener(SumMaskWatcher(etMaxPrice))
+            SumInputMask(etCostPrice, etWholesalePrice, etMinPrice, etMaxPrice)
 
             etCostPrice.addTextChangedListener {
                 tilCostPrice.isErrorEnabled = false

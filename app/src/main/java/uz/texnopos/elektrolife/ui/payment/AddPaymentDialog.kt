@@ -14,11 +14,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.payment.AddPayment
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import uz.texnopos.elektrolife.settings.Settings
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 
 class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
@@ -46,11 +46,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
                 settings.currency
             )
 
-            etCash.filterForDouble
-            etCard.filterForDouble
-
-            etCash.addTextChangedListener(SumMaskWatcher(etCash))
-            etCard.addTextChangedListener(SumMaskWatcher(etCard))
+            SumInputMask(etCash, etCard)
 
             tilCash.suffixText = settings.currency
             tilCard.suffixText = settings.currency

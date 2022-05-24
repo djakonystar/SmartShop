@@ -14,10 +14,10 @@ import androidx.lifecycle.MutableLiveData
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
 import uz.texnopos.elektrolife.settings.Settings
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 
 class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
@@ -76,14 +76,13 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             tilQuantity.suffixText = "/$remained"
             tilSumma.suffixText = settings.currency
 
-            etSumma.filterForDouble
             etSumma.setText(product.maxPrice.price.toSumFormat)
 
-            if (product.warehouse?.unit?.id != 1) etQuantity.filterForDouble
-            else etQuantity.setBlockFilter("-.,")
+            val type = if (product.warehouse?.unit?.id != 1) SumInputMask.NUMBER_DECIMAL
+            else SumInputMask.NUMBER
 
-            etQuantity.addTextChangedListener(SumMaskWatcher(etQuantity))
-            etSumma.addTextChangedListener(SumMaskWatcher(etSumma))
+            SumInputMask(etQuantity, type = type)
+            SumInputMask(etSumma)
 
             etQuantity.addTextChangedListener {
                 tilQuantity.isErrorEnabled = false

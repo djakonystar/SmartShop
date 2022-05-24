@@ -51,8 +51,8 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
 
         binding.apply {
             codeScanner = CodeScanner(activity, scannerView)
-            codeScanner.decodeCallback = DecodeCallback {
-                val result = it.text
+            codeScanner.decodeCallback = DecodeCallback { res ->
+                val result = res.text
                 activity.runOnUiThread {
                     when (type) {
                         GET_BASKET -> {
@@ -61,6 +61,29 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                                 val type = arguments[0]
                                 val uuid = arguments[1]
                                 viewModel.getBasket(type, uuid)
+                                viewModel.order.observe(viewLifecycleOwner) {
+                                    when (it.status) {
+                                        ResourceState.LOADING -> setLoading(true)
+                                        ResourceState.SUCCESS -> {
+                                            setLoading(false)
+                                            val basket = it.data!!
+                                            val basketString =
+                                                GsonBuilder().setPrettyPrinting().create()
+                                                    .toJson(basket)
+                                            navController.navigate(
+                                                QrScannerFragmentDirections.actionQrScannerFragmentToReturnOrderFragment(
+                                                    basketString
+                                                )
+                                            )
+                                        }
+                                        ResourceState.ERROR -> {
+                                            setLoading(false)
+                                            showError(it.message).setOnDismissListener {
+                                                codeScanner.startPreview()
+                                            }
+                                        }
+                                    }
+                                }
                             } else {
                                 showError(getString(R.string.basket_code_error))
                                     .setOnDismissListener {
@@ -74,6 +97,29 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                                 val type = arguments[0]
                                 val uuid = arguments[1]
                                 viewModel.getProduct(type, uuid)
+                                viewModel.product.observe(viewLifecycleOwner) {
+                                    when (it.status) {
+                                        ResourceState.LOADING -> setLoading(true)
+                                        ResourceState.SUCCESS -> {
+                                            setLoading(false)
+                                            val product = it.data!!
+                                            val productString =
+                                                GsonBuilder().setPrettyPrinting().create()
+                                                    .toJson(product)
+                                            navController.navigate(
+                                                QrScannerFragmentDirections.actionQrScannerFragmentToNewSaleFragment(
+                                                    productString
+                                                )
+                                            )
+                                        }
+                                        ResourceState.ERROR -> {
+                                            setLoading(false)
+                                            showError(it.message).setOnDismissListener {
+                                                codeScanner.startPreview()
+                                            }
+                                        }
+                                    }
+                                }
                             } else {
                                 showError(getString(R.string.product_code_error))
                                     .setOnDismissListener {
@@ -87,6 +133,39 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                                 val type = arguments[0]
                                 val uuid = arguments[1]
                                 viewModel.getProduct(type, uuid)
+                                viewModel.product.observe(viewLifecycleOwner) {
+                                    when (it.status) {
+                                        ResourceState.LOADING -> setLoading(true)
+                                        ResourceState.SUCCESS -> {
+                                            setLoading(false)
+                                            val product = it.data!!
+                                            val transaction = TransactionTransfer(
+                                                product.id,
+                                                product.name,
+                                                product.count,
+                                                product.warehouse?.unit?.id ?: 1,
+                                                Price(
+                                                    product.costPrice.currencyId,
+                                                    product.costPrice.price
+                                                )
+                                            )
+                                            val dialog = TransactionDialog(transaction)
+                                            dialog.show(
+                                                requireActivity().supportFragmentManager,
+                                                dialog.tag
+                                            )
+                                            dialog.setOnDismissListener {
+                                                navController.popBackStack()
+                                            }
+                                        }
+                                        ResourceState.ERROR -> {
+                                            setLoading(false)
+                                            showError(it.message).setOnDismissListener {
+                                                codeScanner.startPreview()
+                                            }
+                                        }
+                                    }
+                                }
                             } else {
                                 showError(getString(R.string.product_code_error))
                                     .setOnDismissListener {
@@ -102,79 +181,12 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
                 codeScanner.startPreview()
             }
         }
-
-        setUpObservers()
     }
 
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
             scannerView.isEnabled = !loading
-        }
-    }
-
-    private fun setUpObservers() {
-        viewModel.order.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    val basket = it.data!!
-                    val basketString = GsonBuilder().setPrettyPrinting().create().toJson(basket)
-                    navController.navigate(
-                        QrScannerFragmentDirections.actionQrScannerFragmentToReturnOrderFragment(
-                            basketString
-                        )
-                    )
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showError(it.message).setOnDismissListener {
-                        codeScanner.startPreview()
-                    }
-                }
-            }
-        }
-
-        viewModel.product.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    val product = it.data!!
-                    when (type) {
-                        GET_PRODUCT -> {
-                            val productString =
-                                GsonBuilder().setPrettyPrinting().create().toJson(product)
-                            navController.navigate(
-                                QrScannerFragmentDirections.actionQrScannerFragmentToNewSaleFragment(
-                                    productString
-                                )
-                            )
-                        }
-                        POST_TRANSACTION -> {
-                            val transaction = TransactionTransfer(
-                                product.id,
-                                product.name,
-                                product.count,
-                                product.warehouse?.unit?.id ?: 1,
-                                Price(product.costPrice.currencyId, product.costPrice.price)
-                            )
-                            val dialog = TransactionDialog(transaction)
-                            dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                            dialog.setOnDismissListener {
-                                navController.popBackStack()
-                            }
-                        }
-                    }
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showError(it.message).setOnDismissListener {
-                        codeScanner.startPreview()
-                    }
-                }
-            }
         }
     }
 

@@ -122,4 +122,7 @@ dependencies {
 
     // Expandable FAB
     implementation 'com.nambimobile.widgets:expandable-fab:1.2.1'
+
+    // SumInputMask
+    implementation 'com.github.djakonystar:SumInputMask:0.1.0'
 }
