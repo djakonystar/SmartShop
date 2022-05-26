@@ -17,9 +17,11 @@ android {
 //        applicationId "uz.texnopos.smartshopelnew" // ElektroLife
 //        applicationId "uz.texnopos.smartshopluxggnew" // LuxGadget
 //        applicationId "uz.texnopos.smartshopverita" // Verita
-//        applicationId "uz.texnopos.smartshopcs" // Computer Service
 //        applicationId "uz.texnopos.smartshopks" // Qońırat Shop
+//        applicationId "uz.texnopos.smartshopidealmagazin" // Qońırat Shop
 //        applicationId "uz.texnopos.smartshoptexas" // Taxiatas
+//        applicationId "uz.texnopos.smartshopcs" // Computer Service
+
         minSdk 23
         targetSdk 31
         versionCode 2
@@ -124,5 +126,5 @@ dependencies {
     implementation 'com.nambimobile.widgets:expandable-fab:1.2.1'
 
     // SumInputMask
-    implementation 'com.github.djakonystar:SumInputMask:0.1.0'
+    implementation 'com.github.djakonystar:SumInputMask:0.1.1'
 }
