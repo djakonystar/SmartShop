@@ -17,13 +17,13 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentExpenseAddBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.settings.Settings.Companion.FINANCE_EXPENSE
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,8 +79,7 @@ class ExpenseAddFragment : Fragment(R.layout.fragment_expense_add) {
             }
 
             tilSum.suffixText = settings.currency
-            etSum.filterForDouble
-            etSum.addTextChangedListener(SumMaskWatcher(etSum))
+            SumInputMask(etSum)
 
             etDescription.addTextChangedListener {
                 tilDescription.isErrorEnabled = false

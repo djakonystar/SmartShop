@@ -10,12 +10,15 @@ import androidx.navigation.fragment.findNavController
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
+import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.showSuccess
+import uz.texnopos.elektrolife.core.extensions.toDouble
 import uz.texnopos.elektrolife.data.model.newcategory.CategoryPost
 import uz.texnopos.elektrolife.data.model.newcategory.Percent
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentCategoryNewBinding
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 
 class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
     private lateinit var binding: FragmentCategoryNewBinding
@@ -38,15 +41,7 @@ class NewCategoryFragment : Fragment(R.layout.fragment_category_new) {
         }
 
         binding.apply {
-            etWholesalePercent.filterForDouble
-            etMinPercent.filterForDouble
-            etMaxPercent.filterForDouble
-            etMinQuantity.filterForDouble
-
-            etWholesalePercent.addTextChangedListener(SumMaskWatcher(etWholesalePercent))
-            etMinPercent.addTextChangedListener(SumMaskWatcher(etMinPercent))
-            etMaxPercent.addTextChangedListener(SumMaskWatcher(etMaxPercent))
-            etMinQuantity.addTextChangedListener(SumMaskWatcher(etMinQuantity))
+            SumInputMask(etWholesalePercent, etMinPercent, etMaxPercent, etMinQuantity)
 
             etCategoryName.addTextChangedListener {
                 tilCategoryName.isErrorEnabled = false

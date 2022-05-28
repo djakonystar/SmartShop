@@ -12,10 +12,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newproduct.Price
 import uz.texnopos.elektrolife.data.model.newproduct.Product
@@ -122,15 +122,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 tilProductQuantity.isErrorEnabled = false
             }
 
-            etCostPrice.filterForDouble
-            etWholesalePrice.filterForDouble
-            etMinPrice.filterForDouble
-            etMaxPrice.filterForDouble
-
-            etCostPrice.addTextChangedListener(SumMaskWatcher(etCostPrice))
-            etWholesalePrice.addTextChangedListener(SumMaskWatcher(etWholesalePrice))
-            etMinPrice.addTextChangedListener(SumMaskWatcher(etMinPrice))
-            etMaxPrice.addTextChangedListener(SumMaskWatcher(etMaxPrice))
+            SumInputMask(etCostPrice, etWholesalePrice, etMinPrice, etMaxPrice)
 
             etCostPrice.addTextChangedListener {
                 tilCostPrice.isErrorEnabled = false
@@ -184,26 +176,34 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             actCostCurrency.setOnItemClickListener { _, _, i, _ ->
                 tilCostCurrency.isErrorEnabled = false
-                currencyIds[0] = i + 1
-                calculate()
+                if (currencyIds[0] != i + 1) {
+                    currencyIds[0] = i + 1
+                    calculate()
+                }
             }
 
             actWholesaleCurrency.setOnItemClickListener { _, _, i, _ ->
                 tilWholesaleCurrency.isErrorEnabled = false
-                currencyIds[1] = i + 1
-                calculate()
+                if (currencyIds[1] != i + 1) {
+                    currencyIds[1] = i + 1
+                    calculate()
+                }
             }
 
             actMinCurrency.setOnItemClickListener { _, _, i, _ ->
                 tilMinCurrency.isErrorEnabled = false
-                currencyIds[2] = i + 1
-                calculate()
+                if (currencyIds[2] != i + 1) {
+                    currencyIds[2] = i + 1
+                    calculate()
+                }
             }
 
             actMaxCurrency.setOnItemClickListener { _, _, i, _ ->
                 tilMaxCurrency.isErrorEnabled = false
-                currencyIds[3] = i + 1
-                calculate()
+                if (currencyIds[3] != i + 1) {
+                    currencyIds[3] = i + 1
+                    calculate()
+                }
             }
 
             btnAddProduct.onClick {
@@ -312,8 +312,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             val minPrice = ((minPercent / 100.0 + 1) * min)
             val maxPrice = ((maxPercent / 100.0 + 1) * max)
 
+            etWholesalePrice.text?.clear()
             etWholesalePrice.setText((wholesalePrice format 2).sumFormat)
+            etMinPrice.text?.clear()
             etMinPrice.setText((minPrice format 2).sumFormat)
+            etMaxPrice.text?.clear()
             etMaxPrice.setText((maxPrice format 2).sumFormat)
 
             if (price == 0.0) {

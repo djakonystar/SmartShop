@@ -17,12 +17,12 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.core.utils.SumMaskWatcher
 import uz.texnopos.elektrolife.data.model.newclient.Client
 import uz.texnopos.elektrolife.databinding.DialogCheckoutOrderBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -86,8 +86,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             tilCash.suffixText = settings.currency
             tilCard.suffixText = settings.currency
 
-            etCash.addTextChangedListener(SumMaskWatcher(etCash))
-            etCard.addTextChangedListener(SumMaskWatcher(etCard))
+            SumInputMask(etCash, etCard)
 
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
