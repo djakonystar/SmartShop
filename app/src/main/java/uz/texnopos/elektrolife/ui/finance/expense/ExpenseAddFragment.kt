@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
@@ -19,8 +20,10 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentExpenseAddBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.settings.Settings.Companion.FINANCE_EXPENSE
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,6 +32,7 @@ class ExpenseAddFragment : Fragment(R.layout.fragment_expense_add) {
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val viewModel: FinanceViewModel by viewModel()
+    private val settings: Settings by inject()
     private val calendarHelper = CalendarHelper()
     private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
     private var dateInLong = calendarHelper.currentDateMillis
@@ -74,7 +78,8 @@ class ExpenseAddFragment : Fragment(R.layout.fragment_expense_add) {
                 selectedPaymentType = i + 1
             }
 
-            etSum.filterForDouble
+            tilSum.suffixText = settings.currency
+            SumInputMask(etSum)
 
             etDescription.addTextChangedListener {
                 tilDescription.isErrorEnabled = false

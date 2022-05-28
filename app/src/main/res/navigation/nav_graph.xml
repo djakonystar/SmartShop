@@ -25,16 +25,6 @@
             android:id="@+id/action_mainFragment_to_newSaleFragment"
             app:destination="@id/newSaleFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_newPayment"
-            app:destination="@id/newPayment" >
-            <argument
-                android:name="clientId"
-                android:defaultValue="0" />
-            <argument
-                android:name="client"
-                android:defaultValue="null" />
-        </action>
-        <action
             android:id="@+id/action_mainFragment_to_newProductFragment"
             app:destination="@id/newProductFragment" />
         <action
@@ -75,15 +65,6 @@
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/newPayment"
-        android:name="uz.texnopos.elektrolife.ui.newpayment.NewPaymentFragment"
-        android:label="NewPayment"
-        tools:layout="@layout/fragment_payment_new">
-        <argument
-            android:name="client"
-            app:argType="string" />
-    </fragment>
-    <fragment
         android:id="@+id/newProductFragment"
         android:name="uz.texnopos.elektrolife.ui.newproduct.NewProductFragment"
         android:label="NewProductFragment"
@@ -100,9 +81,6 @@
         android:name="uz.texnopos.elektrolife.ui.client.ClientFragment"
         android:label="fragment_clients"
         tools:layout="@layout/fragment_client" >
-        <action
-            android:id="@+id/action_clientsFragment_to_newPayment"
-            app:destination="@id/newPayment" />
         <action
             android:id="@+id/action_clientsFragment_to_clientDetailFragment"
             app:destination="@id/clientDetailFragment" />
@@ -143,10 +121,7 @@
         android:id="@+id/orderFragment"
         tools:layout="@layout/fragment_order"
         android:name="uz.texnopos.elektrolife.ui.newsale.order.OrderFragment"
-        android:label="OrderFragment" >
-        <argument android:name="products"
-            app:argType="string" />
-    </fragment>
+        android:label="OrderFragment" />
     <fragment
         android:id="@+id/financeFragment"
         android:name="uz.texnopos.elektrolife.ui.finance.FinanceFragment"

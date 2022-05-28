@@ -6,10 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
 import uz.texnopos.elektrolife.core.extensions.Constants
-import uz.texnopos.elektrolife.core.extensions.checkModule
+import uz.texnopos.elektrolife.core.extensions.format
 import uz.texnopos.elektrolife.core.extensions.inflate
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
-import uz.texnopos.elektrolife.data.model.warehouse.Product
+import uz.texnopos.elektrolife.core.extensions.sumFormat
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ItemWarehouseBinding
 
@@ -26,13 +25,13 @@ class WarehouseAdapter : BaseAdapter<WarehouseItem, WarehouseAdapter.WarehouseVi
                 if (model.unit.id == 1) {
                     tvCount.text = itemView.context?.getString(
                         R.string.price_text,
-                        model.count.toLong().toSumFormat,
+                        model.count.toLong().toString().sumFormat,
                         Constants.getUnitName(itemView.context, model.unit.id)
                     )
                 } else {
                     tvCount.text = itemView.context?.getString(
                         R.string.price_text,
-                        model.count.toSumFormat,
+                        model.count.format(2).sumFormat,
                         Constants.getUnitName(itemView.context, model.unit.id)
                     )
                 }

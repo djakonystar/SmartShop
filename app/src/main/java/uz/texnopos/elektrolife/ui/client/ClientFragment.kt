@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.client
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -121,26 +122,8 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 phone.dialPhone(requireActivity())
             }
 
-            adapter.setOnPaymentClickListener { client ->
-                val clientStr = GsonBuilder().setPrettyPrinting().create().toJson(
-                    client.apply {
-                        Client(
-                            id = id,
-                            name = name,
-                            phone = phone,
-                            tin = tin,
-                            balance = balance,
-                            comment = comment ?: "",
-                            type = type
-                        )
-                    }
-                )
-                navController.navigate(
-                    ClientFragmentDirections.actionClientsFragmentToNewPayment(client = clientStr)
-                )
-            }
-
             adapter.setOnInfoClickListener { client ->
+                Log.d("clientType", client.type.toString())
                 val clientDetailDialogFragment = ClientDetailDialogFragment(client = client)
                 clientDetailDialogFragment.show(
                     requireActivity().supportFragmentManager,

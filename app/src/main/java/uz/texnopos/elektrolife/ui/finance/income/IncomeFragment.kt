@@ -65,6 +65,9 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         binding.apply {
+            tvCashPrice.isSelected = true
+            tvCardPrice.isSelected = true
+
             cardDate.onClick {
                 val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                     .setSelection(

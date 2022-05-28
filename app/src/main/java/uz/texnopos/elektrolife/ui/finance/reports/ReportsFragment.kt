@@ -59,6 +59,10 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
         }
 
         binding.apply {
+            tvCashboxCash.isSelected = true
+            tvCashboxCard.isSelected = true
+            ivProfitMoney.isSelected = true
+
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 viewModel.getCashbox(

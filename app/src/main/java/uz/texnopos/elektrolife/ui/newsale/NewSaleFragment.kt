@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -45,7 +44,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private var allProductsList = mutableListOf<Product>()
     private var searchValue = ""
     private var selectedCategoryId = -1
-    private var selectedChipId: Int = -1
     private lateinit var productCode: String
     private var isLoading = false
     private var page = 1
@@ -81,7 +79,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
             btnScanner.onClick {
                 navController.navigate(
-                    NewSaleFragmentDirections.actionNewSaleFragmentToQrScannerFragment(QrScannerFragment.GET_PRODUCT)
+                    NewSaleFragmentDirections.actionNewSaleFragmentToQrScannerFragment(
+                        QrScannerFragment.GET_PRODUCT
+                    )
                 )
             }
         }
@@ -93,7 +93,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnItemAddedListener { quantity, salePrice ->
-                    Basket.setProduct(product, quantity, salePrice.toDouble())
+                    Basket.setProduct(product, quantity, salePrice)
                 }
                 dialog.setOnDismissListener {
                     hideSoftKeyboard()
@@ -133,24 +133,17 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnItemAddedListener { quantity, salePrice ->
-                    Basket.setProduct(product, quantity, salePrice.toDouble())
+                    Basket.setProduct(product, quantity, salePrice)
                 }
                 dialog.setOnDismissListener {
                     hideSoftKeyboard()
                 }
             }
 
-            chipGroup.check(selectedChipId)
-
             btnFab.onClick {
                 if (Basket.products.isNotEmpty()) {
-                    val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-                    val gsonString = gsonPretty.toJson(Basket.products)
-                    selectedChipId = chipGroup.checkedChipId
                     findNavController().navigate(
-                        NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(
-                            gsonString
-                        )
+                        NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment()
                     )
                 } else {
                     context?.getString(R.string.basket_empty_warning)?.let { text ->
@@ -251,7 +244,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                     val dialog = AddToBasketDialog(product)
                     dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                     dialog.setOnItemAddedListener { quantity, salePrice ->
-                        Basket.setProduct(product, quantity, salePrice.toDouble())
+                        Basket.setProduct(product, quantity, salePrice)
                     }
                     dialog.setOnDismissListener {
                         hideSoftKeyboard()

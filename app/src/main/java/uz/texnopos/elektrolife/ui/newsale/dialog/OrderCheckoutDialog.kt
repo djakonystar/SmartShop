@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.coroutines.delay
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -23,6 +22,7 @@ import uz.texnopos.elektrolife.databinding.DialogCheckoutOrderBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,10 +32,11 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
     private val newClientsViewModel: NewClientViewModel by viewModel()
     private val newPaymentViewModel: NewPaymentViewModel by viewModel()
     private val settings: Settings by inject()
-    private var list: MutableSet<String> = mutableSetOf()
-    private var listIds: MutableMap<String, Int> = mutableMapOf()
+    private var clientsList: MutableSet<String> = mutableSetOf()
+    private var clientsIds: MutableMap<String, Int> = mutableMapOf()
     private var clientName = ""
     private var clientId = 1
+    private var newClient = ""
     private var date = ""
     private var dateForBackend = ""
     private var dateInLong = System.currentTimeMillis()
@@ -59,17 +60,18 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             calculateDebt()
 
             etSearchClient.addTextChangedListener {
-                list.clear()
+                clientsList.clear()
                 newPaymentViewModel.searchClient(it.toString())
             }
             etSearchClient.setOnItemClickListener { adapterView, _, i, _ ->
                 clientName = adapterView.getItemAtPosition(i).toString()
-                clientId = listIds.getValue(clientName)
+                clientId = clientsIds.getValue(clientName)
             }
             btnAddClient.onClick {
                 addClientDialog = AddClientDialog()
                 addClientDialog.show(requireActivity().supportFragmentManager, addClientDialog.tag)
                 addClientDialog.setData { name, inn, phone, type, comment ->
+                    newClient = "$name, $phone"
                     newClientsViewModel.registerNewClient(
                         Client(
                             name = name,
@@ -84,6 +86,8 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             tilCash.suffixText = settings.currency
             tilCard.suffixText = settings.currency
 
+            SumInputMask(etCash, etCard)
+
             etCash.addTextChangedListener {
                 tilCash.isErrorEnabled = false
                 tilCard.isErrorEnabled = false
@@ -91,7 +95,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             }
             btnCashMagnet.onClick {
                 etCard.text?.clear()
-                etCash.setText(totalPrice format 2)
+                etCash.setText(totalPrice.format(2).sumFormat)
                 etCash.setSelection(etCash.length())
             }
             etCard.addTextChangedListener {
@@ -101,7 +105,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             }
             btnCardMagnet.onClick {
                 etCash.text?.clear()
-                etCard.setText(totalPrice format 2)
+                etCard.setText(totalPrice.format(2).sumFormat)
                 etCard.setSelection(etCard.length())
             }
             etDate.addTextChangedListener {
@@ -164,13 +168,14 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     it.data!!.data.clients.forEach { client ->
-                        list.add("${client.name}, ${client.phone}")
-                        if (!listIds.contains("${client.name}, ${client.phone}"))
-                            listIds["${client.name}, ${client.phone}"] = client.id
+                        clientsList.clear()
+                        clientsList.add("${client.name}, ${client.phone}")
+                        if (!clientsIds.contains("${client.name}, ${client.phone}"))
+                            clientsIds["${client.name}, ${client.phone}"] = client.id
                         val arrayAdapter = ArrayAdapter(
                             requireContext(),
                             R.layout.item_spinner,
-                            list.toMutableList()
+                            clientsList.toMutableList()
                         )
                         binding.apply {
                             etSearchClient.setAdapter(arrayAdapter)
@@ -190,6 +195,8 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
+                    binding.etSearchClient.setText(newClient)
+                    clientId = it.data!!.id
                     showSuccess(getString(R.string.client_successfully_added))
                         .setOnPositiveButtonClickListener {
                             addClientDialog.dismiss()
@@ -214,7 +221,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 tvDebtPrice.text = context?.getString(R.string.sum_text, (-remind).toSumFormat)
             }
 
-            btnAdd.isEnabled = remind >= 0
+            btnAdd.isEnabled = remind in -500.0..0.0 || remind > 0
 
             tvDebtPrice.setTextColor(
                 ContextCompat.getColor(

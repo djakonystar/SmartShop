@@ -18,6 +18,7 @@ import uz.texnopos.elektrolife.data.model.payment.AddPayment
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.databinding.DialogAddPaymentBinding
 import uz.texnopos.elektrolife.settings.Settings
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 
 class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
     private lateinit var binding: DialogAddPaymentBinding
@@ -45,8 +46,8 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
                 settings.currency
             )
 
-            etCash.filterForDouble
-            etCard.filterForDouble
+            SumInputMask(etCash, etCard)
+
             tilCash.suffixText = settings.currency
             tilCard.suffixText = settings.currency
 
@@ -58,7 +59,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
 
             btnCashMagnet.onClick {
                 etCard.text?.clear()
-                etCash.setText(order.amount.remaining format 2)
+                etCash.setText((order.amount.remaining format 2).sumFormat)
                 calculateDebt()
             }
 
@@ -70,7 +71,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
 
             btnCardMagnet.onClick {
                 etCash.text?.clear()
-                etCard.setText(order.amount.remaining format 2)
+                etCard.setText((order.amount.remaining format 2).sumFormat)
                 calculateDebt()
             }
 
@@ -142,7 +143,7 @@ class AddPaymentDialog(private val order: OrderResponse) : DialogFragment() {
                 )
             }
 
-            btnPay.isEnabled = remind >= 0
+            btnPay.isEnabled = remind > 0 || remind in -500.0..0.0
 
             tvDebtPrice.setTextColor(
                 ContextCompat.getColor(

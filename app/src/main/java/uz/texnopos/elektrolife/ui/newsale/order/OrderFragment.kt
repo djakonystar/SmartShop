@@ -42,10 +42,8 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
     private val adapter: OrderAdapter by inject()
     private val settings: Settings by inject()
     private val orderReceiptAdapter: OrderReceiptAdapter by inject()
-    private val safeArgs: OrderFragmentArgs by navArgs()
     private var price = MutableLiveData<Double>()
     private var basketListener = MutableLiveData<List<Product>>()
-    private val gson = Gson()
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,20 +62,20 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
         }
 
         binding.apply {
-            val myType = object : TypeToken<List<Product>>() {}.type
-            val productList = gson.fromJson<List<Product>>(safeArgs.products, myType)
-
             recyclerView.adapter = adapter
             adapter.models = Basket.products.toMutableList()
             tvTotalPrice.text = context?.getString(R.string.total_sum_text, "0", settings.currency)
             val totalPrice =
-                productList.sumOf { product -> product.salePrice * product.count }
+                Basket.products.sumOf { product -> product.salePrice * product.count }
 
             price.postValue(totalPrice)
 
             price.observe(viewLifecycleOwner) { sum ->
-                tvTotalPrice.text =
-                    context?.getString(R.string.total_sum_text, sum.toSumFormat, settings.currency)
+                tvTotalPrice.text = context?.getString(
+                    R.string.total_sum_text,
+                    sum.format(2).sumFormat,
+                    settings.currency
+                )
             }
             basketListener.observe(viewLifecycleOwner) { orders ->
                 if (orders.isEmpty()) navController.popBackStack()
@@ -86,8 +84,12 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             adapter.setOnEditClickListener { product, position ->
                 editBasketProduct = EditBasketProductDialog(product)
                 editBasketProduct.setOnItemAddedListener { quantity, salePrice ->
-                    Basket.setProduct(product, quantity, salePrice.toDouble())
+                    Basket.setProduct(product, quantity, salePrice)
                     adapter.notifyItemChanged(position)
+                    val total =
+                        Basket.products.sumOf { product -> product.salePrice * product.count }
+
+                    price.postValue(total)
                 }
 
                 editBasketProduct.show(

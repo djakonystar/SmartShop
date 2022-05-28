@@ -149,6 +149,7 @@ val String.sumFormat: String
         text = text.chunked(3).joinToString(" ")
         if (this.contains('.')) {
             val afterPoint = this.substringAfter('.')
+            if (afterPoint.length == 1) return "${text.reversed()}.${afterPoint}0"
             return "${text.reversed()}.$afterPoint"
         }
         return text.reversed()
@@ -234,6 +235,18 @@ fun String.getOnlyDigits(): String {
     return s.ifEmpty { "0" }
 }
 
+fun CharSequence.notContains(char: Char, ignoreCase: Boolean = false): Boolean {
+    return !this.contains(char, ignoreCase)
+}
+
+fun CharSequence.notContains(other: CharSequence, ignoreCase: Boolean = false): Boolean {
+    return !this.contains(other, ignoreCase)
+}
+
+fun CharSequence.notContains(regex: Regex): Boolean {
+    return !this.contains(regex)
+}
+
 @SuppressLint("SetTextI18n")
 fun animateDebtPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
@@ -274,8 +287,10 @@ val EditText.filterForDouble: Unit
                 0
             }
 
+            val range = this.length() - 2..this.length()
+
             if (source != null && source.equals(".") && spanned.contains(".")) ""
-            else if (source != null && afterPoint == 2) ""
+            else if (source != null && afterPoint == 2 && this.selectionEnd in range) ""
             else if (source != null && source.equals(".") && spanned.isEmpty()) "0."
             else if (source != null && source.equals(".") && spanned.isNotEmpty()) "."
             else if (source != null && "-,.".contains("" + source)) ""
@@ -312,7 +327,12 @@ infix fun Double.format(afterPoint: Int): String {
 }
 
 val String.toDouble: Double
-    get() = this.ifEmpty { "0.0" }.toDouble()
+    get() {
+        if (this.isEmpty()) {
+            return 0.0
+        }
+        return this.filter { it.isDigit() || it == '.' }.ifEmpty { "0.0" }.toDouble()
+    }
 
 fun Fragment.doPrint(filePath: String, fileName: String) {
     try {

@@ -17,6 +17,7 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogAddToBasketBinding
 import uz.texnopos.elektrolife.settings.Settings
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 
 class AddToBasketDialog(private val product: Product) : DialogFragment() {
     private lateinit var binding: DialogAddToBasketBinding
@@ -46,7 +47,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             val unitId = product.warehouse?.unit?.id ?: -1
             val remained = getString(
                 R.string.price_text,
-                if (unitId == 1) r.toLong() else r,
+                (if (unitId == 1) r.toLong() else r).toString().sumFormat,
                 Constants.getUnitName(requireContext(), unitId)
             )
 
@@ -75,17 +76,18 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             tilQuantity.suffixText = "/$remained"
             tilSumma.suffixText = settings.currency
 
-            etSumma.filterForDouble
             etSumma.setText(product.maxPrice.price.toSumFormat)
 
-            if (product.warehouse?.unit?.id != 1) etQuantity.filterForDouble
-            else etQuantity.setBlockFilter("-.,")
+            val type = if (product.warehouse?.unit?.id != 1) SumInputMask.NUMBER_DECIMAL
+            else SumInputMask.NUMBER
 
+            SumInputMask(etQuantity, type = type)
+            SumInputMask(etSumma)
 
             etQuantity.addTextChangedListener {
-                val count = it.toString().toDouble
                 tilQuantity.isErrorEnabled = false
-                if (count > remained.substringBefore(' ').toDouble() || count <= 0.0) {
+                val count = it.toString().toDouble
+                if (count > r || count <= 0.0) {
                     tilQuantity.error = context?.getString(R.string.not_enough_error)
                 }
             }
@@ -96,17 +98,16 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
             btnAdd.onClick {
                 val quantity = etQuantity.text.toString().toDouble
-                var sum = etSumma.text.toString()
+                val sum = etSumma.text.toString().toDouble
 
-                if (quantity != 0.0 && !tilQuantity.isErrorEnabled && sum.isNotEmpty() && !tilSumma.isErrorEnabled) {
-                    sum = sum.filter { s -> s.isDigit() || s == '.' }
+                if (quantity != 0.0 && !tilQuantity.isErrorEnabled && sum != 0.0 && !tilSumma.isErrorEnabled) {
                     onItemAdded.invoke(quantity, sum)
                     dismiss()
                 } else {
                     if (quantity == 0.0) {
                         tilQuantity.error = getString(R.string.required_field)
                     }
-                    if (sum.isEmpty()) {
+                    if (sum == 0.0) {
                         tilSumma.error = context?.getString(R.string.required_field)
                     }
                 }
@@ -147,7 +148,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         }
 
         sumLiveData.observe(viewLifecycleOwner) { s ->
-            val sum = s.ifEmpty { "0" }.toDouble()
+            val sum = s.toDouble
             binding.apply {
                 if (product.wholesalePrice.code == "USD") {
                     if (sum < product.wholesalePrice.price * settings.usdToUzs || sum > product.maxPrice.price) {
@@ -170,8 +171,8 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
         }
     }
 
-    private var onItemAdded: (quantity: Double, salePrice: String) -> Unit = { _, _ -> }
-    fun setOnItemAddedListener(onItemClick: (quantity: Double, salePrice: String) -> Unit) {
+    private var onItemAdded: (quantity: Double, salePrice: Double) -> Unit = { _, _ -> }
+    fun setOnItemAddedListener(onItemClick: (quantity: Double, salePrice: Double) -> Unit) {
         this.onItemAdded = onItemClick
     }
 
