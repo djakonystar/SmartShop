@@ -2,6 +2,7 @@ package uz.texnopos.elektrolife.ui.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -15,7 +16,8 @@ import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
-import uz.texnopos.elektrolife.ui.main.dialog.LangDialog
+import uz.texnopos.elektrolife.ui.dialog.LangDialog
+import uz.texnopos.elektrolife.ui.dialog.UrlDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
@@ -53,13 +55,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 navController.navigate(R.id.action_mainFragment_to_warehouseFragment)
             }
 
-            ivOther.onClick {
-//                optionsMenu(it)
-                navController.navigate(MainFragmentDirections.actionMainFragmentToNewCategoryFragment())
-            }
-            ivLang.onClick {
-                val dialog = LangDialog()
-                dialog.show(requireActivity().supportFragmentManager, "LangDialog")
+            ivSettings.onClick {
+                optionsMenu(it)
             }
             newSale.onClick {
                 navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment("null"))
@@ -88,7 +85,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
                 "admin", "ceo" -> {
                     newProduct.isEnabled = true
-                    ivOther.isVisible = false
                     finance.onClick {
                         navController.navigate(R.id.action_mainFragment_to_financeFragment)
                     }
@@ -129,5 +125,25 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
+    }
+
+    private fun optionsMenu(view: View) {
+        val optionsMenu = PopupMenu(requireContext(), view)
+        val menuInflater = optionsMenu.menuInflater
+        menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
+        optionsMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_item_lang -> {
+                    val langDialog = LangDialog()
+                    langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
+                }
+                R.id.menu_item_url -> {
+                    val urlDialog = UrlDialog()
+                    urlDialog.show(requireActivity().supportFragmentManager, urlDialog.tag)
+                }
+            }
+            return@setOnMenuItemClickListener true
+        }
+        optionsMenu.show()
     }
 }

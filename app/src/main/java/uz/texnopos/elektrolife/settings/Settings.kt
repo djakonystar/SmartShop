@@ -17,6 +17,9 @@ class Settings(context: Context) {
         const val LANGUAGE = "language"
         const val CURRENCY = "currency"
         const val USER_ID = "userId"
+        const val BASE_URL = "baseUrl"
+        const val LANG_SELECTED = "languageSelected"
+        const val SHOP_SELECTED = "shopSelected"
 
         /**
          * Finance type on creating new **Expense**
@@ -53,8 +56,8 @@ class Settings(context: Context) {
         get() = preferences.getString(PIN, "") ?: ""
 
     var role: String
-        set(value) = preferences.edit().putString(USER_ROLE,value).apply()
-        get() = preferences.getString(USER_ROLE,"")?: ""
+        set(value) = preferences.edit().putString(USER_ROLE, value).apply()
+        get() = preferences.getString(USER_ROLE, "") ?: ""
 
     var userId: Int
         set(value) = preferences.edit().putInt(USER_ID, value).apply()
@@ -77,4 +80,16 @@ class Settings(context: Context) {
     var currency: String
         set(value) = preferences.edit().putString(CURRENCY, value).apply()
         get() = preferences.getString(CURRENCY, "UZS") ?: "UZS"
+
+    var baseUrl: String
+        set(value) = preferences.edit().putString(BASE_URL, value).apply()
+        get() = preferences.getString(BASE_URL, "https://example.com") ?: "https://example.com"
+
+    var langSelected: Boolean
+        set(value) = preferences.edit().putBoolean(LANG_SELECTED, value).apply()
+        get() = preferences.getBoolean(LANG_SELECTED, false)
+
+    var shopSelected: Boolean
+        set(value) = preferences.edit().putBoolean(SHOP_SELECTED, value).apply()
+        get() = preferences.getBoolean(SHOP_SELECTED, false)
 }

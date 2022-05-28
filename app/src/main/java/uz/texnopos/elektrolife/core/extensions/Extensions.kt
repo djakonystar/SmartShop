@@ -426,3 +426,7 @@ private fun Fragment.requestMultiplePermissions() =
 //            showMessage("Permission granted!")
         }
     }
+
+fun <T: Any> T.scope(action: (T) -> Unit) {
+    action(this)
+}

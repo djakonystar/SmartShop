@@ -3,7 +3,10 @@ package uz.texnopos.elektrolife.ui.signin
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
@@ -18,6 +21,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.utils.DynamicRetrofit
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.databinding.FragmentSignInBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -25,6 +29,7 @@ import uz.texnopos.elektrolife.settings.Settings
 class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private lateinit var binding: FragmentSignInBinding
     private lateinit var navController: NavController
+    private val retrofit: DynamicRetrofit by inject()
     private val viewModel: SignInViewModel by viewModel()
     private val settings: Settings by inject()
     private var pincode: String = ""
@@ -35,9 +40,10 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding = FragmentSignInBinding.bind(view)
         navController = findNavController()
 
+        retrofit.setUrl(settings.baseUrl)
+
         binding.apply {
-            tvPincode.isVisible = requireActivity().packageName == "uz.texnopos.smartshoptest" ||
-                    requireActivity().packageName == "uz.texnopos.smartshopteststore"
+            tvPincode.isVisible = settings.baseUrl == "https://smart-shop.my-project.site"
 
             beforeUnlock()
 

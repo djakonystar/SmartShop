@@ -4,6 +4,20 @@ import android.content.Context
 import uz.texnopos.elektrolife.R
 
 object Constants {
+    var BASE_URL = "https://smart-shop.my-project.site"
+
+    fun provideBaseUrls(): Map<String, String> = mapOf(
+        "SmartShop Test" to "https://smart-shop.my-project.site",
+        "ElectroLife" to "https://new-electro-life.texnopos.site",
+        "LuxGadget" to "https://new-lux-gadget.texnopos.site",
+        "Qońirat Shop" to "https://new-qoniratshop.texnopos.site",
+        "Sinyor" to "https://sinyor.texnopos.site",
+        "Raya Bujiteriya" to "https://raya-bijuteriya.texnopos.site",
+        "MobiShop" to "https://mobishop.texnopos.site",
+        "Verita" to "https://verita.texnopos.site",
+        "Ideal Magazin" to "https://ideal-magazin.texnopos.site"
+    )
+
     fun getUnitName(context: Context, unitId: Int): String {
         return when (unitId) {
             1 -> context.getString(R.string.measure_pcs)

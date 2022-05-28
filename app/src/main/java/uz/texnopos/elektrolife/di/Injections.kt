@@ -10,6 +10,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uz.texnopos.elektrolife.core.extensions.Constants
+import uz.texnopos.elektrolife.core.utils.DynamicRetrofit
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientAdapter
@@ -57,39 +58,13 @@ private const val baseUrl = "https://smart-shop.my-project.site" // Test-new
 //private const val baseUrl = "https://verita.texnopos.site" // Verita
 //private const val baseUrl = "https:/new-qoniratshop.texnopos.site" // Qońirat Shop
 //private const val baseUrl = "https://ideal-magazin.texnopos.site" // Ideal Magazin
-// private const val baseUrl = "https://taxiatas.texnopos.uz" // Taxiatas
+//private const val baseUrl = "https://taxiatas.texnopos.uz" // Taxiatas
 //private const val baseUrl = "https://computer-service.texnopos.site" // Computer Service
 private const val timeOut = 50L
 
 val networkModule = module {
-    single {
-        GsonBuilder().setLenient().create()
-    }
-
-    single {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .connectTimeout(timeout = timeOut, TimeUnit.SECONDS)
-            .readTimeout(timeout = timeOut, TimeUnit.SECONDS)
-            .writeTimeout(timeout = timeOut, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true)
-            .build()
-    }
-
-    single {
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create(get()))
-            .client(get())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .build()
-    }
-
-    single {
-        get<Retrofit>().create(ApiInterface::class.java)
-    }
+    single { DynamicRetrofit() }
+    single { DynamicRetrofit().api }
 }
 
 val helperModule = module {

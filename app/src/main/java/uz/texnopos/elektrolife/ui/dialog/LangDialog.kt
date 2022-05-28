@@ -1,6 +1,5 @@
-package uz.texnopos.elektrolife.ui.main.dialog
+package uz.texnopos.elektrolife.ui.dialog
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,22 +34,22 @@ class LangDialog : DialogFragment() {
             tvRu.onClick {
                 settings.language = "ru"
                 dismiss()
-                (requireActivity() as MainActivity).setNewLocale()
+                (requireActivity() as MainActivity).rerun()
             }
             tvUz.onClick {
                 settings.language = "uz"
                 dismiss()
-                (requireActivity() as MainActivity).setNewLocale()
+                (requireActivity() as MainActivity).rerun()
             }
             tvKk.onClick {
                 settings.language = "kaa"
                 dismiss()
-                (requireActivity() as MainActivity).setNewLocale()
+                (requireActivity() as MainActivity).rerun()
             }
             tvEng.onClick {
                 settings.language = "en"
                 dismiss()
-                (requireActivity() as MainActivity).setNewLocale()
+                (requireActivity() as MainActivity).rerun()
             }
         }
     }
