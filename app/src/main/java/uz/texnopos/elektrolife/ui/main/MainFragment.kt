@@ -2,7 +2,6 @@ package uz.texnopos.elektrolife.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -17,7 +16,6 @@ import uz.texnopos.elektrolife.databinding.FragmentMainBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.LangDialog
-import uz.texnopos.elektrolife.ui.dialog.UrlDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
@@ -56,7 +54,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             ivSettings.onClick {
-                optionsMenu(it)
+                val langDialog = LangDialog()
+                langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
             }
             newSale.onClick {
                 navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment("null"))
@@ -127,23 +126,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    private fun optionsMenu(view: View) {
-        val optionsMenu = PopupMenu(requireContext(), view)
-        val menuInflater = optionsMenu.menuInflater
-        menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
-        optionsMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_item_lang -> {
-                    val langDialog = LangDialog()
-                    langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
-                }
-                R.id.menu_item_url -> {
-                    val urlDialog = UrlDialog()
-                    urlDialog.show(requireActivity().supportFragmentManager, urlDialog.tag)
-                }
-            }
-            return@setOnMenuItemClickListener true
-        }
-        optionsMenu.show()
-    }
+//    private fun optionsMenu(view: View) {
+//        val optionsMenu = PopupMenu(requireContext(), view)
+//        val menuInflater = optionsMenu.menuInflater
+//        menuInflater.inflate(R.menu.menu_other, optionsMenu.menu)
+//        optionsMenu.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.menu_item_lang -> {
+//
+//                }
+//                R.id.menu_item_url -> {
+//                    val urlDialog = UrlDialog()
+//                    urlDialog.show(requireActivity().supportFragmentManager, urlDialog.tag)
+//                }
+//            }
+//            return@setOnMenuItemClickListener true
+//        }
+//        optionsMenu.show()
+//    }
 }

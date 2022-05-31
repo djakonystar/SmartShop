@@ -1,6 +1,8 @@
 package uz.texnopos.elektrolife.ui.dialog
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +17,7 @@ import uz.texnopos.elektrolife.core.extensions.scope
 import uz.texnopos.elektrolife.databinding.DialogUrlBinding
 import uz.texnopos.elektrolife.settings.Settings
 
-class UrlDialog: DialogFragment() {
+class UrlDialog : DialogFragment() {
     private lateinit var binding: DialogUrlBinding
     private lateinit var baseUrls: List<String>
     private val settings: Settings by inject()
@@ -50,8 +52,12 @@ class UrlDialog: DialogFragment() {
             btnContinue.onClick {
                 settings.baseUrl = "https://${etUrl.text.toString()}"
                 settings.shopSelected = true
-                dismiss()
-                (requireActivity() as MainActivity).rerun()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    run {
+                        dismiss()
+                        (requireActivity() as MainActivity).rerun()
+                    }
+                }, 300)
             }
         }
     }

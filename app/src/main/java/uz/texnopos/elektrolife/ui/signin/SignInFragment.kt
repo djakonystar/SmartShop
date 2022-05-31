@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.utils.DynamicRetrofit
@@ -30,7 +29,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
     private lateinit var binding: FragmentSignInBinding
     private lateinit var navController: NavController
     private val retrofit: DynamicRetrofit by inject()
-    private val viewModel: SignInViewModel by viewModel()
+    private lateinit var viewModel: SignInViewModel
     private val settings: Settings by inject()
     private var pincode: String = ""
 
@@ -41,6 +40,8 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         navController = findNavController()
 
         retrofit.setUrl(settings.baseUrl)
+        val mViewModel: SignInViewModel by inject()
+        viewModel = mViewModel
 
         binding.apply {
             tvPincode.isVisible = settings.baseUrl == "https://smart-shop.my-project.site"
