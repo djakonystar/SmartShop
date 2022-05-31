@@ -12,28 +12,12 @@
         android:layout_height="60dp"
         android:layout_marginBottom="-10dp"
         android:src="@drawable/logotype"
-        app:layout_constraintBottom_toBottomOf="@id/ivLang"
+        app:layout_constraintBottom_toBottomOf="@id/iv_settings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ivLang" />
+        app:layout_constraintTop_toTopOf="@id/iv_settings" />
 
     <ImageView
-        android:id="@+id/ivOther"
-        android:layout_width="@dimen/img_standard_height_mobile"
-        android:layout_height="@dimen/img_standard_height_mobile"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:contentDescription="@string/add_category_en"
-        android:focusable="true"
-        android:padding="@dimen/padding_small"
-        android:src="@drawable/ic_add"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/new_sale"
-        app:layout_constraintEnd_toStartOf="@id/ivLang"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivLang"
+        android:id="@+id/iv_settings"
         android:layout_width="@dimen/action_bar_icon_size_mobile"
         android:layout_height="@dimen/action_bar_icon_size_mobile"
         android:layout_marginEnd="@dimen/margin_standard"

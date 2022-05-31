@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.koin.android.ext.android.inject
+import uz.texnopos.elektrolife.core.utils.DynamicRetrofit
 import uz.texnopos.elektrolife.databinding.ActivityMainBinding
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.*
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         res.updateConfiguration(conf, dm)
     }
 
-    fun setNewLocale() {
+    fun rerun() {
         val refresh = Intent(this, MainActivity::class.java)
         refresh.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         this.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

@@ -188,4 +188,7 @@
     <string name="product_code_error">This is not a product code!</string>
     <string name="basket_code_error">This is not a sale code!</string>
     <string name="internet_error">You have problems with internet!</string>
+    <string name="select_your_shop">Select your shop</string>
+    <string name="text_continue">Continue</string>
+    <string name="input_shop_url">Input your shop URL</string>
 </resources>

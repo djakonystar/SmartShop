@@ -188,4 +188,7 @@
     <string name="product_code_error">Это не код продукта!</string>
     <string name="basket_code_error">Это не код продажи!</string>
     <string name="internet_error">У вас проблемы с интернетом!</string>
+    <string name="select_your_shop">Выберите свой магазин</string>
+    <string name="text_continue">Продолжить</string>
+    <string name="input_shop_url">Введите URL вашего магазина</string>
 </resources>
