@@ -127,4 +127,7 @@ dependencies {
 
     // SumInputMask
     implementation 'com.github.djakonystar:SumInputMask:0.1.1'
+
+    // StfalconImageViewer
+    implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
 }

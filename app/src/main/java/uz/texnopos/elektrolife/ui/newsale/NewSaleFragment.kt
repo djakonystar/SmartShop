@@ -15,9 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.stfalcon.imageviewer.StfalconImageViewer
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
@@ -137,6 +139,20 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
                 dialog.setOnDismissListener {
                     hideSoftKeyboard()
+                }
+            }
+
+            adapter.onImageClickListener { product, imageView ->
+                product.image?.let { imageUrl ->
+                    StfalconImageViewer.Builder(context, arrayOf(imageUrl)) { view, url ->
+                        Glide.with(requireContext())
+                            .load(url)
+                            .placeholder(R.drawable.image_placeholder)
+                            .into(view)
+                    }
+                        .allowSwipeToDismiss(true)
+                        .withTransitionFrom(imageView)
+                        .show()
                 }
             }
 
