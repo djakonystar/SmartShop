@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale
 
 import android.app.Activity
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -108,9 +107,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 0 && btnFab.isVisible) btnFab.hide()
-                    else if (dy < 0 && !btnFab.isVisible) btnFab.show()
-
                     if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
                         layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
                     ) {
@@ -168,16 +164,16 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
 
-            root.viewTreeObserver.addOnGlobalLayoutListener {
-                val r = Rect()
-                root.getWindowVisibleDisplayFrame(r)
-                val screenHeight = root.rootView.height
-                val keypadHeight = screenHeight - r.bottom
-
-                if (keypadHeight <= screenHeight * 0.15) {
-                    btnFab.show()
-                }
-            }
+//            root.viewTreeObserver.addOnGlobalLayoutListener {
+//                val r = Rect()
+//                root.getWindowVisibleDisplayFrame(r)
+//                val screenHeight = root.rootView.height
+//                val keypadHeight = screenHeight - r.bottom
+//
+//                if (keypadHeight <= screenHeight * 0.15) {
+//                    btnFab.show()
+//                }
+//            }
         }
 
         categoryViewModel.getCategories()

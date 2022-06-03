@@ -4,7 +4,7 @@ import android.content.Context
 import uz.texnopos.elektrolife.R
 
 object Constants {
-    var BASE_URL = "https://smart-shop.my-project.site"
+    const val CLOUD_NAME = "http-electro-life-texnopos-site"
 
     fun provideBaseUrls(): Map<String, String> = mapOf(
         "SmartShop Test" to "https://smart-shop.my-project.site",

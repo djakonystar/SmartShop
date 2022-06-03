@@ -15,5 +15,6 @@ data class Product(
     val minPrice: Price,
     @SerializedName("price_max")
     val maxPrice: Price,
-    val warehouse: Warehouse
+    val warehouse: Warehouse,
+    val image: String = ""
 )

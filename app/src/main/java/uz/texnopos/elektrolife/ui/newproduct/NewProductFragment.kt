@@ -1,5 +1,6 @@
 package uz.texnopos.elektrolife.ui.newproduct
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -10,6 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.shaon2016.propicker.pro_image_picker.ProPicker
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import site.texnopos.djakonystar.suminputmask.SumInputMask
@@ -29,6 +34,7 @@ import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
+import java.io.File
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var binding: FragmentProductNewBinding
@@ -38,6 +44,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private val viewModel: NewProductViewModel by viewModel()
     private val currencyViewModel: CurrencyViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
+    private val imageViewModel: ImageViewModel by viewModel()
     private val settings: Settings by inject()
     private var mutableList: MutableList<CategoryResponse> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
@@ -56,6 +63,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var measureUnitsList: List<String>
     private var unitId: Int = 1
     private var measureUnitLiveData: MutableLiveData<Int> = MutableLiveData(1)
+    private lateinit var imagePart: MultipartBody.Part
+    private lateinit var presetPart: MultipartBody.Part
+    private var imageUrl = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -206,6 +216,29 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 }
             }
 
+            cvImage.onClick {
+                ProPicker.with(this@NewProductFragment)
+                    .cropSquare()
+                    .compressImage()
+                    .maxResultSize(720, 720)
+                    .start { resultCode, data ->
+                        if (resultCode == Activity.RESULT_OK && data != null) {
+                            val picker = ProPicker.getPickerData(data)
+                            val fileUri = picker?.uri
+                            binding.ivProduct.setImageURI(fileUri)
+
+                            val file = File(fileUri?.path!!)
+                            val image =
+                                file.asRequestBody("image/*".toMediaTypeOrNull())
+
+                            imagePart =
+                                MultipartBody.Part.createFormData("file", file.name, image)
+                            presetPart =
+                                MultipartBody.Part.createFormData("upload_preset", "smart-shop")
+                        }
+                    }
+            }
+
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
                 val costPrice = etCostPrice.text.toString().toDouble
@@ -219,18 +252,34 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     wholesalePrice != 0.0 && minPrice != 0.0 && maxPrice != 0.0 &&
                     checkCurrencies && unitId != -1
                 ) {
-                    viewModel.createProduct(
-                        Product(
-                            categoryId = categoryId,
-                            name = productName,
-                            brand = brand,
-                            costPrice = Price(currencyIds[0], costPrice),
-                            wholesalePrice = Price(currencyIds[1], wholesalePrice),
-                            minPrice = Price(currencyIds[2], minPrice),
-                            maxPrice = Price(currencyIds[3], maxPrice),
-                            warehouse = Warehouse(unitId, productQuantity)
-                        )
-                    )
+                    imageViewModel.uploadImage(Constants.CLOUD_NAME, imagePart, presetPart)
+
+                    imageViewModel.image.observe(viewLifecycleOwner) {
+                        when (it.status) {
+                            ResourceState.LOADING -> setLoading(true)
+                            ResourceState.SUCCESS -> {
+                                setLoading(false)
+                                imageUrl = it.data!!.secureUrl
+                                viewModel.createProduct(
+                                    Product(
+                                        categoryId = categoryId,
+                                        name = productName,
+                                        brand = brand,
+                                        costPrice = Price(currencyIds[0], costPrice),
+                                        wholesalePrice = Price(currencyIds[1], wholesalePrice),
+                                        minPrice = Price(currencyIds[2], minPrice),
+                                        maxPrice = Price(currencyIds[3], maxPrice),
+                                        warehouse = Warehouse(unitId, productQuantity),
+                                        image = imageUrl
+                                    )
+                                )
+                            }
+                            ResourceState.ERROR -> {
+                                setLoading(false)
+                                showError(it.message)
+                            }
+                        }
+                    }
                 } else {
                     if (categoryId == -1) {
                         tilCategory.error = context?.getString(R.string.required_field)
@@ -271,6 +320,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     }
                 }
             }
+
             ivAddCategory.onClick {
                 navController.navigate(R.id.action_newProductFragment_to_newCategoryFragment)
             }
@@ -521,6 +571,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                         etMaxPrice.text!!.clear()
                         actMaxCurrency.text.clear()
                         currencyIds = mutableListOf(-1, -1, -1, -1)
+                        ivProduct.setImageResource(R.drawable.ic_upload)
+                        imageUrl = ""
                     }
                 }
                 ResourceState.ERROR -> {
