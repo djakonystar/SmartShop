@@ -9,6 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.shaon2016.propicker.pro_image_picker.ProPicker
@@ -34,6 +35,7 @@ import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerViewModel
 import java.io.File
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
@@ -45,6 +47,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private val currencyViewModel: CurrencyViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val imageViewModel: ImageViewModel by viewModel()
+    private val qrScannerViewModel: QrScannerViewModel by viewModel()
     private val settings: Settings by inject()
     private var mutableList: MutableList<CategoryResponse> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
@@ -74,6 +77,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         abBinding = ActionBarProductNewBinding.bind(view)
         navController = findNavController()
         measureUnitsList = Constants.getUnits(requireContext())
+
+        val currentBackStackEntry = navController.currentBackStackEntry
+        val savedStateHandle = currentBackStackEntry?.savedStateHandle
+        observeQrCodeResult(savedStateHandle)
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
@@ -122,9 +129,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             ivQrScanner.onClick {
                 navController.navigate(
-                    NewProductFragmentDirections.actionNewProductFragmentToQrScannerFragment(
-                        QrScannerFragment.POST_TRANSACTION
-                    )
+                    NewProductFragmentDirections.actionNewProductFragmentToQrScannerFragment()
                 )
             }
 
@@ -457,6 +462,14 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                                 mapOfRates["${toCurrency.code}${currency.code}"] =
                                     1 / toCurrency.rate.toDouble()
                             }
+
+                            when (currency.code) {
+                                "USD" -> currency.rate.forEach { rate ->
+                                    when (rate.code) {
+                                        "UZS" -> settings.usdToUzs = rate.rate
+                                    }
+                                }
+                            }
                         }
 
                         val currencyList = mapOfCurrency.values.toList()
@@ -581,5 +594,51 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 }
             }
         }
+    }
+
+    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
+        savedStateHandle?.getLiveData<String>(QrScannerFragment.RESULT_TEXT)
+            ?.observe(viewLifecycleOwner) { result ->
+                if (result.startsWith(QrScannerFragment.PRODUCT)) {
+                    val arguments = result.split("\n")
+                    val type = arguments[0]
+                    val uuid = arguments[1]
+                    qrScannerViewModel.getProduct(type, uuid)
+                    qrScannerViewModel.product.observe(viewLifecycleOwner) {
+                        when (it.status) {
+                            ResourceState.LOADING -> setLoading(true)
+                            ResourceState.SUCCESS -> {
+                                setLoading(false)
+                                val product = it.data!!
+                                val transaction = TransactionTransfer(
+                                    product.id,
+                                    product.name,
+                                    product.count,
+                                    product.warehouse?.unit?.id ?: 1,
+                                    Price(
+                                        product.costPrice.currencyId,
+                                        product.costPrice.price
+                                    )
+                                )
+                                val dialog = TransactionDialog(transaction)
+                                dialog.show(
+                                    requireActivity().supportFragmentManager,
+                                    dialog.tag
+                                )
+                                dialog.setOnDismissListener {
+                                    navController.popBackStack()
+                                }
+                            }
+                            ResourceState.ERROR -> {
+                                setLoading(false)
+                                showError(it.message)
+                            }
+                        }
+                    }
+                    savedStateHandle.remove(QrScannerFragment.RESULT_TEXT)
+                } else {
+                    showError(getString(R.string.product_code_error))
+                }
+            }
     }
 }

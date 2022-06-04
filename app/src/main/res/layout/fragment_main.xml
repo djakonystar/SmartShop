@@ -413,6 +413,21 @@
 
     </androidx.cardview.widget.CardView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_qr_scanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_standard"
+        android:backgroundTint="@color/white_grey"
+        android:src="@drawable/ic_qr_code_scanner"
+        app:backgroundTint="@color/app_main_color"
+        app:borderWidth="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/app_main_color"
+        tools:ignore="ContentDescription" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
