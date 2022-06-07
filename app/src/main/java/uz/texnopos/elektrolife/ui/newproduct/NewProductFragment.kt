@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.shaon2016.propicker.pro_image_picker.ProPicker
+//import com.shaon2016.propicker.pro_image_picker.ProPicker
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -222,28 +222,29 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     calculate()
                 }
             }
+            cvImage.isVisible = false
 
-            cvImage.onClick {
-                ProPicker.with(this@NewProductFragment)
-                    .cropSquare()
-                    .compressImage()
-                    .maxResultSize(720, 720)
-                    .start { resultCode, data ->
-                        if (resultCode == Activity.RESULT_OK && data != null) {
-                            val picker = ProPicker.getPickerData(data)
-                            val fileUri = picker?.uri
-                            binding.ivProduct.setImageURI(fileUri)
-
-                            val file = File(fileUri?.path!!)
-                            val image =
-                                file.asRequestBody("image/*".toMediaTypeOrNull())
-
-                            imagePart =
-                                MultipartBody.Part.createFormData("file", file.name, image)
-                            imageSelected = true
-                        }
-                    }
-            }
+//            cvImage.onClick {
+//                ProPicker.with(this@NewProductFragment)
+//                    .cropSquare()
+//                    .compressImage()
+//                    .maxResultSize(720, 720)
+//                    .start { resultCode, data ->
+//                        if (resultCode == Activity.RESULT_OK && data != null) {
+//                            val picker = ProPicker.getPickerData(data)
+//                            val fileUri = picker?.uri
+//                            binding.ivProduct.setImageURI(fileUri)
+//
+//                            val file = File(fileUri?.path!!)
+//                            val image =
+//                                file.asRequestBody("image/*".toMediaTypeOrNull())
+//
+//                            imagePart =
+//                                MultipartBody.Part.createFormData("file", file.name, image)
+//                            imageSelected = true
+//                        }
+//                    }
+//            }
 
             btnAddProduct.onClick {
                 val productName = etProductName.text.toString()
