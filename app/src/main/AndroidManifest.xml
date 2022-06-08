@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Warehouse"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:replace="android:theme">
         <activity
             android:name="uz.texnopos.elektrolife.MainActivity"

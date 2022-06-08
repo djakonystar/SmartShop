@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.Constants
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
@@ -41,8 +43,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         observeQrCodeResult(savedStateHandle)
 
         binding.apply {
+            Log.d("logotype", Constants.provideBaseUrls()[settings.baseUrl] ?: "logo")
             val logoResId = resources.getIdentifier(
-                "logo",
+                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
                 "drawable",
                 requireActivity().packageName
             )

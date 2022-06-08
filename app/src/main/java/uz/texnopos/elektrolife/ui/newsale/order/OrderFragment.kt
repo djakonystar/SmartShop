@@ -198,6 +198,14 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
 
         viewBinding.apply {
             ivLogo.setImageResource(R.drawable.logotype)
+            val logoResId = resources.getIdentifier(
+                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
+                "drawable",
+                requireActivity().packageName
+            )
+            if (logoResId != 0) {
+                ivLogo.setImageResource(logoResId)
+            }
             tvSeller.text = "Продавец: ${basket.employee.name}"
             val createdDate = basket.createdAt.substring(0..9).changeDateFormat
             val createdTime = basket.createdAt.substring(11..18)
