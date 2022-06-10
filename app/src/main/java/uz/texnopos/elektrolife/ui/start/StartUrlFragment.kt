@@ -26,7 +26,7 @@ class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
 
         binding = FragmentStartUrlBinding.bind(view)
         navController = findNavController()
-        baseUrls = Constants.provideBaseUrls().values.toList()
+        baseUrls = Constants.provideBaseUrls().keys.toList()
 
         if (settings.shopSelected) {
             navController.navigate(R.id.action_startShopFragment_to_signInFragment)

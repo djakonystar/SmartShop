@@ -1,13 +1,12 @@
 package uz.texnopos.elektrolife.ui.newsale
 
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
-import uz.texnopos.elektrolife.core.extensions.Constants
-import uz.texnopos.elektrolife.core.extensions.inflate
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.sumFormat
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ItemNewSaleBinding
 
@@ -27,6 +26,19 @@ class NewSaleProductAdapter : BaseAdapter<Product, NewSaleProductAdapter.NewSale
                     else remained.toString().sumFormat,
                     Constants.getUnitName(itemView.context, product.warehouse?.unit?.id ?: -1)
                 )
+
+                if (product.image != null) {
+                    Glide.with(ivProduct)
+                        .load(product.image)
+                        .placeholder(R.drawable.image_placeholder)
+                        .into(ivProduct)
+                } else {
+                    ivProduct.setImageResource(R.drawable.image_placeholder)
+                }
+
+                ivProduct.onClick {
+                    onImageClick(product, ivProduct)
+                }
 
                 itemView.onClick {
                     onItemClick.invoke(product)
@@ -48,5 +60,10 @@ class NewSaleProductAdapter : BaseAdapter<Product, NewSaleProductAdapter.NewSale
     var onItemClick: (product: Product) -> Unit = {}
     fun onItemClickListener(onItemClick: (product: Product) -> Unit) {
         this.onItemClick = onItemClick
+    }
+
+    var onImageClick: (product: newSaleProduct, imageView: ImageView) -> Unit = { _, _ -> }
+    fun onImageClickListener(onImageClick: (product: newSaleProduct, imageView: ImageView) -> Unit) {
+        this.onImageClick = onImageClick
     }
 }

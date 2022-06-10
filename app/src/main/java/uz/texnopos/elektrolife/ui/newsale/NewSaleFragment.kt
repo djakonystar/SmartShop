@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale
 
 import android.app.Activity
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,19 +9,19 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
+import com.stfalcon.imageviewer.StfalconImageViewer
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.newSaleProduct
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
@@ -39,12 +38,10 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private val viewModel: NewSaleViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val adapter: NewSaleProductAdapter by inject()
-    private val navArgs: NewSaleFragmentArgs by navArgs()
     private var productsList = mutableListOf<Product>()
     private var allProductsList = mutableListOf<Product>()
     private var searchValue = ""
     private var selectedCategoryId = -1
-    private lateinit var productCode: String
     private var isLoading = false
     private var page = 1
     private var lastPage = 0
@@ -55,6 +52,13 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         binding = FragmentNewSaleBinding.bind(view)
         abBinding = ActionBarNewSaleBinding.bind(view)
         navController = findNavController()
+
+        val currentBackStackEntry = navController.currentBackStackEntry
+        val currentSavedStateHandle = currentBackStackEntry?.savedStateHandle
+        val previousBackStackEntry = navController.previousBackStackEntry
+        val prevSavedStateHandle = previousBackStackEntry?.savedStateHandle
+        observeQrCodeResult(currentSavedStateHandle)
+        observeQrCodeResult(prevSavedStateHandle)
 
         abBinding.apply {
             btnHome.onClick {
@@ -79,36 +83,18 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
             btnScanner.onClick {
                 navController.navigate(
-                    NewSaleFragmentDirections.actionNewSaleFragmentToQrScannerFragment(
-                        QrScannerFragment.GET_PRODUCT
-                    )
+                    NewSaleFragmentDirections.actionNewSaleFragmentToQrScannerFragment()
                 )
             }
         }
 
         binding.apply {
-            val productString = navArgs.product
-            if (productString != "null") {
-                val product = Gson().fromJson(productString, newSaleProduct::class.java)
-                val dialog = AddToBasketDialog(product)
-                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                dialog.setOnItemAddedListener { quantity, salePrice ->
-                    Basket.setProduct(product, quantity, salePrice)
-                }
-                dialog.setOnDismissListener {
-                    hideSoftKeyboard()
-                }
-            }
-
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = layoutManager
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 0 && btnFab.isVisible) btnFab.hide()
-                    else if (dy < 0 && !btnFab.isVisible) btnFab.show()
-
                     if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
                         layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
                     ) {
@@ -140,6 +126,20 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
 
+            adapter.onImageClickListener { product, imageView ->
+                product.image?.let { imageUrl ->
+                    StfalconImageViewer.Builder(context, arrayOf(imageUrl)) { view, url ->
+                        Glide.with(requireContext())
+                            .load(url)
+                            .placeholder(R.drawable.image_placeholder)
+                            .into(view)
+                    }
+                        .allowSwipeToDismiss(true)
+                        .withTransitionFrom(imageView)
+                        .show()
+                }
+            }
+
             btnFab.onClick {
                 if (Basket.products.isNotEmpty()) {
                     findNavController().navigate(
@@ -152,16 +152,16 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
 
-            root.viewTreeObserver.addOnGlobalLayoutListener {
-                val r = Rect()
-                root.getWindowVisibleDisplayFrame(r)
-                val screenHeight = root.rootView.height
-                val keypadHeight = screenHeight - r.bottom
-
-                if (keypadHeight <= screenHeight * 0.15) {
-                    btnFab.show()
-                }
-            }
+//            root.viewTreeObserver.addOnGlobalLayoutListener {
+//                val r = Rect()
+//                root.getWindowVisibleDisplayFrame(r)
+//                val screenHeight = root.rootView.height
+//                val keypadHeight = screenHeight - r.bottom
+//
+//                if (keypadHeight <= screenHeight * 0.15) {
+//                    btnFab.show()
+//                }
+//            }
         }
 
         categoryViewModel.getCategories()
@@ -234,29 +234,43 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
         }
 
-        viewModel.product.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    productCode = ""
-                    val product = it.data!!
-                    val dialog = AddToBasketDialog(product)
-                    dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                    dialog.setOnItemAddedListener { quantity, salePrice ->
-                        Basket.setProduct(product, quantity, salePrice)
+
+    }
+
+    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
+        savedStateHandle?.getLiveData<String>(QrScannerFragment.RESULT_TEXT)
+            ?.observe(viewLifecycleOwner) { result ->
+                if (result.startsWith(QrScannerFragment.PRODUCT)) {
+                    val arguments = result.split("\n")
+                    val type = arguments[0]
+                    val uuid = arguments[1]
+                    viewModel.getProduct(type, uuid)
+                    viewModel.product.observe(viewLifecycleOwner) {
+                        when (it.status) {
+                            ResourceState.LOADING -> setLoading(true)
+                            ResourceState.SUCCESS -> {
+                                setLoading(false)
+                                val product = it.data!!
+                                val dialog = AddToBasketDialog(product)
+                                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+                                dialog.setOnItemAddedListener { quantity, salePrice ->
+                                    Basket.setProduct(product, quantity, salePrice)
+                                }
+                                dialog.setOnDismissListener {
+                                    hideSoftKeyboard()
+                                }
+                            }
+                            ResourceState.ERROR -> {
+                                setLoading(false)
+                                showError(it.message)
+                            }
+                        }
                     }
-                    dialog.setOnDismissListener {
-                        hideSoftKeyboard()
-                    }
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    productCode = ""
-                    showError(it.message)
+                    savedStateHandle.remove(QrScannerFragment.RESULT_TEXT)
+                } else {
+                    showError(getString(R.string.product_code_error))
                 }
             }
-        }
     }
 
     private fun addNewChip(category: CategoryResponse) {

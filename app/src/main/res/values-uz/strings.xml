@@ -194,4 +194,5 @@
     <string name="settings">Sozlamalar</string>
     <string name="language">Til</string>
     <string name="shop_url">Do\'kon URL manzili</string>
+    <string name="unknown_qr_code">Noma\'lum kod!</string>
 </resources>

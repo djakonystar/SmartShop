@@ -1,17 +1,10 @@
 package uz.texnopos.elektrolife.di
 
-import com.google.gson.GsonBuilder
-import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import uz.texnopos.elektrolife.core.extensions.Constants
-import uz.texnopos.elektrolife.core.utils.DynamicRetrofit
-import uz.texnopos.elektrolife.data.retrofit.ApiInterface
+import uz.texnopos.elektrolife.data.retrofit.DynamicRetrofit
+import uz.texnopos.elektrolife.data.retrofit.ImageRetrofit
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientAdapter
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
@@ -29,6 +22,7 @@ import uz.texnopos.elektrolife.ui.finance.salary.detail.SalaryDetailViewModel
 import uz.texnopos.elektrolife.ui.newcategory.NewCategoryViewModel
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
+import uz.texnopos.elektrolife.ui.newproduct.ImageViewModel
 import uz.texnopos.elektrolife.ui.newproduct.NewProductViewModel
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.newsale.NewSaleProductAdapter
@@ -46,7 +40,6 @@ import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailViewModel
 import uz.texnopos.elektrolife.ui.signin.SignInViewModel
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseAdapter
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
-import java.util.concurrent.TimeUnit
 
 //private const val baseUrl = "https://electro-life.my-project.site" // Test
 private const val baseUrl = "https://smart-shop.my-project.site" // Test-new
@@ -65,6 +58,7 @@ private const val timeOut = 50L
 val networkModule = module {
     single { DynamicRetrofit() }
     single { DynamicRetrofit().api }
+    single { ImageRetrofit().api }
 }
 
 val helperModule = module {
@@ -93,6 +87,7 @@ val viewModelModule = module {
     viewModel { SalaryDetailViewModel(get(), get()) }
     viewModel { PaymentViewModel(get(), get(), get()) }
     viewModel { QrScannerViewModel(get(), get()) }
+    viewModel { ImageViewModel(get()) }
 }
 
 val adapterModule = module {

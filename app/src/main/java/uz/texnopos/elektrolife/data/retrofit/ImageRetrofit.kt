@@ -1,4 +1,4 @@
-package uz.texnopos.elektrolife.core.utils
+package uz.texnopos.elektrolife.data.retrofit
 
 import com.google.gson.GsonBuilder
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -6,13 +6,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import java.util.concurrent.TimeUnit
 
-class DynamicRetrofit {
+class ImageRetrofit {
     companion object {
         private const val TIME_OUT = 50L
-        private var BASE_URL = "https://sinyor.texnopos.site"
+        private var BASE_URL = "https://api.cloudinary.com"
     }
 
     private fun provideGson() = GsonBuilder().setLenient().create()
@@ -35,13 +34,8 @@ class DynamicRetrofit {
         .client(provideOkHttpClient())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()
-        .create(ApiInterface::class.java)
+        .create(ImageApiInterface::class.java)
 
-    var api: ApiInterface = buildApi()
+    var api: ImageApiInterface = buildApi()
         private set
-
-    fun setUrl(url: String) {
-        if (BASE_URL != url) BASE_URL = url
-        api = buildApi()
-    }
 }
