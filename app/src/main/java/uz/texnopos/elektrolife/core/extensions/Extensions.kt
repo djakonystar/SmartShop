@@ -16,6 +16,7 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -379,6 +380,11 @@ fun Fragment.pdfGenerator(
                 override fun onFailure(failureResponse: FailureResponse?) {
                     super.onFailure(failureResponse)
                     onFailure.invoke(failureResponse)
+                }
+
+                override fun showLog(log: String?) {
+                    super.showLog(log)
+                    log?.let { Log.d("XMLtoPDF", it) }
                 }
             })
     }

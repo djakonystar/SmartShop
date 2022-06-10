@@ -242,6 +242,10 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             val card = etCard.text.toString().toDouble
             val debt = if (cash + card < totalPrice) totalPrice - (cash + card) else 0.0
             var dateRequired = false
+            val currentClientName = etSearchClient.text.toString()
+            clientId = if (clientsList.contains(currentClientName)) {
+                clientsIds.getValue(clientName)
+            } else 1
             val comment = etComment.text.toString()
 
             if (debt > 0) {

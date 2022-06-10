@@ -1,15 +1,19 @@
 package uz.texnopos.elektrolife.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.Constants
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
@@ -18,22 +22,30 @@ import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.LangDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerViewModel
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private lateinit var navController: NavController
     private val currencyViewModel: CurrencyViewModel by viewModel()
+    private val qrScannerViewModel: QrScannerViewModel by viewModel()
     private val settings: Settings by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         Basket.clear()
         binding = FragmentMainBinding.bind(view)
         navController = findNavController()
 
+        val currentBackStackEntry = navController.currentBackStackEntry
+        val savedStateHandle = currentBackStackEntry?.savedStateHandle
+        observeQrCodeResult(savedStateHandle)
+
         binding.apply {
+            Log.d("logotype", Constants.provideBaseUrls()[settings.baseUrl] ?: "logo")
             val logoResId = resources.getIdentifier(
-                "logo",
+                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
                 "drawable",
                 requireActivity().packageName
             )
@@ -46,7 +58,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
             returnOrder.onClick {
                 navController.navigate(
-                    MainFragmentDirections.actionMainFragmentToQrScannerFragment(QrScannerFragment.GET_BASKET)
+                    MainFragmentDirections.actionMainFragmentToQrScannerFragment()
                 )
             }
             warehouse.onClick {
@@ -58,10 +70,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
             }
             newSale.onClick {
-                navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment("null"))
+                navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
             }
             newProduct.onClick {
                 navController.navigate(R.id.action_mainFragment_to_newProductFragment)
+            }
+
+            fabQrScanner.onClick {
+                navController.navigate(MainFragmentDirections.actionMainFragmentToQrScannerFragment())
             }
 
             when (settings.role) {
@@ -92,7 +108,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
-        currencyViewModel.getCurrency()
+//        currencyViewModel.getCurrency()
         setUpObservers()
     }
 
@@ -124,6 +140,46 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
+    }
+
+    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
+        savedStateHandle?.getLiveData<String>(QrScannerFragment.RESULT_TEXT)
+            ?.observe(viewLifecycleOwner) { result ->
+                if (result.startsWith(QrScannerFragment.BASKET)) {
+                    val arguments = result.split("\n")
+                    val type = arguments[0]
+                    val uuid = arguments[1]
+                    qrScannerViewModel.getBasket(type, uuid)
+                    qrScannerViewModel.order.observe(viewLifecycleOwner) {
+                        when (it.status) {
+                            ResourceState.LOADING -> setLoading(true)
+                            ResourceState.SUCCESS -> {
+                                setLoading(false)
+                                val basket = it.data!!
+                                val basketString =
+                                    GsonBuilder().setPrettyPrinting().create()
+                                        .toJson(basket)
+                                navController.navigate(
+                                    MainFragmentDirections.actionMainFragmentToReturnOrderFragment(
+                                        basketString
+                                    )
+                                )
+                            }
+                            ResourceState.ERROR -> {
+                                setLoading(false)
+                                showError(it.message)
+                            }
+                        }
+                    }
+                    savedStateHandle.remove(QrScannerFragment.RESULT_TEXT)
+                } else if (result.startsWith(QrScannerFragment.PRODUCT)) {
+                    savedStateHandle.remove<String>(QrScannerFragment.RESULT_TEXT)
+                    savedStateHandle[QrScannerFragment.RESULT_TEXT] = result
+                    navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
+                } else {
+                    showError(getString(R.string.unknown_qr_code))
+                }
+            }
     }
 
 //    private fun optionsMenu(view: View) {

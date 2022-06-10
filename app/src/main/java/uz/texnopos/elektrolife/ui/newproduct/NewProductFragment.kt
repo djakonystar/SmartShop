@@ -9,6 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.shaon2016.propicker.pro_image_picker.ProPicker
@@ -34,6 +35,7 @@ import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionDialog
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
+import uz.texnopos.elektrolife.ui.qrscanner.QrScannerViewModel
 import java.io.File
 
 class NewProductFragment : Fragment(R.layout.fragment_product_new) {
@@ -45,6 +47,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private val currencyViewModel: CurrencyViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val imageViewModel: ImageViewModel by viewModel()
+    private val qrScannerViewModel: QrScannerViewModel by viewModel()
     private val settings: Settings by inject()
     private var mutableList: MutableList<CategoryResponse> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
@@ -63,8 +66,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var measureUnitsList: List<String>
     private var unitId: Int = 1
     private var measureUnitLiveData: MutableLiveData<Int> = MutableLiveData(1)
-    private lateinit var imagePart: MultipartBody.Part
-    private lateinit var presetPart: MultipartBody.Part
+    private var imagePart: MultipartBody.Part = MultipartBody.Part.createFormData("file", "")
+    private var presetPart: MultipartBody.Part =
+        MultipartBody.Part.createFormData("upload_preset", "smart-shop")
+    private var imageSelected = false
     private var imageUrl = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,6 +79,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         abBinding = ActionBarProductNewBinding.bind(view)
         navController = findNavController()
         measureUnitsList = Constants.getUnits(requireContext())
+
+        val currentBackStackEntry = navController.currentBackStackEntry
+        val savedStateHandle = currentBackStackEntry?.savedStateHandle
+        observeQrCodeResult(savedStateHandle)
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
@@ -122,9 +131,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
             ivQrScanner.onClick {
                 navController.navigate(
-                    NewProductFragmentDirections.actionNewProductFragmentToQrScannerFragment(
-                        QrScannerFragment.POST_TRANSACTION
-                    )
+                    NewProductFragmentDirections.actionNewProductFragmentToQrScannerFragment()
                 )
             }
 
@@ -228,13 +235,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             binding.ivProduct.setImageURI(fileUri)
 
                             val file = File(fileUri?.path!!)
-                            val image =
-                                file.asRequestBody("image/*".toMediaTypeOrNull())
+                            val image = file.asRequestBody("image/*".toMediaTypeOrNull())
 
                             imagePart =
                                 MultipartBody.Part.createFormData("file", file.name, image)
-                            presetPart =
-                                MultipartBody.Part.createFormData("upload_preset", "smart-shop")
+                            imageSelected = true
                         }
                     }
             }
@@ -252,33 +257,49 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     wholesalePrice != 0.0 && minPrice != 0.0 && maxPrice != 0.0 &&
                     checkCurrencies && unitId != -1
                 ) {
-                    imageViewModel.uploadImage(Constants.CLOUD_NAME, imagePart, presetPart)
+                    if (imageSelected) {
+                        imageViewModel.uploadImage(Constants.CLOUD_NAME, imagePart, presetPart)
 
-                    imageViewModel.image.observe(viewLifecycleOwner) {
-                        when (it.status) {
-                            ResourceState.LOADING -> setLoading(true)
-                            ResourceState.SUCCESS -> {
-                                setLoading(false)
-                                imageUrl = it.data!!.secureUrl
-                                viewModel.createProduct(
-                                    Product(
-                                        categoryId = categoryId,
-                                        name = productName,
-                                        brand = brand,
-                                        costPrice = Price(currencyIds[0], costPrice),
-                                        wholesalePrice = Price(currencyIds[1], wholesalePrice),
-                                        minPrice = Price(currencyIds[2], minPrice),
-                                        maxPrice = Price(currencyIds[3], maxPrice),
-                                        warehouse = Warehouse(unitId, productQuantity),
-                                        image = imageUrl
+                        imageViewModel.image.observe(viewLifecycleOwner) {
+                            when (it.status) {
+                                ResourceState.LOADING -> setLoading(true)
+                                ResourceState.SUCCESS -> {
+                                    setLoading(false)
+                                    imageUrl = it.data!!.secureUrl
+                                    viewModel.createProduct(
+                                        Product(
+                                            categoryId = categoryId,
+                                            name = productName,
+                                            brand = brand,
+                                            costPrice = Price(currencyIds[0], costPrice),
+                                            wholesalePrice = Price(currencyIds[1], wholesalePrice),
+                                            minPrice = Price(currencyIds[2], minPrice),
+                                            maxPrice = Price(currencyIds[3], maxPrice),
+                                            warehouse = Warehouse(unitId, productQuantity),
+                                            image = imageUrl
+                                        )
                                     )
-                                )
-                            }
-                            ResourceState.ERROR -> {
-                                setLoading(false)
-                                showError(it.message)
+                                }
+                                ResourceState.ERROR -> {
+                                    setLoading(false)
+                                    showError(it.message)
+                                }
                             }
                         }
+                    } else {
+                        viewModel.createProduct(
+                            Product(
+                                categoryId = categoryId,
+                                name = productName,
+                                brand = brand,
+                                costPrice = Price(currencyIds[0], costPrice),
+                                wholesalePrice = Price(currencyIds[1], wholesalePrice),
+                                minPrice = Price(currencyIds[2], minPrice),
+                                maxPrice = Price(currencyIds[3], maxPrice),
+                                warehouse = Warehouse(unitId, productQuantity),
+                                image = imageUrl
+                            )
+                        )
                     }
                 } else {
                     if (categoryId == -1) {
@@ -457,6 +478,14 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                                 mapOfRates["${toCurrency.code}${currency.code}"] =
                                     1 / toCurrency.rate.toDouble()
                             }
+
+                            when (currency.code) {
+                                "USD" -> currency.rate.forEach { rate ->
+                                    when (rate.code) {
+                                        "UZS" -> settings.usdToUzs = rate.rate
+                                    }
+                                }
+                            }
                         }
 
                         val currencyList = mapOfCurrency.values.toList()
@@ -551,9 +580,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     setLoading(false)
                     // TODO: Print qrcode
                     showSuccess(getString(R.string.product_added_successfully))
-                        .setOnPositiveButtonClickListener {
-                            navController.popBackStack()
-                        }
                     binding.apply {
                         actCategory.text.clear()
                         categoryId = -1
@@ -581,5 +607,51 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 }
             }
         }
+    }
+
+    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
+        savedStateHandle?.getLiveData<String>(QrScannerFragment.RESULT_TEXT)
+            ?.observe(viewLifecycleOwner) { result ->
+                if (result.startsWith(QrScannerFragment.PRODUCT)) {
+                    val arguments = result.split("\n")
+                    val type = arguments[0]
+                    val uuid = arguments[1]
+                    qrScannerViewModel.getProduct(type, uuid)
+                    qrScannerViewModel.product.observe(viewLifecycleOwner) {
+                        when (it.status) {
+                            ResourceState.LOADING -> setLoading(true)
+                            ResourceState.SUCCESS -> {
+                                setLoading(false)
+                                val product = it.data!!
+                                val transaction = TransactionTransfer(
+                                    product.id,
+                                    product.name,
+                                    product.count,
+                                    product.warehouse?.unit?.id ?: 1,
+                                    Price(
+                                        product.costPrice.currencyId,
+                                        product.costPrice.price
+                                    )
+                                )
+                                val dialog = TransactionDialog(transaction)
+                                dialog.show(
+                                    requireActivity().supportFragmentManager,
+                                    dialog.tag
+                                )
+                                dialog.setOnDismissListener {
+                                    navController.popBackStack()
+                                }
+                            }
+                            ResourceState.ERROR -> {
+                                setLoading(false)
+                                showError(it.message)
+                            }
+                        }
+                    }
+                    savedStateHandle.remove(QrScannerFragment.RESULT_TEXT)
+                } else {
+                    showError(getString(R.string.product_code_error))
+                }
+            }
     }
 }
