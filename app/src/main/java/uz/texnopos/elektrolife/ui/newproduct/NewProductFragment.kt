@@ -66,8 +66,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private lateinit var measureUnitsList: List<String>
     private var unitId: Int = 1
     private var measureUnitLiveData: MutableLiveData<Int> = MutableLiveData(1)
-    private lateinit var imagePart: MultipartBody.Part
-    private lateinit var presetPart: MultipartBody.Part
+    private var imagePart: MultipartBody.Part = MultipartBody.Part.createFormData("file", "")
+    private var presetPart: MultipartBody.Part =
+        MultipartBody.Part.createFormData("upload_preset", "smart-shop")
+    private var imageSelected = false
     private var imageUrl = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -233,13 +235,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             binding.ivProduct.setImageURI(fileUri)
 
                             val file = File(fileUri?.path!!)
-                            val image =
-                                file.asRequestBody("image/*".toMediaTypeOrNull())
+                            val image = file.asRequestBody("image/*".toMediaTypeOrNull())
 
                             imagePart =
                                 MultipartBody.Part.createFormData("file", file.name, image)
-                            presetPart =
-                                MultipartBody.Part.createFormData("upload_preset", "smart-shop")
+                            imageSelected = true
                         }
                     }
             }
@@ -257,33 +257,49 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     wholesalePrice != 0.0 && minPrice != 0.0 && maxPrice != 0.0 &&
                     checkCurrencies && unitId != -1
                 ) {
-                    imageViewModel.uploadImage(Constants.CLOUD_NAME, imagePart, presetPart)
+                    if (imageSelected) {
+                        imageViewModel.uploadImage(Constants.CLOUD_NAME, imagePart, presetPart)
 
-                    imageViewModel.image.observe(viewLifecycleOwner) {
-                        when (it.status) {
-                            ResourceState.LOADING -> setLoading(true)
-                            ResourceState.SUCCESS -> {
-                                setLoading(false)
-                                imageUrl = it.data!!.secureUrl
-                                viewModel.createProduct(
-                                    Product(
-                                        categoryId = categoryId,
-                                        name = productName,
-                                        brand = brand,
-                                        costPrice = Price(currencyIds[0], costPrice),
-                                        wholesalePrice = Price(currencyIds[1], wholesalePrice),
-                                        minPrice = Price(currencyIds[2], minPrice),
-                                        maxPrice = Price(currencyIds[3], maxPrice),
-                                        warehouse = Warehouse(unitId, productQuantity),
-                                        image = imageUrl
+                        imageViewModel.image.observe(viewLifecycleOwner) {
+                            when (it.status) {
+                                ResourceState.LOADING -> setLoading(true)
+                                ResourceState.SUCCESS -> {
+                                    setLoading(false)
+                                    imageUrl = it.data!!.secureUrl
+                                    viewModel.createProduct(
+                                        Product(
+                                            categoryId = categoryId,
+                                            name = productName,
+                                            brand = brand,
+                                            costPrice = Price(currencyIds[0], costPrice),
+                                            wholesalePrice = Price(currencyIds[1], wholesalePrice),
+                                            minPrice = Price(currencyIds[2], minPrice),
+                                            maxPrice = Price(currencyIds[3], maxPrice),
+                                            warehouse = Warehouse(unitId, productQuantity),
+                                            image = imageUrl
+                                        )
                                     )
-                                )
-                            }
-                            ResourceState.ERROR -> {
-                                setLoading(false)
-                                showError(it.message)
+                                }
+                                ResourceState.ERROR -> {
+                                    setLoading(false)
+                                    showError(it.message)
+                                }
                             }
                         }
+                    } else {
+                        viewModel.createProduct(
+                            Product(
+                                categoryId = categoryId,
+                                name = productName,
+                                brand = brand,
+                                costPrice = Price(currencyIds[0], costPrice),
+                                wholesalePrice = Price(currencyIds[1], wholesalePrice),
+                                minPrice = Price(currencyIds[2], minPrice),
+                                maxPrice = Price(currencyIds[3], maxPrice),
+                                warehouse = Warehouse(unitId, productQuantity),
+                                image = imageUrl
+                            )
+                        )
                     }
                 } else {
                     if (categoryId == -1) {
@@ -564,9 +580,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     setLoading(false)
                     // TODO: Print qrcode
                     showSuccess(getString(R.string.product_added_successfully))
-                        .setOnPositiveButtonClickListener {
-                            navController.popBackStack()
-                        }
                     binding.apply {
                         actCategory.text.clear()
                         categoryId = -1
