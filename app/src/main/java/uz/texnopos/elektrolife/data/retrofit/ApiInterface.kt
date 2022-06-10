@@ -192,7 +192,8 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Query("page") page: Int,
         @Query("category_id") categoryId: Int,
-        @Query("search") name: String
+        @Query("search") name: String,
+        @Query("count") count: Int
     ): Observable<GenericResponse<PagingResponse<List<newSaleProduct>>>>
 
     @GET("api/products")
@@ -205,7 +206,8 @@ interface ApiInterface {
     fun getProducts(
         @Header("Authorization") token: String,
         @Query("page") page: Int,
-        @Query("search") name: String
+        @Query("search") name: String,
+        @Query("count") count: Int
     ): Observable<GenericResponse<PagingResponse<List<newSaleProduct>>>>
 
     @GET("api/qrcode/read")

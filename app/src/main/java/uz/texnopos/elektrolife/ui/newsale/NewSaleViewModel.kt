@@ -37,14 +37,16 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
                     api.getProducts(
                         token = "Bearer ${settings.token}",
                         page = page,
-                        name = pair.second
+                        name = pair.second,
+                        count = 1
                     ).subscribeOn(Schedulers.io())
                 } else {
                     api.getProducts(
                         token = "Bearer ${settings.token}",
                         page = page,
                         categoryId = pair.first,
-                        name = pair.second
+                        name = pair.second,
+                        count = 1
                     ).subscribeOn(Schedulers.io())
                 }
             }
