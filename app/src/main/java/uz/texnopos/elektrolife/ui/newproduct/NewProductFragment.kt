@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
@@ -12,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import com.shaon2016.propicker.pro_image_picker.ProPicker
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -175,7 +177,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             val unitAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, measureUnitsList)
             actMeasureUnit.setAdapter(unitAdapter)
-            actMeasureUnit.threshold = 200
+            setThreshold(actMeasureUnit)
             actMeasureUnit.setText(measureUnitsList[0])
             unitId = 1
             measureUnitLiveData.postValue(unitId)
@@ -186,42 +188,27 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 measureUnitLiveData.postValue(unitId)
             }
 
-            actCostCurrency.threshold = 100
-            actWholesaleCurrency.threshold = 100
-            actMinCurrency.threshold = 100
-            actMaxCurrency.threshold = 100
+            setThreshold(
+                actCostCurrency,
+                actWholesaleCurrency,
+                actMinCurrency,
+                actMaxCurrency
+            )
 
-            actCostCurrency.setOnItemClickListener { _, _, i, _ ->
-                tilCostCurrency.isErrorEnabled = false
-                if (currencyIds[0] != i + 1) {
-                    currencyIds[0] = i + 1
-                    calculate()
-                }
-            }
-
-            actWholesaleCurrency.setOnItemClickListener { _, _, i, _ ->
-                tilWholesaleCurrency.isErrorEnabled = false
-                if (currencyIds[1] != i + 1) {
-                    currencyIds[1] = i + 1
-                    calculate()
-                }
-            }
-
-            actMinCurrency.setOnItemClickListener { _, _, i, _ ->
-                tilMinCurrency.isErrorEnabled = false
-                if (currencyIds[2] != i + 1) {
-                    currencyIds[2] = i + 1
-                    calculate()
-                }
-            }
-
-            actMaxCurrency.setOnItemClickListener { _, _, i, _ ->
-                tilMaxCurrency.isErrorEnabled = false
-                if (currencyIds[3] != i + 1) {
-                    currencyIds[3] = i + 1
-                    calculate()
-                }
-            }
+            setCurrencyCalculator(
+                acts = arrayOf(
+                    actCostCurrency,
+                    actWholesaleCurrency,
+                    actMinCurrency,
+                    actMaxCurrency
+                ),
+                tils = arrayOf(
+                    tilCostCurrency,
+                    tilWholesaleCurrency,
+                    tilMinCurrency,
+                    tilMaxCurrency
+                )
+            )
 
             cvImage.onClick {
                 ProPicker.with(this@NewProductFragment)
@@ -350,6 +337,27 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         currencyViewModel.getCurrency()
         categoryViewModel.getCategories()
         setUpObservers()
+    }
+
+    private fun setThreshold(vararg acts: AppCompatAutoCompleteTextView, value: Int = 100) {
+        acts.forEach { act ->
+            act.threshold = value
+        }
+    }
+
+    private fun setCurrencyCalculator(
+        vararg acts: AppCompatAutoCompleteTextView,
+        tils: Array<TextInputLayout>
+    ) {
+        acts.forEachIndexed { index, act ->
+            act.setOnItemClickListener { _, _, i, _ ->
+                tils[index].isErrorEnabled = false
+                if (currencyIds[0] != i + 1) {
+                    currencyIds[0] = i + 1
+                    calculate()
+                }
+            }
+        }
     }
 
     private fun Double.roundingSum(): Double {
