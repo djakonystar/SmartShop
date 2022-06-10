@@ -20,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.utils.DynamicRetrofit
+import uz.texnopos.elektrolife.data.retrofit.DynamicRetrofit
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.databinding.FragmentSignInBinding
 import uz.texnopos.elektrolife.settings.Settings
