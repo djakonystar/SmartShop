@@ -132,5 +132,5 @@ dependencies {
     implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
 
     // ProPicker
-//    implementation 'com.github.shaon2016:ProPicker:1.0.5'
+    implementation 'com.github.shaon2016:ProPicker:1.0.5'
 }

@@ -14,7 +14,6 @@ object Constants {
         "https://sinyor.texnopos.site" to "logo_sinyor",
         "https://raya-bijuteriya.texnopos.site" to "logo_raya_bujiteriya",
         "https://mobishop.texnopos.site" to "logo_mobi_shop",
-        "https://verita.texnopos.site" to "logo_verita",
         "https://ideal-magazin.texnopos.site" to "logo_ideal_magazin"
     )
 
