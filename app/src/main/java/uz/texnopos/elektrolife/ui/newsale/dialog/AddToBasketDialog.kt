@@ -76,10 +76,12 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             tilQuantity.suffixText = "/$remained"
             tilSumma.suffixText = settings.currency
 
-            etSumma.setText(product.maxPrice.price.toSumFormat)
+
 
             val type = if (product.warehouse?.unit?.id != 1) SumInputMask.NUMBER_DECIMAL
             else SumInputMask.NUMBER
+
+            etQuantity.setText(if (type == SumInputMask.NUMBER_DECIMAL) "1.0" else "1")
 
             SumInputMask(etQuantity, type = type)
             SumInputMask(etSumma)
@@ -94,6 +96,16 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
 
             etSumma.addTextChangedListener {
                 sumLiveData.postValue(it.toString().filter { s -> s.isDigit() || s == '.' })
+            }
+
+            btnCountMagnet.onClick {
+                etQuantity.setText(remained.filter { c -> c.isDigit() || c == '.' })
+                etQuantity.setSelection(etQuantity.length())
+            }
+
+            btnSummaMagnet.onClick {
+                etSumma.setText(product.maxPrice.price.toSumFormat)
+                etSumma.setSelection(etSumma.length())
             }
 
             btnAdd.onClick {
