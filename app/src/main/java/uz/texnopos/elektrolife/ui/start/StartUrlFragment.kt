@@ -33,6 +33,11 @@ class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
         }
 
         binding.apply {
+            tvTestUrl.onClick {
+                etUrl.setText(getString(R.string.test_base_url).substringAfter("https://"))
+                etUrl.setSelection(etUrl.length())
+            }
+
             etUrl.addTextChangedListener {
                 "https://${it.toString()}".scope { url ->
                     btnContinue.isEnabled = baseUrls.contains(url)
