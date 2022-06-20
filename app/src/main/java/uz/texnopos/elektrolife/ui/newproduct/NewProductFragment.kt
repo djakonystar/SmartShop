@@ -588,6 +588,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     setLoading(false)
                     // TODO: Print qrcode
                     showSuccess(getString(R.string.product_added_successfully))
+                        .setOnDismissListener {
+                            navController.popBackStack()
+                        }
                     binding.apply {
                         actCategory.text.clear()
                         categoryId = -1
