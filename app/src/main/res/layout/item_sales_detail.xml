@@ -13,6 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_image"
+            android:layout_width="@dimen/finance_category_height_mobile"
+            android:layout_height="@dimen/finance_category_height_mobile"
+            android:layout_margin="@dimen/margin_standard"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="@dimen/til_corner_radius"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/blackLine">
+
+            <ImageView
+                android:id="@+id/iv_product"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/image_placeholder"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/tvProductName"
             android:layout_width="0dp"
@@ -20,8 +40,8 @@
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginTop="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toStartOf="@id/tvCount"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cv_image"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />
 
@@ -32,32 +52,9 @@
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toStartOf="@id/tvCost"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cv_image"
             app:layout_constraintTop_toBottomOf="@id/tvProductName"
-            tools:ignore="SpUsage" />
-
-        <TextView
-            android:id="@+id/tvCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpUsage" />
-
-        <TextView
-            android:id="@+id/tvCost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:layout_marginBottom="@dimen/margin_standard"
-            android:textColor="@color/app_main_color"
-            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCount"
             tools:ignore="SpUsage" />
 
         <View
@@ -73,14 +70,15 @@
             android:id="@+id/tvTotalPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/blackLine"
             android:layout_marginHorizontal="@dimen/margin_standard"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/margin_middle"
             android:layout_marginBottom="@dimen/margin_standard"
-            android:textColor="@color/black"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-            />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/blackLine"
+            tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

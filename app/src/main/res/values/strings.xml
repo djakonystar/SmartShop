@@ -231,5 +231,6 @@
     <string name="language">Til</string>
     <string name="shop_url">Do\'kon URL manzili</string>
     <string name="unknown_qr_code">Noma\'lum kod!</string>
-    <string name="test_base_url">https://smart-shop.my-project.site</string>
+    <string name="test_base_url" translatable="false">https://smart-shop.my-project.site</string>
+    <string name="sales_detail_sum_text" translatable="false">%s %s * %s %s = <b>%s %s</b></string>
 </resources>

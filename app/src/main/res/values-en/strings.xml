@@ -191,4 +191,8 @@
     <string name="select_your_shop">Select your shop</string>
     <string name="text_continue">Continue</string>
     <string name="input_shop_url">Input your shop URL</string>
+    <string name="unknown_qr_code">Unknown code!</string>
+    <string name="shop_url">URL address of the shop</string>
+    <string name="language">Language</string>
+    <string name="settings">Settings</string>
 </resources>

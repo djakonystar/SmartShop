@@ -191,4 +191,8 @@
     <string name="select_your_shop">Óz dúkanińizdi saylań</string>
     <string name="text_continue">Dawam etiw</string>
     <string name="input_shop_url">Dúkanińiz URLın kiritiń</string>
+    <string name="unknown_qr_code">Belgisiz kod!</string>
+    <string name="shop_url">Dúkan URL mánzili</string>
+    <string name="language">Til</string>
+    <string name="settings">Sazlamalar</string>
 </resources>

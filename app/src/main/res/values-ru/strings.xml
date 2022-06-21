@@ -191,4 +191,8 @@
     <string name="select_your_shop">Выберите свой магазин</string>
     <string name="text_continue">Продолжить</string>
     <string name="input_shop_url">Введите URL вашего магазина</string>
+    <string name="unknown_qr_code">Неизвестный код!</string>
+    <string name="shop_url">URL адрес магазина</string>
+    <string name="language">Язык</string>
+    <string name="settings">Настройки</string>
 </resources>
