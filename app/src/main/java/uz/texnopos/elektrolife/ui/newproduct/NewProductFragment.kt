@@ -352,8 +352,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         acts.forEachIndexed { index, act ->
             act.setOnItemClickListener { _, _, i, _ ->
                 tils[index].isErrorEnabled = false
-                if (currencyIds[0] != i + 1) {
-                    currencyIds[0] = i + 1
+                if (currencyIds[index] != i + 1) {
+                    currencyIds[index] = i + 1
                     calculate()
                 }
             }
