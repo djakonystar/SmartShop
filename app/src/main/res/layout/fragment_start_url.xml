@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.start.StartUrlFragment">
+
+    <TextView
+        android:id="@+id/tv_test_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_middle"
+        android:text="@string/test_base_url"
+        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        app:layout_constraintBottom_toTopOf="@id/til_url"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_url"
@@ -13,10 +24,10 @@
         android:layout_marginHorizontal="16dp"
         android:hint="@string/input_shop_url"
         app:endIconMode="clear_text"
-        app:prefixText="https://"
-        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@id/btn_continue"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:prefixText="https://">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_url"
@@ -34,10 +45,10 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginVertical="@dimen/margin_standard"
+        android:enabled="false"
         android:paddingHorizontal="@dimen/button_padding_horizontal"
         android:text="@string/text_continue"
         android:textSize="@dimen/text_size_larger"
-        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -12,5 +12,6 @@ data class Order(
     val count: Double,
     @SerializedName("unit_id")
     val unitId: Int,
-    val price: Double
+    val price: Double,
+    val image: String?
 )

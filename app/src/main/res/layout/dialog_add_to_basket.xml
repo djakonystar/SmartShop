@@ -100,7 +100,8 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_standard"
         android:hint="@string/quantity"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toStartOf="@id/btn_count_magnet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvMax"
         app:suffixTextColor="@color/black">
@@ -118,6 +119,22 @@
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/btn_count_magnet"
+        android:layout_width="@dimen/img_standard_height_mobile"
+        android:layout_height="@dimen/img_standard_height_mobile"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/add"
+        android:focusable="true"
+        android:padding="2dp"
+        android:src="@drawable/magnet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tilQuantity"
+        app:tint="@color/app_main_color" />
 
     <TextView
         android:id="@+id/tvQuantityCounter"
@@ -141,7 +158,8 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:layout_marginEnd="@dimen/margin_standard"
         android:hint="@string/sum_uzb"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toStartOf="@id/btn_summa_magnet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvQuantityCounter"
         app:suffixTextColor="@color/black">
@@ -159,6 +177,22 @@
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/btn_summa_magnet"
+        android:layout_width="@dimen/img_standard_height_mobile"
+        android:layout_height="@dimen/img_standard_height_mobile"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/add"
+        android:focusable="true"
+        android:padding="2dp"
+        android:src="@drawable/magnet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tilSumma"
+        app:tint="@color/app_main_color" />
 
     <Button
         android:id="@+id/btnAdd"

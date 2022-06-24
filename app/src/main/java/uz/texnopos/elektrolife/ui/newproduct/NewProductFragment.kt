@@ -352,8 +352,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         acts.forEachIndexed { index, act ->
             act.setOnItemClickListener { _, _, i, _ ->
                 tils[index].isErrorEnabled = false
-                if (currencyIds[0] != i + 1) {
-                    currencyIds[0] = i + 1
+                if (currencyIds[index] != i + 1) {
+                    currencyIds[index] = i + 1
                     calculate()
                 }
             }
@@ -588,6 +588,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                     setLoading(false)
                     // TODO: Print qrcode
                     showSuccess(getString(R.string.product_added_successfully))
+                        .setOnDismissListener {
+                            navController.popBackStack()
+                        }
                     binding.apply {
                         actCategory.text.clear()
                         categoryId = -1
