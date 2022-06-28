@@ -22,7 +22,7 @@ import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
 import uz.texnopos.elektrolife.data.model.newsale.Order
 import uz.texnopos.elektrolife.data.model.payment.AddPayment
 import uz.texnopos.elektrolife.data.model.payment.PaymentHistory
-import uz.texnopos.elektrolife.data.model.qrcode.ProductResponse
+import uz.texnopos.elektrolife.data.model.warehouse.EditProduct
 import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.model.sales.OrderResponse
 import uz.texnopos.elektrolife.data.model.sales.returnorder.ReturnOrder
@@ -163,6 +163,12 @@ interface ApiInterface {
         @Query("category_id") categoryId: Int,
         @Query("search") search: String
     ): Observable<GenericResponse<PagingResponse<List<WarehouseItem>>>>
+
+    @PUT("api/product")
+    fun editProduct(
+        @Header("Authorization") token: String,
+        @Body product: EditProduct
+    ): Observable<GenericResponse<Any>>
 
     @POST("api/login")
     fun signIn(

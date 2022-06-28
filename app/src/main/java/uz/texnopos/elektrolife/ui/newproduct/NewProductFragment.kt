@@ -51,7 +51,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private val imageViewModel: ImageViewModel by viewModel()
     private val qrScannerViewModel: QrScannerViewModel by viewModel()
     private val settings: Settings by inject()
-    private var mutableList: MutableList<CategoryResponse> = mutableListOf()
+    private var categoriesList: MutableList<CategoryResponse> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
     private var categoryId = -1
     private var liveCostPrice = MutableLiveData<Double>()
@@ -88,8 +88,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
-            tvRate.text =
-                context?.getString(R.string.dollar_rate_text, settings.usdToUzs.toString())
             btnHome.onClick {
                 navController.popBackStack()
             }
@@ -164,10 +162,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             actCategory.setAdapter(categoriesAdapter)
             actCategory.setOnItemClickListener { _, _, i, _ ->
                 tilCategory.isErrorEnabled = false
-                categoryId = mutableList[i].id
-                wholesalePercent = mutableList[i].wholePercent
-                minPercent = mutableList[i].minPercent
-                maxPercent = mutableList[i].maxPercent
+                categoryId = categoriesList[i].id
+                wholesalePercent = categoriesList[i].wholePercent
+                minPercent = categoriesList[i].minPercent
+                maxPercent = categoriesList[i].maxPercent
             }
 
             actCategory.doOnTextChanged { text, _, _, _ ->
@@ -511,6 +509,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                         actWholesaleCurrency.setText(currencyList[currencyIds[1] - 1])
                         actMinCurrency.setText(currencyList[currencyIds[2] - 1])
                         actMaxCurrency.setText(currencyList[currencyIds[3] - 1])
+
+                        abBinding.tvRate.text = getString(
+                            R.string.dollar_rate_text,
+                            settings.usdToUzs.toString()
+                        )
                     }
                 }
                 ResourceState.ERROR -> {
@@ -525,8 +528,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    mutableList = it.data!!.toMutableList()
-                    mutableList.forEach { category ->
+                    categoriesList = it.data!!.toMutableList()
+                    categoriesList.forEach { category ->
                         if (!categoryName.contains(category.name)) categoryName.add(category.name)
                     }
                     categoriesAdapter =

@@ -38,6 +38,7 @@ import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailAdapter
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailViewModel
 import uz.texnopos.elektrolife.ui.signin.SignInViewModel
+import uz.texnopos.elektrolife.ui.warehouse.EditProductViewModel
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseAdapter
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
@@ -74,6 +75,7 @@ val viewModelModule = module {
     viewModel { PaymentViewModel(get(), get(), get()) }
     viewModel { QrScannerViewModel(get(), get()) }
     viewModel { ImageViewModel(get()) }
+    viewModel { EditProductViewModel(get(), get()) }
 }
 
 val adapterModule = module {

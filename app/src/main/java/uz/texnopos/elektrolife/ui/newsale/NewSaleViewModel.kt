@@ -1,6 +1,5 @@
 package uz.texnopos.elektrolife.ui.newsale
 
-import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,7 +18,7 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val searchSubject = BehaviorSubject.create<Pair<Int, String>>()
+    private val searchSubject = BehaviorSubject.create<List<Any>>()
     private var page = 0
 
     private var mutableProducts: MutableLiveData<Resource<PagingResponse<List<newSaleProduct>>>> =
@@ -32,21 +31,21 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
     init {
         searchSubject
             .debounce(700, TimeUnit.MILLISECONDS)
-            .switchMap { pair ->
-                if (pair.first == -1) {
+            .switchMap { list ->
+                if (list.first() == -1) {
                     api.getProducts(
                         token = "Bearer ${settings.token}",
                         page = page,
-                        name = pair.second,
-                        count = 1
+                        name = list[1] as String,
+                        count = list[2] as Int
                     ).subscribeOn(Schedulers.io())
                 } else {
                     api.getProducts(
                         token = "Bearer ${settings.token}",
                         page = page,
-                        categoryId = pair.first,
-                        name = pair.second,
-                        count = 1
+                        categoryId = list.first() as Int,
+                        name = list[1] as String,
+                        count = list[2] as Int
                     ).subscribeOn(Schedulers.io())
                 }
             }
@@ -87,16 +86,16 @@ class NewSaleViewModel(private val api: ApiInterface, private val settings: Sett
         )
     }
 
-    fun getProducts(page: Int, searchValue: String) {
+    fun getProducts(page: Int, searchValue: String, count: Int) {
         this.page = page
         mutableProducts.value = Resource.loading()
-        searchSubject.onNext(Pair(-1, searchValue))
+        searchSubject.onNext(listOf(-1, searchValue, count))
     }
 
-    fun getProducts(page: Int, categoryId: Int, searchValue: String) {
+    fun getProducts(page: Int, categoryId: Int, searchValue: String, count: Int) {
         this.page = page
         mutableProducts.value = Resource.loading()
-        searchSubject.onNext(Pair(categoryId, searchValue))
+        searchSubject.onNext(listOf(categoryId, searchValue, count))
     }
 
     fun getProduct(type: String, uuid: String) {

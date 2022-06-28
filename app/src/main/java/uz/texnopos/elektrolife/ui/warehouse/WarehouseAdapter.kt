@@ -8,35 +8,29 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
 import uz.texnopos.elektrolife.core.extensions.*
-import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ItemWarehouseBinding
 
-class WarehouseAdapter : BaseAdapter<WarehouseItem, WarehouseAdapter.WarehouseViewHolder>() {
+class WarehouseAdapter : BaseAdapter<newSaleProduct, WarehouseAdapter.WarehouseViewHolder>() {
     inner class WarehouseViewHolder(private val binding: ItemWarehouseBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun populateModel(model: WarehouseItem) {
+        fun populateModel(product: newSaleProduct) {
             binding.apply {
-                tvName.text = model.product.name
+                tvName.text = product.name
                 tvName.isSelected = true
-                tvFirm.text = model.product.brand
-                if (model.unit.id == 1) {
-                    tvCount.text = itemView.context?.getString(
-                        R.string.price_text,
-                        model.count.toLong().toString().sumFormat,
-                        Constants.getUnitName(itemView.context, model.unit.id)
-                    )
-                } else {
-                    tvCount.text = itemView.context?.getString(
-                        R.string.price_text,
-                        model.count.format(2).sumFormat,
-                        Constants.getUnitName(itemView.context, model.unit.id)
-                    )
-                }
+                tvFirm.text = product.brand
+                val remained = product.warehouse?.count ?: 0.0
+                val unitId = product.warehouse?.unit?.id ?: -1
+                tvCount.text = itemView.context?.getString(
+                    R.string.price_text,
+                    if (unitId == 1) remained.toLong().toString().sumFormat
+                    else remained.toString().sumFormat,
+                    Constants.getUnitName(itemView.context, product.warehouse?.unit?.id ?: -1)
+                )
 
-                if (model.product.image != null) {
+                if (product.image != null) {
                     Glide.with(ivProduct)
-                        .load(model.product.image)
+                        .load(product.image)
                         .placeholder(R.drawable.image_placeholder)
                         .into(ivProduct)
                 } else {
@@ -44,7 +38,7 @@ class WarehouseAdapter : BaseAdapter<WarehouseItem, WarehouseAdapter.WarehouseVi
                 }
 
                 ivProduct.onClick {
-                    model.product.image?.let { imageUrl ->
+                    product.image?.let { imageUrl ->
                         StfalconImageViewer.Builder(itemView.context, arrayOf(imageUrl)) { view, url ->
                             Glide.with(itemView.context)
                                 .load(url)
@@ -55,6 +49,10 @@ class WarehouseAdapter : BaseAdapter<WarehouseItem, WarehouseAdapter.WarehouseVi
                             .withTransitionFrom(ivProduct)
                             .show()
                     }
+                }
+
+                itemView.onClick {
+                    onItemClick(product)
                 }
             }
         }
@@ -68,5 +66,10 @@ class WarehouseAdapter : BaseAdapter<WarehouseItem, WarehouseAdapter.WarehouseVi
 
     override fun onBindViewHolder(holder: WarehouseViewHolder, position: Int) {
         holder.populateModel(models[position])
+    }
+
+    private var onItemClick: (product: newSaleProduct) -> Unit = {}
+    fun setOnItemClickListener(onItemClick: (product: newSaleProduct) -> Unit) {
+        this.onItemClick = onItemClick
     }
 }

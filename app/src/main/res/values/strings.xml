@@ -233,4 +233,7 @@
     <string name="unknown_qr_code">Noma\'lum kod!</string>
     <string name="test_base_url" translatable="false">https://smart-shop.my-project.site</string>
     <string name="sales_detail_sum_text" translatable="false">%s %s * %s %s = <b>%s %s</b></string>
+    <string name="save">Saqlash</string>
+    <string name="edit_product">Mahsulotni tahrirlash</string>
+    <string name="product_edited_successfully">Mahsulot muvaffaqiyatli tahrirlandi!</string>
 </resources>

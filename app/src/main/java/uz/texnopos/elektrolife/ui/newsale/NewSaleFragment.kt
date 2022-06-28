@@ -70,12 +70,12 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 searchValue = it.toString()
                 searchValue.ifEmpty { page = 1 }
                 adapter.models = listOf()
-                viewModel.getProducts(page, selectedCategoryId, searchValue)
+                viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.getProducts(page, selectedCategoryId, searchValue)
+                    viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -99,7 +99,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                         layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
                     ) {
                         page++
-                        viewModel.getProducts(page, selectedCategoryId, searchValue)
+                        viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
                     }
                 }
             })
@@ -112,7 +112,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 categoryViewModel.getCategories()
                 page = 1
                 adapter.models = listOf()
-                viewModel.getProducts(page, searchValue)
+                viewModel.getProducts(page, searchValue, 0)
             }
 
             adapter.onItemClickListener { product ->
@@ -165,7 +165,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
 
         categoryViewModel.getCategories()
-        viewModel.getProducts(page, searchValue)
+        viewModel.getProducts(page, searchValue, 0)
         setUpObservers()
     }
 
@@ -294,7 +294,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
                     page = 1
                     adapter.models = listOf()
-                    viewModel.getProducts(page, selectedCategoryId, searchValue)
+                    viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
                 }
             }
         } catch (e: Exception) {

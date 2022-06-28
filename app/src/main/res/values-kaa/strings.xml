@@ -195,4 +195,7 @@
     <string name="shop_url">Dúkan URL mánzili</string>
     <string name="language">Til</string>
     <string name="settings">Sazlamalar</string>
+    <string name="save">Saqlaw</string>
+    <string name="edit_product">Ónimdi ózgertiw</string>
+    <string name="product_edited_successfully">Ónim tabıslı ózgertildi!</string>
 </resources>

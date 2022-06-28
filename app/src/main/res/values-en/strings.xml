@@ -195,4 +195,7 @@
     <string name="shop_url">URL address of the shop</string>
     <string name="language">Language</string>
     <string name="settings">Settings</string>
+    <string name="save">Save</string>
+    <string name="edit_product">Edit Product</string>
+    <string name="product_edited_successfully">Product edited successfully!</string>
 </resources>
