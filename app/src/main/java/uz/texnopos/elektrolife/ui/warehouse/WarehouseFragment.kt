@@ -88,7 +88,6 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
                     )
                 }
-
             }
 
             swipeRefresh.setOnRefreshListener {
