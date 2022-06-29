@@ -17,6 +17,8 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_ADMIN
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
 import uz.texnopos.elektrolife.core.extensions.animateDebtPrice
 import uz.texnopos.elektrolife.core.extensions.newSaleProduct
 import uz.texnopos.elektrolife.core.extensions.onClick
@@ -24,6 +26,7 @@ import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
 
@@ -34,6 +37,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val productViewModel: NewSaleViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
+    private val settings: Settings by inject()
     private var sortType = "byFewRemain"
     private var productsList = mutableListOf<newSaleProduct>()
     private var allProductsList = mutableListOf<newSaleProduct>()
@@ -79,9 +83,11 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             })
 
             adapter.setOnItemClickListener {
-                navController.navigate(
-                    WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
-                )
+                if (settings.role == ROLE_CEO || settings.role == ROLE_ADMIN) {
+                    navController.navigate(
+                        WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
+                    )
+                }
             }
 
             swipeRefresh.setOnRefreshListener {

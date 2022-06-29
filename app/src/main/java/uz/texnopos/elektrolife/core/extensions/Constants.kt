@@ -5,6 +5,9 @@ import uz.texnopos.elektrolife.R
 
 object Constants {
     const val CLOUD_NAME = "http-electro-life-texnopos-site"
+    const val ROLE_CEO = "ceo"
+    const val ROLE_ADMIN = "admin"
+    const val ROLE_SELLER = "saller"
 
     fun provideBaseUrls(): Map<String, String> = mapOf(
         "https://smart-shop.my-project.site" to "logo_test",
