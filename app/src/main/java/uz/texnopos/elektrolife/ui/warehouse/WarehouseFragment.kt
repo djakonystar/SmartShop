@@ -24,6 +24,7 @@ import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
 import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
 
@@ -34,6 +35,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val productViewModel: NewSaleViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
+    private val settings: Settings by inject()
     private var sortType = "byFewRemain"
     private var productsList = mutableListOf<newSaleProduct>()
     private var allProductsList = mutableListOf<newSaleProduct>()
@@ -79,9 +81,12 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             })
 
             adapter.setOnItemClickListener {
-                navController.navigate(
-                    WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
-                )
+                if (settings.role=="ceo"||settings.role=="admin"){
+                    navController.navigate(
+                        WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
+                    )
+                }
+
             }
 
             swipeRefresh.setOnRefreshListener {
