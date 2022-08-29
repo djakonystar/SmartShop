@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.CalendarConstraints
@@ -38,7 +39,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private val settings: Settings by inject()
 
     private val typesOfPayment = mutableSetOf<Int>()
-    private var allSales = listOf<Basket>()
+    private var allSales = mutableListOf<Basket>()
     private lateinit var baskets: BasketResponse
 
     private val calendarHelper = CalendarHelper()
@@ -48,8 +49,16 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
     private var dateToInLong = calendarHelper.currentDateMillis
     private var dateTo = calendarHelper.currentDate
 
+    private var isLoading = false
+    private var page = 1
+    private var lastPage = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        page = 1
+        lastPage = 0
+        allSales = mutableListOf()
 
         binding = FragmentSalesBinding.bind(view)
         navController = findNavController()
@@ -62,12 +71,21 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
         }
 
         binding.apply {
+            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            recyclerView.layoutManager = layoutManager
             recyclerView.adapter = adapter
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (dy > 0 && fabDatePicker.isVisible) fabDatePicker.hide()
                     else if (dy < 0 && !fabDatePicker.isVisible) fabDatePicker.show()
+
+                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+                    ) {
+                        page++
+                        viewModel.getBaskets(dateFrom.changeDateFormat, dateTo.changeDateFormat, page)
+                    }
                 }
             })
 
@@ -82,7 +100,9 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 setLoading(false)
                 swipeRefresh.isRefreshing = false
                 if (typesOfPayment.isEmpty()) {
-                    viewModel.getBaskets(dateFrom.changeDateFormat, dateTo.changeDateFormat)
+                    page = 1
+                    allSales = mutableListOf()
+                    viewModel.getBaskets(dateFrom.changeDateFormat, dateTo.changeDateFormat, page)
                 } else {
                     filterSales()
                 }
@@ -112,9 +132,12 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                     dateToInLong = dates.second
                     dateTo = simpleDateFormat.format(dateToInLong)
 
+                    page = 1
+                    allSales = mutableListOf()
                     viewModel.getBaskets(
                         dateFrom.changeDateFormat,
-                        dateTo.changeDateFormat
+                        dateTo.changeDateFormat,
+                        page
                     )
                 }
 
@@ -127,7 +150,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             }
         }
 
-        viewModel.getBaskets(dateFrom.changeDateFormat, dateTo.changeDateFormat)
+        viewModel.getBaskets(dateFrom.changeDateFormat, dateTo.changeDateFormat, page)
         setUpObservers()
     }
 
@@ -150,9 +173,13 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    allSales = it.data!!.data.baskets
+                    it.data!!.data.baskets.forEach {basket ->
+                        allSales.add(basket)
+                    }
                     adapter.models = allSales
                     baskets = it.data.data
+
+                    lastPage = it.data.lastPage
                     setAmount()
 //                    filterSales()
                 }
@@ -193,6 +220,7 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             }
             else -> ""
         }
+        allSales = mutableListOf()
         viewModel.filterBaskets(typesOfPayment, dateFrom.changeDateFormat, dateTo.changeDateFormat)
     }
 

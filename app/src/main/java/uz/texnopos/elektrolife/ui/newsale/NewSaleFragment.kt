@@ -24,6 +24,7 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
@@ -233,8 +234,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
         }
-
-
     }
 
     private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {

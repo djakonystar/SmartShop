@@ -15,7 +15,8 @@ object Constants {
         "https://raya-bijuteriya.texnopos.site" to "logo_raya_bujiteriya",
         "https://mobishop.texnopos.site" to "logo_mobi_shop",
         "https://ideal-magazin.texnopos.site" to "logo_ideal_magazin",
-        "https://imran.texnopos.site" to "logo_test"
+        "https://imran.texnopos.site" to "logo_test",
+        "https://rolfshop.texnopos.site" to "logo_test"
     )
 
     fun getUnitName(context: Context, unitId: Int): String {

@@ -41,10 +41,10 @@ class SalesViewModel(private val api: ApiInterface, private val settings: Settin
         )
     }
 
-    fun getBaskets(from: String, to: String) {
+    fun getBaskets(from: String, to: String, page: Int) {
         mutableBaskets.postValue(Resource.loading())
         compositeDisposable.add(
-            api.getBaskets(token = "Bearer ${settings.token}", from = from, to = to, page = 1)
+            api.getBaskets(token = "Bearer ${settings.token}", from = from, to = to, page = page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
