@@ -77,7 +77,6 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
             tilSumma.suffixText = settings.currency
 
 
-
             val type = if (product.warehouse?.unit?.id != 1) SumInputMask.NUMBER_DECIMAL
             else SumInputMask.NUMBER
 
@@ -120,7 +119,7 @@ class AddToBasketDialog(private val product: Product) : DialogFragment() {
                         tilQuantity.error = getString(R.string.required_field)
                     }
                     if (sum == 0.0) {
-                        tilSumma.error = context?.getString(R.string.required_field)
+                        tilSumma.error = getString(R.string.required_field)
                     }
                 }
             }

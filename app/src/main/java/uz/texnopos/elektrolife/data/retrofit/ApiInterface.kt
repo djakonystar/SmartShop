@@ -29,6 +29,7 @@ import uz.texnopos.elektrolife.data.model.sales.returnorder.ReturnOrder
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.data.model.signin.SignInResponse
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
+import uz.texnopos.elektrolife.data.model.warehouse_item.Payload
 
 interface ApiInterface {
 
@@ -326,4 +327,10 @@ interface ApiInterface {
         @Query("from") from: String,
         @Query("to") to: String
     ): Observable<GenericResponse<List<SalaryMonthly>>>
+
+    @GET("api/products")
+    fun getCurrentProduct(
+        @Header("Authorization") token: String,
+        @Query("search") search: String
+    ): Observable<GenericResponse<Payload>>
 }

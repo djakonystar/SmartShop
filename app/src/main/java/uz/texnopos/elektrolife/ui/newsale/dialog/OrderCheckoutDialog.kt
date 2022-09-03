@@ -195,8 +195,8 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    binding.etSearchClient.setText(newClient)
                     clientId = it.data!!.id
+                    newPaymentViewModel.searchClient(newClient)
                     showSuccess(getString(R.string.client_successfully_added))
                         .setOnPositiveButtonClickListener {
                             addClientDialog.dismiss()
@@ -244,7 +244,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             var dateRequired = false
             val currentClientName = etSearchClient.text.toString()
             clientId = if (clientsList.contains(currentClientName)) {
-                clientsIds.getValue(clientName)
+                clientsIds.getValue(clientName)  /**bug*/
             } else 1
             val comment = etComment.text.toString()
 

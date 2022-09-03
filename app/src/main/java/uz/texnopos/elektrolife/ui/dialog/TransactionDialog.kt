@@ -19,7 +19,6 @@ import uz.texnopos.elektrolife.databinding.DialogTransactionBinding
 class TransactionDialog(private val transaction: TransactionTransfer) :
     DialogFragment(R.layout.dialog_transaction) {
     private lateinit var binding: DialogTransactionBinding
-    private lateinit var product: warehouseProduct
     private val transactionViewModel: TransactionViewModel by viewModel()
 
     override fun onCreateView(
@@ -63,9 +62,13 @@ class TransactionDialog(private val transaction: TransactionTransfer) :
                                     productId = transaction.productId,
                                     count = quantity,
                                     unitId = unitId,
-                                    price = transaction.price
+                                    price = transaction.price,
+                                    maxPrice = transaction.maxPrice,
+                                    minPrice = transaction.minPrice,
+                                    wholePrice = transaction.wholePrice
                                 )
                             )
+
                         )
 
                         transactionViewModel.newTransaction(postTransaction)

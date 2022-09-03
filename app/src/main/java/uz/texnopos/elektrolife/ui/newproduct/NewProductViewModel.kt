@@ -11,6 +11,8 @@ import uz.texnopos.elektrolife.core.Resource
 import uz.texnopos.elektrolife.core.extensions.createdProduct
 import uz.texnopos.elektrolife.data.model.newproduct.Product
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
+import uz.texnopos.elektrolife.data.model.warehouse_item.Data
+import uz.texnopos.elektrolife.data.model.warehouse_item.Payload
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.concurrent.TimeUnit
@@ -23,15 +25,15 @@ class NewProductViewModel(private val api: ApiInterface, private val settings: S
     private var mutableProduct: MutableLiveData<Resource<createdProduct>> = MutableLiveData()
     val product: LiveData<Resource<createdProduct>> = mutableProduct
 
-    private var mutableWarehouseProducts: MutableLiveData<Resource<List<WarehouseItem>>> =
+    private var mutableWarehouseProducts: MutableLiveData<Resource<List<Data>>> =
         MutableLiveData()
-    val warehouseProducts: LiveData<Resource<List<WarehouseItem>>> = mutableWarehouseProducts
+    val warehouseProducts: LiveData<Resource<List<Data>>> = mutableWarehouseProducts
 
     init {
         searchSubject
             .debounce(700, TimeUnit.MILLISECONDS)
             .switchMap { value ->
-                api.warehouseProducts(token = "Bearer ${settings.token}", searchValue = value)
+                api.getCurrentProduct(token = "Bearer ${settings.token}", search = value)
                     .subscribeOn(Schedulers.io())
             }
             .observeOn(AndroidSchedulers.mainThread())
