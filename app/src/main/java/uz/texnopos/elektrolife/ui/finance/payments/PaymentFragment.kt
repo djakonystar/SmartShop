@@ -65,8 +65,8 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
                 paymentsList = mutableListOf()
-                page = 1
                 adapter.models = listOf()
+                page = 1
                 viewModel.getPayments(
                     page = page,
                     from = dateFrom.changeDateFormat,
@@ -117,6 +117,9 @@ class PaymentFragment : Fragment(R.layout.fragment_payment) {
                     dateTo = simpleDateFormat.format(dateToInLong)
 
                     page = 1
+                    paymentsList = mutableListOf()
+                    adapter.models = listOf()
+
                     viewModel.getPayments(
                         page = page,
                         from = dateFrom.changeDateFormat,

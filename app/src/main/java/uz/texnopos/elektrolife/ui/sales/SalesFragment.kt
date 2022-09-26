@@ -1,6 +1,7 @@
 package uz.texnopos.elektrolife.ui.sales
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
@@ -55,10 +56,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        page = 1
-        lastPage = 0
-        allSales = mutableListOf()
 
         binding = FragmentSalesBinding.bind(view)
         navController = findNavController()
@@ -150,6 +147,9 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             }
         }
 
+
+        page = 1
+        lastPage = 0
         viewModel.getBaskets(dateFrom.changeDateFormat, dateTo.changeDateFormat, page)
         setUpObservers()
     }
@@ -173,6 +173,9 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
+                    if(page == 1){
+                        allSales.clear()
+                    }
                     it.data!!.data.baskets.forEach {basket ->
                         allSales.add(basket)
                     }
@@ -181,7 +184,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
 
                     lastPage = it.data.lastPage
                     setAmount()
-//                    filterSales()
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -200,7 +202,6 @@ class SalesFragment : Fragment(R.layout.fragment_sales) {
             ids.isEmpty() -> ""
             ids.size == 3 -> {
                 "cash|card|debt"
-//                allSales.filter { s -> s.cash > 0 && s.card > 0 && s.debt.debt > 0 }
             }
             ids.size == 2 -> {
                 if (ids[0] == 1 && ids[1] == 2) {

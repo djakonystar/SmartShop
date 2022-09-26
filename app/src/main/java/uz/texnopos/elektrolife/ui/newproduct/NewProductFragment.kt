@@ -144,6 +144,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 dialog.setOnDismissListener {
                     etProductName.text.clear()
                 }
+                dialog.onItemClickListener {
+                    etCostPrice.setText("")
+                }
             }
 
             ivQrScanner.onClick {
@@ -681,9 +684,9 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                                     )
                                 )
                                 etCostPrice.setText(product.costPrice.price format 2)
-                                etWholesalePrice.setText(product.wholesalePrice.price format 2)
+                                /*etWholesalePrice.setText(product.wholesalePrice.price format 2)
                                 etMaxPrice.setText(product.maxPrice.price format 2)
-                                etMinPrice.setText(product.minPrice.price format 2)
+                                etMinPrice.setText(product.minPrice.price format 2)*/
                                 val dialog = TransactionDialog(transaction)
                                 dialog.show(
                                     requireActivity().supportFragmentManager,

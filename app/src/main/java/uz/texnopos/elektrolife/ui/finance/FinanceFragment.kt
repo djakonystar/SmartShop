@@ -35,8 +35,10 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
     private val viewModel: ReportsViewModel by viewModel()
     private val settings: Settings by inject()
     private val calendarHelper = CalendarHelper()
+
     private var lastSumOfCashboxCash = 0.0
     private var lastSumOfCashboxCard = 0.0
+
     private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
     private var cashboxDateFromInLong = calendarHelper.firstDayOfCurrentMonthMillis
     private var cashboxDateFrom = calendarHelper.firstDayOfCurrentMonth
@@ -56,7 +58,6 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
                 navController.popBackStack()
             }
         }
-
         if (settings.role == "ceo") {
             binding.topContainer.isVisible = false
             binding.cardReports.isVisible = true

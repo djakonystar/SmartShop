@@ -14,6 +14,7 @@ import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.newproduct.Transaction
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionItem
 import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
+import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.DialogTransactionBinding
 
 class TransactionDialog(private val transaction: TransactionTransfer) :
@@ -30,6 +31,10 @@ class TransactionDialog(private val transaction: TransactionTransfer) :
         return inflater.inflate(R.layout.dialog_transaction, container, false)
     }
 
+    var onItemClick: () -> Unit = {}
+    fun onItemClickListener(onItemClick: () -> Unit) {
+        this.onItemClick = onItemClick
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,10 +73,11 @@ class TransactionDialog(private val transaction: TransactionTransfer) :
                                     wholePrice = transaction.wholePrice
                                 )
                             )
-
                         )
 
                         transactionViewModel.newTransaction(postTransaction)
+
+                        onItemClick.invoke()
                     }
                 }
             }
