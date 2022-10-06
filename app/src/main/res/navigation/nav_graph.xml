@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_mainFragment_to_returnOrderFragment"
             app:destination="@id/returnOrderFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newSaleFragment"
@@ -272,4 +275,9 @@
             android:name="product"
             app:argType="uz.texnopos.elektrolife.data.model.newsale.Product" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="uz.texnopos.elektrolife.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

@@ -198,4 +198,10 @@
     <string name="save">Saqlash</string>
     <string name="edit_product">Mahsulotni tahrirlash</string>
     <string name="product_edited_successfully">Mahsulot muvaffaqiyatli tahrirlandi!</string>
+    <string name="company_details">Kompaniya ma\'lumotlari</string>
+    <string name="company_name_title">Kompaniya nomi</string>
+    <string name="company_prefix">Kompaniya prefiksi</string>
+    <string name="change_prefix">Prefiksni o\'zgartirish</string>
+    <string name="logout">Chiqish</string>
+    <string name="required_restart">Ilova qayta ishga tushadi!</string>
 </resources>

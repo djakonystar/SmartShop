@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.MainActivity
@@ -31,6 +32,13 @@ class LangDialog : DialogFragment() {
         binding = DialogLangBinding.bind(view)
 
         binding.apply {
+            val currentLang = settings.language
+
+            ivCheckEng.isVisible = currentLang == "en"
+            ivCheckRu.isVisible = currentLang == "ru"
+            ivCheckUz.isVisible = currentLang == "uz"
+            ivCheckKk.isVisible = currentLang == "kaa"
+
             tvRu.onClick {
                 settings.language = "ru"
                 dismiss()

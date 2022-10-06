@@ -43,7 +43,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         observeQrCodeResult(savedStateHandle)
 
         binding.apply {
-            Log.d("logotype", Constants.provideBaseUrls()[settings.baseUrl] ?: "logo")
             val logoResId = resources.getIdentifier(
                 Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
                 "drawable",
@@ -66,8 +65,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             ivSettings.onClick {
-                val langDialog = LangDialog()
-                langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
+//                val langDialog = LangDialog()
+//                langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
+                navController.navigate(R.id.action_mainFragment_to_settingsFragment)
             }
             newSale.onClick {
                 navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
