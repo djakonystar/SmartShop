@@ -190,12 +190,23 @@
     <string name="internet_error">Sizde internet mashqalası bar!</string>
     <string name="select_your_shop">Óz dúkanińizdi saylań</string>
     <string name="text_continue">Dawam etiw</string>
-    <string name="input_shop_url">Dúkanińiz URLın kiritiń</string>
+    <string name="input_shop_url">Dúkanińiz prefiksın kiritiń</string>
     <string name="unknown_qr_code">Belgisiz kod!</string>
-    <string name="shop_url">Dúkan URL mánzili</string>
+    <string name="shop_url">Dúkan prefiksı</string>
     <string name="language">Til</string>
     <string name="settings">Sazlamalar</string>
     <string name="save">Saqlaw</string>
     <string name="edit_product">Ónimdi ózgertiw</string>
     <string name="product_edited_successfully">Ónim tabıslı ózgertildi!</string>
+    <string name="company_details">Kompaniya maǵlıwmatları</string>
+    <string name="company_name_title">Kompaniya atı</string>
+    <string name="company_prefix">Kompaniya prefiksı</string>
+    <string name="change_prefix">Prefikstı ózgertiw</string>
+    <string name="logout">Shıǵıw</string>
+    <string name="required_restart">Qosımsha qayta iske\ntúsedi!</string>
+    <string name="warning_logout">Rastan da shıǵajaqsız ba?</string>
+    <string name="details_success_msg">Maǵlıwmatlar tabıslı ózgertildi!</string>
+    <string name="prefix_changed_successfully">Prefiks tabıslı ózgertildi!</string>
+    <string name="warning_reset">Rastan da qosımsha sazlamaların tikleyjaqsız ba?</string>
+    <string name="login_to_test">Test rejimda kiriw</string>
 </resources>

@@ -23,9 +23,9 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="@string/lang_title"
+        android:contentDescription="@string/settings"
         android:focusable="true"
-        android:src="@drawable/ic_lang"
+        android:src="@drawable/ic_settings"
         app:layout_constraintBottom_toTopOf="@id/new_sale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -2,9 +2,12 @@ package uz.texnopos.elektrolife.di
 
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import uz.texnopos.elektrolife.data.retrofit.DynamicRetrofit
 import uz.texnopos.elektrolife.data.retrofit.ImageRetrofit
+import uz.texnopos.elektrolife.data.retrofit.PrefixApi
+import uz.texnopos.elektrolife.data.retrofit.PrefixRetrofit
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientAdapter
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
@@ -37,6 +40,7 @@ import uz.texnopos.elektrolife.ui.sales.SalesViewModel
 import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailAdapter
 import uz.texnopos.elektrolife.ui.sales.detail.SalesDetailViewModel
+import uz.texnopos.elektrolife.ui.settings.dialog.PrefixViewModel
 import uz.texnopos.elektrolife.ui.signin.SignInViewModel
 import uz.texnopos.elektrolife.ui.warehouse.EditProductViewModel
 import uz.texnopos.elektrolife.ui.warehouse.WarehouseAdapter
@@ -44,8 +48,9 @@ import uz.texnopos.elektrolife.ui.warehouse.WarehouseViewModel
 
 val networkModule = module {
     single { DynamicRetrofit() }
-    single { DynamicRetrofit().api }
+    factory { DynamicRetrofit().api }
     single { ImageRetrofit().api }
+    single { PrefixRetrofit().api }
 }
 
 val helperModule = module {
@@ -76,6 +81,7 @@ val viewModelModule = module {
     viewModel { QrScannerViewModel(get(), get()) }
     viewModel { ImageViewModel(get()) }
     viewModel { EditProductViewModel(get(), get()) }
+    viewModel { PrefixViewModel(get()) }
 }
 
 val adapterModule = module {

@@ -190,12 +190,23 @@
     <string name="internet_error">У вас проблемы с интернетом!</string>
     <string name="select_your_shop">Выберите свой магазин</string>
     <string name="text_continue">Продолжить</string>
-    <string name="input_shop_url">Введите URL вашего магазина</string>
+    <string name="input_shop_url">Введите префикс вашего магазина</string>
     <string name="unknown_qr_code">Неизвестный код!</string>
-    <string name="shop_url">URL адрес магазина</string>
+    <string name="shop_url">Префикс магазина</string>
     <string name="language">Язык</string>
     <string name="settings">Настройки</string>
     <string name="save">Сохранить</string>
     <string name="edit_product">Изменить продукт</string>
     <string name="product_edited_successfully">Продукт успешно изменен!</string>
+    <string name="company_details">Данные компании</string>
+    <string name="company_name_title">Название компании</string>
+    <string name="company_prefix">Префикс компании</string>
+    <string name="change_prefix">Сменить префикс</string>
+    <string name="logout">Выход</string>
+    <string name="required_restart">Приложение будет\nперезапущено!</string>
+    <string name="warning_logout">Вы уверены, что хотите выйти?</string>
+    <string name="details_success_msg">Данные успешно изменены!</string>
+    <string name="prefix_changed_successfully">Префикс успешно изменен!</string>
+    <string name="warning_reset">Вы действительно хотите сбросить настройки приложении?</string>
+    <string name="login_to_test">Войти в тестовый режим</string>
 </resources>

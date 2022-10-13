@@ -123,4 +123,7 @@ dependencies {
 
     // ProPicker
     implementation 'com.github.shaon2016:ProPicker:1.0.5'
+
+    // MagicTooltip
+    implementation 'com.github.Devit951:MagicTip:1.0.0'
 }

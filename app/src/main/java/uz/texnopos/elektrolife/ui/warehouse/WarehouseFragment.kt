@@ -17,6 +17,8 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_ADMIN
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
 import uz.texnopos.elektrolife.core.extensions.animateDebtPrice
 import uz.texnopos.elektrolife.core.extensions.newSaleProduct
 import uz.texnopos.elektrolife.core.extensions.onClick
@@ -81,7 +83,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             })
 
             adapter.setOnItemClickListener {
-                if (settings.role=="ceo"||settings.role=="admin"){
+                if (settings.role == ROLE_CEO || settings.role == ROLE_ADMIN) {
                     navController.navigate(
                         WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
                     )

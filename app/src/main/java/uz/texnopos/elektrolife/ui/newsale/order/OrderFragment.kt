@@ -206,6 +206,9 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             if (logoResId != 0) {
                 ivLogo.setImageResource(logoResId)
             }
+            tvCompanyName.text = settings.companyName
+            tvCompanyAddress.text = settings.companyAddress
+            tvCompanyPhone.text = "+998 ${settings.companyPhone.toPhoneNumber}"
             tvSeller.text = "Продавец: ${basket.employee.name}"
             val createdDate = basket.createdAt.substring(0..9).changeDateFormat
             val createdTime = basket.createdAt.substring(11..18)

@@ -8,47 +8,50 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.extensions.Constants
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.scope
 import uz.texnopos.elektrolife.databinding.FragmentStartUrlBinding
 import uz.texnopos.elektrolife.settings.Settings
 
 class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
     private lateinit var binding: FragmentStartUrlBinding
     private lateinit var navController: NavController
-    private lateinit var baseUrls: List<String>
     private val settings: Settings by inject()
-    private lateinit var selectedShop: String
+    private var prefix: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentStartUrlBinding.bind(view)
         navController = findNavController()
-        baseUrls = Constants.provideBaseUrls().keys.toList()
 
         if (settings.shopSelected) {
-            navController.navigate(R.id.action_startShopFragment_to_signInFragment)
+            navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)
         }
 
         binding.apply {
-            tvTestUrl.onClick {
-                etUrl.setText(getString(R.string.test_base_url).substringAfter("https://"))
-                etUrl.setSelection(etUrl.length())
-            }
-
             etUrl.addTextChangedListener {
-                "https://${it.toString()}".scope { url ->
-                    btnContinue.isEnabled = baseUrls.contains(url)
-                    selectedShop = url
-                }
+                prefix = it.toString()
+                tilUrl.isErrorEnabled = false
             }
 
             btnContinue.onClick {
-                settings.baseUrl = selectedShop
+                if (prefix.isNotEmpty() && prefix.isNotBlank()) {
+                    settings.prefix = prefix
+                    settings.baseUrl = "https://$prefix.texnopos.uz"
+                    settings.shopSelected = true
+                    navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)
+                } else {
+                    tilUrl.error = getString(R.string.required_field)
+                }
+            }
+
+            btnLoginTest.onClick {
+                settings.baseUrl = getString(R.string.test_base_url)
                 settings.shopSelected = true
-                navController.navigate(R.id.action_startShopFragment_to_signInFragment)
+                settings.companyName = getString(R.string.test_company_name)
+                settings.companyPhone = getString(R.string.test_company_phone)
+                settings.companyConfigured = true
+                navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)
             }
         }
     }

@@ -190,10 +190,10 @@
     <string name="internet_error">Sizda internet muammosi mavjud!</string>
     <string name="select_your_shop">O\'z do\'koningizni tanlang</string>
     <string name="text_continue">Davom etish</string>
-    <string name="input_shop_url">Do\'koningiz URLini kiriting</string>
+    <string name="input_shop_url">Do\'koningiz prefiksini kiriting</string>
     <string name="settings">Sozlamalar</string>
     <string name="language">Til</string>
-    <string name="shop_url">Do\'kon URL manzili</string>
+    <string name="shop_url">Do\'kon prefiksi</string>
     <string name="unknown_qr_code">Noma\'lum kod!</string>
     <string name="save">Saqlash</string>
     <string name="edit_product">Mahsulotni tahrirlash</string>
@@ -203,5 +203,10 @@
     <string name="company_prefix">Kompaniya prefiksi</string>
     <string name="change_prefix">Prefiksni o\'zgartirish</string>
     <string name="logout">Chiqish</string>
-    <string name="required_restart">Ilova qayta ishga tushadi!</string>
+    <string name="required_restart">Ilova qayta ishga\ntushadi!</string>
+    <string name="warning_logout">Rostdan ham chiqmoqchimisiz?</string>
+    <string name="details_success_msg">Ma\'lumotlar muvaffaqiyatli o\'zgartirildi!</string>
+    <string name="prefix_changed_successfully">Prefiks muvaffaqiyatli o\'zgartirildi!</string>
+    <string name="warning_reset">Siz rostdan ham ilova sozlamalarini tiklamoqchimisiz?</string>
+    <string name="login_to_test">Test rejimda kirish</string>
 </resources>

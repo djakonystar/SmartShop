@@ -190,12 +190,23 @@
     <string name="internet_error">You have problems with internet!</string>
     <string name="select_your_shop">Select your shop</string>
     <string name="text_continue">Continue</string>
-    <string name="input_shop_url">Input your shop URL</string>
+    <string name="input_shop_url">Input your shop prefix</string>
     <string name="unknown_qr_code">Unknown code!</string>
-    <string name="shop_url">URL address of the shop</string>
+    <string name="shop_url">Prefix of the shop</string>
     <string name="language">Language</string>
     <string name="settings">Settings</string>
     <string name="save">Save</string>
     <string name="edit_product">Edit Product</string>
     <string name="product_edited_successfully">Product edited successfully!</string>
+    <string name="company_details">Company details</string>
+    <string name="company_name_title">Company name</string>
+    <string name="company_prefix">Company prefix</string>
+    <string name="change_prefix">Change prefix</string>
+    <string name="logout">Logout</string>
+    <string name="required_restart">The application will be\nrestarted!</string>
+    <string name="warning_logout">Do you really want to logout?</string>
+    <string name="details_success_msg">Details changed successfully!</string>
+    <string name="prefix_changed_successfully">Prefix changed successfully!</string>
+    <string name="warning_reset">Do you really want to reset the app settings?</string>
+    <string name="login_to_test">Log in to test mode</string>
 </resources>

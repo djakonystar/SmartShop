@@ -17,6 +17,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_ADMIN
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
 import uz.texnopos.elektrolife.core.extensions.changeDateFormat
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
@@ -58,10 +60,10 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
                 navController.popBackStack()
             }
         }
-        if (settings.role == "ceo") {
+        if (settings.role == ROLE_CEO) {
             binding.topContainer.isVisible = false
             binding.cardReports.isVisible = true
-        } else if (settings.role == "admin") {
+        } else if (settings.role == ROLE_ADMIN) {
             binding.topContainer.isVisible = true
             binding.cardReports.isVisible = false
             viewModel.getCashbox(cashboxDateFrom.changeDateFormat, cashboxDateTo.changeDateFormat)
@@ -70,7 +72,7 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
         binding.apply {
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
-                if (settings.role == "admin") {
+                if (settings.role == ROLE_ADMIN) {
                     viewModel.getCashbox(
                         cashboxDateFrom.changeDateFormat,
                         cashboxDateTo.changeDateFormat

@@ -6,28 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.start.StartUrlFragment">
 
-    <TextView
-        android:id="@+id/tv_test_url"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_middle"
-        android:text="@string/test_base_url"
-        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-        app:layout_constraintBottom_toTopOf="@id/til_url"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:hint="@string/input_shop_url"
+        android:hint="@string/company_prefix"
         app:endIconMode="clear_text"
         app:layout_constraintBottom_toTopOf="@id/btn_continue"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:prefixText="https://">
+        app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_url"
@@ -45,7 +33,6 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginVertical="@dimen/margin_standard"
-        android:enabled="false"
         android:paddingHorizontal="@dimen/button_padding_horizontal"
         android:text="@string/text_continue"
         android:textSize="@dimen/text_size_larger"
@@ -53,6 +40,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_url"
+        tools:ignore="SpUsage" />
+
+    <Button
+        android:id="@+id/btn_login_test"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginVertical="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/button_padding_horizontal"
+        android:text="@string/login_to_test"
+        android:textSize="@dimen/text_size_larger"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_continue"
         tools:ignore="SpUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
