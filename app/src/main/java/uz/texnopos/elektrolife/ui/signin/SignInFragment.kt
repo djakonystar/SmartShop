@@ -20,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.showWarning
 import uz.texnopos.elektrolife.data.retrofit.DynamicRetrofit
 import uz.texnopos.elektrolife.data.model.signin.SignIn
 import uz.texnopos.elektrolife.databinding.FragmentSignInBinding
@@ -45,6 +47,14 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
         binding.apply {
             tvPincode.isVisible = settings.baseUrl == "https://smart-shop.my-project.site"
+
+            btnReset.onClick {
+                val warningDialog = showWarning(getString(R.string.warning_reset))
+                warningDialog.setOnPositiveButtonClickListener {
+                    settings.reset()
+                    navController.navigate(R.id.action_signInFragment_to_startLangFragment)
+                }
+            }
 
             beforeUnlock()
 

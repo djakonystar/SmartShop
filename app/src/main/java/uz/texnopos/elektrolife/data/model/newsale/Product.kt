@@ -1,8 +1,11 @@
 package uz.texnopos.elektrolife.data.model.newsale
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 
+@Parcelize
 data class Product(
     val id: Int,
     val category: CategoryResponse,
@@ -22,4 +25,4 @@ data class Product(
     val qrCode: String,
     var count: Double = 0.0,
     var salePrice: Double = 0.0
-)
+): Parcelable

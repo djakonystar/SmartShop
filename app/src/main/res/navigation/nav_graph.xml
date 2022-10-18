@@ -15,6 +15,11 @@
             app:destination="@id/mainFragment"
             app:popUpTo="@id/signInFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signInFragment_to_startLangFragment"
+            app:destination="@id/startLangFragment"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -51,6 +56,9 @@
         <action
             android:id="@+id/action_mainFragment_to_returnOrderFragment"
             app:destination="@id/returnOrderFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newSaleFragment"
@@ -107,7 +115,11 @@
         android:id="@+id/warehouseFragment"
         android:name="uz.texnopos.elektrolife.ui.warehouse.WarehouseFragment"
         android:label="fragment_warehouse"
-        tools:layout="@layout/fragment_warehouse" />
+        tools:layout="@layout/fragment_warehouse" >
+        <action
+            android:id="@+id/action_warehouseFragment_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newCategoryFragment"
         android:name="uz.texnopos.elektrolife.ui.newcategory.NewCategoryFragment"
@@ -254,9 +266,40 @@
         android:label="fragment_start_shop"
         tools:layout="@layout/fragment_start_url" >
         <action
-            android:id="@+id/action_startShopFragment_to_signInFragment"
-            app:destination="@id/signInFragment"
+            android:id="@+id/action_startShopFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment"
             app:popUpTo="@id/startShopFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="uz.texnopos.elektrolife.ui.warehouse.EditProductFragment"
+        android:label="fragment_product_edit"
+        tools:layout="@layout/fragment_product_edit" >
+        <argument
+            android:name="product"
+            app:argType="uz.texnopos.elektrolife.data.model.newsale.Product" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="uz.texnopos.elektrolife.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/companyDetailsFragment"
+        android:name="uz.texnopos.elektrolife.ui.start.CompanyDetailsFragment"
+        android:label="fragment_company_details"
+        tools:layout="@layout/fragment_company_details" >
+        <action
+            android:id="@+id/action_companyDetailsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/companyDetailsFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

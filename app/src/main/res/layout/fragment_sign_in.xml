@@ -20,9 +20,22 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_standard"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/btn_reset"
+            android:layout_width="@dimen/img_standard_height_mobile"
+            android:layout_height="@dimen/img_standard_height_mobile"
+            android:layout_margin="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_client_en"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/app_main_color" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_lock"

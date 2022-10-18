@@ -1,5 +1,8 @@
 package uz.texnopos.elektrolife.ui.newsale.dialog
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -23,14 +27,25 @@ import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newpayment.NewPaymentViewModel
 import site.texnopos.djakonystar.suminputmask.SumInputMask
+import uz.texnopos.elektrolife.data.model.newsale.Order
+import uz.texnopos.elektrolife.data.model.newsale.OrderItem
+import uz.texnopos.elektrolife.databinding.LayoutPrintingBinding
+import uz.texnopos.elektrolife.ui.dialog.SuccessOrderDialog
+import uz.texnopos.elektrolife.ui.newsale.Basket
+import uz.texnopos.elektrolife.ui.newsale.order.OrderViewModel
+import uz.texnopos.elektrolife.ui.sales.detail.OrderReceiptAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
+class OrderCheckoutDialog(private val totalPrice: Double, private val orders: List<OrderItem>) :
+    DialogFragment() {
     private lateinit var binding: DialogCheckoutOrderBinding
     private lateinit var addClientDialog: AddClientDialog
+    private lateinit var printingView: View
     private val newClientsViewModel: NewClientViewModel by viewModel()
     private val newPaymentViewModel: NewPaymentViewModel by viewModel()
+    private val orderViewModel: OrderViewModel by viewModel()
+    private val orderReceiptAdapter: OrderReceiptAdapter by inject()
     private val settings: Settings by inject()
     private var clientsList: MutableSet<String> = mutableSetOf()
     private var clientsIds: MutableMap<String, Int> = mutableMapOf()
@@ -54,6 +69,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = DialogCheckoutOrderBinding.bind(view)
+        printingView = binding.root.inflate(R.layout.layout_printing)
 
         binding.apply {
             tvTitle.text = context?.getString(R.string.sum_text, totalPrice.toSumFormat)
@@ -158,6 +174,11 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
         binding.apply {
             progressBar.isVisible = loading
             mainContainer.isEnabled = !loading
+            btnAdd.isEnabled = !loading
+            btnCancel.isEnabled = !loading
+            btnAddClient.isEnabled = !loading
+            btnCardMagnet.isEnabled = !loading
+            btnCashMagnet.isEnabled = !loading
         }
     }
 
@@ -195,8 +216,8 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    binding.etSearchClient.setText(newClient)
                     clientId = it.data!!.id
+                    newPaymentViewModel.searchClient(newClient)
                     showSuccess(getString(R.string.client_successfully_added))
                         .setOnPositiveButtonClickListener {
                             addClientDialog.dismiss()
@@ -245,6 +266,7 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
             val currentClientName = etSearchClient.text.toString()
             clientId = if (clientsList.contains(currentClientName)) {
                 clientsIds.getValue(clientName)
+                /**bug*/
             } else 1
             val comment = etComment.text.toString()
 
@@ -261,18 +283,147 @@ class OrderCheckoutDialog(private val totalPrice: Double) : DialogFragment() {
                         tilClient.error = context?.getString(R.string.required_field)
                     }
                 } else {
-                    sendDate.invoke(clientId, cash, card, debt, dateForBackend, comment)
+                    orderViewModel.setOrder(
+                        Order(
+                            id = clientId,
+                            card = card,
+                            cash = cash,
+                            debt = debt,
+                            term = date,
+                            description = comment,
+                            orders = orders
+                        )
+                    )
                 }
             } else {
-                sendDate.invoke(clientId, cash, card, debt, dateForBackend, comment)
+                orderViewModel.setOrder(
+                    Order(
+                        id = clientId,
+                        card = card,
+                        cash = cash,
+                        debt = debt,
+                        term = date,
+                        description = comment,
+                        orders = orders
+                    )
+                )
+            }
+        }
+
+        orderViewModel.orderState.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(true)
+                    orderReceiptAdapter.models = it.data!!.orders
+                    prepareReceipt(printingView, it.data)
+                    val successDialog =
+                        SuccessOrderDialog(getString(R.string.order_successfully_done))
+                    successDialog.setOnPrintButtonClickListener {
+                        printReceipt(printingView, it.data)
+                    }
+                    successDialog.setOnPositiveButtonClickListener {
+                        dismiss()
+                    }
+                    successDialog.show(requireActivity().supportFragmentManager, successDialog.tag)
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showError(it.message)
+                }
             }
         }
     }
 
-    private var sendDate: (clientId: Int, cash: Double, card: Double, debt: Double, date: String, comment: String) -> Unit =
-        { _: Int, _: Double, _: Double, _: Double, _: String, _: String -> }
+    @SuppressLint("SetTextI18n")
+    private fun prepareReceipt(view: View, basket: orderBasketResponse) {
+        val viewBinding = LayoutPrintingBinding.bind(view)
+        val orders = basket.orders
 
-    fun sendData(sendDate: (clientId: Int, cash: Double, card: Double, debt: Double, date: String, comment: String) -> Unit) {
-        this.sendDate = sendDate
+        viewBinding.apply {
+            ivLogo.setImageResource(R.drawable.logotype)
+            val logoResId = resources.getIdentifier(
+                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
+                "drawable",
+                requireActivity().packageName
+            )
+            if (logoResId != 0) {
+                ivLogo.setImageResource(logoResId)
+            }
+            tvCompanyName.text = settings.companyName
+            tvCompanyAddress.text = settings.companyAddress
+            tvCompanyPhone.text = "+998 ${settings.companyPhone.toPhoneNumber}"
+            tvSeller.text = "Продавец: ${basket.employee.name}"
+            val createdDate = basket.createdAt.substring(0..9).changeDateFormat
+            val createdTime = basket.createdAt.substring(11..18)
+            tvDate.text = "Время: $createdDate $createdTime"
+            recyclerView.adapter = orderReceiptAdapter
+            tvTotal.text = getString(
+                R.string.price_text,
+                orders.sumOf { p -> p.count * p.price }.toSumFormat,
+                settings.currency
+            )
+            if (basket.amount.cash <= 0) {
+                tvCashTitle.isVisible = false
+                tvDotsCash.isVisible = false
+                tvCash.isVisible = false
+            }
+            tvCash.text = getString(
+                R.string.price_text,
+                basket.amount.cash.toSumFormat,
+                settings.currency
+            )
+            if (basket.amount.card <= 0) {
+                tvCardTitle.isVisible = false
+                tvDotsCard.isVisible = false
+                tvCard.isVisible = false
+            }
+            tvCard.text = getString(
+                R.string.price_text,
+                basket.amount.card.toSumFormat,
+                settings.currency
+            )
+            if (basket.amount.debt <= 0) {
+                tvDebtTitle.isVisible = false
+                tvDotsDebt.isVisible = false
+                tvDebt.isVisible = false
+            }
+            tvDebtTitle.text = "Долг (до ${basket.term?.changeDateFormat})"
+            tvDebt.text = getString(
+                R.string.price_text,
+                basket.amount.debt.toSumFormat,
+                settings.currency
+            )
+            GlideToVectorYou.justLoadImage(requireActivity(), Uri.parse(basket.qrLink), ivQrCode)
+        }
+    }
+
+    private fun printReceipt(view: View, basket: orderBasketResponse) {
+        val createdTime = basket.createdAt.replace('.', '_')
+            .replace(' ', '_')
+            .replace(':', '_')
+        val fileName = "${createdTime}_${basket.id}"
+        pdfGenerator(view, fileName,
+            { response ->
+                response?.let {
+                    doPrint(it.path, fileName)
+                    dismiss()
+                    Basket.clear()
+                }
+            },
+            { failureResponse ->
+                showError(failureResponse?.errorMessage)
+            }
+        )
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss()
+    }
+
+    private var onDismiss: () -> Unit = {}
+    fun setOnDismissListener(onDismiss: () -> Unit) {
+        this.onDismiss = onDismiss
     }
 }

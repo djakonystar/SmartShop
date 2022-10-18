@@ -24,6 +24,7 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
+import uz.texnopos.elektrolife.core.extensions.showMessage
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
@@ -70,12 +71,12 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 searchValue = it.toString()
                 searchValue.ifEmpty { page = 1 }
                 adapter.models = listOf()
-                viewModel.getProducts(page, selectedCategoryId, searchValue)
+                viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.getProducts(page, selectedCategoryId, searchValue)
+                    viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -99,7 +100,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                         layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
                     ) {
                         page++
-                        viewModel.getProducts(page, selectedCategoryId, searchValue)
+                        viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
                     }
                 }
             })
@@ -112,7 +113,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 categoryViewModel.getCategories()
                 page = 1
                 adapter.models = listOf()
-                viewModel.getProducts(page, searchValue)
+                viewModel.getProducts(page, searchValue, 0)
             }
 
             adapter.onItemClickListener { product ->
@@ -165,7 +166,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
 
         categoryViewModel.getCategories()
-        viewModel.getProducts(page, searchValue)
+        viewModel.getProducts(page, searchValue, 0)
         setUpObservers()
     }
 
@@ -233,8 +234,6 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                 }
             }
         }
-
-
     }
 
     private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
@@ -294,7 +293,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
 
                     page = 1
                     adapter.models = listOf()
-                    viewModel.getProducts(page, selectedCategoryId, searchValue)
+                    viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
                 }
             }
         } catch (e: Exception) {

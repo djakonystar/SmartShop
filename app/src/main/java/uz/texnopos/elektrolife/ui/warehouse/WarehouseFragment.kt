@@ -17,24 +17,30 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_ADMIN
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
+import uz.texnopos.elektrolife.core.extensions.animateDebtPrice
+import uz.texnopos.elektrolife.core.extensions.newSaleProduct
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
-import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
+import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var binding: FragmentWarehouseBinding
     private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
-    private val viewModel: WarehouseViewModel by viewModel()
     private val categoryViewModel: CategoryViewModel by viewModel()
+    private val productViewModel: NewSaleViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
+    private val settings: Settings by inject()
     private var sortType = "byFewRemain"
-    private var productsList = mutableListOf<WarehouseItem>()
-    private var allProductsList = mutableListOf<WarehouseItem>()
+    private var productsList = mutableListOf<newSaleProduct>()
+    private var allProductsList = mutableListOf<newSaleProduct>()
     private var searchValue = ""
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
@@ -71,10 +77,18 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
                     ) {
                         page++
-                        viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
+                        productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
                     }
                 }
             })
+
+            adapter.setOnItemClickListener {
+                if (settings.role == ROLE_CEO || settings.role == ROLE_ADMIN) {
+                    navController.navigate(
+                        WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
+                    )
+                }
+            }
 
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
@@ -84,19 +98,19 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                 categoryViewModel.getCategories()
                 page = 1
                 adapter.models = listOf()
-                viewModel.warehouseProducts(page, searchValue)
+                productViewModel.getProducts(page, searchValue, -1)
             }
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
                 searchValue.ifEmpty { page = 1 }
                 adapter.models = listOf()
-                viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
+                productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
+                    productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -104,7 +118,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         }
 
         categoryViewModel.getCategories()
-        viewModel.warehouseProducts(page, searchValue)
+        productViewModel.getProducts(page, searchValue, -1)
         setUpObservers()
     }
 
@@ -114,13 +128,13 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     }
 
     private fun setUpObservers() {
-        viewModel.warehouseProducts.observe(viewLifecycleOwner) {
+        productViewModel.products.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     lastPage = it.data!!.lastPage
-                    allProductsList = it.data.data as MutableList<WarehouseItem>
+                    allProductsList = it.data.data as MutableList<newSaleProduct>
                     if (adapter.models.isEmpty()) {
                         adapter.models = allProductsList
                         productsList = allProductsList
@@ -132,21 +146,6 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         }
                         adapter.models = productsList
                     }
-//                        adapter.models = it.data.payload
-//                        adapter.models = when (sortType) {
-//                            "byFewRemain" -> productsList
-//                                .sortedBy { t -> t.count / (t.category.minCount?.toDouble() ?: 0.0) }
-//                            "byProduct" -> productsList
-//                                .sortedBy { t -> t.name.lowercase() }
-//                            "byCategory" -> productsList
-//                                .sortedBy { t -> t.name.lowercase() }
-//                                .sortedBy { t -> t.category?.name?.lowercase() }
-//                            "byRemainAscend" -> productsList
-//                                .sortedBy { t -> t.remained }
-//                            "byRemainDescend" -> productsList
-//                                .sortedByDescending { t -> t.remained }
-//                            else -> productsList
-//                        }
                     showLottieAnimation(productsList.isEmpty())
                 }
                 ResourceState.ERROR -> {
@@ -229,7 +228,7 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
 
                     page = 1
                     adapter.models = listOf()
-                    viewModel.warehouseProducts(page, selectedCategoryId, searchValue)
+                    productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
 
 //                    if (selectedCategoryId != -1) {
 //                        viewModel.warehouseProducts(searchValue)

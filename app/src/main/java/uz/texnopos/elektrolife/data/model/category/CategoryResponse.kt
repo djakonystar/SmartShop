@@ -1,7 +1,10 @@
 package uz.texnopos.elektrolife.data.model.category
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CategoryResponse(
     val id: Int,
     val name: String,
@@ -13,4 +16,4 @@ data class CategoryResponse(
     val maxPercent: Double,
     @SerializedName("min_product")
     val minProduct: Double? = 0.0
-)
+): Parcelable

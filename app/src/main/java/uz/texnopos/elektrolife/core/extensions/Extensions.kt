@@ -197,7 +197,7 @@ val String.toPhoneFormat: String
 val String.toPhoneNumber: String
     get() {
         val arr = this.toCharArray()
-        var phone = "+998 ("
+        var phone = if (arr.size == 9) "(" else "+998 ("
         arr.forEachIndexed { index, c ->
             phone += c
             if (index == 1) {
@@ -436,3 +436,7 @@ private fun Fragment.requestMultiplePermissions() =
 fun <T: Any> T.scope(action: (T) -> Unit) {
     action(this)
 }
+
+fun String.isNotEmptyAndBlank() = this.isNotEmpty() && this.isNotBlank()
+
+fun String.isEmptyOrBlank() = this.isEmpty() || this.isBlank()

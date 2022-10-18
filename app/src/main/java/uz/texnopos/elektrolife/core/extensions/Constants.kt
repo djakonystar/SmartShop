@@ -5,16 +5,23 @@ import uz.texnopos.elektrolife.R
 
 object Constants {
     const val CLOUD_NAME = "http-electro-life-texnopos-site"
+    const val ROLE_CEO = "ceo"
+    const val ROLE_ADMIN = "admin"
+    const val ROLE_SELLER = "saller"
 
     fun provideBaseUrls(): Map<String, String> = mapOf(
         "https://smart-shop.my-project.site" to "logo_test",
-        "https://new-electro-life.texnopos.site" to "logo_electro_life",
-        "https://new-lux-gadget.texnopos.site" to "logo_lux_gadget",
-        "https://new-qoniratshop.texnopos.site" to "logo_kungrad_shop",
-        "https://sinyor.texnopos.site" to "logo_sinyor",
-        "https://raya-bijuteriya.texnopos.site" to "logo_raya_bujiteriya",
-        "https://mobishop.texnopos.site" to "logo_mobi_shop",
-        "https://ideal-magazin.texnopos.site" to "logo_ideal_magazin"
+        "https://new-electro-life.texnopos.uz" to "logo_electro_life",
+        "https://new-qoniratshop.texnopos.uz" to "logo_kungrad_shop",
+        "https://sinyor.texnopos.uz" to "logo_sinyor",
+        "https://raya-bijuteriya.texnopos.uz" to "logo_raya_bujiteriya",
+        "https://mobishop.texnopos.uz" to "logo_mobi_shop",
+        "https://ideal-magazin.texnopos.uz" to "logo_ideal_magazin",
+        "https://imran.texnopos.uz" to "logo_test",
+        "https://rolfshop.texnopos.uz" to "logo_rolfshop",
+        "https://mobishop2.texnopos.uz" to "logo_mobi_shop",
+        "https://takayama.texnopos.uz" to "logo_test",
+        "https://johnny.texnopos.uz" to "johnny_logo"
     )
 
     fun getUnitName(context: Context, unitId: Int): String {

@@ -2,6 +2,7 @@ package uz.texnopos.elektrolife.ui.newproduct
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -25,11 +26,9 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
-import uz.texnopos.elektrolife.data.model.newproduct.Price
-import uz.texnopos.elektrolife.data.model.newproduct.Product
-import uz.texnopos.elektrolife.data.model.newproduct.TransactionTransfer
-import uz.texnopos.elektrolife.data.model.newproduct.Warehouse
+import uz.texnopos.elektrolife.data.model.newproduct.*
 import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
+import uz.texnopos.elektrolife.data.model.warehouse_item.Data
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -51,16 +50,19 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private val imageViewModel: ImageViewModel by viewModel()
     private val qrScannerViewModel: QrScannerViewModel by viewModel()
     private val settings: Settings by inject()
-    private var mutableList: MutableList<CategoryResponse> = mutableListOf()
+    private var categoriesList: MutableList<CategoryResponse> = mutableListOf()
     private var categoryName: MutableList<String> = mutableListOf()
     private var categoryId = -1
     private var liveCostPrice = MutableLiveData<Double>()
     private var categoryNameLiveData = MutableLiveData<String>()
+
     private var wholesalePercent: Double = 0.0
     private var minPercent: Double = 0.0
     private var maxPercent: Double = 0.0
+
     private var productsList: MutableSet<String> = mutableSetOf()
-    private var productsMap: MutableMap<String, WarehouseItem> = mutableMapOf()
+    private var productsMap: MutableMap<String, Data> = mutableMapOf()
+
     private var mapOfCurrency: MutableMap<Int, String> = mutableMapOf()
     private var currencyIds = mutableListOf(-1, -1, -1, -1)
     private var mapOfRates = mutableMapOf<String, Double>()
@@ -88,8 +90,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.new_product)
-            tvRate.text =
-                context?.getString(R.string.dollar_rate_text, settings.usdToUzs.toString())
             btnHome.onClick {
                 navController.popBackStack()
             }
@@ -111,23 +111,41 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 }
             }
 
+
             etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
                 val warehouseItem = productsMap.getValue(productName)
                 val transaction = TransactionTransfer(
-                    warehouseItem.product.id,
-                    warehouseItem.product.name,
-                    warehouseItem.count,
-                    warehouseItem.unit.id,
-                    Price(
-                        warehouseItem.product.costPrice.currencyId,
-                        warehouseItem.product.costPrice.price
+                    productId = warehouseItem.id,
+                    productName = warehouseItem.name,
+                    count = warehouseItem.warehouse.count.toDouble(),
+                    unitId = warehouseItem.warehouse.unit.id,
+                    price = Price(
+                        warehouseItem.cost_price.currency_id,
+                        warehouseItem.cost_price.price.toDouble()
+                    ),
+                    maxPrice = MaxPrice(
+                        warehouseItem.max_price.price,
+                        warehouseItem.max_price.currency_id
+                    ),
+                    minPrice = MinPrice(
+                        warehouseItem.min_price.price,
+                        warehouseItem.min_price.currency_id
+                    ),
+                    wholePrice = WholePrice(
+                        warehouseItem.whole_price.price,
+                        warehouseItem.whole_price.currency_id
                     )
                 )
+                etCostPrice.setText(warehouseItem.cost_price.price.toString())
+
                 val dialog = TransactionDialog(transaction)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
                     etProductName.text.clear()
+                }
+                dialog.onItemClickListener {
+                    etCostPrice.setText("")
                 }
             }
 
@@ -164,10 +182,10 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
             actCategory.setAdapter(categoriesAdapter)
             actCategory.setOnItemClickListener { _, _, i, _ ->
                 tilCategory.isErrorEnabled = false
-                categoryId = mutableList[i].id
-                wholesalePercent = mutableList[i].wholePercent
-                minPercent = mutableList[i].minPercent
-                maxPercent = mutableList[i].maxPercent
+                categoryId = categoriesList[i].id
+                wholesalePercent = categoriesList[i].wholePercent
+                minPercent = categoriesList[i].minPercent
+                maxPercent = categoriesList[i].maxPercent
             }
 
             actCategory.doOnTextChanged { text, _, _, _ ->
@@ -511,6 +529,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                         actWholesaleCurrency.setText(currencyList[currencyIds[1] - 1])
                         actMinCurrency.setText(currencyList[currencyIds[2] - 1])
                         actMaxCurrency.setText(currencyList[currencyIds[3] - 1])
+
+                        abBinding.tvRate.text = getString(
+                            R.string.dollar_rate_text,
+                            settings.usdToUzs.toString()
+                        )
                     }
                 }
                 ResourceState.ERROR -> {
@@ -525,8 +548,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    mutableList = it.data!!.toMutableList()
-                    mutableList.forEach { category ->
+                    categoriesList = it.data!!.toMutableList()
+                    categoriesList.forEach { category ->
                         if (!categoryName.contains(category.name)) categoryName.add(category.name)
                     }
                     categoriesAdapter =
@@ -546,10 +569,11 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 ResourceState.SUCCESS -> {
                     setLoading(false)
                     it.data!!.forEach { warehouseItem ->
-                        productsList.add(warehouseItem.product.name)
-                        if (!productsMap.contains(warehouseItem.product.name)) productsMap[warehouseItem.product.name] =
+                        productsList.add(warehouseItem.name)
+                        if (!productsMap.contains(warehouseItem.name)) productsMap[warehouseItem.name] =
                             warehouseItem
                     }
+
                     binding.apply {
                         if (etProductName.text.isEmpty()) {
                             productsList.clear()
@@ -560,6 +584,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             )
                             etProductName.setAdapter(arrayAdapter)
                             etProductName.dismissDropDown()
+
                         } else {
                             val arrayAdapter = ArrayAdapter(
                                 requireContext(),
@@ -568,6 +593,8 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                             )
                             etProductName.setAdapter(arrayAdapter)
                             etProductName.showDropDown()
+
+
                             if (productsList.size == 1 && etProductName.text.toString() == productsList.firstOrNull()) {
                                 etProductName.dismissDropDown()
                             }
@@ -620,7 +647,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
         }
     }
 
-    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
+    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) = binding.apply {
         savedStateHandle?.getLiveData<String>(QrScannerFragment.RESULT_TEXT)
             ?.observe(viewLifecycleOwner) { result ->
                 if (result.startsWith(QrScannerFragment.PRODUCT)) {
@@ -642,8 +669,24 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                                     Price(
                                         product.costPrice.currencyId,
                                         product.costPrice.price
+                                    ),
+                                    maxPrice = MaxPrice(
+                                        product.maxPrice.price,
+                                        product.maxPrice.currencyId
+                                    ),
+                                    minPrice = MinPrice(
+                                        product.minPrice.price,
+                                        product.minPrice.currencyId
+                                    ),
+                                    wholePrice = WholePrice(
+                                        product.wholesalePrice.price,
+                                        product.wholesalePrice.currencyId
                                     )
                                 )
+                                etCostPrice.setText(product.costPrice.price format 2)
+                                /*etWholesalePrice.setText(product.wholesalePrice.price format 2)
+                                etMaxPrice.setText(product.maxPrice.price format 2)
+                                etMinPrice.setText(product.minPrice.price format 2)*/
                                 val dialog = TransactionDialog(transaction)
                                 dialog.show(
                                     requireActivity().supportFragmentManager,

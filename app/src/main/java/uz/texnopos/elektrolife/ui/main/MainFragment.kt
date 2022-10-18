@@ -14,6 +14,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.Constants
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_ADMIN
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
+import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_SELLER
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
@@ -43,7 +46,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         observeQrCodeResult(savedStateHandle)
 
         binding.apply {
-            Log.d("logotype", Constants.provideBaseUrls()[settings.baseUrl] ?: "logo")
             val logoResId = resources.getIdentifier(
                 Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
                 "drawable",
@@ -66,8 +68,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             ivSettings.onClick {
-                val langDialog = LangDialog()
-                langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
+//                val langDialog = LangDialog()
+//                langDialog.show(requireActivity().supportFragmentManager, langDialog.tag)
+                navController.navigate(R.id.action_mainFragment_to_settingsFragment)
             }
             newSale.onClick {
                 navController.navigate(MainFragmentDirections.actionMainFragmentToNewSaleFragment())
@@ -81,7 +84,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             when (settings.role) {
-                "saller" -> {
+                ROLE_SELLER -> {
                     iconFinance.setImageResource(R.drawable.ic_sales_3d_seller)
                     titleFinance.text = context?.getString(R.string.sales)
                     finance.onClick {
@@ -98,7 +101,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         )
                     }
                 }
-                "admin", "ceo" -> {
+                ROLE_ADMIN, ROLE_CEO -> {
                     newProduct.isEnabled = true
                     finance.onClick {
                         navController.navigate(R.id.action_mainFragment_to_financeFragment)

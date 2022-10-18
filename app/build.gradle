@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -13,8 +14,8 @@ android {
 
         minSdk 23
         targetSdk 31
-        versionCode 1
-        versionName "1.1.0"
+        versionCode 4
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -122,4 +123,7 @@ dependencies {
 
     // ProPicker
     implementation 'com.github.shaon2016:ProPicker:1.0.5'
+
+    // MagicTooltip
+    implementation 'com.github.Devit951:MagicTip:1.0.0'
 }

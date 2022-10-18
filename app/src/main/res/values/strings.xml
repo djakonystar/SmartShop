@@ -182,29 +182,29 @@
     <string name="warning">Ishonchingiz komilmi?</string>
     <string name="reports">Hisobotlar</string>
     <string name="price_icon" translatable="false">Price icon</string>
-    <string name="currency_text">Currency</string>
-    <string name="measure_text">Measure</string>
+    <string name="currency_text">Valyuta</string>
+    <string name="measure_text">O\'lchov</string>
     <string name="receipt_count_text" translatable="false">%dx%s %s</string>
-    <string name="print_receipt">Print Receipt</string>
-    <string name="salaries">Salaries</string>
-    <string name="month_first">January</string>
-    <string name="month_second">February</string>
-    <string name="month_third">March</string>
-    <string name="month_fourth">April</string>
+    <string name="print_receipt">Kvitansiyani chop etish</string>
+    <string name="salaries">Oyliklar</string>
+    <string name="month_first">Yanvar</string>
+    <string name="month_second">Fevral</string>
+    <string name="month_third">Mart</string>
+    <string name="month_fourth">Aprel</string>
     <string name="month_fifth">May</string>
-    <string name="month_sixth">June</string>
-    <string name="month_seventh">July</string>
-    <string name="month_eighth">August</string>
-    <string name="month_ninth">September</string>
-    <string name="month_tenth">October</string>
-    <string name="month_eleventh">November</string>
-    <string name="month_twelfth">December</string>
-    <string name="measure_pcs">pcs</string>
+    <string name="month_sixth">Iyun</string>
+    <string name="month_seventh">Iyul</string>
+    <string name="month_eighth">Avgust</string>
+    <string name="month_ninth">Sentyabr</string>
+    <string name="month_tenth">Oktyabr</string>
+    <string name="month_eleventh">Noyabr</string>
+    <string name="month_twelfth">Dekabr</string>
+    <string name="measure_pcs">dona</string>
     <string name="measure_tonne">t</string>
     <string name="measure_kg">kg</string>
     <string name="measure_gr">gr</string>
     <string name="measure_meter">m</string>
-    <string name="measure_cm">cm</string>
+    <string name="measure_cm">sm</string>
     <string name="measure_liter">l</string>
     <string name="employees">Xodimlar</string>
     <string name="date_from_text">Dan: %s</string>
@@ -223,14 +223,31 @@
     <string name="return_text">Qaytarish</string>
     <string name="product_code_error">Bu mahsulot kodi emas!</string>
     <string name="basket_code_error">Bu sotuv kodi emas!</string>
-    <string name="internet_error">You have problems with internet!</string>
+    <string name="internet_error">Internet bilan bog\'liq muammolaringiz bor!</string>
     <string name="select_your_shop">O\'z do\'koningizni tanlang</string>
     <string name="text_continue">Davom etish</string>
-    <string name="input_shop_url">Do\'koningiz URLini kiriting</string>
+    <string name="input_shop_url">Do\'koningiz prefiksini kiriting</string>
     <string name="settings">Sozlamalar</string>
     <string name="language">Til</string>
-    <string name="shop_url">Do\'kon URL manzili</string>
+    <string name="shop_url">Do\'kon prefiksi</string>
     <string name="unknown_qr_code">Noma\'lum kod!</string>
     <string name="test_base_url" translatable="false">https://smart-shop.my-project.site</string>
     <string name="sales_detail_sum_text" translatable="false">%s %s * %s %s = <b>%s %s</b></string>
+    <string name="save">Saqlash</string>
+    <string name="edit_product">Mahsulotni tahrirlash</string>
+    <string name="product_edited_successfully">Mahsulot muvaffaqiyatli tahrirlandi!</string>
+    <string name="company_details">Kompaniya ma\'lumotlari</string>
+    <string name="company_name_title">Kompaniya nomi</string>
+    <string name="company_prefix">Kompaniya prefiksi</string>
+    <string name="change_prefix">Prefiksni o\'zgartirish</string>
+    <string name="logout">Chiqish</string>
+    <string name="required_restart">Ilova qayta ishga tushadi!</string>
+    <string name="warning_logout">Rostdan ham chiqmoqchimisiz?</string>
+    <string name="details_success_msg">Ma\'lumotlar muvaffaqiyatli o\'zgartirildi!</string>
+    <string name="prefix_changed_successfully">Prefiks muvaffaqiyatli o\'zgartirildi!</string>
+    <string name="warning_reset">Siz rostdan ham ilova sozlamalarini tiklamoqchimisiz?</string>
+    <string name="login_to_test">Test rejimda kirish</string>
+    <string name="test_company_name" translatable="false">TexnoPOS Company</string>
+    <string name="test_company_phone" translatable="false">900957117</string>
+    <string name="test_company_address" translatable="false">Nukus, Karakalpakstan</string>
 </resources>
