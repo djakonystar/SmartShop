@@ -49,6 +49,7 @@ class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
                 settings.baseUrl = getString(R.string.test_base_url)
                 settings.shopSelected = true
                 settings.companyName = getString(R.string.test_company_name)
+                settings.companyAddress = getString(R.string.test_company_address)
                 settings.companyPhone = getString(R.string.test_company_phone)
                 settings.companyConfigured = true
                 navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)

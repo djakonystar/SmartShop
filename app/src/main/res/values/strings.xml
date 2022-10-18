@@ -249,4 +249,5 @@
     <string name="login_to_test">Test rejimda kirish</string>
     <string name="test_company_name" translatable="false">TexnoPOS Company</string>
     <string name="test_company_phone" translatable="false">900957117</string>
+    <string name="test_company_address" translatable="false">Nukus, Karakalpakstan</string>
 </resources>

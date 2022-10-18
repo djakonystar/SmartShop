@@ -117,8 +117,7 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
             btnOrder.onClick {
                 val finalPrice =
                     tvTotalPrice.text.filter { c -> c.isDigit() || c == '.' }.toString().toDouble()
-                orderCheckoutDialog = OrderCheckoutDialog(finalPrice)
-                orderCheckoutDialog.show(requireActivity().supportFragmentManager, "")
+
                 val orders: MutableList<OrderItem> = mutableListOf()
                 Basket.products.forEachIndexed { index, product ->
                     orders.add(
@@ -126,155 +125,21 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                         OrderItem(product.id, product.count, 1, product.salePrice)
                     )
                 }
-                orderCheckoutDialog.sendData { clientId, cash, card, debt, date, comment ->
-                    viewModelOrder.setOrder(
-                        Order(
-                            id = clientId,
-                            card = card,
-                            cash = cash,
-                            debt = debt,
-                            term = date,
-                            description = comment,
-                            orders = orders
-                        )
-                    )
+                orderCheckoutDialog = OrderCheckoutDialog(finalPrice, orders)
+                orderCheckoutDialog.show(requireActivity().supportFragmentManager, "")
+
+                orderCheckoutDialog.setOnDismissListener {
+                    tvTotalPrice.text = ""
+                    adapter.models = mutableListOf()
+                    Basket.clear()
+                    navController.popBackStack(R.id.mainFragment, false)
                 }
             }
         }
-
-        setUpObservers()
     }
 
     override fun onDetach() {
         adapter.models = mutableListOf()
         super.onDetach()
-    }
-
-    private fun setLoading(loading: Boolean) {
-        binding.apply {
-            progressBar.isVisible = loading
-            recyclerView.isEnabled = !loading
-            btnOrder.isEnabled = !loading
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setUpObservers() {
-        viewModelOrder.orderState.observe(viewLifecycleOwner) {
-            when (it.status) {
-                ResourceState.LOADING -> setLoading(true)
-                ResourceState.SUCCESS -> {
-                    setLoading(false)
-                    orderReceiptAdapter.models = it.data!!.orders
-                    prepareReceipt(printingView, it.data)
-                    val successDialog =
-                        SuccessOrderDialog(getString(R.string.order_successfully_done))
-                    successDialog.setOnPrintButtonClickListener {
-                        printReceipt(printingView, it.data)
-                    }
-                    successDialog.setOnPositiveButtonClickListener {
-                        binding.apply {
-                            tvTotalPrice.text = ""
-                            adapter.models = mutableListOf()
-                        }
-                        orderCheckoutDialog.dismiss()
-                        Basket.clear()
-                        navController.popBackStack(R.id.mainFragment, false)
-                    }
-                    successDialog.show(requireActivity().supportFragmentManager, successDialog.tag)
-                }
-                ResourceState.ERROR -> {
-                    setLoading(false)
-                    showError(it.message)
-                }
-            }
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun prepareReceipt(view: View, basket: orderBasketResponse) {
-        val viewBinding = LayoutPrintingBinding.bind(view)
-        val orders = basket.orders
-
-        viewBinding.apply {
-            ivLogo.setImageResource(R.drawable.logotype)
-            val logoResId = resources.getIdentifier(
-                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
-                "drawable",
-                requireActivity().packageName
-            )
-            if (logoResId != 0) {
-                ivLogo.setImageResource(logoResId)
-            }
-            tvCompanyName.text = settings.companyName
-            tvCompanyAddress.text = settings.companyAddress
-            tvCompanyPhone.text = "+998 ${settings.companyPhone.toPhoneNumber}"
-            tvSeller.text = "Продавец: ${basket.employee.name}"
-            val createdDate = basket.createdAt.substring(0..9).changeDateFormat
-            val createdTime = basket.createdAt.substring(11..18)
-            tvDate.text = "Время: $createdDate $createdTime"
-            recyclerView.adapter = orderReceiptAdapter
-            tvTotal.text = getString(
-                R.string.price_text,
-                orders.sumOf { p -> p.count * p.price }.toSumFormat,
-                settings.currency
-            )
-            if (basket.amount.cash <= 0) {
-                tvCashTitle.isVisible = false
-                tvDotsCash.isVisible = false
-                tvCash.isVisible = false
-            }
-            tvCash.text = getString(
-                R.string.price_text,
-                basket.amount.cash.toSumFormat,
-                settings.currency
-            )
-            if (basket.amount.card <= 0) {
-                tvCardTitle.isVisible = false
-                tvDotsCard.isVisible = false
-                tvCard.isVisible = false
-            }
-            tvCard.text = getString(
-                R.string.price_text,
-                basket.amount.card.toSumFormat,
-                settings.currency
-            )
-            if (basket.amount.debt <= 0) {
-                tvDebtTitle.isVisible = false
-                tvDotsDebt.isVisible = false
-                tvDebt.isVisible = false
-            }
-            tvDebtTitle.text = "Долг (до ${basket.term?.changeDateFormat})"
-            tvDebt.text = getString(
-                R.string.price_text,
-                basket.amount.debt.toSumFormat,
-                settings.currency
-            )
-            GlideToVectorYou.justLoadImage(requireActivity(), Uri.parse(basket.qrLink), ivQrCode)
-        }
-    }
-
-    private fun printReceipt(view: View, basket: orderBasketResponse) {
-        val createdTime = basket.createdAt.replace('.', '_')
-            .replace(' ', '_')
-            .replace(':', '_')
-        val fileName = "${createdTime}_${basket.id}"
-        pdfGenerator(view, fileName,
-            { response ->
-                response?.let {
-                    doPrint(it.path, fileName)
-                    binding.apply {
-                        tvTotalPrice.text = ""
-                        adapter.models = mutableListOf()
-                    }
-                    orderCheckoutDialog.dismiss()
-                    Basket.clear()
-                    navController.popBackStack(R.id.mainFragment, false)
-                }
-            },
-            { failureResponse ->
-                showError(failureResponse?.errorMessage)
-            }
-        )
     }
 }
