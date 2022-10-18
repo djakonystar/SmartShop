@@ -13,6 +13,7 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.sales.Sales
 import uz.texnopos.elektrolife.databinding.FragmentClientSaleBinding
 import uz.texnopos.elektrolife.ui.client.detail.ClientDetailFragmentDirections
 import uz.texnopos.elektrolife.ui.sales.SalesAdapter
@@ -34,7 +35,7 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
 
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
-                viewModel.basketsOfUser(userId = client.id)
+                viewModel.getClientSales(clientId = client.id)
             }
         }
 
@@ -47,7 +48,7 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
             )
         }
 
-        viewModel.basketsOfUser(userId = client.id)
+        viewModel.getClientSales(clientId = client.id)
         setUpObservers()
     }
 
@@ -59,12 +60,16 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
     }
 
     private fun setUpObservers() {
-        viewModel.baskets.observe(viewLifecycleOwner) {
+        viewModel.clientSales.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    adapter.models = it.data!!.data.baskets
+                    if (it.data!!.successful) {
+                        adapter.models = it.data.payload
+                    } else {
+                        showError(it.data.message)
+                    }
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -72,10 +77,5 @@ class ClientSalesFragment(private val client: Client) : Fragment(R.layout.fragme
                 }
             }
         }
-    }
-
-    override fun onDetach() {
-        adapter.models = listOf()
-        super.onDetach()
     }
 }

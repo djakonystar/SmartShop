@@ -1,267 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.sales.detail.SalesDetailFragment">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSearch"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="150dp">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:hint="@string/search"
+        app:endIconMode="clear_text"
+        app:layout_constraintTop_toBottomOf="@id/actionBar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/action_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                app:layout_constraintTop_toTopOf="parent">
+    </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/btnHome"
-                    android:layout_width="@dimen/img_standard_height_mobile"
-                    android:layout_height="@dimen/img_standard_height_mobile"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/margin_middle"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/home_button"
-                    android:padding="@dimen/padding_small"
-                    android:src="@drawable/ic_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/black" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilSearch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_standard"
-                    app:endIconMode="clear_text"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btnHome"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:startIconDrawable="@drawable/ic_search_24"
-                    app:startIconTint="@color/app_main_color">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSearch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLength="30"
-                        android:paddingVertical="@dimen/padding_standard_middle"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/item_text_size_standard_mobile"
-                        tools:ignore="SpUsage" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginVertical="@dimen/margin_middle"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/action_bar"
-                tools:listitem="@layout/item_sales_detail" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="150dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <com.nambimobile.widgets.efab.ExpandableFabLayout
-        android:id="@+id/expandable_fab_layout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/margin_middle"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/bottomContainer"
+        app:layout_constraintTop_toBottomOf="@id/tilSearch"
+        tools:listitem="@layout/item_sales_detail" />
 
-        <com.nambimobile.widgets.efab.Overlay
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:overlay_alpha="0.4"
-            app:overlay_closingAnimationDurationMs="500"
-            app:overlay_color="@color/black"
-            app:overlay_openingAnimationDurationMs="500" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_bg"
+        android:elevation="@dimen/elevation_standard"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.nambimobile.widgets.efab.ExpandableFab
-            android:id="@+id/expandable_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:efab_closingAnticipateTension="0"
-            app:efab_icon="@drawable/ic_more"
-            app:efab_iconAnimationRotationDeg="90"
-            app:efab_closingAnimationDurationMs="300"
-            app:efab_orientation="portrait"
-            app:layout_anchor="@id/bottom_app_bar" />
-
-        <com.nambimobile.widgets.efab.FabOption
-            android:id="@+id/fab_print_receipt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/ic_print"
-            app:fab_orientation="portrait"
-            app:label_text="@string/print_receipt" />
-
-        <com.nambimobile.widgets.efab.FabOption
-            android:id="@+id/fab_refund_debt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/ic_total_money"
-            app:fab_orientation="portrait"
-            app:label_text="@string/amortization" />
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_app_bar"
+        <TextView
+            android:id="@+id/tvTotalPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:fabAlignmentMode="end"
-            app:fabAnimationMode="scale"
-            app:fabCradleVerticalOffset="16dp"
-            app:hideOnScroll="false"
-            tools:ignore="BottomAppBar">
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/margin_standard">
+        <TextView
+            android:id="@+id/tvDebtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            android:textColor="@color/error_color"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
 
-                <ImageView
-                    android:id="@+id/iv_total_price"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:contentDescription="@string/cash_icon"
-                    android:src="@drawable/ic_total_money"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_total_price"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_total_price"
-                    app:tint="@color/app_main_color" />
+        <ImageView
+            android:id="@+id/ivCash"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_cash"
+            app:layout_constraintBottom_toBottomOf="@id/tvCashPrice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvCashPrice"
+            app:tint="@color/app_main_color" />
 
-                <TextView
-                    android:id="@+id/tv_total_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_standard"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/app_main_color"
-                    app:layout_constraintStart_toEndOf="@id/iv_total_price"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvCashPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lineHalf"
+            app:layout_constraintStart_toEndOf="@id/ivCash"
+            app:layout_constraintTop_toBottomOf="@id/tvDebtPrice"
+            tools:ignore="SpUsage" />
 
-                <ImageView
-                    android:id="@+id/iv_cash_price"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:contentDescription="@string/cash_icon"
-                    android:src="@drawable/ic_cash"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_cash_price"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_cash_price"
-                    app:tint="@color/app_main_color" />
+        <ImageView
+            android:id="@+id/ivCard"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_card"
+            app:layout_constraintBottom_toBottomOf="@id/tvCardPrice"
+            app:layout_constraintStart_toEndOf="@id/lineHalf"
+            app:layout_constraintTop_toTopOf="@id/tvCardPrice"
+            app:tint="@color/app_main_color" />
 
-                <TextView
-                    android:id="@+id/tv_cash_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/app_main_color"
-                    app:layout_constraintStart_toEndOf="@id/iv_cash_price"
-                    app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
+        <TextView
+            android:id="@+id/tvCardPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_middle"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="@color/app_main_color"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivCard"
+            app:layout_constraintTop_toBottomOf="@id/tvDebtPrice"
+            tools:ignore="SpUsage" />
 
-                <ImageView
-                    android:id="@+id/iv_card_price"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:contentDescription="@string/cash_icon"
-                    android:src="@drawable/ic_card"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_card_price"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_card_price"
-                    app:tint="@color/app_main_color" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/lineHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-                <TextView
-                    android:id="@+id/tv_card_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/app_main_color"
-                    app:layout_constraintStart_toEndOf="@id/iv_card_price"
-                    app:layout_constraintTop_toBottomOf="@id/tv_cash_price" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/iv_debt_price"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:contentDescription="@string/cash_icon"
-                    android:src="@drawable/ic_debt"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_debt_price"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_debt_price"
-                    app:tint="@color/error_color" />
-
-                <TextView
-                    android:id="@+id/tv_debt_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/error_color"
-                    app:layout_constraintStart_toEndOf="@id/iv_debt_price"
-                    app:layout_constraintTop_toBottomOf="@id/tv_card_price" />
-
-                <TextView
-                    android:id="@+id/tv_debt_paid_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/error_color"
-                    app:layout_constraintStart_toEndOf="@id/iv_debt_price"
-                    app:layout_constraintTop_toBottomOf="@id/tv_debt_price" />
-
-                <TextView
-                    android:id="@+id/tv_debt_remained_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginBottom="@dimen/margin_middle"
-                    android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                    android:textColor="@color/error_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_debt_price"
-                    app:layout_constraintTop_toBottomOf="@id/tv_debt_paid_price" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.bottomappbar.BottomAppBar>
-
-    </com.nambimobile.widgets.efab.ExpandableFabLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

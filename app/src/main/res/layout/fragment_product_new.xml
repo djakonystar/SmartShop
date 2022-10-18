@@ -7,18 +7,18 @@
     tools:context=".ui.newproduct.NewProductFragment">
 
     <include
-        android:id="@+id/action_bar"
+        android:id="@+id/actionBar"
         layout="@layout/action_bar_product_new" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/action_bar">
+        app:layout_constraintTop_toBottomOf="@id/actionBar">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_view"
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp">
 
@@ -27,19 +27,19 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_category"
+                    android:id="@+id/tilSpinner"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_standard"
                     android:hint="@string/choose_category"
                     app:endIconTint="@color/app_main_color"
-                    app:layout_constraintEnd_toStartOf="@id/iv_add_category"
+                    app:layout_constraintEnd_toStartOf="@id/ivAddCategory"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/act_category"
+                        android:id="@+id/actSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
@@ -51,7 +51,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
-                    android:id="@+id/iv_add_category"
+                    android:id="@+id/ivAddCategory"
                     android:layout_width="@dimen/action_bar_icon_size_mobile"
                     android:layout_height="@dimen/action_bar_icon_size_mobile"
                     android:layout_marginEnd="@dimen/margin_standard"
@@ -60,27 +60,25 @@
                     android:foregroundGravity="center_vertical"
                     android:padding="@dimen/padding_middle"
                     android:src="@drawable/ic_baseline_post_add_24"
-                    app:layout_constraintBottom_toBottomOf="@id/til_category"
+                    app:layout_constraintBottom_toBottomOf="@id/tilSpinner"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/til_category"
-                    app:layout_constraintTop_toTopOf="@id/til_category"
+                    app:layout_constraintStart_toEndOf="@id/tilSpinner"
+                    app:layout_constraintTop_toTopOf="@id/tilSpinner"
                     app:tint="@color/app_main_color" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_product_name"
+                    android:id="@+id/tilProductName"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_standard"
                     android:hint="@string/product_name"
                     app:endIconMode="dropdown_menu"
                     app:endIconTint="@color/app_main_color"
-                    app:layout_constraintEnd_toStartOf="@id/iv_qr_scanner"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/til_category">
+                    app:layout_constraintTop_toBottomOf="@id/tilSpinner">
 
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/et_product_name"
+                    <AutoCompleteTextView
+                        android:id="@+id/etSearchProduct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:dropDownHeight="wrap_content"
@@ -90,81 +88,39 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/iv_qr_scanner"
-                    android:layout_width="@dimen/action_bar_icon_size_mobile"
-                    android:layout_height="@dimen/action_bar_icon_size_mobile"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/add_new_category_desc"
-                    android:foregroundGravity="center_vertical"
-                    android:padding="@dimen/padding_middle"
-                    android:src="@drawable/ic_qr_code_scanner"
-                    app:layout_constraintBottom_toBottomOf="@id/til_product_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/til_product_name"
-                    app:layout_constraintTop_toTopOf="@id/til_product_name"
-                    app:tint="@color/app_main_color" />
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_product_quantity"
-                    android:layout_width="0dp"
+                    android:id="@+id/tilProductQuantity"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_standard"
                     android:hint="@string/product_quantity"
+                    app:endIconMode="clear_text"
                     app:helperText="@string/product_quantity_helper"
-                    app:layout_constraintEnd_toStartOf="@id/til_measure_unit"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/til_product_name">
+                    app:layout_constraintTop_toBottomOf="@id/tilProductName">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_product_quantity"
+                        android:id="@+id/etProductQuantity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:maxLength="15"
+                        android:digits="0123456789 "
+                        android:inputType="number"
+                        android:maxLength="9"
                         android:singleLine="true"
-                        android:textAlignment="textEnd"
                         tools:ignore="SpUsage" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_measure_unit"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:hint="@string/measure_text"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/app_main_color"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/til_product_name">
-
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/act_measure_unit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:dropDownHeight="wrap_content"
-                        android:focusable="false"
-                        android:longClickable="false"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_brand"
+                    android:id="@+id/tilBranchName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_standard"
                     android:hint="@string/brand_name"
                     app:endIconMode="clear_text"
-                    app:layout_constraintTop_toBottomOf="@id/til_product_quantity">
+                    app:layout_constraintTop_toBottomOf="@id/tilProductQuantity">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_brand"
+                        android:id="@+id/etBranchName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="text"
@@ -172,275 +128,95 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_cost_price"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCostPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/til_brand">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_cost_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/cost_price"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintEnd_toStartOf="@id/til_cost_currency"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_cost_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLength="19"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textAlignment="textEnd"
-                            tools:ignore="SpUsage" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_cost_currency"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/currency_text"
-                        app:endIconMode="dropdown_menu"
-                        app:endIconTint="@color/app_main_color"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@id/til_cost_price"
-                        app:layout_constraintTop_toTopOf="@id/til_cost_price">
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/act_cost_currency"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:dropDownHeight="wrap_content"
-                            android:focusable="false"
-                            android:longClickable="false"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_wholesale_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/container_cost_price">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_wholesale_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/wholesale_price"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintEnd_toStartOf="@id/til_wholesale_currency"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_wholesale_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLength="19"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textAlignment="textEnd"
-                            tools:ignore="SpUsage" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_wholesale_currency"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/currency_text"
-                        app:endIconMode="dropdown_menu"
-                        app:endIconTint="@color/app_main_color"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/act_wholesale_currency"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:dropDownHeight="wrap_content"
-                            android:focusable="false"
-                            android:longClickable="false"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_min_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/container_wholesale_price">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_min_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/min_price"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintEnd_toStartOf="@id/til_min_currency"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_min_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLength="19"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textAlignment="textEnd"
-                            tools:ignore="SpUsage" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_min_currency"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/currency_text"
-                        app:endIconMode="dropdown_menu"
-                        app:endIconTint="@color/app_main_color"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/act_min_currency"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:dropDownHeight="wrap_content"
-                            android:focusable="false"
-                            android:longClickable="false"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container_max_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/container_min_price">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_max_price"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginStart="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/max_price"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintEnd_toStartOf="@id/til_max_currency"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_max_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLength="19"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textAlignment="textEnd"
-                            tools:ignore="SpUsage" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_max_currency"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_standard"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:enabled="false"
-                        android:hint="@string/currency_text"
-                        app:endIconMode="dropdown_menu"
-                        app:endIconTint="@color/app_main_color"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/act_max_currency"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:dropDownHeight="wrap_content"
-                            android:focusable="false"
-                            android:longClickable="false"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cv_image"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
                     android:layout_margin="@dimen/margin_standard"
-                    app:cardElevation="@dimen/elevation_standard"
-                    app:cardCornerRadius="@dimen/til_corner_radius"
-                    app:strokeColor="@color/app_main_color"
-                    app:strokeWidth="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/container_max_price">
+                    android:hint="@string/cost_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilBranchName">
 
-                    <ImageView
-                        android:id="@+id/iv_product"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCostPrice"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="2dp"
-                        android:src="@drawable/ic_upload"
-                        android:scaleType="centerCrop" />
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilWholesalePrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/wholesale_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilCostPrice">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etWholesalePrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789., "
+                        android:inputType="number"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMinPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/min_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilWholesalePrice">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMinPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789 "
+                        android:inputType="number"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMaxPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_standard"
+                    android:hint="@string/max_price"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@id/tilMinPrice">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMaxPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789 "
+                        android:inputType="number"
+                        android:maxLength="19"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:ignore="SpUsage" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/btn_add_product"
+                    android:id="@+id/btnAddProduct"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
                     android:layout_marginHorizontal="@dimen/margin_standard"
@@ -452,17 +228,17 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cv_image"
+                    app:layout_constraintTop_toBottomOf="@id/tilMaxPrice"
                     tools:ignore="SpUsage" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -472,3 +248,4 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

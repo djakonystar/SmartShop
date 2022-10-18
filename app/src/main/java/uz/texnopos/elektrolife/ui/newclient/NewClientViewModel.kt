@@ -7,36 +7,39 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
+import uz.texnopos.elektrolife.data.GenericResponse
 import uz.texnopos.elektrolife.data.model.newclient.ClientId
-import uz.texnopos.elektrolife.data.model.newclient.Client
+import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
-class NewClientViewModel(private val api: ApiInterface, private val settings: Settings) :
-    ViewModel() {
-    private var compositeDisposable = CompositeDisposable()
+class NewClientViewModel(private val api:ApiInterface, private val settings: Settings): ViewModel() {
+    private var compositeDisposable =  CompositeDisposable()
 
-    private var mutableRegister: MutableLiveData<Resource<ClientId>> = MutableLiveData()
-    val registerNewClient: LiveData<Resource<ClientId>> = mutableRegister
+    private var mutableRegister: MutableLiveData<Resource<GenericResponse<ClientId>>> = MutableLiveData()
+    val registerNewClient: LiveData<Resource<GenericResponse<ClientId>>> get() = mutableRegister
 
-    fun registerNewClient(client: Client) {
+    fun registerNewClient(registerClient: RegisterClient){
         mutableRegister.value = Resource.loading()
-        compositeDisposable.add(
-            api.addNewClient("Bearer ${settings.token}", client)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { response ->
-                        if (response.successful) {
-                            mutableRegister.value = Resource.success(response.payload)
-                        } else {
-                            mutableRegister.value = Resource.error(response.message)
-                        }
-                    },
-                    { error ->
-                        mutableRegister.value = Resource.error(error.localizedMessage)
+        compositeDisposable.add(api.registerNewClient("Bearer ${settings.token}",registerClient)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                if (it.successful)
+                    {
+                    mutableRegister.value = Resource.success(it)
                     }
-                )
+                else
+                    {
+                        mutableRegister.value = Resource.error(it.message)
+                    }
+                }
+                ,
+                {
+                    mutableRegister.value = Resource.error(it.localizedMessage)
+                }
+            )
         )
     }
 

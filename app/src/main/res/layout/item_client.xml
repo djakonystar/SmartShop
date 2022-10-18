@@ -106,7 +106,6 @@
             android:contentDescription="@string/add_payment"
             android:padding="@dimen/padding_small"
             android:src="@drawable/ic_payment"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/ivPhone"
             app:layout_constraintEnd_toStartOf="@id/ivPhone"
             app:layout_constraintTop_toTopOf="@id/ivPhone"

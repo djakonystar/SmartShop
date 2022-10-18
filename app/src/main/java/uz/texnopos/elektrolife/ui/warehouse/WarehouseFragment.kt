@@ -10,43 +10,33 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_ADMIN
-import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
-import uz.texnopos.elektrolife.core.extensions.animateDebtPrice
-import uz.texnopos.elektrolife.core.extensions.newSaleProduct
 import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.data.model.category.CategoryResponse
+import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
+import uz.texnopos.elektrolife.data.model.warehouse.Product
 import uz.texnopos.elektrolife.databinding.ActionBarSortBinding
 import uz.texnopos.elektrolife.databinding.FragmentWarehouseBinding
-import uz.texnopos.elektrolife.settings.Settings
-import uz.texnopos.elektrolife.ui.newsale.CategoryViewModel
-import uz.texnopos.elektrolife.ui.newsale.NewSaleViewModel
+import uz.texnopos.elektrolife.ui.newsale.CategoriesViewModel
+import java.util.*
 
 class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
     private lateinit var binding: FragmentWarehouseBinding
     private lateinit var abBinding: ActionBarSortBinding
     private lateinit var navController: NavController
-    private val categoryViewModel: CategoryViewModel by viewModel()
-    private val productViewModel: NewSaleViewModel by viewModel()
+    private val viewModel: WarehouseViewModel by viewModel()
+    private val categoryViewModel: CategoriesViewModel by viewModel()
     private val adapter: WarehouseAdapter by inject()
-    private val settings: Settings by inject()
     private var sortType = "byFewRemain"
-    private var productsList = mutableListOf<newSaleProduct>()
-    private var allProductsList = mutableListOf<newSaleProduct>()
+    private var productsList = mutableListOf<Product>()
+    private var allProductsList = mutableListOf<Product>()
     private var searchValue = ""
     private var selectedCategoryId = -1
     private var selectedChipId: Int = -1
-    private var isLoading = false
-    private var page = 1
-    private var lastPage = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,57 +50,30 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
             btnHome.onClick {
                 navController.popBackStack()
             }
-            btnSort.isVisible = false
             btnSort.onClick {
                 optionsMenu(btnSort)
             }
         }
 
         binding.apply {
-            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
-            recyclerView.layoutManager = layoutManager
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
-                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
-                    ) {
-                        page++
-                        productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
-                    }
-                }
-            })
-
-            adapter.setOnItemClickListener {
-                if (settings.role == ROLE_CEO || settings.role == ROLE_ADMIN) {
-                    navController.navigate(
-                        WarehouseFragmentDirections.actionWarehouseFragmentToEditProductFragment(it)
-                    )
-                }
-            }
 
             swipeRefresh.setOnRefreshListener {
-                swipeRefresh.isRefreshing = false
                 setLoading(false)
+                swipeRefresh.isRefreshing = false
                 chipGroup.removeAllViews()
-                productsList = mutableListOf()
                 categoryViewModel.getCategories()
-                page = 1
-                adapter.models = listOf()
-                productViewModel.getProducts(page, searchValue, -1)
+                viewModel.getProductsByName(searchValue)
             }
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                searchValue.ifEmpty { page = 1 }
-                adapter.models = listOf()
-                productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
+                viewModel.getProductsByName(searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
+                    viewModel.getProductsByName(searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -118,35 +81,44 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
         }
 
         categoryViewModel.getCategories()
-        productViewModel.getProducts(page, searchValue, -1)
+        viewModel.getProductsByName(searchValue)
         setUpObservers()
     }
 
-    override fun onDetach() {
-        adapter.models = listOf()
-        super.onDetach()
-    }
-
     private fun setUpObservers() {
-        productViewModel.products.observe(viewLifecycleOwner) {
+        viewModel.warehouseProducts.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    lastPage = it.data!!.lastPage
-                    allProductsList = it.data.data as MutableList<newSaleProduct>
-                    if (adapter.models.isEmpty()) {
-                        adapter.models = allProductsList
-                        productsList = allProductsList
-                    } else {
-                        allProductsList.forEach { product ->
-                            if (!productsList.contains(product)) {
-                                productsList.add(product)
-                            }
+                    if (it.data!!.successful) {
+                        allProductsList = it.data.payload as MutableList<Product>
+                        productsList = if (selectedCategoryId == -1) {
+                            it.data.payload as MutableList<Product>
+                        } else {
+                            it.data.payload.filter { product ->
+                                product.category?.id == selectedCategoryId
+                            } as MutableList<Product>
                         }
-                        adapter.models = productsList
+//                        adapter.models = it.data.payload
+                        adapter.models = when (sortType) {
+                            "byFewRemain" -> productsList
+                                .sortedBy { t -> t.remained / (t.category?.minCount?.toDouble() ?: 0.0) }
+                            "byProduct" -> productsList
+                                .sortedBy { t -> t.name.lowercase() }
+                            "byCategory" -> productsList
+                                .sortedBy { t -> t.name.lowercase() }
+                                .sortedBy { t -> t.category?.name?.lowercase() }
+                            "byRemainAscend" -> productsList
+                                .sortedBy { t -> t.remained }
+                            "byRemainDescend" -> productsList
+                                .sortedByDescending { t -> t.remained }
+                            else -> productsList
+                        }
+                        showLottieAnimation(productsList.isEmpty())
+                    } else {
+                        showError(it.data.message)
                     }
-                    showLottieAnimation(productsList.isEmpty())
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -201,13 +173,13 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                     sortType = "byFewRemain"
                 }
             }
-//            viewModel.warehouseProducts(searchValue)
+            viewModel.getProductsByName(searchValue)
             return@setOnMenuItemClickListener true
         }
         optionsMenu.show()
     }
 
-    private fun addNewChip(category: CategoryResponse) {
+    private fun addNewChip(category: CatalogCategory) {
         try {
             binding.apply {
                 val inflater = LayoutInflater.from(requireContext())
@@ -226,32 +198,25 @@ class WarehouseFragment : Fragment(R.layout.fragment_warehouse) {
                         -1
                     }
 
-                    page = 1
-                    adapter.models = listOf()
-                    productViewModel.getProducts(page, selectedCategoryId, searchValue, -1)
-
-//                    if (selectedCategoryId != -1) {
-//                        viewModel.warehouseProducts(searchValue)
-//                    } else {
-//                        adapter.models = allProductsList
-////                        adapter.models = when (sortType) {
-////                            "byFewRemain" -> allProductsList
-////                                .sortedBy { t ->
-////                                    t.remained / (t.category?.minCount?.toDouble() ?: 0.0)
-////                                }
-////                            "byProduct" -> allProductsList
-////                                .sortedBy { t -> t.name.lowercase() }
-////                            "byCategory" -> allProductsList
-////                                .sortedBy { t -> t.name.lowercase() }
-////                                .sortedBy { t -> t.category?.name?.lowercase() }
-////                            "byRemainAscend" -> allProductsList
-////                                .sortedBy { t -> t.remained }
-////                            "byRemainDescend" -> allProductsList
-////                                .sortedByDescending { t -> t.remained }
-////                            else -> allProductsList
-////                        }
-//                        showLottieAnimation(allProductsList.isEmpty())
-//                    }
+                    if (selectedCategoryId != -1) {
+                        viewModel.getProductsByName(searchValue)
+                    } else {
+                        adapter.models = when (sortType) {
+                            "byFewRemain" -> allProductsList
+                                .sortedBy { t -> t.remained / (t.category?.minCount?.toDouble() ?: 0.0) }
+                            "byProduct" -> allProductsList
+                                .sortedBy { t -> t.name.lowercase() }
+                            "byCategory" -> allProductsList
+                                .sortedBy { t -> t.name.lowercase() }
+                                .sortedBy { t -> t.category?.name?.lowercase() }
+                            "byRemainAscend" -> allProductsList
+                                .sortedBy { t -> t.remained }
+                            "byRemainDescend" -> allProductsList
+                                .sortedByDescending { t -> t.remained }
+                            else -> allProductsList
+                        }
+                        showLottieAnimation(allProductsList.isEmpty())
+                    }
                 }
             }
         } catch (e: Exception) {

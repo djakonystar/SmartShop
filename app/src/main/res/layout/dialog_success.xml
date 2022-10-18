@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/margin_standard"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/success_new"
+        app:lottie_rawRes="@raw/success"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

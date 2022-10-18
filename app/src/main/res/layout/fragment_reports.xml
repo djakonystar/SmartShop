@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.finance.reports.ReportsFragment">
 
     <include
@@ -86,65 +86,30 @@
                         tools:ignore="SpUsage" />
 
                     <ImageView
-                        android:id="@+id/ivCashboxCash"
+                        android:id="@+id/ivCashboxMoney"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginStart="@dimen/margin_standard"
                         android:src="@drawable/ic_cash"
-                        app:layout_constraintBottom_toBottomOf="@id/tvCashboxCash"
+                        app:layout_constraintBottom_toBottomOf="@id/tvCashboxMoney"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/tvCashboxCash"
+                        app:layout_constraintTop_toTopOf="@id/tvCashboxMoney"
                         app:tint="@color/app_main_color" />
 
                     <TextView
-                        android:id="@+id/tvCashboxCash"
+                        android:id="@+id/tvCashboxMoney"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_middle"
                         android:layout_marginEnd="@dimen/margin_standard"
                         android:layout_marginBottom="@dimen/margin_standard"
-                        android:clickable="true"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                        android:textColor="@color/app_main_color"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/btnCashboxDate"
-                        app:layout_constraintStart_toEndOf="@id/ivCashboxCash"
-                        app:layout_constraintTop_toBottomOf="@id/tvRangeCashbox" />
-
-                    <ImageView
-                        android:id="@+id/ivCashboxCard"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_marginStart="@dimen/margin_standard"
-                        android:src="@drawable/ic_card"
-                        app:layout_constraintBottom_toBottomOf="@id/tvCashboxCard"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/tvCashboxCard"
-                        app:tint="@color/app_main_color" />
-
-                    <TextView
-                        android:id="@+id/tvCashboxCard"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_middle"
-                        android:layout_marginEnd="@dimen/margin_standard"
-                        android:layout_marginBottom="@dimen/margin_standard"
-                        android:clickable="true"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="marquee_forever"
                         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                         android:textColor="@color/app_main_color"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/btnCashboxDate"
-                        app:layout_constraintStart_toEndOf="@id/ivCashboxCard"
-                        app:layout_constraintTop_toBottomOf="@id/tvCashboxCash" />
+                        app:layout_constraintStart_toEndOf="@id/ivCashboxMoney"
+                        app:layout_constraintTop_toBottomOf="@id/tvRangeCashbox" />
 
                     <ImageView
                         android:id="@+id/btnCashboxDate"
@@ -244,11 +209,6 @@
                         android:layout_marginStart="@dimen/margin_middle"
                         android:layout_marginEnd="@dimen/margin_standard"
                         android:layout_marginBottom="@dimen/margin_standard"
-                        android:clickable="true"
-                        android:ellipsize="marquee"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:marqueeRepeatLimit="marquee_forever"
                         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
                         android:textColor="@color/app_main_color"
                         android:textStyle="bold"

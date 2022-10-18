@@ -7,9 +7,10 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.model.PagingResponse
+import uz.texnopos.elektrolife.data.GenericResponse
+import uz.texnopos.elektrolife.data.model.finance.Balance
+import uz.texnopos.elektrolife.data.model.finance.Finance
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
-import uz.texnopos.elektrolife.data.model.finance.FinanceResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
@@ -18,26 +19,25 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
 
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableFinancePost: MutableLiveData<Resource<List<String>>> = MutableLiveData()
-    val financePost: LiveData<Resource<List<String>>> = mutableFinancePost
-
-    private var mutableFinanceDetails: MutableLiveData<Resource<PagingResponse<FinanceResponse>>> =
+    private var mutableFinancePost: MutableLiveData<Resource<GenericResponse<List<String>>>> =
         MutableLiveData()
-    val financeDetails: LiveData<Resource<PagingResponse<FinanceResponse>>> = mutableFinanceDetails
+    val financePost: LiveData<Resource<GenericResponse<List<String>>>> = mutableFinancePost
+
+    private var mutableFinanceDetails: MutableLiveData<Resource<GenericResponse<List<Finance>>>> =
+        MutableLiveData()
+    val financeDetails: LiveData<Resource<GenericResponse<List<Finance>>>> = mutableFinanceDetails
 
     fun addFinanceDetail(finance: FinancePost) {
         mutableFinancePost.value = Resource.loading()
         compositeDisposable.add(
-            api.addFinanceDetail("Bearer ${settings.token}", finance)
+            api.addFinanceDetail(
+                "Bearer ${settings.token}", finance
+            )
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        if (response.successful) {
-                            mutableFinancePost.value = Resource.success(response.payload)
-                        } else {
-                            mutableFinancePost.value = Resource.error(response.message)
-                        }
+                        mutableFinancePost.value = Resource.success(response)
                     },
                     { error ->
                         mutableFinancePost.value = Resource.error(error.localizedMessage)
@@ -46,25 +46,17 @@ class FinanceViewModel(private val api: ApiInterface, private val settings: Sett
         )
     }
 
-    fun getFinanceDetails(page: Int, from: String, to: String, type: String) {
+    fun getFinanceDetails(from: String, to: String, type: String) {
         mutableFinanceDetails.value = Resource.loading()
         compositeDisposable.add(
             api.getFinanceDetails(
-                token = "Bearer ${settings.token}",
-                page = page,
-                from = from,
-                to = to,
-                type = type
+                "Bearer ${settings.token}", from, to, type
             )
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        if (response.successful) {
-                            mutableFinanceDetails.value = Resource.success(response.payload)
-                        } else {
-                            mutableFinanceDetails.value = Resource.error(response.message)
-                        }
+                        mutableFinanceDetails.value = Resource.success(response)
                     },
                     { error ->
                         mutableFinanceDetails.value = Resource.error(error.localizedMessage)

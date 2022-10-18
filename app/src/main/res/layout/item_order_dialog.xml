@@ -54,7 +54,6 @@
             android:padding="@dimen/padding_small"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_minus"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvQuantity"
             app:layout_constraintEnd_toStartOf="@id/tvQuantity"
             app:layout_constraintTop_toTopOf="@id/tvQuantity" />
@@ -78,23 +77,9 @@
             android:padding="@dimen/padding_small"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_plus"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/tvQuantity"
-            app:layout_constraintEnd_toStartOf="@id/btn_edit"
-            app:layout_constraintTop_toTopOf="@id/tvQuantity" />
-
-        <ImageView
-            android:id="@+id/btn_edit"
-            android:layout_width="@dimen/img_standard_height_mobile"
-            android:layout_height="@dimen/img_standard_height_mobile"
-            android:layout_marginEnd="@dimen/margin_middle"
-            android:padding="@dimen/padding_small"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_baseline_edit_24"
             app:layout_constraintBottom_toBottomOf="@id/tvQuantity"
             app:layout_constraintEnd_toStartOf="@id/btnDelete"
-            app:layout_constraintTop_toTopOf="@id/tvQuantity"
-            app:tint="@color/app_main_color" />
+            app:layout_constraintTop_toTopOf="@id/tvQuantity" />
 
         <ImageView
             android:id="@+id/btnDelete"

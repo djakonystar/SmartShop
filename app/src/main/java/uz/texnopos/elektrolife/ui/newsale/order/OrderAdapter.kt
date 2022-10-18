@@ -1,16 +1,17 @@
 package uz.texnopos.elektrolife.ui.newsale.order
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.core.extensions.inflate
+import uz.texnopos.elektrolife.core.extensions.onClick
+import uz.texnopos.elektrolife.core.extensions.toSumFormat
 import uz.texnopos.elektrolife.data.model.newsale.Product
 import uz.texnopos.elektrolife.databinding.ItemOrderDialogBinding
-import uz.texnopos.elektrolife.settings.Settings
 
-class OrderAdapter(private val settings: Settings) :
-    RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
+class OrderAdapter : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     var models: MutableList<Product> = mutableListOf()
         set(value) {
@@ -23,18 +24,11 @@ class OrderAdapter(private val settings: Settings) :
         @SuppressLint("SetTextI18n")
         fun populateModel(model: Product, position: Int) {
             binding.apply {
-                tvName.text = model.name
-                val unitId = model.warehouse?.unit?.id ?: 1
-                tvQuantity.text = itemView.context?.getString(
-                    R.string.price_text,
-                    if (unitId == 1) model.count.toLong().toSumFormat else model.count.toSumFormat,
-                    Constants.getUnitName(root.context, unitId)
-                )
-                tvCost.text = itemView.context?.getString(
-                    R.string.price_text,
-                    model.salePrice.toSumFormat,
-                    settings.currency
-                )
+                tvName.text = model.productName
+                tvQuantity.text =
+                    itemView.context?.getString(R.string.count_text, model.count.toSumFormat)
+                tvCost.text =
+                    itemView.context?.getString(R.string.sum_text, model.salePrice.toSumFormat)
 
                 plusQuantity.onClick {
                     onPlusCount.invoke(model)
@@ -42,10 +36,6 @@ class OrderAdapter(private val settings: Settings) :
 
                 minusQuantity.onClick {
                     onMinusCount.invoke(model)
-                }
-
-                btnEdit.onClick {
-                    onEditClick(model, position)
                 }
 
                 btnDelete.onClick {
@@ -74,11 +64,6 @@ class OrderAdapter(private val settings: Settings) :
         this.onDeleteItem = onDeleteItem
     }
 
-    private var onEditClick: (product: Product, position: Int) -> Unit = { _, _ -> }
-    fun setOnEditClickListener(onEditClick: (product: Product, position: Int) -> Unit) {
-        this.onEditClick = onEditClick
-    }
-
     private var onPlusCount: (product: Product) -> Unit = {}
     fun onPlusCounterClickListener(onPlusCount: (product: Product) -> Unit) {
         this.onPlusCount = onPlusCount
@@ -92,6 +77,7 @@ class OrderAdapter(private val settings: Settings) :
     fun plusCount(model: Product) {
         val position = models.indexOf(model)
 //        models[position].count++
+        Log.d("basketcount", "In adapter: ${models[position].count}")
         notifyItemChanged(position)
     }
 
@@ -101,9 +87,8 @@ class OrderAdapter(private val settings: Settings) :
         notifyItemChanged(position)
     }
 
-    fun removeItem(model: Product, position: Int, action: (models: MutableList<Product>) -> Unit) {
-        val products = models
-        products.removeAt(position)
-        action(products)
+    fun removeItem(model: Product, position: Int) {
+        models.remove(model)
+        notifyItemRemoved(position)
     }
 }
