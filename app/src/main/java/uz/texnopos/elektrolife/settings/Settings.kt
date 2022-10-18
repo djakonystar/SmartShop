@@ -6,20 +6,25 @@ import android.content.SharedPreferences
 class Settings(context: Context) {
 
     companion object {
-        const val SIGNED_IN = "signedIn"
-        const val TOKEN = "accessToken"
-        const val USERNAME = "username"
-        const val USER_ROLE = "notROLE"
-        const val PRODUCT = "product"
-        const val PIN = "pin"
-        const val USD_UZS = "usdToUzs"
-        const val FIRST_RUN = "firstRun"
-        const val LANGUAGE = "language"
-        const val CURRENCY = "currency"
-        const val USER_ID = "userId"
-        const val BASE_URL = "baseUrl"
-        const val LANG_SELECTED = "languageSelected"
-        const val SHOP_SELECTED = "shopSelected"
+        private const val SIGNED_IN = "signedIn"
+        private const val TOKEN = "accessToken"
+        private const val USERNAME = "username"
+        private const val USER_ROLE = "notROLE"
+        private const val PRODUCT = "product"
+        private const val PIN = "pin"
+        private const val USD_UZS = "usdToUzs"
+        private const val FIRST_RUN = "firstRun"
+        private const val LANGUAGE = "language"
+        private const val CURRENCY = "currency"
+        private const val USER_ID = "userId"
+        private const val BASE_URL = "baseUrl"
+        private const val LANG_SELECTED = "languageSelected"
+        private const val SHOP_SELECTED = "shopSelected"
+        private const val COMPANY_CONFIGURED = "companyConfigured"
+        private const val COMPANY_NAME = "companyName"
+        private const val COMPANY_ADDRESS = "address"
+        private const val COMPANY_PHONE = "companyPhone"
+        private const val COMPANY_PREFIX = "companyPrefix"
 
         /**
          * Finance type on creating new **Expense**
@@ -92,4 +97,28 @@ class Settings(context: Context) {
     var shopSelected: Boolean
         set(value) = preferences.edit().putBoolean(SHOP_SELECTED, value).apply()
         get() = preferences.getBoolean(SHOP_SELECTED, false)
+
+    var companyConfigured: Boolean
+        set(value) = preferences.edit().putBoolean(COMPANY_CONFIGURED, value).apply()
+        get() = preferences.getBoolean(COMPANY_CONFIGURED, false)
+
+    var companyName: String
+        set(value) = preferences.edit().putString(COMPANY_NAME, value).apply()
+        get() = preferences.getString(COMPANY_NAME, "") ?: ""
+
+    var companyAddress: String
+        set(value) = preferences.edit().putString(COMPANY_ADDRESS, value).apply()
+        get() = preferences.getString(COMPANY_ADDRESS, "") ?: ""
+
+    var companyPhone: String
+        set(value) = preferences.edit().putString(COMPANY_PHONE, value).apply()
+        get() = preferences.getString(COMPANY_PHONE, "") ?: ""
+
+    var prefix: String
+        set(value) = preferences.edit().putString(COMPANY_PREFIX, value).apply()
+        get() = preferences.getString(COMPANY_PREFIX, "") ?: ""
+
+    fun reset() {
+        preferences.edit().clear().apply()
+    }
 }
