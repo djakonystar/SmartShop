@@ -8,11 +8,5 @@ data class TransactionItem(
     val count: Double,
     @SerializedName("unit_id")
     val unitId: Int,
-    val price: Price,
-    @SerializedName("max_price")
-    val maxPrice: MaxPrice,
-    @SerializedName("min_price")
-    val minPrice: MinPrice,
-    @SerializedName("whole_price")
-    val wholePrice: WholePrice
+    val price: Price
 )
