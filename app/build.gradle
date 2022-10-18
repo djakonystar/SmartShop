@@ -3,23 +3,19 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
 }
 
 android {
     compileSdk 31
 
     defaultConfig {
-//        applicationId "uz.texnopos.smartshoptest" // Test
-//        applicationId "uz.texnopos.smartshopteststore" // Test PlayStore
-//        applicationId "uz.texnopos.smartshopel" // ElektroLife
-//        applicationId "uz.texnopos.smartshopluxgg" // LuxGadget
-//        applicationId "uz.texnopos.smartshopcs" // Computer Service
-//        applicationId "uz.texnopos.smartshopks" // Qońırat Shop
-        applicationId "uz.texnopos.smartshoptexas" // Taxiatas
+        applicationId "uz.texnopos.smartshop"
+
         minSdk 23
         targetSdk 31
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -93,6 +89,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
 
+    // Glide to Vector You
+    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
+
     // RxJava
     implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
     implementation "io.reactivex.rxjava3:rxandroid:$rxjava_version"
@@ -106,4 +105,25 @@ dependencies {
 
     //elegant btn lib
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+
+    // PdfGenerator
+    implementation 'com.github.Gkemon:Android-XML-to-PDF-Generator:2.6.1'
+
+    // QR Code Scanner
+    implementation 'com.github.yuriy-budiyev:code-scanner:2.1.2'
+
+    // Expandable FAB
+    implementation 'com.nambimobile.widgets:expandable-fab:1.2.1'
+
+    // SumInputMask
+    implementation 'com.github.djakonystar:SumInputMask:0.1.1'
+
+    // StfalconImageViewer
+    implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
+
+    // ProPicker
+    implementation 'com.github.shaon2016:ProPicker:1.0.5'
+
+    // MagicTooltip
+    implementation 'com.github.Devit951:MagicTip:1.0.0'
 }

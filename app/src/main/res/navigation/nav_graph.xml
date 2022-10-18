@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/startLangFragment">
 
     <fragment
         android:id="@+id/signInFragment"
@@ -15,6 +15,11 @@
             app:destination="@id/mainFragment"
             app:popUpTo="@id/signInFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signInFragment_to_startLangFragment"
+            app:destination="@id/startLangFragment"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -24,16 +29,6 @@
         <action
             android:id="@+id/action_mainFragment_to_newSaleFragment"
             app:destination="@id/newSaleFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_newPayment"
-            app:destination="@id/newPayment" >
-            <argument
-                android:name="clientId"
-                android:defaultValue="0" />
-            <argument
-                android:name="client"
-                android:defaultValue="null" />
-        </action>
         <action
             android:id="@+id/action_mainFragment_to_newProductFragment"
             app:destination="@id/newProductFragment" />
@@ -52,6 +47,18 @@
         <action
             android:id="@+id/action_mainFragment_to_financeFragment"
             app:destination="@id/financeFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_salaryDetailFragment"
+            app:destination="@id/salaryDetailFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_qrScannerFragment"
+            app:destination="@id/qrScannerFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_returnOrderFragment"
+            app:destination="@id/returnOrderFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newSaleFragment"
@@ -61,15 +68,9 @@
         <action
             android:id="@+id/action_newSaleFragment_to_orderFragment"
             app:destination="@id/orderFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/newPayment"
-        android:name="uz.texnopos.elektrolife.ui.newpayment.NewPaymentFragment"
-        android:label="NewPayment"
-        tools:layout="@layout/fragment_payment_new">
-        <argument
-            android:name="client"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_newSaleFragment_to_qrScannerFragment"
+            app:destination="@id/qrScannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/newProductFragment"
@@ -79,15 +80,15 @@
         <action
             android:id="@+id/action_newProductFragment_to_newCategoryFragment"
             app:destination="@id/newCategoryFragment" />
+        <action
+            android:id="@+id/action_newProductFragment_to_qrScannerFragment"
+            app:destination="@id/qrScannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/clientsFragment"
         android:name="uz.texnopos.elektrolife.ui.client.ClientFragment"
         android:label="fragment_clients"
         tools:layout="@layout/fragment_client" >
-        <action
-            android:id="@+id/action_clientsFragment_to_newPayment"
-            app:destination="@id/newPayment" />
         <action
             android:id="@+id/action_clientsFragment_to_clientDetailFragment"
             app:destination="@id/clientDetailFragment" />
@@ -107,14 +108,18 @@
         android:name="uz.texnopos.elektrolife.ui.sales.detail.SalesDetailFragment"
         android:label="DetailSalesFragment" >
         <argument
-            android:name="detail"
+            android:name="basket"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/warehouseFragment"
         android:name="uz.texnopos.elektrolife.ui.warehouse.WarehouseFragment"
         android:label="fragment_warehouse"
-        tools:layout="@layout/fragment_warehouse" />
+        tools:layout="@layout/fragment_warehouse" >
+        <action
+            android:id="@+id/action_warehouseFragment_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newCategoryFragment"
         android:name="uz.texnopos.elektrolife.ui.newcategory.NewCategoryFragment"
@@ -128,10 +133,7 @@
         android:id="@+id/orderFragment"
         tools:layout="@layout/fragment_order"
         android:name="uz.texnopos.elektrolife.ui.newsale.order.OrderFragment"
-        android:label="OrderFragment" >
-        <argument android:name="products"
-            app:argType="string" />
-    </fragment>
+        android:label="OrderFragment" />
     <fragment
         android:id="@+id/financeFragment"
         android:name="uz.texnopos.elektrolife.ui.finance.FinanceFragment"
@@ -149,6 +151,12 @@
         <action
             android:id="@+id/action_financeFragment_to_reportsFragment"
             app:destination="@id/reportsFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_salaryFragment"
+            app:destination="@id/salaryFragment" />
+        <action
+            android:id="@+id/action_financeFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
@@ -179,17 +187,6 @@
         android:label="fragment_income_add"
         tools:layout="@layout/fragment_income_add" />
     <fragment
-        android:id="@+id/startFragment"
-        android:name="uz.texnopos.elektrolife.ui.start.StartFragment"
-        android:label="fragment_start"
-        tools:layout="@layout/fragment_start" >
-        <action
-            android:id="@+id/action_startFragment_to_signInFragment"
-            app:destination="@id/signInFragment"
-            app:popUpTo="@id/startFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
         android:id="@+id/clientDetailFragment"
         android:name="uz.texnopos.elektrolife.ui.client.detail.ClientDetailFragment"
         android:label="fragment_client_detail"
@@ -206,4 +203,103 @@
         android:name="uz.texnopos.elektrolife.ui.finance.reports.ReportsFragment"
         android:label="fragment_reports"
         tools:layout="@layout/fragment_reports" />
+    <fragment
+        android:id="@+id/qrScannerFragment"
+        android:name="uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment"
+        android:label="fragment_qr_scanner"
+        tools:layout="@layout/fragment_qr_scanner" >
+        <action
+            android:id="@+id/action_qrScannerFragment_to_returnOrderFragment"
+            app:destination="@id/returnOrderFragment"
+            app:popUpTo="@id/qrScannerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/salaryFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.salary.SalaryFragment"
+        android:label="fragment_salary"
+        tools:layout="@layout/fragment_salary" >
+        <action
+            android:id="@+id/action_salaryFragment_to_salaryDetailFragment"
+            app:destination="@id/salaryDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/salaryDetailFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.salary.detail.SalaryDetailFragment"
+        android:label="fragment_salary_detail"
+        tools:layout="@layout/fragment_salary_detail" >
+        <argument
+            android:name="employeeId"
+            app:argType="integer" />
+        <argument
+            android:name="employeeName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="uz.texnopos.elektrolife.ui.finance.payments.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
+    <fragment
+        android:id="@+id/returnOrderFragment"
+        android:name="uz.texnopos.elektrolife.ui.sales.returnorder.ReturnOrderFragment"
+        android:label="fragment_order_return"
+        tools:layout="@layout/fragment_order_return" >
+        <argument
+            android:name="orderResponse"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/startLangFragment"
+        android:name="uz.texnopos.elektrolife.ui.start.StartLangFragment"
+        android:label="fragment_start_lang"
+        tools:layout="@layout/fragment_start_lang" >
+        <action
+            android:id="@+id/action_startLangFragment_to_startShopFragment"
+            app:destination="@id/startShopFragment"
+            app:popUpTo="@id/startLangFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/startShopFragment"
+        android:name="uz.texnopos.elektrolife.ui.start.StartUrlFragment"
+        android:label="fragment_start_shop"
+        tools:layout="@layout/fragment_start_url" >
+        <action
+            android:id="@+id/action_startShopFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment"
+            app:popUpTo="@id/startShopFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="uz.texnopos.elektrolife.ui.warehouse.EditProductFragment"
+        android:label="fragment_product_edit"
+        tools:layout="@layout/fragment_product_edit" >
+        <argument
+            android:name="product"
+            app:argType="uz.texnopos.elektrolife.data.model.newsale.Product" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="uz.texnopos.elektrolife.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/companyDetailsFragment"
+        android:name="uz.texnopos.elektrolife.ui.start.CompanyDetailsFragment"
+        android:label="fragment_company_details"
+        tools:layout="@layout/fragment_company_details" >
+        <action
+            android:id="@+id/action_companyDetailsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/companyDetailsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

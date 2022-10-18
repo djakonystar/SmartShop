@@ -37,7 +37,7 @@
     <string name="search">Izlash</string>
     <string name="count_text">%s dona</string>
     <string name="sum_text" translatable="false">%s UZS</string>
-    <string name="dollar_text" translatable="false">%s USD</string>
+    <string name="price_text" translatable="false">%s %s</string>
     <string name="sort_button" translatable="false">Sort Button</string>
     <string name="by_product_name">Mahsulot nomi bo\'yicha</string>
     <string name="by_category">Kategoriya bo\'yicha</string>
@@ -47,7 +47,7 @@
     <string name="by_few_remain">Kam qolganlar bo\'yicha</string>
     <string name="status_indicator" translatable="false">Status Indicator</string>
     <string name="payment_cash">Naqd</string>
-    <string name="payment_card">Karta</string>
+    <string name="payment_card">Bank kartasi</string>
     <string name="choose_category">Kategoriyani tanlang</string>
     <string name="product_name">Mahsulot nomi</string>
     <string name="brand_name">Ishlab chiqaruvchi</string>
@@ -87,9 +87,9 @@
     <string name="debt_pay_date_helper">Qarz to\'lanadigan oxirgi muddat (agar qarz qolgan bo\'lsa)</string>
     <string name="payment_mix">Aralash</string>
     <string name="add_to_basket">Savatga qo\'shish</string>
-    <string name="wholesale_price_text">Ulgurji: %s USD</string>
-    <string name="min_price_text">Minimum: %s UZS</string>
-    <string name="max_price_text">Narxi: %s UZS</string>
+    <string name="wholesale_price_text">Ulgurji: %s %s</string>
+    <string name="min_price_text">Minimum: %s %s</string>
+    <string name="max_price_text">Narxi: %s %s</string>
     <string name="quantity">Soni</string>
     <string name="pay">To\'lash</string>
     <string name="counter_text" translatable="false">%s/%s</string>
@@ -97,8 +97,8 @@
     <string name="basket_en" translatable="false">Basket</string>
     <string name="confirm_order">Buyurtmani amalga oshirish</string>
     <string name="delete_product" translatable="false">Delete product</string>
-    <string name="total_sum_text">Summa: %s UZS</string>
-    <string name="total_debt_text">Qarz: %s UZS</string>
+    <string name="total_sum_text">Summa: %s %s</string>
+    <string name="total_debt_text">Qarz: %s %s</string>
     <string name="input_correct_info">Aniq ma\'lumot kiriting</string>
     <string name="basket_empty_warning">Avval savatga mahsulot qo\'shing!</string>
     <string name="add_to_basket_en" translatable="false">Add to basket</string>
@@ -150,14 +150,14 @@
     <string name="cashbox_title">Kassa</string>
     <string name="natural_person_short">J</string>
     <string name="legal_person_short">Yu</string>
-    <string name="expense_any_back" translatable="false">Boshqalar</string>
-    <string name="expense_administrative_back" translatable="false">Ma\'muriy xarajatlar</string>
-    <string name="expense_rent_back" translatable="false">Ijara to\'lovlari</string>
-    <string name="expense_salary_back" translatable="false">Oylik</string>
+    <string name="expense_any_back" translatable="false">Boshqa</string>
+    <string name="expense_administrative_back" translatable="false">Ma\'muriy</string>
+    <string name="expense_rent_back" translatable="false">Ijara</string>
+    <string name="expense_salary_back" translatable="false">Ish haqi</string>
     <string name="expense_investments_back" translatable="false">Investitsiyalar</string>
-    <string name="expense_office_back" translatable="false">Idora</string>
+    <string name="expense_office_back" translatable="false">Ofis   </string>
     <string name="expense_taxes_back" translatable="false">Soliqlar</string>
-    <string name="expense_household_back" translatable="false">Uy xarajatlari</string>
+    <string name="expense_household_back" translatable="false">Maishiy</string>
     <string name="category_added_successfully">Kategoriya muvaffaqiyatli qo\'shildi!</string>
     <string name="choose_payment_type">To\'lov turini tanlang</string>
     <string name="choose_client_and_fill_payment">Iltimos mijozni tanlang va to\'lovni to\'liq kiriting</string>
@@ -181,4 +181,73 @@
     <string name="err_valid_sum">Haqiqiy summa kiriting</string>
     <string name="warning">Ishonchingiz komilmi?</string>
     <string name="reports">Hisobotlar</string>
+    <string name="price_icon" translatable="false">Price icon</string>
+    <string name="currency_text">Valyuta</string>
+    <string name="measure_text">O\'lchov</string>
+    <string name="receipt_count_text" translatable="false">%dx%s %s</string>
+    <string name="print_receipt">Kvitansiyani chop etish</string>
+    <string name="salaries">Oyliklar</string>
+    <string name="month_first">Yanvar</string>
+    <string name="month_second">Fevral</string>
+    <string name="month_third">Mart</string>
+    <string name="month_fourth">Aprel</string>
+    <string name="month_fifth">May</string>
+    <string name="month_sixth">Iyun</string>
+    <string name="month_seventh">Iyul</string>
+    <string name="month_eighth">Avgust</string>
+    <string name="month_ninth">Sentyabr</string>
+    <string name="month_tenth">Oktyabr</string>
+    <string name="month_eleventh">Noyabr</string>
+    <string name="month_twelfth">Dekabr</string>
+    <string name="measure_pcs">dona</string>
+    <string name="measure_tonne">t</string>
+    <string name="measure_kg">kg</string>
+    <string name="measure_gr">gr</string>
+    <string name="measure_meter">m</string>
+    <string name="measure_cm">sm</string>
+    <string name="measure_liter">l</string>
+    <string name="employees">Xodimlar</string>
+    <string name="date_from_text">Dan: %s</string>
+    <string name="date_to_text">Gacha: %s</string>
+    <string name="payment_type">To\'lov turi</string>
+    <string name="total_price_text">Umumiy: %s %s</string>
+    <string name="cash_price_text">Naqd: %s %s</string>
+    <string name="card_price_text">Karta: %s %s</string>
+    <string name="debt_price_text">Qarz: %s %s</string>
+    <string name="debt_paid_price_text">To\'langani: %s %s</string>
+    <string name="debt_remained_price_text">Qoldiq: %s %s</string>
+    <string name="amortization">Qarz to\'lash</string>
+    <string name="return_order">Mahsulotni qaytarish</string>
+    <string name="payment_debt_paid">To\'langan qarz</string>
+    <string name="order_successfully_returned">Mahsulot muvaffaqiyatli qaytarildi!</string>
+    <string name="return_text">Qaytarish</string>
+    <string name="product_code_error">Bu mahsulot kodi emas!</string>
+    <string name="basket_code_error">Bu sotuv kodi emas!</string>
+    <string name="internet_error">Internet bilan bog\'liq muammolaringiz bor!</string>
+    <string name="select_your_shop">O\'z do\'koningizni tanlang</string>
+    <string name="text_continue">Davom etish</string>
+    <string name="input_shop_url">Do\'koningiz prefiksini kiriting</string>
+    <string name="settings">Sozlamalar</string>
+    <string name="language">Til</string>
+    <string name="shop_url">Do\'kon prefiksi</string>
+    <string name="unknown_qr_code">Noma\'lum kod!</string>
+    <string name="test_base_url" translatable="false">https://smart-shop.my-project.site</string>
+    <string name="sales_detail_sum_text" translatable="false">%s %s * %s %s = <b>%s %s</b></string>
+    <string name="save">Saqlash</string>
+    <string name="edit_product">Mahsulotni tahrirlash</string>
+    <string name="product_edited_successfully">Mahsulot muvaffaqiyatli tahrirlandi!</string>
+    <string name="company_details">Kompaniya ma\'lumotlari</string>
+    <string name="company_name_title">Kompaniya nomi</string>
+    <string name="company_prefix">Kompaniya prefiksi</string>
+    <string name="change_prefix">Prefiksni o\'zgartirish</string>
+    <string name="logout">Chiqish</string>
+    <string name="required_restart">Ilova qayta ishga tushadi!</string>
+    <string name="warning_logout">Rostdan ham chiqmoqchimisiz?</string>
+    <string name="details_success_msg">Ma\'lumotlar muvaffaqiyatli o\'zgartirildi!</string>
+    <string name="prefix_changed_successfully">Prefiks muvaffaqiyatli o\'zgartirildi!</string>
+    <string name="warning_reset">Siz rostdan ham ilova sozlamalarini tiklamoqchimisiz?</string>
+    <string name="login_to_test">Test rejimda kirish</string>
+    <string name="test_company_name" translatable="false">TexnoPOS Company</string>
+    <string name="test_company_phone" translatable="false">900957117</string>
+    <string name="test_company_address" translatable="false">Nukus, Karakalpakstan</string>
 </resources>

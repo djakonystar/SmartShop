@@ -7,49 +7,90 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.GenericResponse
-import uz.texnopos.elektrolife.data.model.sales.Sales
+import uz.texnopos.elektrolife.data.model.PagingResponse
+import uz.texnopos.elektrolife.data.model.sales.Basket
+import uz.texnopos.elektrolife.data.model.sales.BasketResponse
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
 
 class SalesViewModel(private val api: ApiInterface, private val settings: Settings) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    private var mutableOrders: MutableLiveData<Resource<GenericResponse<List<Sales>>>> =
+    private var mutableBaskets: MutableLiveData<Resource<PagingResponse<BasketResponse>>> =
         MutableLiveData()
-    val orders: LiveData<Resource<GenericResponse<List<Sales>>>> get() = mutableOrders
+    val baskets: LiveData<Resource<PagingResponse<BasketResponse>>> = mutableBaskets
 
-    fun getOrders() {
-        mutableOrders.value = Resource.loading()
+    fun getBaskets(page: Int) {
+        mutableBaskets.postValue(Resource.loading())
         compositeDisposable.add(
-            api.getOrders("Bearer ${settings.token}")
-                .subscribeOn(Schedulers.newThread())
+            api.getBaskets(token = "Bearer ${settings.token}", page = page)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableOrders.value = Resource.success(response)
+                        if (response.successful) {
+                            mutableBaskets.value = Resource.success(response.payload)
+                        } else {
+                            mutableBaskets.value = Resource.error(response.message)
+                        }
                     },
                     { error ->
-                        mutableOrders.value = Resource.error(error.localizedMessage)
+                        mutableBaskets.value = Resource.error(error.message)
                     }
                 )
         )
     }
 
-    fun getOrdersByDate(from: String, to: String) {
-        mutableOrders.value = Resource.loading()
+    fun getBaskets(from: String, to: String, page: Int) {
+        mutableBaskets.postValue(Resource.loading())
         compositeDisposable.add(
-            api.getOrdersByDate("Bearer ${settings.token}", from, to)
-                .subscribeOn(Schedulers.newThread())
+            api.getBaskets(token = "Bearer ${settings.token}", from = from, to = to, page = page)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        mutableOrders.value = Resource.success(response)
+                        if (response.successful) {
+                            mutableBaskets.value = Resource.success(response.payload)
+                        } else {
+                            mutableBaskets.value = Resource.error(response.message)
+                        }
                     },
                     { error ->
-                        mutableOrders.value = Resource.error(error.localizedMessage)
+                        mutableBaskets.value = Resource.error(error.message)
                     }
                 )
         )
+    }
+
+    fun filterBaskets(typesOfPayment: String, from: String, to: String) {
+        mutableBaskets.value = Resource.loading()
+        compositeDisposable.add(
+            api.filterBaskets(
+                token = "Bearer ${settings.token}",
+                typeOfPayment = typesOfPayment,
+                from = from,
+                to = to,
+                page = 1
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        if (response.successful) {
+                            mutableBaskets.value = Resource.success(response.payload)
+                        } else {
+                            mutableBaskets.value = Resource.error(response.message)
+                        }
+                    },
+                    { error ->
+                        mutableBaskets.value = Resource.error(error.message)
+                    }
+                )
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

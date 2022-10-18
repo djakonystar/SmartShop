@@ -59,17 +59,30 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />
 
+        <ImageView
+            android:id="@+id/iv_payment_type"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:contentDescription="@string/cash_icon"
+            android:src="@drawable/ic_cash"
+            app:layout_constraintBottom_toBottomOf="@id/tvSum"
+            app:layout_constraintStart_toEndOf="@id/categoryBackground"
+            app:layout_constraintTop_toTopOf="@id/tvSum"
+            app:tint="@color/app_main_color" />
+
         <TextView
             android:id="@+id/tvSum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_middle"
             android:layout_marginBottom="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvDate"
-            app:layout_constraintStart_toEndOf="@id/categoryBackground"
+            app:layout_constraintStart_toEndOf="@id/iv_payment_type"
             app:layout_constraintTop_toBottomOf="@id/tvDescription"
             tools:ignore="SpUsage" />
 

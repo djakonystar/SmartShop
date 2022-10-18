@@ -6,8 +6,10 @@ data class Finance(
     val description: String,
     val date: String,
     @SerializedName("category_name")
-    val category: String,
-    @SerializedName("staff")
+    val category: Category,
+    @SerializedName("whom")
     val payee: String,
-    val price: Double
+    val price: Double,
+    @SerializedName("payment_type")
+    val paymentType: String
 )

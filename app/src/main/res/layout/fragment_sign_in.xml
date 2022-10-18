@@ -1,90 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.signin.SignInFragment">
 
-    <TextView
-        android:id="@+id/tvPincode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_middle"
-        android:layout_marginEnd="@dimen/margin_middle"
-        android:text="CEO: 1111\nAdmin: 2222\nSeller: 3333"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_standard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpUsage" />
-
-    <ImageView
-        android:id="@+id/ivLock"
-        android:layout_width="@dimen/login_lock_icon_size"
-        android:layout_height="@dimen/login_lock_icon_size"
-        android:layout_marginBottom="@dimen/margin_middle"
-        android:src="@drawable/ic_pin_code"
-        app:layout_constraintBottom_toTopOf="@id/tvDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/tvDescription"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/enter_special_code"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_standard"
-        app:layout_constraintBottom_toBottomOf="@id/guideline"
-        tools:ignore="SpUsage" />
+        android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvPincode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_middle"
+            android:layout_marginEnd="@dimen/margin_middle"
+            android:text="CEO: 7117\nAdmin: 2222\nSeller: 3333"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
 
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/pin_code_edit_height"
-        android:layout_marginHorizontal="@dimen/margin_32"
-        android:layout_marginTop="@dimen/margin_16"
-        android:backgroundTint="@color/app_main_color"
-        android:focusable="false"
-        android:inputType="numberPassword"
-        android:letterSpacing="0.6"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/pin_code_edit_text_size"
-        android:maxLength="4"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription"
-        tools:ignore="Autofill,LabelFor,SpUsage" />
+        <ImageView
+            android:id="@+id/btn_reset"
+            android:layout_width="@dimen/img_standard_height_mobile"
+            android:layout_height="@dimen/img_standard_height_mobile"
+            android:layout_margin="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_client_en"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/app_main_color" />
 
-    <uz.texnopos.elektrolife.core.MyKeyboard
-        android:id="@+id/keyboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="52dp"
-        android:layout_marginVertical="32dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/etPassword" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_lock"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            app:lottie_rawRes="@raw/lock_new"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:layout_constraintBottom_toTopOf="@id/tvDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/ivLock"
+            android:layout_width="@dimen/login_lock_icon_size"
+            android:layout_height="@dimen/login_lock_icon_size"
+            android:layout_marginBottom="@dimen/margin_middle"
+            android:src="@drawable/ic_pin_code"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/tvDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_special_code"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="@id/guideline"
+            tools:ignore="SpUsage" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pin_code_edit_height"
+            android:layout_marginHorizontal="@dimen/margin_32"
+            android:layout_marginTop="@dimen/margin_16"
+            android:backgroundTint="@color/app_main_color"
+            android:focusable="false"
+            android:inputType="numberPassword"
+            android:letterSpacing="0.6"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/pin_code_edit_text_size"
+            android:maxLength="4"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            tools:ignore="Autofill,LabelFor,SpUsage" />
+
+        <uz.texnopos.elektrolife.core.MyKeyboard
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="52dp"
+            android:layout_marginVertical="32dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/etPassword" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

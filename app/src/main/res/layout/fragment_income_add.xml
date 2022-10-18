@@ -106,22 +106,46 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_payment_type"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_middle"
+                android:hint="@string/payment_type"
+                app:endIconTint="@color/app_main_color"
+                app:layout_constraintTop_toBottomOf="@id/tilPayee">
+
+                <AutoCompleteTextView
+                    android:id="@+id/act_payment_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:longClickable="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/item_text_size_standard_mobile"
+                    tools:ignore="SpUsage" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilSum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_middle"
                 android:hint="@string/sum_uzb"
-                app:layout_constraintTop_toBottomOf="@id/tilPayee">
+                app:layout_constraintTop_toBottomOf="@id/til_payment_type">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etSum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789 "
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:maxLength="19"
                     android:maxLines="1"
+                    android:textAlignment="textEnd"
                     tools:ignore="SpUsage" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -130,16 +154,16 @@
                 android:id="@+id/btnAddExpense"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/button_height"
-                android:layout_marginVertical="@dimen/margin_standard"
                 android:layout_marginHorizontal="@dimen/margin_standard"
+                android:layout_marginVertical="@dimen/margin_standard"
                 android:backgroundTint="@color/app_main_color"
                 android:paddingHorizontal="@dimen/button_padding_horizontal"
                 android:text="@string/add_income"
                 android:textSize="@dimen/text_size_larger"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilSum"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:ignore="SpUsage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

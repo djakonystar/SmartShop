@@ -5,84 +5,66 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
-import uz.texnopos.elektrolife.core.extensions.changeDateFormat
-import uz.texnopos.elektrolife.core.extensions.inflate
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.toSumFormat
-import uz.texnopos.elektrolife.data.model.sales.Sales
+import uz.texnopos.elektrolife.core.extensions.*
+import uz.texnopos.elektrolife.data.model.sales.Basket
 import uz.texnopos.elektrolife.databinding.ItemSalesBinding
+import uz.texnopos.elektrolife.settings.Settings
 
-class SalesAdapter : BaseAdapter<Sales, SalesAdapter.SalesViewHolder>() {
+class SalesAdapter(private val settings: Settings) :
+    BaseAdapter<Basket, SalesAdapter.SalesViewHolder>() {
     inner class SalesViewHolder(private val binding: ItemSalesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun populateModel(sales: Sales) {
+        fun populateModel(basket: Basket) {
             binding.apply {
-                val basket = sales.basket
+                val totalPrice = basket.cash + basket.card + basket.debt.debt
+                tvClientName.isSelected = true
+                tvTotalPrice.isSelected = true
                 tvCardPrice.isSelected = true
                 tvCashPrice.isSelected = true
                 tvDebtPrice.isSelected = true
-                tvClientName.text = sales.clientName
+                tvSellerName.isSelected = true
+                tvClientName.text = basket.customer.name
+                tvPhone.text = basket.customer.phone.toPhoneFormat
                 tvTotalPrice.text = itemView.context?.getString(
-                    R.string.sum_text,
-                    basket.price.toLong().toSumFormat
+                    R.string.price_text,
+                    totalPrice.checkModule.toSumFormat,
+                    settings.currency
                 )
-                tvCashPrice.text = itemView.context?.getString(R.string.sum_text, basket.cash.toLong().toSumFormat)
-                tvCardPrice.text = itemView.context?.getString(R.string.sum_text, basket.card.toLong().toSumFormat)
-                if (basket.debt > 0) {
+                tvCashPrice.text = itemView.context?.getString(
+                    R.string.price_text,
+                    basket.cash.checkModule.toSumFormat,
+                    settings.currency
+                )
+                tvCardPrice.text = itemView.context?.getString(
+                    R.string.price_text,
+                    basket.card.checkModule.toSumFormat,
+                    settings.currency
+                )
+                if (basket.debt.debt > 0) {
                     dot.setImageResource(R.drawable.red_eclipse)
                     tvDebtPrice.text = itemView.context?.getString(
-                        R.string.sum_text,
-                        "-${(basket.debt.toLong()).toSumFormat}"
+                        R.string.price_text,
+                        "-${basket.debt.debt.checkModule.toSumFormat}",
+                        settings.currency
                     )
                 } else {
                     dot.setImageResource(R.drawable.green_eclipse)
                     tvDebtPrice.text = itemView.context?.getString(
-                        R.string.sum_text,
-                        (basket.debt.toLong()).toSumFormat
+                        R.string.price_text,
+                        basket.debt.debt.checkModule.toSumFormat,
+                        settings.currency
                     )
 //                    tvDebtPrice.text = ""
                 }
-                tvSellerName.text = sales.vendorName
+                tvSellerName.text = basket.employee.name
                 val createdDate = basket.createdAt.substring(0..9).changeDateFormat
                 val createdTime = basket.createdAt.substring(11..18)
                 tvDate.text = "$createdDate $createdTime"
-                if (basket.cash > 0 && basket.card > 0 && basket.debt > 0) {
-                    tvPaymentInfo.text = itemView.context?.getString(
-                        R.string.type_of_payment_three,
-                        itemView.context?.getString(R.string.payment_cash),
-                        itemView.context?.getString(R.string.payment_card),
-                        itemView.context?.getString(R.string.payment_debt)
-                    )
-                } else if (basket.cash > 0 && basket.card > 0) {
-                    tvPaymentInfo.text = itemView.context?.getString(
-                        R.string.type_of_payment_two,
-                        itemView.context?.getString(R.string.payment_cash),
-                        itemView.context?.getString(R.string.payment_card)
-                    )
-                } else if (basket.cash > 0 && basket.debt > 0) {
-                    tvPaymentInfo.text = itemView.context?.getString(
-                        R.string.type_of_payment_two,
-                        itemView.context?.getString(R.string.payment_cash),
-                        itemView.context?.getString(R.string.payment_debt)
-                    )
-                } else if (basket.card > 0 && basket.debt > 0) {
-                    tvPaymentInfo.text = itemView.context?.getString(
-                        R.string.type_of_payment_two,
-                        itemView.context?.getString(R.string.payment_card),
-                        itemView.context?.getString(R.string.payment_debt)
-                    )
-                } else if (basket.cash > 0) {
-                    tvPaymentInfo.text = itemView.context?.getString(R.string.payment_cash)
-                } else if (basket.card > 0) {
-                    tvPaymentInfo.text = itemView.context?.getString(R.string.payment_card)
-                } else {
-                    tvPaymentInfo.text = itemView.context?.getString(R.string.payment_debt)
-                }
             }
 
             itemView.onClick {
-                onClickItem.invoke(sales)
+                onClickItem.invoke(basket)
             }
         }
     }
@@ -97,8 +79,8 @@ class SalesAdapter : BaseAdapter<Sales, SalesAdapter.SalesViewHolder>() {
         holder.populateModel(models[position])
     }
 
-    private var onClickItem: (sales: Sales) -> Unit = {}
-    fun onClickItem(clickItem: (sales: Sales) -> Unit) {
+    private var onClickItem: (basket: Basket) -> Unit = {}
+    fun onClickItem(clickItem: (basket: Basket) -> Unit) {
         this.onClickItem = clickItem
     }
 }

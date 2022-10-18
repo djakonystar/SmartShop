@@ -13,7 +13,7 @@
     <color name="color_sales">#00c853</color>
     <color name="color_add_payment">#ff6d00</color>
     <color name="color_warehouse">#26a69a</color>
-    <color name="app_main_color">#26a69a</color>
+    <color name="app_main_color">#1cbcea</color>
     <color name="white_grey">#f7f8fa</color>
     <color name="payment_icon_color">#FF6D00</color>
     <color name="item_background_color">#F1F4FB</color>
@@ -23,4 +23,5 @@
     <color name="is_enabled_color">#4D000000</color>
     <color name="mainBackground">#F2F2F4</color>
     <color name="myBlack">#181725</color>
+    <color name="black_alpha_87">#DE000000</color>
 </resources>

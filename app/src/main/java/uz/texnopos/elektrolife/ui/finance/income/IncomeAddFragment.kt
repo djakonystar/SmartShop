@@ -10,21 +10,20 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
-import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
-import uz.texnopos.elektrolife.core.MaskWatcherPaymentDecimal
+import uz.texnopos.elektrolife.core.CalendarHelper
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.changeDateFormat
-import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.showSuccess
+import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.finance.FinancePost
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentIncomeAddBinding
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.settings.Settings.Companion.FINANCE_INCOME
 import uz.texnopos.elektrolife.ui.finance.FinanceViewModel
+import site.texnopos.djakonystar.suminputmask.SumInputMask
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,8 +32,11 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
     private lateinit var abBinding: ActionBarBinding
     private lateinit var navController: NavController
     private val viewModel: FinanceViewModel by viewModel()
-    private var dateInLong = System.currentTimeMillis()
-    private var date = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateInLong)
+    private val settings: Settings by inject()
+    private val calendarHelper = CalendarHelper()
+    private val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
+    private var dateInLong = calendarHelper.currentDateMillis
+    private var date = simpleDateFormat.format(dateInLong)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,16 +45,9 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
 
-        val categoryList = listOf(
-            getString(R.string.expense_any),
-            getString(R.string.expense_administrative),
-            getString(R.string.expense_rent),
-            getString(R.string.expense_salary),
-            getString(R.string.expense_investments),
-            getString(R.string.expense_office),
-            getString(R.string.expense_taxes),
-            getString(R.string.expense_household),
-        )
+        val categoryList = Constants.getFinanceCategories(requireContext())
+        val paymentTypeList =
+            listOf(getString(R.string.payment_cash), getString(R.string.payment_card))
 
         abBinding.apply {
             tvTitle.text = context?.getString(R.string.add_income)
@@ -61,23 +56,30 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
             }
         }
 
-        var selectedCategory = -1
+        var selectedCategory = 1
+        var selectedPaymentType = 1
 
         binding.apply {
             val categoryAdapter =
                 ArrayAdapter(requireContext(), R.layout.item_spinner, categoryList)
             actCategory.setAdapter(categoryAdapter)
-            actCategory.setOnFocusChangeListener { _, _ ->
-                actCategory.showDropDown()
-            }
-            actCategory.setOnItemClickListener { adapterView, _, i, _ ->
-                tilCategory.isErrorEnabled = false
-                if (adapterView.getItemAtPosition(i) != getString(R.string.not_selected)) {
-                    selectedCategory = i + 1
-                }
+            actCategory.threshold = 100
+            actCategory.setText(categoryList[0])
+            actCategory.setOnItemClickListener { _, _, i, _ ->
+                selectedCategory = i + 1
             }
 
-            etSum.addTextChangedListener(MaskWatcherPaymentDecimal(etSum))
+            val paymentTypeAdapter =
+                ArrayAdapter(requireContext(), R.layout.item_spinner, paymentTypeList)
+            actPaymentType.setAdapter(paymentTypeAdapter)
+            actPaymentType.threshold = 100
+            actPaymentType.setText(paymentTypeList[0])
+            actPaymentType.setOnItemClickListener { _, _, i, _ ->
+                selectedPaymentType = i + 1
+            }
+
+            tilSum.suffixText = settings.currency
+            SumInputMask(etSum)
 
             etDescription.addTextChangedListener {
                 tilDescription.isErrorEnabled = false
@@ -91,7 +93,6 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
 
             etDate.setText(date)
             etDate.onClick {
-                tilDate.isEnabled = false
                 val datePickerDialog = MaterialDatePicker.Builder.datePicker()
                     .setTitleText(context?.getString(R.string.choose_date_uz))
                     .setSelection(dateInLong)
@@ -105,7 +106,7 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
 
                 datePickerDialog.addOnPositiveButtonClickListener {
                     dateInLong = it
-                    date = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT).format(dateInLong)
+                    date = simpleDateFormat.format(dateInLong)
                     etDate.setText(date)
                 }
 
@@ -113,32 +114,34 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
                     tilDate.isEnabled = true
                 }
 
-                datePickerDialog.show(requireActivity().supportFragmentManager, "DatePicker")
+                datePickerDialog.show(
+                    requireActivity().supportFragmentManager,
+                    datePickerDialog.tag
+                )
+                tilDate.isEnabled = false
             }
 
             btnAddExpense.onClick {
                 val description = etDescription.text.toString()
                 val payee = etPayee.text.toString()
-                val sum = etSum.text.toString().filter { it.isDigit() || it == '.' }
+                val sum = etSum.text.toString().toDouble
 
-                if (description.isNotEmpty() && selectedCategory != -1 && sum.isNotEmpty()) {
+                if (description.isNotEmpty() && sum != 0.0) {
                     val expense = FinancePost(
                         description = description,
                         date = date.changeDateFormat,
                         categoryId = selectedCategory,
                         payee = payee,
-                        price = sum.toDouble(),
-                        type = FINANCE_INCOME
+                        price = sum,
+                        type = FINANCE_INCOME,
+                        paymentType = if (selectedPaymentType == 1) "cash" else "card"
                     )
                     viewModel.addFinanceDetail(expense)
                 } else {
                     if (description.isEmpty()) {
                         tilDescription.error = getString(R.string.required_field)
                     }
-                    if (selectedCategory == -1) {
-                        tilCategory.error = getString(R.string.required_field)
-                    }
-                    if (sum.isEmpty()) {
+                    if (sum == 0.0) {
                         tilSum.error = getString(R.string.required_field)
                     }
                 }
@@ -161,12 +164,8 @@ class IncomeAddFragment : Fragment(R.layout.fragment_income_add) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    if (it.data!!.successful) {
-                        showSuccess(context?.getString(R.string.success))
-                        navController.popBackStack()
-                    } else {
-                        showError(it.data.message)
-                    }
+                    showSuccess(context?.getString(R.string.success))
+                    navController.popBackStack()
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)

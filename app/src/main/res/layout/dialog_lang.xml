@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minWidth="@dimen/dialog_sale_min_width_mobile"
-    tools:context=".ui.main.dialog.LangDialog">
+    tools:context=".ui.dialog.LangDialog">
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_standard"
-        android:text="@string/lang_title"
+        android:text="@string/language"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
         android:textSize="@dimen/lang_title_mobile"
@@ -31,6 +31,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <ImageView
+        android:id="@+id/iv_check_eng"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:padding="@dimen/padding_middle"
+        android:src="@drawable/ic_baseline_check_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tvEng"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvEng"
+        app:tint="@color/app_main_color" />
 
     <TextView
         android:id="@+id/tvEng"
@@ -58,6 +71,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEng" />
 
+    <ImageView
+        android:id="@+id/iv_check_ru"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:padding="@dimen/padding_middle"
+        android:src="@drawable/ic_baseline_check_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tvRu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvRu"
+        app:tint="@color/app_main_color" />
+
     <TextView
         android:id="@+id/tvRu"
         android:layout_width="0dp"
@@ -83,6 +109,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvRu" />
 
+    <ImageView
+        android:id="@+id/iv_check_uz"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:padding="@dimen/padding_middle"
+        android:src="@drawable/ic_baseline_check_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tvUz"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvUz"
+        app:tint="@color/app_main_color" />
+
     <TextView
         android:id="@+id/tvUz"
         android:layout_width="0dp"
@@ -107,6 +146,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvUz" />
+
+    <ImageView
+        android:id="@+id/iv_check_kk"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/margin_16"
+        android:padding="@dimen/padding_middle"
+        android:src="@drawable/ic_baseline_check_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tvKk"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvKk"
+        app:tint="@color/app_main_color" />
 
     <TextView
         android:id="@+id/tvKk"

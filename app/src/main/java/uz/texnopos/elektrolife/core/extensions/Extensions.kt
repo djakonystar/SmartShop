@@ -1,47 +1,56 @@
 package uz.texnopos.elektrolife.core.extensions
 
+import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
+import android.print.PrintAttributes
+import android.print.PrintManager
+import android.text.InputFilter
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.gkemon.XMLtoPDF.PdfGenerator
+import com.gkemon.XMLtoPDF.PdfGeneratorListener
+import com.gkemon.XMLtoPDF.model.FailureResponse
+import com.gkemon.XMLtoPDF.model.SuccessResponse
+import com.google.android.material.snackbar.Snackbar
 import uz.texnopos.elektrolife.R
+import uz.texnopos.elektrolife.core.utils.MyPrintDocumentAdapter
+import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.dialog.ErrorDialog
 import uz.texnopos.elektrolife.ui.dialog.SuccessDialog
 import uz.texnopos.elektrolife.ui.dialog.WarningDialog
 
-fun View.visibility(visibility: Boolean): View {
-    if (visibility) {
-        this.visibility = View.VISIBLE
-    } else {
-        this.visibility = View.GONE
-    }
-    return this
-}
-
-fun View.enabled(isEnabled: Boolean): View {
-    this.isEnabled = isEnabled
-    return this
-}
-
 fun Fragment.showMessage(msg: String?) {
     Toast.makeText(this.requireContext(), msg, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.showSnackbar(message: String) {
+    Snackbar.make(this.requireView(), message, Snackbar.LENGTH_LONG).show()
 }
 
 fun Fragment.showError(message: String?): ErrorDialog {
@@ -118,26 +127,12 @@ val Int.dpToFloat: Float
     get() = (this / Resources.getSystem().displayMetrics.density)
 
 fun String.dialPhone(activity: Activity) {
-    val phone = "+998$this"
+    var phone = "+998"
+    if (this.length == 9) phone += this
+    else phone = this
     val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(phone)))
     activity.startActivity(intent)
 }
-
-fun String.dialPhoneFull(activity: Activity) {
-    val phone = this
-    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(phone)))
-    activity.startActivity(intent)
-}
-
-val String.ifContainsLatin: Boolean
-    get() {
-        this.forEach {
-            if (it.code in 65..90 || it.code in 97..122) {
-                return true
-            }
-        }
-        return false
-    }
 
 val String.toSumFormat: String
     get() {
@@ -148,6 +143,18 @@ val String.toSumFormat: String
         return text.reversed()
     }
 
+val String.sumFormat: String
+    get() {
+        val beforePoint = this.substringBefore('.')
+        var text = beforePoint.reversed()
+        text = text.chunked(3).joinToString(" ")
+        if (this.contains('.')) {
+            val afterPoint = this.substringAfter('.')
+            if (afterPoint.length == 1) return "${text.reversed()}.${afterPoint}0"
+            return "${text.reversed()}.$afterPoint"
+        }
+        return text.reversed()
+    }
 
 val Int.toSumFormat: String
     get() {
@@ -170,7 +177,6 @@ val Number.toSumFormat: String
 val Double.toSumFormat: String
     get() {
         var num = this.toLong().toSumFormat
-        val l = this.toString().length - this.toLong().toString().length - 1
         val formattedNum = "%.${2}f".format(this)
         val afterPoint = formattedNum.substring(formattedNum.length - 2, formattedNum.length)
         num += if (afterPoint == "0") ".00" else {
@@ -180,26 +186,18 @@ val Double.toSumFormat: String
         return num
     }
 
+val String.toPhoneFormat: String
+    get() {
+        if (this.length == 13) {
+            return this.substring(4).toPhoneFormat
+        }
+        return this.toPhoneNumber
+    }
+
 val String.toPhoneNumber: String
     get() {
         val arr = this.toCharArray()
-        var phone = "+998 ("
-        arr.forEachIndexed { index, c ->
-            phone += c
-            if (index == 1) {
-                phone += ") "
-            }
-            if (index == 4 || index == 6) {
-                phone += " "
-            }
-        }
-        return phone
-    }
-
-val String.toPhoneNumberFromFull: String
-    get() {
-        val arr = this.substring(4..this.lastIndex).toCharArray()
-        var phone = "+998 ("
+        var phone = if (arr.size == 9) "(" else "+998 ("
         arr.forEachIndexed { index, c ->
             phone += c
             if (index == 1) {
@@ -238,14 +236,27 @@ fun String.getOnlyDigits(): String {
     return s.ifEmpty { "0" }
 }
 
+fun CharSequence.notContains(char: Char, ignoreCase: Boolean = false): Boolean {
+    return !this.contains(char, ignoreCase)
+}
+
+fun CharSequence.notContains(other: CharSequence, ignoreCase: Boolean = false): Boolean {
+    return !this.contains(other, ignoreCase)
+}
+
+fun CharSequence.notContains(regex: Regex): Boolean {
+    return !this.contains(regex)
+}
+
 @SuppressLint("SetTextI18n")
-fun animateDebtPrice(start: Long, end: Long, textView: TextView, view: View) {
+fun animateDebtPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
     animator.addUpdateListener {
-        val newValue = (it.animatedValue as Float).toLong().toSumFormat
-        textView.text = view.context.getString(
+        val newValue = (it.animatedValue as Float).toDouble().format(2).toDouble
+        textView.text = textView.context.getString(
             R.string.total_debt_text,
-            newValue
+            newValue.checkModule.toSumFormat,
+            settings.currency
         )
     }
     animator.duration = 500
@@ -253,17 +264,179 @@ fun animateDebtPrice(start: Long, end: Long, textView: TextView, view: View) {
 }
 
 @SuppressLint("SetTextI18n")
-fun animateTotalPrice(start: Long, end: Long, textView: TextView, view: View) {
+fun animateTotalPrice(start: Double, end: Double, textView: TextView, settings: Settings) {
     val animator = ValueAnimator.ofFloat(start.toFloat(), end.toFloat())
     animator.addUpdateListener {
-        val newValue = (it.animatedValue as Float).toLong().toSumFormat
-        textView.text = view.context.getString(
+        val newValue = (it.animatedValue as Float).toDouble().format(2).toDouble
+        textView.text = textView.context.getString(
             R.string.total_sum_text,
-            newValue
+            newValue.checkModule.toSumFormat,
+            settings.currency
         )
     }
     animator.duration = 500
     animator.start()
 }
 
+val EditText.filterForDouble: Unit
+    @SuppressLint("SetTextI18n")
+    get() {
+        val filter = InputFilter { source, _, _, spanned, _, _ ->
+            val afterPoint = if (spanned.contains('.')) {
+                spanned.toString().substringAfter('.').length
+            } else {
+                0
+            }
 
+            val range = this.length() - 2..this.length()
+
+            if (source != null && source.equals(".") && spanned.contains(".")) ""
+            else if (source != null && afterPoint == 2 && this.selectionEnd in range) ""
+            else if (source != null && source.equals(".") && spanned.isEmpty()) "0."
+            else if (source != null && source.equals(".") && spanned.isNotEmpty()) "."
+            else if (source != null && "-,.".contains("" + source)) ""
+            else null
+        }
+        this.filters = arrayOf(filter)
+    }
+
+fun EditText.setBlockFilter(block: String) {
+    val filter = InputFilter { source, _, _, _, _, _ ->
+        if (source != null && block.contains("" + source)) "" else null
+    }
+    this.filters = arrayOf(filter)
+}
+
+val Double.checkModule: Number
+    get() {
+        return if (this % 1 == 0.0) this.toLong()
+        else this
+    }
+
+fun Int.unitConverter(context: Context): String {
+    return Constants.getUnitName(context, this)
+}
+
+infix fun Double.format(afterPoint: Int): String {
+    val formatted = "%.${afterPoint}f".format(this)
+
+    return if (formatted.contains(',')) {
+        formatted.replace(',', '.')
+    } else {
+        formatted
+    }
+}
+
+val String.toDouble: Double
+    get() {
+        if (this.isEmpty()) {
+            return 0.0
+        }
+        return this.filter { it.isDigit() || it == '.' }.ifEmpty { "0.0" }.toDouble()
+    }
+
+fun Fragment.doPrint(filePath: String, fileName: String) {
+    try {
+        val printManager = requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val jobName = "${getString(R.string.app_name)} Document"
+        printManager.print(
+            jobName,
+            MyPrintDocumentAdapter(requireContext(), filePath, fileName),
+            PrintAttributes.Builder().build()
+        )
+    } catch (e: Exception) {
+        showMessage(e.message)
+    }
+}
+
+fun Fragment.pdfGenerator(
+    view: View,
+    fileName: String,
+    onSuccess: (response: SuccessResponse?) -> Unit,
+    onFailure: (failureResponse: FailureResponse?) -> Unit
+) {
+    this.context?.let { context ->
+        PdfGenerator.Builder()
+            .setContext(context)
+            .fromViewSource()
+            .fromView(view)
+            .setFileName(fileName)
+            .setFolderNameOrPath(this.requireActivity().packageName)
+            .openPDAfterGeneration(false)
+            .build(object : PdfGeneratorListener() {
+                override fun onStartPDFGeneration() {
+
+                }
+
+                override fun onFinishPDFGeneration() {
+
+                }
+
+                override fun onSuccess(response: SuccessResponse?) {
+                    super.onSuccess(response)
+                    onSuccess.invoke(response)
+                }
+
+                override fun onFailure(failureResponse: FailureResponse?) {
+                    super.onFailure(failureResponse)
+                    onFailure.invoke(failureResponse)
+                }
+
+                override fun showLog(log: String?) {
+                    super.showLog(log)
+                    log?.let { Log.d("XMLtoPDF", it) }
+                }
+            })
+    }
+}
+
+val Fragment.checkForPermissions: Unit
+    get() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestMultiplePermissions().launch(
+                arrayOf(
+                    Manifest.permission.CAMERA
+                )
+            )
+        } else {
+//            showMessage("Permission already granted!")
+        }
+    }
+
+private fun Fragment.requestMultiplePermissions() =
+    registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        var isGranted = true
+        permissions.entries.forEach {
+            if (!it.value) isGranted =
+                false
+        }
+        if (!isGranted) {
+            val dialog = showWarning("Permission required")
+            dialog.setOnPositiveButtonClickListener {
+                val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                requireActivity().startActivity(intent)
+            }
+            dialog.setOnDismissListener {
+                findNavController().popBackStack()
+            }
+            if (dialog.isAdded) {
+                requireActivity().supportFragmentManager.beginTransaction().show(dialog)
+            }
+        } else {
+//            showMessage("Permission granted!")
+        }
+    }
+
+fun <T: Any> T.scope(action: (T) -> Unit) {
+    action(this)
+}
+
+fun String.isNotEmptyAndBlank() = this.isNotEmpty() && this.isNotBlank()
+
+fun String.isEmptyOrBlank() = this.isEmpty() || this.isBlank()
