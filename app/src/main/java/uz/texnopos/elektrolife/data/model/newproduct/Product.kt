@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName
 data class Product(
     @SerializedName("category_id")
     val categoryId: Int,
-    val name: String,
     val brand: String,
+    val name: String,
     @SerializedName("cost_price")
-    val costPrice: Price,
+    val costPrice: Double,
     @SerializedName("price_wholesale")
-    val wholesalePrice: Price,
+    val wholesalePrice: Double,
     @SerializedName("price_min")
-    val minPrice: Price,
+    val minPrice: Int,
     @SerializedName("price_max")
-    val maxPrice: Price,
-    val warehouse: Warehouse,
-    val image: String = ""
+    val maxPrice: Int,
+    @SerializedName("new_count")
+    val quantity: Int
 )

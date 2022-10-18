@@ -1,136 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.client.detail.payment.ClientPaymentFragment">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="100dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/item_payment" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="100dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_app_bar"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:fabAlignmentMode="end"
-        app:fabAnimationMode="scale"
-        app:fabCradleVerticalOffset="16dp"
-        app:hideOnScroll="false">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_48">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/margin_standard">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iv_total_price"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:contentDescription="@string/cash_icon"
-                android:src="@drawable/ic_total_money"
-                app:layout_constraintBottom_toBottomOf="@id/tv_total_price"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_total_price"
-                app:tint="@color/app_main_color" />
-
-            <TextView
-                android:id="@+id/tv_total_price"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_standard"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textColor="@color/app_main_color"
-                app:layout_constraintStart_toEndOf="@id/iv_total_price"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_cash_price"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:contentDescription="@string/cash_icon"
-                android:src="@drawable/ic_cash"
-                app:layout_constraintBottom_toBottomOf="@id/tv_cash_price"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_cash_price"
-                app:tint="@color/app_main_color" />
-
-            <TextView
-                android:id="@+id/tv_cash_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textColor="@color/app_main_color"
-                app:layout_constraintStart_toEndOf="@id/iv_cash_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
-
-            <ImageView
-                android:id="@+id/iv_card_price"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:contentDescription="@string/cash_icon"
-                android:src="@drawable/ic_card"
-                app:layout_constraintBottom_toBottomOf="@id/tv_card_price"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_card_price"
-                app:tint="@color/app_main_color" />
-
-            <TextView
-                android:id="@+id/tv_card_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_standard"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-                android:textColor="@color/app_main_color"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_card_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_cash_price" />
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_payment" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.bottomappbar.BottomAppBar>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_date_picker"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_bg"
+        android:elevation="@dimen/elevation_standard"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_calendar"
-        app:layout_anchor="@id/bottom_app_bar"
-        app:tint="@color/white" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

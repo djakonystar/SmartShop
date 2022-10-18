@@ -47,49 +47,29 @@
             tools:ignore="SpUsage" />
 
         <TextView
-            android:id="@+id/tv_phone"
-            android:layout_width="0dp"
+            android:id="@+id/tvTotalPriceTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
+            android:text="@string/sum_of_sale"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textSize="@dimen/text_size_standard"
             app:layout_constraintBottom_toTopOf="@id/tvTotalPrice"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvClientName"
             tools:ignore="SpUsage" />
-
-        <ImageView
-            android:id="@+id/iv_total_price"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:contentDescription="@string/price_icon"
-            android:src="@drawable/ic_total_money"
-            app:layout_constraintBottom_toBottomOf="@id/tvTotalPrice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTotalPrice"
-            app:tint="@color/app_main_color" />
 
         <TextView
             android:id="@+id/tvTotalPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_middle"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:clickable="true"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
+            android:layout_marginHorizontal="@dimen/margin_standard"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textColor="@color/app_main_color"
             app:layout_constraintBottom_toTopOf="@id/view"
             app:layout_constraintEnd_toStartOf="@id/guideline"
-            app:layout_constraintStart_toEndOf="@id/iv_total_price"
-            app:layout_constraintTop_toBottomOf="@id/tv_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalPriceTitle"
             tools:ignore="SpUsage" />
 
         <View
@@ -120,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.53" />
+            app:layout_constraintGuide_percent="0.58" />
 
         <ImageView
             android:id="@+id/ivCash"
@@ -223,12 +203,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginVertical="@dimen/margin_middle"
-            android:clickable="true"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
             android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline"
@@ -241,12 +215,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
-            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             android:textSize="@dimen/text_size_standard"
+            android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
             app:layout_constraintBottom_toBottomOf="@id/tvSellerName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@id/tvSellerName"
+            app:layout_constraintStart_toEndOf="@id/guideline"
             tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

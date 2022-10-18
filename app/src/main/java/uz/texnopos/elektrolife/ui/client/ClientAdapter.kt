@@ -1,7 +1,6 @@
 package uz.texnopos.elektrolife.ui.client
 
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.BaseAdapter
@@ -17,27 +16,17 @@ class ClientAdapter : BaseAdapter<Client, ClientAdapter.ClientsViewHolder>() {
         fun populateModel(model: Client) {
             binding.apply {
                 tvName.text = model.name
-                tvBalance.text = if (model.balance < 0.0) {
-                    tvBalance.setTextColor(
-                        ContextCompat.getColor(
-                            root.context,
-                            R.color.error_color
-                        )
-                    )
-                    tvSum.setTextColor(ContextCompat.getColor(root.context, R.color.error_color))
-                    "-${(-1 * model.balance).toSumFormat}"
+                tvBalance.text = if (model.balance ?: 0 < 0) {
+                    tvBalance.setTextColor(itemView.resources.getColor(R.color.error_color))
+                    tvSum.setTextColor(itemView.resources.getColor(R.color.error_color))
+                    "-${(-1 * model.balance!!).toString().toSumFormat}"
                 } else {
-                    tvBalance.setTextColor(
-                        ContextCompat.getColor(
-                            root.context,
-                            R.color.app_main_color
-                        )
-                    )
-                    tvSum.setTextColor(ContextCompat.getColor(root.context, R.color.app_main_color))
-                    model.balance.toSumFormat
+                    tvBalance.setTextColor(itemView.resources.getColor(R.color.app_main_color))
+                    tvSum.setTextColor(itemView.resources.getColor(R.color.app_main_color))
+                    model.balance.toString().toSumFormat
                 }
                 tvUserType.text =
-                    if (model.type == "J") itemView.context?.getString(R.string.natural_person_short) else itemView.context?.getString(
+                    if (model.type == 0) itemView.context?.getString(R.string.natural_person_short) else itemView.context?.getString(
                         R.string.legal_person_short
                     )
                 itemView.onClick {
@@ -45,6 +34,9 @@ class ClientAdapter : BaseAdapter<Client, ClientAdapter.ClientsViewHolder>() {
                 }
                 ivPhone.onClick {
                     onPhoneClick.invoke(model.phone)
+                }
+                ivPayment.onClick {
+                    onPaymentClick.invoke(model)
                 }
                 ivInfo.onClick {
                     onInfoClick.invoke(model)
@@ -71,6 +63,11 @@ class ClientAdapter : BaseAdapter<Client, ClientAdapter.ClientsViewHolder>() {
     private var onPhoneClick: (phone: String) -> Unit = {}
     fun setOnPhoneClickListener(onPhoneClick: (phone: String) -> Unit) {
         this.onPhoneClick = onPhoneClick
+    }
+
+    private var onPaymentClick: (model: Client) -> Unit = {}
+    fun setOnPaymentClickListener(onPaymentClick: (model: Client) -> Unit) {
+        this.onPaymentClick = onPaymentClick
     }
 
     private var onInfoClick: (model: Client) -> Unit = {}

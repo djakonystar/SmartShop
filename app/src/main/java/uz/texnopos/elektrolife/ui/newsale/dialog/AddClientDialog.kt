@@ -41,12 +41,13 @@ class AddClientDialog : DialogFragment() {
 
         binding.apply {
             actSpinner.setAdapter(ArrayAdapter(requireContext(), R.layout.item_spinner, list))
-            actSpinner.threshold = 100
-            actSpinner.setText(list[1])
-            type.postValue(list[1])
-            userType = list[1]
-            actSpinner.setOnItemClickListener { _, _, i, _ ->
+            actSpinner.setOnFocusChangeListener { _, b ->
+                if (b) {
+                    actSpinner.showDropDown()
+                }
                 tilSpinner.isErrorEnabled = false
+            }
+            actSpinner.setOnItemClickListener { _, _, i, _ ->
                 type.postValue(list[i])
                 userType = list[i]
             }
@@ -78,14 +79,14 @@ class AddClientDialog : DialogFragment() {
                 if (typeOf != -1 && name.isNotEmpty() && phone.isNotEmpty() && phone.length == 9) {
                     if (typeOf == 1) {
                         if (inn.isNotEmpty() && inn.length == 9) {
-                            sendData.invoke(name, inn.toInt(), phone, typeOf, comment)
+                            sendData.invoke(name, inn, phone, typeOf, comment)
                         } else {
                             tilInn.error =
                                 if (inn.isNotEmpty()) context?.getString(R.string.required_field)
                                 else context?.getString(R.string.input_correct_info)
                         }
                     } else {
-                        sendData.invoke(name, null, phone, typeOf, comment)
+                        sendData.invoke(name, inn, phone, typeOf, comment)
                     }
                 } else {
                     if (typeOf == -1) tilSpinner.error = context?.getString(R.string.required_field)
@@ -123,10 +124,10 @@ class AddClientDialog : DialogFragment() {
     }
 
 
-    private var sendData: (name: String, inn: Int?, phone: String, type: Int, comment: String) -> Unit =
-        { _: String, _: Int?, _: String, _: Int, _: String -> }
+    private var sendData: (name: String, inn: String, phone: String, type: Int, comment: String) -> Unit =
+        { _: String, _: String, _: String, _: Int, _: String -> }
 
-    fun setData(sendData: (name: String, inn: Int?, phone: String, type: Int, comment: String) -> Unit) {
+    fun setData(sendData: (name: String, inn: String, phone: String, type: Int, comment: String) -> Unit) {
         this.sendData = sendData
     }
 }

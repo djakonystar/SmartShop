@@ -1,6 +1,6 @@
 package uz.texnopos.elektrolife.ui.newsale
 
-import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,171 +8,110 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import uz.texnopos.elektrolife.core.extensions.onClick
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import com.stfalcon.imageviewer.StfalconImageViewer
+import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
-import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
-import uz.texnopos.elektrolife.core.extensions.showMessage
-import uz.texnopos.elektrolife.data.model.category.CategoryResponse
+import uz.texnopos.elektrolife.data.model.newsale.CatalogCategory
 import uz.texnopos.elektrolife.data.model.newsale.Product
-import uz.texnopos.elektrolife.databinding.ActionBarNewSaleBinding
+import uz.texnopos.elektrolife.databinding.ActionBarSearchBinding
 import uz.texnopos.elektrolife.databinding.FragmentNewSaleBinding
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddToBasketDialog
-import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 
 class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     private lateinit var binding: FragmentNewSaleBinding
-    private lateinit var abBinding: ActionBarNewSaleBinding
+    private lateinit var abBinding: ActionBarSearchBinding
     private lateinit var navController: NavController
-    private val viewModel: NewSaleViewModel by viewModel()
-    private val categoryViewModel: CategoryViewModel by viewModel()
-    private val adapter: NewSaleProductAdapter by inject()
+    private val categoryViewModel: CategoriesViewModel by viewModel()
+    private val productNewSaleAdapter: NewSaleProductAdapter by inject()
     private var productsList = mutableListOf<Product>()
     private var allProductsList = mutableListOf<Product>()
     private var searchValue = ""
     private var selectedCategoryId = -1
-    private var isLoading = false
-    private var page = 1
-    private var lastPage = 0
+    private var selectedChipId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentNewSaleBinding.bind(view)
-        abBinding = ActionBarNewSaleBinding.bind(view)
+        abBinding = ActionBarSearchBinding.bind(view)
         navController = findNavController()
 
-        val currentBackStackEntry = navController.currentBackStackEntry
-        val currentSavedStateHandle = currentBackStackEntry?.savedStateHandle
-        val previousBackStackEntry = navController.previousBackStackEntry
-        val prevSavedStateHandle = previousBackStackEntry?.savedStateHandle
-        observeQrCodeResult(currentSavedStateHandle)
-        observeQrCodeResult(prevSavedStateHandle)
+        categoryViewModel.getCategories()
+        categoryViewModel.getProductByName(searchValue)
+        setUpObservers()
+
 
         abBinding.apply {
             btnHome.onClick {
                 navController.popBackStack()
-                hideSoftKeyboard()
+                hideSoftKeyboard(btnHome)
             }
 
             etSearch.addTextChangedListener {
                 searchValue = it.toString()
-                searchValue.ifEmpty { page = 1 }
-                adapter.models = listOf()
-                viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
+                categoryViewModel.getProductByName(searchValue)
             }
 
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
+                    categoryViewModel.getProductByName(searchValue)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
-
-            btnScanner.onClick {
-                navController.navigate(
-                    NewSaleFragmentDirections.actionNewSaleFragmentToQrScannerFragment()
-                )
-            }
         }
 
         binding.apply {
-            val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = layoutManager
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
-                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
-                    ) {
-                        page++
-                        viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
-                    }
-                }
-            })
+            recyclerView.adapter = productNewSaleAdapter
 
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 setLoading(false)
                 chipGroup.removeAllViews()
-                productsList = mutableListOf()
                 categoryViewModel.getCategories()
-                page = 1
-                adapter.models = listOf()
-                viewModel.getProducts(page, searchValue, 0)
+                categoryViewModel.getProductByName(searchValue)
             }
 
-            adapter.onItemClickListener { product ->
+            productNewSaleAdapter.onItemClickListener { product ->
                 val dialog = AddToBasketDialog(product)
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                dialog.setOnItemAddedListener { quantity, salePrice ->
-                    Basket.setProduct(product, quantity, salePrice)
+                dialog.onItemClickListener { quantity, totalPrice ->
+                    Basket.setProduct(product, quantity, totalPrice.toLong())
                 }
-                dialog.setOnDismissListener {
-                    hideSoftKeyboard()
+                dialog.onDismissListener {
+                    hideSoftKeyboard(btnFab)
                 }
             }
 
-            adapter.onImageClickListener { product, imageView ->
-                product.image?.let { imageUrl ->
-                    StfalconImageViewer.Builder(context, arrayOf(imageUrl)) { view, url ->
-                        Glide.with(requireContext())
-                            .load(url)
-                            .placeholder(R.drawable.image_placeholder)
-                            .into(view)
-                    }
-                        .allowSwipeToDismiss(true)
-                        .withTransitionFrom(imageView)
-                        .show()
-                }
-            }
+            chipGroup.check(selectedChipId)
 
             btnFab.onClick {
                 if (Basket.products.isNotEmpty()) {
+                    val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+                    val gsonString = gsonPretty.toJson(Basket.products)
+                    selectedChipId = chipGroup.checkedChipId
                     findNavController().navigate(
-                        NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment()
+                        NewSaleFragmentDirections.actionNewSaleFragmentToOrderFragment(
+                            gsonString
+                        )
                     )
                 } else {
                     context?.getString(R.string.basket_empty_warning)?.let { text ->
-                        Snackbar.make(btnFab, text, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(btnFab, text, Snackbar.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
-
-//            root.viewTreeObserver.addOnGlobalLayoutListener {
-//                val r = Rect()
-//                root.getWindowVisibleDisplayFrame(r)
-//                val screenHeight = root.rootView.height
-//                val keypadHeight = screenHeight - r.bottom
-//
-//                if (keypadHeight <= screenHeight * 0.15) {
-//                    btnFab.show()
-//                }
-//            }
         }
-
-        categoryViewModel.getCategories()
-        viewModel.getProducts(page, searchValue, 0)
-        setUpObservers()
-    }
-
-    override fun onDetach() {
-        adapter.models = listOf()
-        super.onDetach()
     }
 
     private fun setLoading(loading: Boolean) {
@@ -207,25 +146,20 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
             }
         }
 
-        viewModel.products.observe(viewLifecycleOwner) {
+        categoryViewModel.products.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    binding.btnFab.show()
-                    lastPage = it.data!!.lastPage
-                    allProductsList = it.data.data as MutableList<Product>
-                    if (adapter.models.isEmpty()) {
-                        adapter.models = allProductsList
-                        productsList = allProductsList
+                    allProductsList = it.data!!.products as MutableList<Product>
+                    productsList = if (selectedCategoryId == -1) {
+                        it.data.products as MutableList<Product>
                     } else {
-                        allProductsList.forEach { product ->
-                            if (!productsList.contains(product)) {
-                                productsList.add(product)
-                            }
-                        }
-                        adapter.models = productsList
+                        it.data.products.filter { product ->
+                            product.categoryId == selectedCategoryId
+                        } as MutableList<Product>
                     }
+                    productNewSaleAdapter.models = productsList
                     showLottieAnimation(productsList.isEmpty())
                 }
                 ResourceState.ERROR -> {
@@ -236,43 +170,7 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
     }
 
-    private fun observeQrCodeResult(savedStateHandle: SavedStateHandle?) {
-        savedStateHandle?.getLiveData<String>(QrScannerFragment.RESULT_TEXT)
-            ?.observe(viewLifecycleOwner) { result ->
-                if (result.startsWith(QrScannerFragment.PRODUCT)) {
-                    val arguments = result.split("\n")
-                    val type = arguments[0]
-                    val uuid = arguments[1]
-                    viewModel.getProduct(type, uuid)
-                    viewModel.product.observe(viewLifecycleOwner) {
-                        when (it.status) {
-                            ResourceState.LOADING -> setLoading(true)
-                            ResourceState.SUCCESS -> {
-                                setLoading(false)
-                                val product = it.data!!
-                                val dialog = AddToBasketDialog(product)
-                                dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-                                dialog.setOnItemAddedListener { quantity, salePrice ->
-                                    Basket.setProduct(product, quantity, salePrice)
-                                }
-                                dialog.setOnDismissListener {
-                                    hideSoftKeyboard()
-                                }
-                            }
-                            ResourceState.ERROR -> {
-                                setLoading(false)
-                                showError(it.message)
-                            }
-                        }
-                    }
-                    savedStateHandle.remove(QrScannerFragment.RESULT_TEXT)
-                } else {
-                    showError(getString(R.string.product_code_error))
-                }
-            }
-    }
-
-    private fun addNewChip(category: CategoryResponse) {
+    private fun addNewChip(category: CatalogCategory) {
         try {
             binding.apply {
                 val inflater = LayoutInflater.from(requireContext())
@@ -291,9 +189,12 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
                         -1
                     }
 
-                    page = 1
-                    adapter.models = listOf()
-                    viewModel.getProducts(page, selectedCategoryId, searchValue, 0)
+                    if (selectedCategoryId != -1) {
+                        categoryViewModel.getProductByName(searchValue)
+                    } else {
+                        productNewSaleAdapter.models = allProductsList
+                        showLottieAnimation(allProductsList.isEmpty())
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -301,13 +202,9 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
         }
     }
 
-    private fun hideSoftKeyboard() {
+    private fun hideSoftKeyboard(view: View) {
         val imm =
-            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var v = requireActivity().currentFocus
-        if (v == null) {
-            v = View(activity)
-        }
-        imm.hideSoftInputFromWindow(v.windowToken, 0)
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

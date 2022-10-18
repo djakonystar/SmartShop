@@ -21,6 +21,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_middle"
+        android:text="@string/warning"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lottieAnimation" />
+
+    <TextView
         android:id="@+id/tvMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,10 +42,9 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lottieAnimation" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
     <Button
         android:id="@+id/btnYes"

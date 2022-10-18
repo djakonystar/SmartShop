@@ -8,9 +8,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import uz.texnopos.elektrolife.core.Resource
-import uz.texnopos.elektrolife.data.model.GenericResponse
-import uz.texnopos.elektrolife.data.model.PagingResponse
-import uz.texnopos.elektrolife.data.model.clients.ClientResponse
+import uz.texnopos.elektrolife.data.GenericResponse
+import uz.texnopos.elektrolife.data.model.clients.Client
 import uz.texnopos.elektrolife.data.model.newpayment.NewPayment
 import uz.texnopos.elektrolife.data.retrofit.ApiInterface
 import uz.texnopos.elektrolife.settings.Settings
@@ -25,20 +24,16 @@ class NewPaymentViewModel(private val api: ApiInterface, private val settings: S
         searchSubject
             .debounce(700, TimeUnit.MILLISECONDS)
             .switchMap {
-                api.getClients(token = "Bearer ${settings.token}", search = it)
+                api.getClients("Bearer ${settings.token}", it)
                     .subscribeOn(Schedulers.io())
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { response ->
-                    if (response.successful) {
-                        mutableClients.value = Resource.success(response.payload)
-                    } else {
-                        mutableClients.value = Resource.error(response.message)
-                    }
+                    mutableSearchClient.value = Resource.success(response)
                 },
                 { error ->
-                    mutableClients.value = Resource.error(error.message)
+                    mutableSearchClient.value = Resource.error(error.localizedMessage)
                 }
             )
     }
@@ -47,9 +42,9 @@ class NewPaymentViewModel(private val api: ApiInterface, private val settings: S
         MutableLiveData()
     val newPayment: LiveData<Resource<GenericResponse<List<String>>>> get() = mutableNewPayment
 
-    private var mutableClients: MutableLiveData<Resource<PagingResponse<ClientResponse>>> =
+    private var mutableSearchClient: MutableLiveData<Resource<GenericResponse<List<Client>>>> =
         MutableLiveData()
-    val clients: LiveData<Resource<PagingResponse<ClientResponse>>> = mutableClients
+    val searchClient: LiveData<Resource<GenericResponse<List<Client>>>> get() = mutableSearchClient
 
     fun newPayment(newPayment: NewPayment) {
         mutableNewPayment.value = Resource.loading()
@@ -72,7 +67,7 @@ class NewPaymentViewModel(private val api: ApiInterface, private val settings: S
     }
 
     fun searchClient(search: String) {
-        mutableClients.value = Resource.loading()
+        mutableSearchClient.value = Resource.loading()
         searchSubject.onNext(search)
     }
 

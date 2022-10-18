@@ -26,25 +26,10 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpUsage" />
 
-    <TextView
-        android:id="@+id/tv_product_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/item_text_size_standard_mobile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        tools:ignore="SpUsage" />
-
     <ImageView
         android:id="@+id/ivVisible"
-        android:layout_width="@dimen/img_standard_height_mobile"
-        android:layout_height="@dimen/img_standard_height_mobile"
+        android:layout_width="@dimen/action_bar_icon_size_mobile"
+        android:layout_height="@dimen/action_bar_icon_size_mobile"
         android:layout_marginEnd="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -66,7 +51,7 @@
         android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_product_name" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
     <TextView
         android:id="@+id/tvMin"
@@ -96,45 +81,27 @@
         android:id="@+id/tilQuantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_middle"
-        android:layout_marginEnd="@dimen/margin_standard"
         android:hint="@string/quantity"
         app:endIconMode="clear_text"
-        app:layout_constraintEnd_toStartOf="@id/btn_count_magnet"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMax"
-        app:suffixTextColor="@color/black">
+        app:layout_constraintTop_toBottomOf="@id/tvMax">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etQuantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
+            android:digits="0123456789 "
+            android:inputType="number"
             android:maxLength="12"
             android:singleLine="true"
-            android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/btn_count_magnet"
-        android:layout_width="@dimen/img_standard_height_mobile"
-        android:layout_height="@dimen/img_standard_height_mobile"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="?selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:contentDescription="@string/add"
-        android:focusable="true"
-        android:padding="2dp"
-        android:src="@drawable/magnet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tilQuantity"
-        app:tint="@color/app_main_color" />
 
     <TextView
         android:id="@+id/tvQuantityCounter"
@@ -145,7 +112,6 @@
         android:text="@string/counter_text"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_standard"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/tilQuantity"
         app:layout_constraintTop_toBottomOf="@id/tilQuantity"
         tools:ignore="SpUsage" />
@@ -154,45 +120,27 @@
         android:id="@+id/tilSumma"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_middle"
-        android:layout_marginEnd="@dimen/margin_standard"
         android:hint="@string/sum_uzb"
         app:endIconMode="clear_text"
-        app:layout_constraintEnd_toStartOf="@id/btn_summa_magnet"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantityCounter"
-        app:suffixTextColor="@color/black">
+        app:layout_constraintTop_toBottomOf="@id/tvQuantityCounter">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSumma"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
+            android:digits="0123456789 "
+            android:inputType="number"
             android:maxLength="19"
             android:singleLine="true"
-            android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="@dimen/item_text_size_standard_mobile"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/btn_summa_magnet"
-        android:layout_width="@dimen/img_standard_height_mobile"
-        android:layout_height="@dimen/img_standard_height_mobile"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:background="?selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:contentDescription="@string/add"
-        android:focusable="true"
-        android:padding="2dp"
-        android:src="@drawable/magnet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tilSumma"
-        app:tint="@color/app_main_color" />
 
     <Button
         android:id="@+id/btnAdd"
@@ -214,10 +162,10 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:paddingHorizontal="32dp"
         android:text="@string/cancel_uzb"
         android:textSize="@dimen/text_size_larger"

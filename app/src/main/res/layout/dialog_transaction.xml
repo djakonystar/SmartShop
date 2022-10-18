@@ -59,74 +59,13 @@
             android:id="@+id/etProductQuantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="0123456789 "
             android:inputType="number"
             android:maxLength="9"
-            android:textAlignment="textEnd"
             android:singleLine="true"
             tools:ignore="SpUsage" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_cost_price"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tilProductQuantity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_cost_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:hint="@string/cost_price"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toStartOf="@id/til_cost_currency"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_cost_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:maxLength="19"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                tools:ignore="SpUsage" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_cost_currency"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_standard"
-            android:hint="@string/currency_text"
-            app:endIconMode="dropdown_menu"
-            app:endIconTint="@color/app_main_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/til_cost_price"
-            app:layout_constraintTop_toTopOf="@id/til_cost_price">
-
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/act_cost_currency"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:dropDownHeight="wrap_content"
-                android:focusable="false"
-                android:longClickable="false"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.ElektroLife.TwentyTwo" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnAdd"
@@ -140,7 +79,7 @@
         android:textSize="@dimen/text_size_larger"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_cost_price"
+        app:layout_constraintTop_toBottomOf="@id/tilProductQuantity"
         tools:ignore="SpUsage" />
 
     <Button

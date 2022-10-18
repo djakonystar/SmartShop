@@ -1,21 +1,18 @@
 package uz.texnopos.elektrolife
 
 import android.content.Intent
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.core.content.ContentProviderCompat.requireContext
 import org.koin.android.ext.android.inject
-import uz.texnopos.elektrolife.databinding.ActivityMainBinding
 import uz.texnopos.elektrolife.settings.Settings
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
     private val settings: Settings by inject()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
         setLocale()
     }
@@ -30,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         res.updateConfiguration(conf, dm)
     }
 
-    fun rerun() {
+    fun setNewLocale() {
         val refresh = Intent(this, MainActivity::class.java)
         refresh.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         this.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

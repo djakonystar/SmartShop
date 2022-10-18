@@ -5,23 +5,17 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name="uz.texnopos.elektrolife.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:theme"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Warehouse"
-        android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
-        tools:replace="android:theme">
+        android:theme="@style/Theme.Warehouse">
         <activity
             android:name="uz.texnopos.elektrolife.MainActivity"
             android:exported="true"

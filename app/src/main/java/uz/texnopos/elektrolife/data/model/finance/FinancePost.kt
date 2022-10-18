@@ -3,14 +3,12 @@ package uz.texnopos.elektrolife.data.model.finance
 import com.google.gson.annotations.SerializedName
 
 data class FinancePost(
+    val description: String,
+    val date: String,
     @SerializedName("category_id")
     val categoryId: Int,
-    val date: String,
-    val price: Double,
-    val description: String,
-    val type: String,
-    @SerializedName("whom")
+    @SerializedName("staff")
     val payee: String,
-    @SerializedName("payment_type")
-    val paymentType: String
+    val price: Double,
+    val type: String
 )

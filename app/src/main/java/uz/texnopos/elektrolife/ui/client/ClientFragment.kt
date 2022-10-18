@@ -1,10 +1,10 @@
 package uz.texnopos.elektrolife.ui.client
 
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -17,9 +17,9 @@ import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.clients.Client
+import uz.texnopos.elektrolife.data.model.newclient.RegisterClient
 import uz.texnopos.elektrolife.databinding.ActionBarClientBinding
 import uz.texnopos.elektrolife.databinding.FragmentClientBinding
-import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.newclient.NewClientViewModel
 import uz.texnopos.elektrolife.ui.newsale.dialog.AddClientDialog
 
@@ -31,12 +31,10 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
     private val viewModel: ClientViewModel by viewModel()
     private val newClientViewModel: NewClientViewModel by viewModel()
     private val adapter: ClientAdapter by inject()
-    private val settings: Settings by inject()
-    private var clientsList = mutableListOf<Client>()
-    private var searchValue = ""
     private var isLoading = false
     private var page = 1
-    private var lastPage = 0
+    private var limit = 50
+    private var mutableClient: MutableList<Client> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,49 +53,65 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 addClientDialog.show(requireActivity().supportFragmentManager, "")
                 addClientDialog.setData { name, inn, phone, type, comment ->
                     newClientViewModel.registerNewClient(
-                        newClient(
+                        RegisterClient(
                             name = name,
                             phone = phone,
                             inn = inn,
                             about = comment,
-                            clientType = if (type == 1) "Y" else "J"
+                            clientType = type
                         )
                     )
                 }
-                observeRegisteringClient()
             }
         }
 
         binding.apply {
             swipeRefresh.setOnRefreshListener {
-                swipeRefresh.isRefreshing = false
                 setLoading(false)
-                clientsList = mutableListOf()
+                swipeRefresh.isRefreshing = false
+                mutableClient = mutableListOf()
                 page = 1
-                adapter.models = listOf()
-                viewModel.getClients(page, searchValue)
+                viewModel.getClients(limit, page, etSearch.text.toString())
             }
             val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = layoutManager
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (!isLoading && adapter.models.isNotEmpty() && page < lastPage &&
-                        layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
-                    ) {
-                        page++
-                        viewModel.getClients(page, searchValue)
+            recyclerView.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (!isLoading) {
+                            if (layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
+                                page++
+                                viewModel.getClients(limit, page, etSearch.text.toString())
+                            }
+                        }
                     }
                 }
-            })
+            )
 
-            etSearch.addTextChangedListener {
-                searchValue = it.toString()
-                searchValue.ifEmpty { page = 1 }
-                adapter.models = listOf()
-                viewModel.getClients(page, searchValue)
-            }
+            etSearch.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    p0?.let {
+                        if (it.isEmpty()) {
+                            mutableClient = mutableListOf()
+                            page = 1
+                            viewModel.getClients(limit, page, "")
+                        } else {
+                            mutableClient = mutableListOf()
+                            page = 1
+                            viewModel.getClients(limit, page, it.toString())
+                        }
+                    }
+                }
+
+            })
 
             adapter.setOnItemClickListener { client ->
                 val clientStr = GsonBuilder().setPrettyPrinting().create().toJson(
@@ -108,7 +122,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                             phone = phone,
                             tin = tin,
                             balance = balance,
-                            comment = comment,
+                            comment = comment ?: "",
                             type = type
                         )
                     }
@@ -122,8 +136,26 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 phone.dialPhone(requireActivity())
             }
 
+            adapter.setOnPaymentClickListener { client ->
+                val clientStr = GsonBuilder().setPrettyPrinting().create().toJson(
+                    client.apply {
+                        Client(
+                            id = id,
+                            name = name,
+                            phone = phone,
+                            tin = tin,
+                            balance = balance,
+                            comment = comment ?: "",
+                            type = type
+                        )
+                    }
+                )
+                navController.navigate(
+                    ClientFragmentDirections.actionClientsFragmentToNewPayment(client = clientStr)
+                )
+            }
+
             adapter.setOnInfoClickListener { client ->
-                Log.d("clientType", client.type.toString())
                 val clientDetailDialogFragment = ClientDetailDialogFragment(client = client)
                 clientDetailDialogFragment.show(
                     requireActivity().supportFragmentManager,
@@ -132,13 +164,8 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
             }
         }
 
-        viewModel.getClients(page, searchValue)
+        viewModel.getClients(limit, 1, "")
         setUpObservers()
-    }
-
-    override fun onDetach() {
-        adapter.models = listOf()
-        super.onDetach()
     }
 
     private fun setLoading(loading: Boolean) {
@@ -155,34 +182,23 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 ResourceState.LOADING -> setLoading(true)
                 ResourceState.SUCCESS -> {
                     setLoading(false)
-                    lastPage = it.data!!.lastPage
-                    if (it.data.currentPage == 1) {
-                        binding.tvDebtPrice.text = getString(
-                            R.string.debt_price_text,
-                            (-it.data.data.debt).toSumFormat,
-                            settings.currency
-                        )
-                    }
-                    val allClientsList = it.data.data.clients as MutableList<Client>
-                    if (adapter.models.isEmpty()) {
-                        adapter.models = allClientsList
-                        clientsList = allClientsList
-                    } else {
-                        it.data.data.clients.forEach { client ->
-                            if (!clientsList.contains(client)) {
-                                clientsList.add(client)
+                    it.data.let { data ->
+                        if (data!!.successful) {
+                            data.payload.forEach { client ->
+                                if (!mutableClient.contains(client)) {
+                                    mutableClient.add(client)
+                                }
                             }
+                            adapter.models = mutableClient
+                            val debts = mutableClient.filter { c -> c.balance!! < 0 }
+                                .sumOf { c -> c.balance!! }.toLong()
+                            binding.tvDebtPrice.text =
+                                context?.getString(R.string.total_debt_text, debts.toSumFormat)
+                            page++
+                        } else {
+                            showError(it.data!!.message)
                         }
-                        adapter.models = clientsList
                     }
-//                    val debts = clientsList.filter { c -> c.balance!! < 0 }
-//                        .sumOf { c -> c.balance!! }.toLong()
-//                    binding.tvDebtPrice.text =
-//                        context?.getString(
-//                            R.string.total_debt_text,
-//                            debts.toSumFormat,
-//                            settings.currency
-//                        )
                 }
                 ResourceState.ERROR -> {
                     setLoading(false)
@@ -190,9 +206,7 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                 }
             }
         }
-    }
 
-    private fun observeRegisteringClient() {
         newClientViewModel.registerNewClient.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)
@@ -200,11 +214,8 @@ class ClientFragment : Fragment(R.layout.fragment_client) {
                     setLoading(false)
                     showSuccess(getString(R.string.client_successfully_added))
                         .setOnDismissListener {
-                            adapter.models = listOf()
-                            clientsList = mutableListOf()
-                            binding.etSearch.text!!.clear()
-                            page = 1
-                            viewModel.getClients(page, searchValue)
+                            mutableClient = mutableListOf()
+                            viewModel.getClients(limit, 1, "")
                             addClientDialog.dismiss()
                         }
                 }
