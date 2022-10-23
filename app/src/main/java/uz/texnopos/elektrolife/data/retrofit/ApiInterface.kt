@@ -8,6 +8,7 @@ import uz.texnopos.elektrolife.data.model.GenericResponse
 import uz.texnopos.elektrolife.data.model.PagingResponse
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.clients.ClientResponse
+import uz.texnopos.elektrolife.data.model.company.CompanyDetail
 import uz.texnopos.elektrolife.data.model.currency.Currency
 import uz.texnopos.elektrolife.data.model.employee.Employee
 import uz.texnopos.elektrolife.data.model.finance.Cashier
@@ -333,4 +334,15 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Query("search") search: String
     ): Observable<GenericResponse<Payload>>
+
+    @GET("api/company")
+    fun getCompanyDetails(
+        @Header("Authorization") token: String
+    ): Observable<GenericResponse<CompanyDetail>>
+
+    @PATCH("api/company")
+    fun updateCompanyDetails(
+        @Header("Authorization") token: String,
+        @Body details: CompanyDetail
+    ): Observable<GenericResponse<List<Any>>>
 }

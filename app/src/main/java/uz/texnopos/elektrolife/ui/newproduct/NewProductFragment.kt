@@ -2,7 +2,6 @@ package uz.texnopos.elektrolife.ui.newproduct
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -27,7 +26,6 @@ import uz.texnopos.elektrolife.core.ResourceState
 import uz.texnopos.elektrolife.core.extensions.*
 import uz.texnopos.elektrolife.data.model.category.CategoryResponse
 import uz.texnopos.elektrolife.data.model.newproduct.*
-import uz.texnopos.elektrolife.data.model.warehouse.WarehouseItem
 import uz.texnopos.elektrolife.data.model.warehouse_item.Data
 import uz.texnopos.elektrolife.databinding.ActionBarProductNewBinding
 import uz.texnopos.elektrolife.databinding.FragmentProductNewBinding
@@ -111,7 +109,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 }
             }
 
-
             etProductName.setOnItemClickListener { adapterView, _, i, _ ->
                 productName = adapterView.getItemAtPosition(i).toString()
                 val warehouseItem = productsMap.getValue(productName)
@@ -143,9 +140,6 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
                 dialog.show(requireActivity().supportFragmentManager, dialog.tag)
                 dialog.setOnDismissListener {
                     etProductName.text.clear()
-                }
-                dialog.onItemClickListener {
-                    etCostPrice.setText("")
                 }
             }
 

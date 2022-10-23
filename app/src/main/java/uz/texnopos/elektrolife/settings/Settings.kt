@@ -20,11 +20,11 @@ class Settings(context: Context) {
         private const val BASE_URL = "baseUrl"
         private const val LANG_SELECTED = "languageSelected"
         private const val SHOP_SELECTED = "shopSelected"
-        private const val COMPANY_CONFIGURED = "companyConfigured"
         private const val COMPANY_NAME = "companyName"
         private const val COMPANY_ADDRESS = "address"
         private const val COMPANY_PHONE = "companyPhone"
         private const val COMPANY_PREFIX = "companyPrefix"
+        private const val LOGOTYPE_URL = "logotypeUrl"
 
         /**
          * Finance type on creating new **Expense**
@@ -98,10 +98,6 @@ class Settings(context: Context) {
         set(value) = preferences.edit().putBoolean(SHOP_SELECTED, value).apply()
         get() = preferences.getBoolean(SHOP_SELECTED, false)
 
-    var companyConfigured: Boolean
-        set(value) = preferences.edit().putBoolean(COMPANY_CONFIGURED, value).apply()
-        get() = preferences.getBoolean(COMPANY_CONFIGURED, false)
-
     var companyName: String
         set(value) = preferences.edit().putString(COMPANY_NAME, value).apply()
         get() = preferences.getString(COMPANY_NAME, "") ?: ""
@@ -117,6 +113,10 @@ class Settings(context: Context) {
     var prefix: String
         set(value) = preferences.edit().putString(COMPANY_PREFIX, value).apply()
         get() = preferences.getString(COMPANY_PREFIX, "") ?: ""
+
+    var logotypeUrl: String
+        set(value) = preferences.edit().putString(LOGOTYPE_URL, value).apply()
+        get() = preferences.getString(LOGOTYPE_URL, "") ?: ""
 
     fun reset() {
         preferences.edit().clear().apply()

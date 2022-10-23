@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
@@ -205,15 +206,9 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
         val order = orderResponse
 
         viewBinding.apply {
-            ivLogo.setImageResource(R.drawable.logotype)
-            val logoResId = resources.getIdentifier(
-                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
-                "drawable",
-                requireActivity().packageName
-            )
-            if (logoResId != 0) {
-                ivLogo.setImageResource(logoResId)
-            }
+            Glide.with(requireContext())
+                .load(settings.logotypeUrl)
+                .into(ivLogo)
             tvCompanyName.text = settings.companyName
             tvCompanyAddress.text = settings.companyAddress
             tvCompanyPhone.text = "+998 ${settings.companyPhone.toPhoneNumber}"

@@ -60,11 +60,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
             cardDetails.onClick {
-                val detailsDialog = CompanyDetailsDialog()
-                detailsDialog.setOnSuccessListener {
-                    showSuccess(getString(R.string.details_success_msg))
-                }
-                detailsDialog.show(requireActivity().supportFragmentManager, detailsDialog.tag)
+                navController.navigate(R.id.action_settingsFragment_to_companyDetailsFragment)
+//                val detailsDialog = CompanyDetailsDialog()
+//                detailsDialog.setOnSuccessListener {
+//                    showSuccess(getString(R.string.details_success_msg))
+//                }
+//                detailsDialog.show(requireActivity().supportFragmentManager, detailsDialog.tag)
             }
 
             cardPrefix.onClick {

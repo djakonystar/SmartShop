@@ -25,7 +25,7 @@ class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
         navController = findNavController()
 
         if (settings.shopSelected) {
-            navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)
+            navController.navigate(R.id.action_startShopFragment_to_signInFragment)
         }
 
         binding.apply {
@@ -39,7 +39,7 @@ class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
                     settings.prefix = prefix
                     settings.baseUrl = "https://$prefix.texnopos.uz"
                     settings.shopSelected = true
-                    navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)
+                    navController.navigate(R.id.action_startShopFragment_to_signInFragment)
                 } else {
                     tilUrl.error = getString(R.string.required_field)
                 }
@@ -48,11 +48,7 @@ class StartUrlFragment : Fragment(R.layout.fragment_start_url) {
             btnLoginTest.onClick {
                 settings.baseUrl = getString(R.string.test_base_url)
                 settings.shopSelected = true
-                settings.companyName = getString(R.string.test_company_name)
-                settings.companyAddress = getString(R.string.test_company_address)
-                settings.companyPhone = getString(R.string.test_company_phone)
-                settings.companyConfigured = true
-                navController.navigate(R.id.action_startShopFragment_to_companyDetailsFragment)
+                navController.navigate(R.id.action_startShopFragment_to_signInFragment)
             }
         }
     }
