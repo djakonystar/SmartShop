@@ -209,4 +209,7 @@
     <string name="prefix_changed_successfully">Префикс успешно изменен!</string>
     <string name="warning_reset">Вы действительно хотите сбросить настройки приложении?</string>
     <string name="login_to_test">Войти в тестовый режим</string>
+    <string name="exit">Закрыть приложение</string>
+    <string name="no_internet_message">Нет подключение к интернету. Это окно закрывается автоматический когда связь, будет восстановлен.</string>
+    <string name="no_internet">Нет интернета</string>
 </resources>

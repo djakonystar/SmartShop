@@ -299,4 +299,9 @@
         android:name="uz.texnopos.elektrolife.ui.start.CompanyDetailsFragment"
         android:label="fragment_company_details"
         tools:layout="@layout/fragment_company_details" />
+    <fragment
+        android:id="@+id/noInternetFragment"
+        android:name="uz.texnopos.elektrolife.ui.noconnection.NoInternetFragment"
+        android:label="fragment_no_internet"
+        tools:layout="@layout/fragment_no_internet" />
 </navigation>

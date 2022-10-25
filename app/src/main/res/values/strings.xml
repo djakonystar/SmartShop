@@ -250,4 +250,7 @@
     <string name="test_company_name" translatable="false">TexnoPOS Company</string>
     <string name="test_company_phone" translatable="false">900957117</string>
     <string name="test_company_address" translatable="false">Nukus, Karakalpakstan</string>
+    <string name="no_internet">Internet yo\'q</string>
+    <string name="no_internet_message">Internet bilan aloqa yo\'q. Aloqa bo\'lgan payti bu oyna avtomatik yopiladi.</string>
+    <string name="exit">Ilovani yopish</string>
 </resources>
