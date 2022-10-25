@@ -209,4 +209,7 @@
     <string name="prefix_changed_successfully">Prefix changed successfully!</string>
     <string name="warning_reset">Do you really want to reset the app settings?</string>
     <string name="login_to_test">Log in to test mode</string>
+    <string name="no_internet">No internet</string>
+    <string name="exit">Close app</string>
+    <string name="no_internet_message">No internet connection. This window closes automatically when the connection is restored.</string>
 </resources>

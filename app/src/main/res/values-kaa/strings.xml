@@ -209,4 +209,7 @@
     <string name="prefix_changed_successfully">Prefiks tabıslı ózgertildi!</string>
     <string name="warning_reset">Rastan da qosımsha sazlamaların tikleyjaqsız ba?</string>
     <string name="login_to_test">Test rejimda kiriw</string>
+    <string name="no_internet">Internet joq</string>
+    <string name="no_internet_message">Internet penen baylanıs joq. Baylanıs qayta tiklengen waqıtta bul ayna avtomatik jabıladı.</string>
+    <string name="exit">Qosımshanı jabıw</string>
 </resources>
