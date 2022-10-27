@@ -1,5 +1,6 @@
-package uz.texnopos.elektrolife.ui.start
+package uz.texnopos.elektrolife.ui.company
 
+import android.Manifest
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
@@ -23,7 +24,6 @@ import uz.texnopos.elektrolife.data.model.company.CompanyDetail
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentCompanyDetailsBinding
 import uz.texnopos.elektrolife.settings.Settings
-import uz.texnopos.elektrolife.ui.company.CompanyDetailsViewModel
 import uz.texnopos.elektrolife.ui.newproduct.ImageViewModel
 import java.io.File
 
@@ -40,12 +40,18 @@ class CompanyDetailsFragment : Fragment(R.layout.fragment_company_details) {
     private var imageSelected = false
     private var imageUrl = ""
 
+    private var name: String = ""
+    private var address = ""
+    private var phone = ""
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentCompanyDetailsBinding.bind(view)
         abBinding = ActionBarBinding.bind(view)
         navController = findNavController()
+
+        checkForPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         abBinding.apply {
             tvTitle.text = getString(R.string.company_details)
@@ -72,8 +78,10 @@ class CompanyDetailsFragment : Fragment(R.layout.fragment_company_details) {
             cvImage.onClick {
                 ProPicker.with(this@CompanyDetailsFragment)
                     .compressImage()
-                    .crop(800f, 300f)
+                    .galleryOnly()
                     .maxResultSize(720, 720)
+                    .crop(800f, 300f)
+                    .onlyImage()
                     .start { resultCode, data ->
                         if (resultCode == Activity.RESULT_OK && data != null) {
                             val picker = ProPicker.getPickerData(data)
@@ -91,30 +99,13 @@ class CompanyDetailsFragment : Fragment(R.layout.fragment_company_details) {
             }
 
             btnSave.onClick {
-                val name = etCompanyName.text.toString()
-                val address = etAddress.text.toString()
-                val phone = etPhone.text.toString().filter { c -> c.isDigit() }
+                name = etCompanyName.text.toString()
+                address = etAddress.text.toString()
+                phone = etPhone.text.toString().filter { c -> c.isDigit() }
 
                 if (name.isNotEmptyAndBlank() && address.isNotEmptyAndBlank() && phone.isNotEmpty()) {
                     if (imageSelected) {
                         imageViewModel.uploadImage(Constants.CLOUD_NAME, imagePart, presetPart)
-
-                        imageViewModel.image.observe(viewLifecycleOwner) {
-                            when (it.status) {
-                                ResourceState.LOADING -> setLoading(true)
-                                ResourceState.SUCCESS -> {
-                                    setLoading(false)
-                                    imageUrl = it.data?.secureUrl ?: ""
-                                    viewModel.updateCompanyDetails(
-                                        CompanyDetail(name, address, phone, imageUrl)
-                                    )
-                                }
-                                ResourceState.ERROR -> {
-                                    setLoading(false)
-                                    showError(it.message)
-                                }
-                            }
-                        }
                     } else {
                         viewModel.updateCompanyDetails(
                             CompanyDetail(name, address, phone, imageUrl)
@@ -149,6 +140,23 @@ class CompanyDetailsFragment : Fragment(R.layout.fragment_company_details) {
     }
 
     private fun setUpObservers() {
+        imageViewModel.image.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    imageUrl = it.data?.secureUrl ?: ""
+                    viewModel.updateCompanyDetails(
+                        CompanyDetail(name, address, phone, imageUrl)
+                    )
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showError(it.message)
+                }
+            }
+        }
+
         viewModel.details.observe(viewLifecycleOwner) {
             when (it.status) {
                 ResourceState.LOADING -> setLoading(true)

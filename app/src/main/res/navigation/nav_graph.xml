@@ -296,7 +296,7 @@
     </fragment>
     <fragment
         android:id="@+id/companyDetailsFragment"
-        android:name="uz.texnopos.elektrolife.ui.start.CompanyDetailsFragment"
+        android:name="uz.texnopos.elektrolife.ui.company.CompanyDetailsFragment"
         android:label="fragment_company_details"
         tools:layout="@layout/fragment_company_details" />
     <fragment
