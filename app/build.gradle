@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "uz.texnopos.smartshop"
 
-        minSdk 23
+        minSdk 24
         targetSdk 31
         versionCode 4
         versionName "1.1.2"
@@ -35,6 +35,11 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 }
 

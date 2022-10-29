@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.start.CompanyDetailsFragment">
+    tools:context=".ui.company.CompanyDetailsFragment">
+
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_company_name"
@@ -13,11 +17,11 @@
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:hint="@string/company_name_title"
         app:endIconMode="clear_text"
-        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@id/til_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_company_name"
@@ -64,7 +68,7 @@
         android:layout_marginTop="@dimen/margin_middle"
         android:hint="@string/phone_number"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@id/btn_save"
+        app:layout_constraintBottom_toTopOf="@id/cv_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_address"
@@ -84,6 +88,30 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_image"
+        android:layout_width="350dp"
+        android:layout_height="120dp"
+        android:layout_margin="@dimen/margin_standard"
+        app:cardCornerRadius="@dimen/til_corner_radius"
+        app:cardElevation="@dimen/elevation_standard"
+        app:layout_constraintBottom_toTopOf="@id/btn_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/til_phone"
+        app:strokeColor="@color/app_main_color"
+        app:strokeWidth="2dp">
+
+        <ImageView
+            android:id="@+id/iv_logotype"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logotype" />
+
+    </com.google.android.material.card.MaterialCardView>
+
     <Button
         android:id="@+id/btn_save"
         android:layout_width="0dp"
@@ -97,8 +125,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_phone"
+        app:layout_constraintTop_toBottomOf="@id/cv_image"
         tools:ignore="SpUsage" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/elevation_standard"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

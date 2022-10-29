@@ -209,4 +209,7 @@
     <string name="prefix_changed_successfully">Prefiks muvaffaqiyatli o\'zgartirildi!</string>
     <string name="warning_reset">Siz rostdan ham ilova sozlamalarini tiklamoqchimisiz?</string>
     <string name="login_to_test">Test rejimda kirish</string>
+    <string name="no_internet">Internet yo\'q</string>
+    <string name="no_internet_message">Internet bilan aloqa yo\'q. Aloqa bo\'lgan payti bu oyna avtomatik yopiladi.</string>
+    <string name="exit">Ilovani yopish</string>
 </resources>

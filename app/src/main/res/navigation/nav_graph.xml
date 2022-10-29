@@ -266,8 +266,8 @@
         android:label="fragment_start_shop"
         tools:layout="@layout/fragment_start_url" >
         <action
-            android:id="@+id/action_startShopFragment_to_companyDetailsFragment"
-            app:destination="@id/companyDetailsFragment"
+            android:id="@+id/action_startShopFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
             app:popUpTo="@id/startShopFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -290,16 +290,18 @@
             app:destination="@id/signInFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_settingsFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/companyDetailsFragment"
-        android:name="uz.texnopos.elektrolife.ui.start.CompanyDetailsFragment"
+        android:name="uz.texnopos.elektrolife.ui.company.CompanyDetailsFragment"
         android:label="fragment_company_details"
-        tools:layout="@layout/fragment_company_details" >
-        <action
-            android:id="@+id/action_companyDetailsFragment_to_signInFragment"
-            app:destination="@id/signInFragment"
-            app:popUpTo="@id/companyDetailsFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_company_details" />
+    <fragment
+        android:id="@+id/noInternetFragment"
+        android:name="uz.texnopos.elektrolife.ui.noconnection.NoInternetFragment"
+        android:label="fragment_no_internet"
+        tools:layout="@layout/fragment_no_internet" />
 </navigation>

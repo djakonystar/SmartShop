@@ -1,13 +1,13 @@
 package uz.texnopos.elektrolife.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -21,8 +21,8 @@ import uz.texnopos.elektrolife.core.extensions.onClick
 import uz.texnopos.elektrolife.core.extensions.showError
 import uz.texnopos.elektrolife.databinding.FragmentMainBinding
 import uz.texnopos.elektrolife.settings.Settings
+import uz.texnopos.elektrolife.ui.company.CompanyDetailsViewModel
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
-import uz.texnopos.elektrolife.ui.dialog.LangDialog
 import uz.texnopos.elektrolife.ui.newsale.Basket
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerFragment
 import uz.texnopos.elektrolife.ui.qrscanner.QrScannerViewModel
@@ -32,6 +32,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var navController: NavController
     private val currencyViewModel: CurrencyViewModel by viewModel()
     private val qrScannerViewModel: QrScannerViewModel by viewModel()
+    private val detailsViewModel: CompanyDetailsViewModel by viewModel()
     private val settings: Settings by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,6 +113,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
 //        currencyViewModel.getCurrency()
+        detailsViewModel.getDetails()
         setUpObservers()
     }
 
@@ -135,6 +137,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                                 }
                             }
                         }
+                    }
+                }
+                ResourceState.ERROR -> {
+                    setLoading(false)
+                    showError(it.message)
+                }
+            }
+        }
+
+        detailsViewModel.details.observe(viewLifecycleOwner) {
+            when (it.status) {
+                ResourceState.LOADING -> setLoading(true)
+                ResourceState.SUCCESS -> {
+                    setLoading(false)
+                    it.data?.let { details ->
+                        settings.companyName = details.name
+                        settings.companyAddress = details.address
+                        settings.companyPhone = details.phone
+                        settings.logotypeUrl = details.image ?: ""
+
+                        Glide.with(requireContext())
+                            .load(settings.logotypeUrl)
+                            .into(binding.ivLogo)
                     }
                 }
                 ResourceState.ERROR -> {

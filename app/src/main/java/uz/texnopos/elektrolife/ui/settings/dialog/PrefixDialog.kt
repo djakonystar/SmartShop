@@ -77,7 +77,6 @@ class PrefixDialog : DialogFragment(R.layout.dialog_prefix) {
                             val prefix = binding.etPrefix.text.toString()
                             settings.baseUrl = "https://$prefix.texnopos.uz"
                             settings.prefix = prefix
-                            settings.companyConfigured = false
                             showSuccess(getString(R.string.prefix_changed_successfully))
                                 .setOnDismissListener {
                                     val intent = requireActivity().intent

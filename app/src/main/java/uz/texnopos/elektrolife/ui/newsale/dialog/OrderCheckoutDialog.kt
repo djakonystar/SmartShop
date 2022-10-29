@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -341,15 +342,9 @@ class OrderCheckoutDialog(private val totalPrice: Double, private val orders: Li
         val orders = basket.orders
 
         viewBinding.apply {
-            ivLogo.setImageResource(R.drawable.logotype)
-            val logoResId = resources.getIdentifier(
-                Constants.provideBaseUrls()[settings.baseUrl] ?: "logo",
-                "drawable",
-                requireActivity().packageName
-            )
-            if (logoResId != 0) {
-                ivLogo.setImageResource(logoResId)
-            }
+            Glide.with(requireContext())
+                .load(settings.logotypeUrl)
+                .into(ivLogo)
             tvCompanyName.text = settings.companyName
             tvCompanyAddress.text = settings.companyAddress
             tvCompanyPhone.text = "+998 ${settings.companyPhone.toPhoneNumber}"

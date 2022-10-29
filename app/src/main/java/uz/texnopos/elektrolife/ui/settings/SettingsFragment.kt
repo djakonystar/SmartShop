@@ -12,13 +12,11 @@ import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.R
 import uz.texnopos.elektrolife.core.extensions.Constants.ROLE_CEO
 import uz.texnopos.elektrolife.core.extensions.onClick
-import uz.texnopos.elektrolife.core.extensions.showSuccess
 import uz.texnopos.elektrolife.databinding.ActionBarBinding
 import uz.texnopos.elektrolife.databinding.FragmentSettingsBinding
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.dialog.LangDialog
 import uz.texnopos.elektrolife.ui.dialog.WarningDialog
-import uz.texnopos.elektrolife.ui.settings.dialog.CompanyDetailsDialog
 import uz.texnopos.elektrolife.ui.settings.dialog.PrefixDialog
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -60,11 +58,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
             cardDetails.onClick {
-                val detailsDialog = CompanyDetailsDialog()
-                detailsDialog.setOnSuccessListener {
-                    showSuccess(getString(R.string.details_success_msg))
-                }
-                detailsDialog.show(requireActivity().supportFragmentManager, detailsDialog.tag)
+                navController.navigate(R.id.action_settingsFragment_to_companyDetailsFragment)
+//                val detailsDialog = CompanyDetailsDialog()
+//                detailsDialog.setOnSuccessListener {
+//                    showSuccess(getString(R.string.details_success_msg))
+//                }
+//                detailsDialog.show(requireActivity().supportFragmentManager, detailsDialog.tag)
             }
 
             cardPrefix.onClick {

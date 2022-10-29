@@ -25,11 +25,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -390,22 +388,31 @@ fun Fragment.pdfGenerator(
     }
 }
 
-val Fragment.checkForPermissions: Unit
-    get() {
+fun Fragment.checkForPermissions(vararg permissions: String) {
+    val notGranted = checkSelfPermission(requireContext(), permissions)
+    if (notGranted.isNotEmpty()) {
+        requestMultiplePermissions().launch(
+            permissions.toList().toTypedArray()
+        )
+    } else {
+//            showMessage("Permission already granted!")
+    }
+}
+
+private fun checkSelfPermission(context: Context, permissions: Array<out String>): Array<String> {
+    val notGranted = mutableListOf<String>()
+    for (permission in permissions) {
         if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+                context,
+                permission
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestMultiplePermissions().launch(
-                arrayOf(
-                    Manifest.permission.CAMERA
-                )
-            )
-        } else {
-//            showMessage("Permission already granted!")
+            notGranted.add(permission)
         }
     }
+
+    return notGranted.toTypedArray()
+}
 
 private fun Fragment.requestMultiplePermissions() =
     registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -415,7 +422,7 @@ private fun Fragment.requestMultiplePermissions() =
                 false
         }
         if (!isGranted) {
-            val dialog = showWarning("Permission required")
+            val dialog = showWarning(getString(R.string.permission_required))
             dialog.setOnPositiveButtonClickListener {
                 val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
@@ -433,7 +440,7 @@ private fun Fragment.requestMultiplePermissions() =
         }
     }
 
-fun <T: Any> T.scope(action: (T) -> Unit) {
+fun <T : Any> T.scope(action: (T) -> Unit) {
     action(this)
 }
 

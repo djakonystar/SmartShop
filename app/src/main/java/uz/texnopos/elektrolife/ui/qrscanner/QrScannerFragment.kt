@@ -1,5 +1,6 @@
 package uz.texnopos.elektrolife.ui.qrscanner
 
+import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -24,7 +25,7 @@ class QrScannerFragment : Fragment(R.layout.fragment_qr_scanner) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkForPermissions
+        checkForPermissions(Manifest.permission.CAMERA)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

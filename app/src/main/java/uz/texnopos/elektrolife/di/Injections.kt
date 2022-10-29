@@ -13,6 +13,7 @@ import uz.texnopos.elektrolife.ui.client.ClientAdapter
 import uz.texnopos.elektrolife.ui.client.ClientViewModel
 import uz.texnopos.elektrolife.ui.client.detail.payment.ClientPaymentAdapter
 import uz.texnopos.elektrolife.ui.client.detail.sale.ClientSalesViewModel
+import uz.texnopos.elektrolife.ui.company.CompanyDetailsViewModel
 import uz.texnopos.elektrolife.ui.currency.CurrencyViewModel
 import uz.texnopos.elektrolife.ui.dialog.TransactionViewModel
 import uz.texnopos.elektrolife.ui.finance.FinanceDetailAdapter
@@ -60,14 +61,14 @@ val helperModule = module {
 val viewModelModule = module {
     viewModel { CategoryViewModel(get(), get()) }
     viewModel { NewPaymentViewModel(get(), get()) }
-    viewModel { SalesViewModel(get(), get())}
+    viewModel { SalesViewModel(get(), get()) }
     viewModel { NewCategoryViewModel(get(), get()) }
-    viewModel { NewProductViewModel(get(),get()) }
+    viewModel { NewProductViewModel(get(), get()) }
     viewModel { ClientViewModel(get(), get()) }
     viewModel { WarehouseViewModel(get(), get()) }
     viewModel { SignInViewModel(get(), get(), get()) }
     viewModel { NewClientViewModel(get(), get()) }
-    viewModel { OrderViewModel(get(),get()) }
+    viewModel { OrderViewModel(get(), get()) }
     viewModel { CurrencyViewModel(get(), get()) }
     viewModel { FinanceViewModel(get(), get()) }
     viewModel { ReportsViewModel(get(), get()) }
@@ -82,6 +83,7 @@ val viewModelModule = module {
     viewModel { ImageViewModel(get()) }
     viewModel { EditProductViewModel(get(), get()) }
     viewModel { PrefixViewModel(get()) }
+    viewModel { CompanyDetailsViewModel(get(), get()) }
 }
 
 val adapterModule = module {
