@@ -1,6 +1,8 @@
 package uz.texnopos.elektrolife.ui.sales.detail
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -197,6 +199,10 @@ class SalesDetailFragment : Fragment(R.layout.fragment_sales_detail) {
                 amount.remaining.toSumFormat,
                 settings.currency
             )
+
+            if (amount.remaining == 0.0) {
+                fabRefundDebt.fabOptionEnabled = false
+            }
         }
     }
 
