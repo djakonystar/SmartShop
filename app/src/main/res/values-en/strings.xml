@@ -213,4 +213,6 @@
     <string name="exit">Close app</string>
     <string name="no_internet_message">No internet connection. This window closes automatically when the connection is restored.</string>
     <string name="permission_required">Permission required</string>
+    <string name="install">Install</string>
+    <string name="update_downloaded_msg">The new version of the application is downloaded!</string>
 </resources>

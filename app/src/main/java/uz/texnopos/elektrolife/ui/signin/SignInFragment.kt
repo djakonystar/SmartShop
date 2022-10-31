@@ -154,19 +154,19 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 //            lottieLock.speed = 3.0f
             lottieLock.playAnimation()
             lottieLock.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
+                override fun onAnimationStart(p0: Animator) {
 
                 }
 
-                override fun onAnimationEnd(p0: Animator?) {
+                override fun onAnimationEnd(p0: Animator) {
                     navController.navigate(R.id.action_signInFragment_to_mainFragment)
                 }
 
-                override fun onAnimationCancel(p0: Animator?) {
+                override fun onAnimationCancel(p0: Animator) {
 
                 }
 
-                override fun onAnimationRepeat(p0: Animator?) {
+                override fun onAnimationRepeat(p0: Animator) {
 
                 }
             })

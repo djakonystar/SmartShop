@@ -212,4 +212,7 @@
     <string name="no_internet">Internet yo\'q</string>
     <string name="no_internet_message">Internet bilan aloqa yo\'q. Aloqa bo\'lgan payti bu oyna avtomatik yopiladi.</string>
     <string name="exit">Ilovani yopish</string>
+    <string name="permission_required">Rozilik talab etiladi</string>
+    <string name="install">O\'rnatish</string>
+    <string name="update_downloaded_msg">Ilovaning yangi versiya yuklandi!</string>
 </resources>

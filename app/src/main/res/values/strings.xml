@@ -254,4 +254,6 @@
     <string name="no_internet_message">Internet bilan aloqa yo\'q. Aloqa bo\'lgan payti bu oyna avtomatik yopiladi.</string>
     <string name="exit">Ilovani yopish</string>
     <string name="permission_required">Permission required</string>
+    <string name="update_downloaded_msg">Загружена новая версия приложении!</string>
+    <string name="install">Установить</string>
 </resources>
