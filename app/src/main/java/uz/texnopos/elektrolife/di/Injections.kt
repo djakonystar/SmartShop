@@ -2,11 +2,9 @@ package uz.texnopos.elektrolife.di
 
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import uz.texnopos.elektrolife.data.retrofit.DynamicRetrofit
 import uz.texnopos.elektrolife.data.retrofit.ImageRetrofit
-import uz.texnopos.elektrolife.data.retrofit.PrefixApi
 import uz.texnopos.elektrolife.data.retrofit.PrefixRetrofit
 import uz.texnopos.elektrolife.settings.Settings
 import uz.texnopos.elektrolife.ui.client.ClientAdapter
