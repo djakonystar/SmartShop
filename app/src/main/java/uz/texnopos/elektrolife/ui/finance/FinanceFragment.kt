@@ -93,7 +93,7 @@ class FinanceFragment : Fragment(R.layout.fragment_finance) {
                             .setValidator(DateValidatorPointBackward.before(calendarHelper.currentDateMillis))
                             .build()
                     )
-                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
+                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar_Fullscreen)
                     .setTitleText(R.string.choose_range)
                     .build()
 
