@@ -19,6 +19,9 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.android.inject
 import uz.texnopos.elektrolife.databinding.ActivityMainBinding
 import uz.texnopos.elektrolife.settings.Settings
@@ -27,6 +30,7 @@ import uz.texnopos.elektrolife.util.NetworkConnectivityObserver
 import java.util.*
 
 class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
+    private lateinit var analytics: FirebaseAnalytics
     private lateinit var binding: ActivityMainBinding
     private lateinit var connectivityObserver: ConnectivityObserver
     private lateinit var navController: NavController
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity(), InstallStateUpdatedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        analytics = Firebase.analytics
         connectivityObserver = NetworkConnectivityObserver(applicationContext)
         setContentView(binding.root)
         val navHostFragment =
