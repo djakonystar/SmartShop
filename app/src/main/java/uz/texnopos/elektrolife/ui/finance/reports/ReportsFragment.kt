@@ -85,7 +85,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
                             .setValidator(DateValidatorPointBackward.before(calendarHelper.currentDateMillis))
                             .build()
                     )
-                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
+                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar_Fullscreen)
                     .setTitleText(R.string.choose_range)
                     .build()
 
@@ -125,7 +125,7 @@ class ReportsFragment : Fragment(R.layout.fragment_reports) {
                             .setValidator(DateValidatorPointBackward.before(calendarHelper.currentDateMillis))
                             .build()
                     )
-                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar)
+                    .setTheme(R.style.ThemeOverlay_MaterialComponents_MaterialCalendar_Fullscreen)
                     .setTitleText(R.string.choose_range)
                     .build()
 

@@ -212,4 +212,7 @@
     <string name="exit">Закрыть приложение</string>
     <string name="no_internet_message">Нет подключение к интернету. Это окно закрывается автоматический когда связь, будет восстановлен.</string>
     <string name="no_internet">Нет интернета</string>
+    <string name="update_downloaded_msg">Загружена новая версия приложении!</string>
+    <string name="permission_required">Требуется разрешение</string>
+    <string name="install">Установить</string>
 </resources>

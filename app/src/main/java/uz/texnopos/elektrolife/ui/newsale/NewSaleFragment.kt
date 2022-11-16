@@ -302,12 +302,14 @@ class NewSaleFragment : Fragment(R.layout.fragment_new_sale) {
     }
 
     private fun hideSoftKeyboard() {
-        val imm =
-            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var v = requireActivity().currentFocus
-        if (v == null) {
-            v = View(activity)
+        if (isAdded) {
+            val imm =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            var v = requireActivity().currentFocus
+            if (v == null) {
+                v = View(activity)
+            }
+            imm.hideSoftInputFromWindow(v.windowToken, 0)
         }
-        imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
 }

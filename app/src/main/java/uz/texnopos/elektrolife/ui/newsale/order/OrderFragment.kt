@@ -128,11 +128,13 @@ class OrderFragment : Fragment(R.layout.fragment_order) {
                 orderCheckoutDialog = OrderCheckoutDialog(finalPrice, orders)
                 orderCheckoutDialog.show(requireActivity().supportFragmentManager, "")
 
-                orderCheckoutDialog.setOnDismissListener {
-                    tvTotalPrice.text = ""
-                    adapter.models = mutableListOf()
-                    Basket.clear()
-                    navController.popBackStack(R.id.mainFragment, false)
+                orderCheckoutDialog.setOnDismissListener { success ->
+                    if (success) {
+                        tvTotalPrice.text = ""
+                        adapter.models = mutableListOf()
+                        Basket.clear()
+                        navController.popBackStack(R.id.mainFragment, false)
+                    }
                 }
             }
         }
