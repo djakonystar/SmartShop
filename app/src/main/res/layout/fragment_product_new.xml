@@ -445,7 +445,6 @@
                     android:layout_height="@dimen/button_height"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginVertical="@dimen/margin_standard"
-                    android:backgroundTint="@color/app_main_color"
                     android:paddingHorizontal="@dimen/button_padding_horizontal"
                     android:text="@string/add_new_product"
                     android:textSize="@dimen/text_size_larger"

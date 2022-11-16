@@ -421,6 +421,7 @@ class NewProductFragment : Fragment(R.layout.fragment_product_new) {
     private fun setLoading(loading: Boolean) {
         binding.apply {
             progressBar.isVisible = loading
+            btnAddProduct.isEnabled = !loading
             scrollView.isEnabled = !loading
         }
     }

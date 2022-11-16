@@ -14,12 +14,13 @@ class CalendarHelper {
             return simpleDateFormat.format(currentDateInMillis)
         }
 
-    val currentDateMillis: Long = currentDateInMillis
+    val currentDateMillis =
+        currentDateInMillis + TimeZone.getDefault().getOffset(currentDateInMillis)
 
     val firstDayOfCurrentMonth: String
         get() {
             val c = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-            c.timeInMillis = currentDateInMillis
+            c.timeInMillis = currentDateInMillis - TimeZone.getDefault().getOffset(currentDateInMillis)
             c[Calendar.DAY_OF_MONTH] = c.getActualMinimum(Calendar.DAY_OF_MONTH)
             return simpleDateFormat.format(c.timeInMillis)
         }
@@ -27,7 +28,7 @@ class CalendarHelper {
     val firstDayOfCurrentMonthMillis: Long
         get() {
             val c = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-            c.timeInMillis = currentDateInMillis
+            c.timeInMillis = currentDateInMillis - TimeZone.getDefault().getOffset(currentDateInMillis)
             c[Calendar.DAY_OF_MONTH] = c.getActualMinimum(Calendar.DAY_OF_MONTH)
             return c.timeInMillis
         }
@@ -35,7 +36,7 @@ class CalendarHelper {
     val lastDayOfCurrentMonth: String
         get() {
             val c = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-            c.timeInMillis = currentDateInMillis
+            c.timeInMillis = currentDateInMillis - TimeZone.getDefault().getOffset(currentDateInMillis)
             c[Calendar.DAY_OF_MONTH] = c.getActualMaximum(Calendar.DAY_OF_MONTH)
             return simpleDateFormat.format(c.timeInMillis)
         }
@@ -43,7 +44,7 @@ class CalendarHelper {
     val lastDayOfCurrentMonthMillis: Long
         get() {
             val c = Calendar.getInstance(TimeZone.getTimeZone("UTC+5"))
-            c.timeInMillis = currentDateInMillis
+            c.timeInMillis = currentDateInMillis - TimeZone.getDefault().getOffset(currentDateInMillis)
             c[Calendar.DAY_OF_MONTH] = c.getActualMaximum(Calendar.DAY_OF_MONTH)
             return c.timeInMillis
         }
