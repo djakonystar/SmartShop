@@ -56,6 +56,7 @@ class OrderCheckoutDialog(private val totalPrice: Double, private val orders: Li
     private var date = ""
     private var dateForBackend = ""
     private var dateInLong = System.currentTimeMillis()
+    private var success: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -318,6 +319,7 @@ class OrderCheckoutDialog(private val totalPrice: Double, private val orders: Li
                     setLoading(true)
                     orderReceiptAdapter.models = it.data!!.orders
                     prepareReceipt(printingView, it.data)
+                    success = true
                     val successDialog =
                         SuccessOrderDialog(getString(R.string.order_successfully_done))
                     successDialog.setOnPrintButtonClickListener {
@@ -414,11 +416,11 @@ class OrderCheckoutDialog(private val totalPrice: Double, private val orders: Li
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        onDismiss()
+        onDismiss(success)
     }
 
-    private var onDismiss: () -> Unit = {}
-    fun setOnDismissListener(onDismiss: () -> Unit) {
+    private var onDismiss: (success: Boolean) -> Unit = {}
+    fun setOnDismissListener(onDismiss: (success: Boolean) -> Unit) {
         this.onDismiss = onDismiss
     }
 }
